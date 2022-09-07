@@ -1,8 +1,11 @@
 package com.godeltech.gbf.bot;
 
+import com.godeltech.gbf.view.RoleView;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
 public class GbfBot extends SpringWebhookBot {
@@ -35,6 +38,16 @@ public class GbfBot extends SpringWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        RoleView roleView = new RoleView();
+        SendMessage message = new SendMessage();
+        message.setText("Please select your role:");
+        message.setChatId(update.getMessage().getChatId().toString());
+        message.setReplyMarkup(roleView.getView());
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 }
