@@ -1,16 +1,16 @@
-package com.godeltech.gbf.view;
+package com.godeltech.gbf.keyboard.impl;
 
-import org.springframework.stereotype.Component;
+import com.godeltech.gbf.keyboard.Keyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-public class RoleView extends View {
+public class RoleKeyboard implements Keyboard {
 
-    public InlineKeyboardMarkup getView() {
+    @Override
+    public InlineKeyboardMarkup getKeyBoardMarkup() {
         List<InlineKeyboardButton> buttons = new ArrayList<>();
 
         var button1 = new InlineKeyboardButton();
