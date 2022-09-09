@@ -1,6 +1,7 @@
-package com.godeltech.gbf.keyboard.impl;
+package com.godeltech.gbf.service.keyboard.impl;
 
-import com.godeltech.gbf.keyboard.Keyboard;
+import com.godeltech.gbf.service.keyboard.Keyboard;
+import com.godeltech.gbf.service.LocaleMessageSource;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -8,6 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StartKeyboard implements Keyboard {
+    private LocaleMessageSource localeMessageSource;
+
+    public StartKeyboard(LocaleMessageSource localeMessageSource) {
+        this.localeMessageSource = localeMessageSource;
+    }
 
     @Override
     public InlineKeyboardMarkup getKeyBoardMarkup() {

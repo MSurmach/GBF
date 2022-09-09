@@ -1,4 +1,4 @@
-package com.godeltech.gbf.keyboard;
+package com.godeltech.gbf.service.keyboard;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 

@@ -1,37 +1,42 @@
 package com.godeltech.gbf;
 
-import com.godeltech.gbf.keyboard.KeyboardFactory;
-import com.godeltech.gbf.state.BotState;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
 public class SendMessageBuilder {
     private Long chat_id;
     private String text;
-    private InlineKeyboardMarkup inlineKeyboardMarkup;
-    private BotState botState;
+    private ReplyKeyboard keyboardMarkup;
 
-    public SendMessageBuilder(BotState botState) {
-        this.botState = botState;
+    public SendMessage reply(Message message) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(message.getChatId());
+        sendMessage.setText(message.getText());
+        sendMessage.setReplyMarkup(message.getReplyMarkup());
+        return sendMessage;
     }
 
-    public SendMessageBuilder chat_id(Long chat_id) {
-        this.chat_id=chat_id;
+    public SendMessageBuilder keyBoardMarkup(ReplyKeyboard keyboardMarkup) {
+        this.keyboardMarkup = keyboardMarkup;
         return this;
     }
 
-    public SendMessageBuilder text(String text){
+    public SendMessageBuilder chat_id(Long chat_id) {
+        this.chat_id = chat_id;
+        return this;
+    }
+
+    public SendMessageBuilder text(String text) {
         this.text = text;
         return this;
     }
 
-    public SendMessage build(){
+    public SendMessage build() {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chat_id);
         sendMessage.setText(text);
-
-        InlineKeyboardMarkup keyBoardMarkup = KeyboardFactory.getKeyboardMarkupFactory().getKeyboard(botState).getKeyBoardMarkup();
-        sendMessage.setReplyMarkup(keyBoardMarkup);
+        sendMessage.setReplyMarkup(keyboardMarkup);
         return sendMessage;
     }
 }

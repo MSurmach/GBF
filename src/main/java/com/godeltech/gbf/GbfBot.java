@@ -1,8 +1,6 @@
 package com.godeltech.gbf;
 
-import com.godeltech.gbf.interceptors.Interceptor;
-import com.godeltech.gbf.interceptors.InterceptorFactory;
-import com.godeltech.gbf.interceptors.ReplyInterceptor;
+import com.godeltech.gbf.service.interceptors.InterceptorFactory;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -15,13 +13,13 @@ public class GbfBot extends TelegramWebhookBot {
 
     private final String botPath;
 
-    private final ReplyInterceptor replyInterceptor;
+    private final InterceptorFactory interceptorFactory;
 
-    public GbfBot(String botUsername, String botToken, String botPath, ReplyInterceptor replyInterceptor) {
+    public GbfBot(String botUsername, String botToken, String botPath, InterceptorFactory interceptorFactory) {
         this.botUsername = botUsername;
         this.botToken = botToken;
         this.botPath = botPath;
-        this.replyInterceptor = replyInterceptor;
+        this.interceptorFactory = interceptorFactory;
     }
 
     @Override
@@ -41,7 +39,6 @@ public class GbfBot extends TelegramWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        Interceptor interceptor = InterceptorFactory.getInstance().getInterceptor(update);
-        return interceptor.intercept(update);
+        return interceptorFactory.intercept(update);
     }
 }
