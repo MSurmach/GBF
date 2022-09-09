@@ -12,12 +12,7 @@ public class CallbackQueryInterceptor implements Interceptor {
     @Override
     public BotApiMethod<?> intercept(Update update) {
         CallbackQuery callbackQuery = update.getCallbackQuery();
-        CountryKeyboard countryKeyboard = new CountryKeyboard();
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(callbackQuery.getMessage().getChatId().toString());
-        sendMessage.setText("CallBack");
-        sendMessage.setReplyMarkup(countryKeyboard.getKeyBoardMarkup());
-        return sendMessage;
-
+        callbackQuery.getData();
+        return null;
     }
 }

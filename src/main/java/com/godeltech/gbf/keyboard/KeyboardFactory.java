@@ -1,7 +1,7 @@
 package com.godeltech.gbf.keyboard;
 
 import com.godeltech.gbf.keyboard.impl.*;
-import com.godeltech.gbf.model.BotState;
+import com.godeltech.gbf.state.BotState;
 
 import java.util.Objects;
 
@@ -19,8 +19,7 @@ public class KeyboardFactory {
 
     public Keyboard getKeyboard(BotState botState) {
         return switch (botState) {
-            case START -> new StartKeyBoard();
-            case ROLE -> new RoleKeyboard();
+            case START -> new StartKeyboard();
             case COUNTRY_FROM, COUNTRY_TO -> new CountryKeyboard();
             case CITY_FROM, CITY_TO -> new CityKeyboard();
             case DATE_FROM, DATE_TO -> new DateKeyboard();
