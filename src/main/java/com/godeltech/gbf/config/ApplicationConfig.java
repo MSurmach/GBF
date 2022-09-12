@@ -1,9 +1,8 @@
 package com.godeltech.gbf.config;
 
 import com.godeltech.gbf.GbfBot;
-import com.godeltech.gbf.SendMessageBuilder;
-import com.godeltech.gbf.service.LocaleMessageSource;
-import com.godeltech.gbf.service.interceptors.InterceptorFactory;
+import com.godeltech.gbf.LocaleMessageSource;
+import com.godeltech.gbf.service.interceptor.InterceptorFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,10 +31,5 @@ public class ApplicationConfig {
         resourceBundleMessageSource.setDefaultEncoding("UTF-8");
         resourceBundleMessageSource.setBasenames("content", "buttons");
         return resourceBundleMessageSource;
-    }
-
-    @Bean
-    public SendMessageBuilder sendMessageBuilder() {
-        return new SendMessageBuilder();
     }
 }

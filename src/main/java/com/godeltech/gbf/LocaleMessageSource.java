@@ -1,4 +1,4 @@
-package com.godeltech.gbf.service;
+package com.godeltech.gbf;
 
 import org.springframework.context.MessageSource;
 
@@ -14,5 +14,9 @@ public class LocaleMessageSource {
 
     public String getLocaleMessage(String code) {
         return messageSource.getMessage(code, null, locale);
+    }
+
+    public String getLocaleMessage(String code, String... args) {
+        return messageSource.getMessage(code, args, locale);
     }
 }

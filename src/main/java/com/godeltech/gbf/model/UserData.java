@@ -1,9 +1,12 @@
 package com.godeltech.gbf.model;
 
+import lombok.Data;
+
 import java.util.Date;
 import java.util.List;
 
-public class User {
+@Data
+public class UserData {
     private long id;
     private String username;
     private Country countryFrom;
@@ -13,4 +16,5 @@ public class User {
     private Date dateFrom;
     private Date dateTo;
     private List<Cargo> cargo;
+    private BotState state;
 }

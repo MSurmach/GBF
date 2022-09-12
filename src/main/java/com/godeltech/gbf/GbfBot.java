@@ -1,6 +1,6 @@
 package com.godeltech.gbf;
 
-import com.godeltech.gbf.service.interceptors.InterceptorFactory;
+import com.godeltech.gbf.service.interceptor.InterceptorFactory;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;

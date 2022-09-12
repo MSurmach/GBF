@@ -11,7 +11,8 @@ public enum Country {
     BULGARIA(List.of("Sofia")),
     GEORGIA(List.of("Tbilisi")),
     UK(List.of("London", "Manchester")),
-    UKRAINE(List.of("Kyiv"));
+    UKRAINE(List.of("Kyiv")),
+    UAE(List.of("Dubai"));
     private final List<String> cities;
 
     Country(List<String> cities) {
