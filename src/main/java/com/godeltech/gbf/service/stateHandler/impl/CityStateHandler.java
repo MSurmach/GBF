@@ -2,6 +2,7 @@ package com.godeltech.gbf.service.stateHandler.impl;
 
 import com.godeltech.gbf.model.Country;
 import com.godeltech.gbf.service.stateHandler.BotStateHandler;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -10,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class CityStateHandler implements BotStateHandler {
 
 

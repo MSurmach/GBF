@@ -5,11 +5,15 @@ import org.springframework.context.MessageSource;
 import java.util.Locale;
 
 public class LocaleMessageSource {
-    private final Locale locale = Locale.UK;
+
+    private Locale locale;
     private final MessageSource messageSource;
 
     public LocaleMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
+    }
+    public void setLocale(String languageCode) {
+        this.locale = new Locale(languageCode);
     }
 
     public String getLocaleMessage(String code) {

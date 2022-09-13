@@ -1,5 +1,6 @@
 package com.godeltech.gbf.controller;
 
+import com.godeltech.gbf.LocaleMessageSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +13,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class WebHookBotController {
 
     private TelegramWebhookBot telegramWebhookBot;
+    @Autowired
+    private LocaleMessageSource localeMessageSource;
 
     @Autowired
     public void setTelegramWebhookBot(TelegramWebhookBot telegramWebhookBot) {
@@ -20,6 +23,8 @@ public class WebHookBotController {
 
     @PostMapping("/")
     public BotApiMethod<?> onWebhookUpdateReceived(@RequestBody Update update) {
+        String languageCode = update.getMessage().getFrom().getLanguageCode();
+        localeMessageSource.setLocale(languageCode);
         return telegramWebhookBot.onWebhookUpdateReceived(update);
     }
 }

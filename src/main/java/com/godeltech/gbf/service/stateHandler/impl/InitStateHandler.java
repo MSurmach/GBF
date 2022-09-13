@@ -1,6 +1,7 @@
 package com.godeltech.gbf.service.stateHandler.impl;
 
 import com.godeltech.gbf.cache.UserDataCache;
+import com.godeltech.gbf.model.BotStateFlow;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.LocaleMessageSource;
 import com.godeltech.gbf.service.stateHandler.BotStateHandler;
@@ -26,21 +27,23 @@ public class InitStateHandler implements BotStateHandler {
     }
 
     @Override
-    public SendMessage handleUpdate(Update update) {
-        collectData(update);
-        SendMessage message = new SendMessage();
-        message.setText(textAnswer(update.getMessage().getFrom().getUserName()));
-        message.setReplyMarkup(inlineKeyboardMarkup());
-        message.setChatId(update.getMessage().getChatId().toString());
-        return message;
+    public void handleUpdate(Update update) {
+        User telegramUser = update.getMessage().getFrom();
+        UserData userData = new UserData();
+        userData.setId(telegramUser.getId());
+        userData.setUsername(telegramUser.getUserName());
+        UserDataCache.addToCache(userData.getId(), userData);
     }
 
-    private void collectData(Update update) {
-        User user = update.getMessage().getFrom();
-        UserData userData = new UserData();
-        userData.setId(user.getId());
-        userData.setUsername(user.getUserName());
-        UserDataCache.addToCache(userData.getId(), userData);
+    @Override
+    public SendMessage getView(Update update){
+        Long chatId = update.getMessage().getChatId();
+        String username = update.getMessage().getFrom().getUserName();
+        SendMessage message = new SendMessage();
+        message.setText(textAnswer(username));
+        message.setReplyMarkup(inlineKeyboardMarkup());
+        message.setChatId(chatId);
+        return message;
     }
 
     private String textAnswer(String username) {
@@ -52,17 +55,17 @@ public class InitStateHandler implements BotStateHandler {
 
         var courierButton = new InlineKeyboardButton();
         courierButton.setText(localeMessageSource.getLocaleMessage("start.button.courier"));
-        courierButton.setCallbackData("COURIER");
+        courierButton.setCallbackData(BotStateFlow.COURIER.name());
         buttons.add(courierButton);
 
         var customerButton = new InlineKeyboardButton();
         customerButton.setText(localeMessageSource.getLocaleMessage("start.button.customer"));
-        customerButton.setCallbackData("CUSTOMER");
+        customerButton.setCallbackData(BotStateFlow.CUSTOMER.name());
         buttons.add(customerButton);
 
         var registrationsButton = new InlineKeyboardButton();
         registrationsButton.setText(localeMessageSource.getLocaleMessage("start.button.registrations"));
-        registrationsButton.setCallbackData("REGISTRATIONS");
+        registrationsButton.setCallbackData(BotStateFlow.VIEWER.name());
         buttons.add(registrationsButton);
 
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();

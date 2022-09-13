@@ -16,5 +16,6 @@ public class UserData {
     private Date dateFrom;
     private Date dateTo;
     private List<Cargo> cargo;
-    private BotState state;
+    private BotState botState;
+    private BotStateFlow botStateFlow;
 }

@@ -1,3 +1,3 @@
 POST https://api.telegram.org/bot5706618703:AAGcJ_1iGj6c-CXrJ-ik_QNUpzbIb6S79t4/getWebhookInfo
 ###
-POST https://api.telegram.org/bot5706618703:AAGcJ_1iGj6c-CXrJ-ik_QNUpzbIb6S79t4/setWebhook?url=https://e32a-178-124-214-152.eu.ngrok.io
+POST https://api.telegram.org/bot5706618703:AAGcJ_1iGj6c-CXrJ-ik_QNUpzbIb6S79t4/setWebhook?url=https://e94c-178-168-180-54.eu.ngrok.io

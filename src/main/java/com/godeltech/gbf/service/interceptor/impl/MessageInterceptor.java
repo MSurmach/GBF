@@ -3,6 +3,7 @@ package com.godeltech.gbf.service.interceptor.impl;
 import com.godeltech.gbf.model.BotState;
 import com.godeltech.gbf.model.Command;
 import com.godeltech.gbf.service.interceptor.Interceptor;
+import com.godeltech.gbf.service.stateHandler.BotStateHandler;
 import com.godeltech.gbf.service.stateHandler.BotStateHandlerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,13 +23,14 @@ public class MessageInterceptor implements Interceptor {
         String input = update.getMessage().getText();
         if (input.equalsIgnoreCase(Command.START.getText())) {
             BotState init = BotState.INIT;
-            return botStateHandlerFactory.getHandler(init).handleUpdate(update);
+            BotStateHandler handler = botStateHandlerFactory.getHandler(init);
+            return handler.getView(update);
         }
         if (input.equalsIgnoreCase(Command.STOP.getText())) {
-            BotState finish = BotState.FINISH;
-            return botStateHandlerFactory.getHandler(finish).handleUpdate(update);
+//            BotState finish = BotState.FINISH;
+//            return botStateHandlerFactory.getHandler(finish).handleUpdate(update);
+            return null;
         }
-        BotState help = BotState.HELP;
-        return botStateHandlerFactory.getHandler(help).handleUpdate(update);
+        return null;
     }
 }
