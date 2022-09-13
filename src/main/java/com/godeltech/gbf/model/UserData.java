@@ -1,20 +1,25 @@
 package com.godeltech.gbf.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class UserData {
     private long id;
     private String username;
-    private Country countryFrom;
-    private Country countryTo;
-    private Country cityFrom;
-    private Country cityTo;
-    private Date dateFrom;
-    private Date dateTo;
+    private String countryFrom;
+    private String countryTo;
+    private String cityFrom;
+    private String cityTo;
+    private String yearTo;
+    private String monthTo;
+    private String dayTo;
+    private String yearFrom;
+    private String monthFrom;
+    private String dayFrom;
     private List<Cargo> cargo;
     private BotState botState;
     private BotStateFlow botStateFlow;

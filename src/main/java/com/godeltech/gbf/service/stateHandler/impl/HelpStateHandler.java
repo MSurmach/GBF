@@ -16,7 +16,7 @@ public class HelpStateHandler implements BotStateHandler {
     @Autowired
     private LocaleMessageSource localeMessageSource;
 
-    @Override
+   /* @Override
     public SendMessage handleUpdate(Update update) {
 
         SendMessage sendMessage = new SendMessage();
@@ -25,7 +25,7 @@ public class HelpStateHandler implements BotStateHandler {
         String userName = update.getMessage().getFrom().getUserName();
         sendMessage.setText(textAnswer(userName));
         return sendMessage;
-    }
+    }*/
 
     private String textAnswer(String username) {
         String mainMessage = localeMessageSource.getLocaleMessage("help.message", username);
@@ -33,5 +33,15 @@ public class HelpStateHandler implements BotStateHandler {
         stringBuilder.append(mainMessage).append(System.lineSeparator());
         Arrays.asList(Command.values()).forEach(command -> stringBuilder.append(command.getText()).append(System.lineSeparator()));
         return stringBuilder.toString();
+    }
+
+    @Override
+    public void handleUpdate(Update update) {
+
+    }
+
+    @Override
+    public SendMessage getView(Update update) {
+        return null;
     }
 }

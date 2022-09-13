@@ -6,16 +6,18 @@ import java.util.List;
 
 @Getter
 public enum Country {
-    BELARUS(List.of("Brest", "Vitebsk", "Gomel", "Grodno", "Mogilev", "Minsk")),
-    POLAND(List.of("Bialystok", "Gdansk", "Krakow", "Lodz", "Poznan", "Warsaw", "Wroclaw")),
-    BULGARIA(List.of("Sofia")),
-    GEORGIA(List.of("Tbilisi")),
-    UK(List.of("London", "Manchester")),
-    UKRAINE(List.of("Kyiv")),
-    UAE(List.of("Dubai"));
+    BELARUS("Belarus", List.of("Brest", "Vitebsk", "Gomel", "Grodno", "Mogilev", "Minsk")),
+    POLAND("Poland", List.of("Bialystok", "Gdansk", "Krakow", "Lodz", "Poznan", "Warsaw", "Wroclaw")),
+    BULGARIA("Bulgaria", List.of("Sofia")),
+    GEORGIA("Georgia", List.of("Tbilisi")),
+    UK("Britain", List.of("London", "Manchester")),
+    UKRAINE("Ukraine", List.of("Kyiv")),
+    UAE("Emirates", List.of("Dubai"));
     private final List<String> cities;
+    private final String name;
 
-    Country(List<String> cities) {
+    Country(String name, List<String> cities) {
+        this.name = name;
         this.cities = cities;
     }
 }

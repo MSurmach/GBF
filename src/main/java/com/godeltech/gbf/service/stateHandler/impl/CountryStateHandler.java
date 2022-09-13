@@ -1,7 +1,11 @@
 package com.godeltech.gbf.service.stateHandler.impl;
 
 import com.godeltech.gbf.LocaleMessageSource;
+import com.godeltech.gbf.cache.UserDataCache;
+import com.godeltech.gbf.model.BotState;
+import com.godeltech.gbf.model.BotStateFlow;
 import com.godeltech.gbf.model.Country;
+import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.stateHandler.BotStateHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,24 +28,32 @@ public class CountryStateHandler implements BotStateHandler {
     }
 
     @Override
-    public SendMessage handleUpdate(Update update) {
+    public void handleUpdate(Update update) {
+        Long telegramUserId = update.getCallbackQuery().getFrom().getId();
+        String callBackData = update.getCallbackQuery().getData();
+        UserData userDataFromCache = UserDataCache.getUserDataFromCache(telegramUserId);
+        BotState currentBotState = userDataFromCache.getBotState();
+        if (currentBotState == BotState.COUNTRY_TO) userDataFromCache.setCountryTo(callBackData);
+        else userDataFromCache.setCountryFrom(callBackData);
+        BotStateFlow botStateFlow = userDataFromCache.getBotStateFlow();
+        userDataFromCache.setBotState(botStateFlow.getNextState(currentBotState));
+    }
+
+    @Override
+    public SendMessage getView(Update update) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(update.getCallbackQuery().getMessage().getChatId());
-        sendMessage.setText("Choose the country");
+        UserData userDataFromCache = UserDataCache.getUserDataFromCache(update.getCallbackQuery().getFrom().getId());
+        BotState botState = userDataFromCache.getBotState();
+        sendMessage.setText(textAnswer(botState));
         sendMessage.setReplyMarkup(inlineKeyboardMarkup());
         return sendMessage;
     }
 
-    public SendMessage getView(Long chatId){
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText(textAnswer());
-        sendMessage.setReplyMarkup(inlineKeyboardMarkup());
-        return sendMessage;
-    }
-
-    private String textAnswer() {
-        return localeMessageSource.getLocaleMessage("city.message");
+    private String textAnswer(BotState botState) {
+        return botState == BotState.COUNTRY_TO ?
+                localeMessageSource.getLocaleMessage("country.to.message") :
+                localeMessageSource.getLocaleMessage("country.from.message");
     }
 
     private InlineKeyboardMarkup inlineKeyboardMarkup() {
@@ -52,7 +64,7 @@ public class CountryStateHandler implements BotStateHandler {
             List<InlineKeyboardButton> rowWithButtons = new ArrayList<>();
             while (countriesInRow > 0) {
                 InlineKeyboardButton button = new InlineKeyboardButton();
-                button.setText(countryList.get(index).name());
+                button.setText(countryList.get(index).getName());
                 button.setCallbackData(countryList.get(index).name());
                 rowWithButtons.add(button);
                 countriesInRow--;

@@ -22,8 +22,9 @@ public class MessageInterceptor implements Interceptor {
     public BotApiMethod<?> intercept(Update update) {
         String input = update.getMessage().getText();
         if (input.equalsIgnoreCase(Command.START.getText())) {
-            BotState init = BotState.INIT;
+            BotState init = BotState.MAIN_MENU;
             BotStateHandler handler = botStateHandlerFactory.getHandler(init);
+            handler.handleUpdate(update);
             return handler.getView(update);
         }
         if (input.equalsIgnoreCase(Command.STOP.getText())) {

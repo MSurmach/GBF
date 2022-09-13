@@ -6,7 +6,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class RegistrationsStateHandler implements BotStateHandler {
     @Override
-    public SendMessage handleUpdate(Update update) {
+    public void handleUpdate(Update update) {
+
+    }
+
+    @Override
+    public SendMessage getView(Update update) {
         return null;
     }
 }

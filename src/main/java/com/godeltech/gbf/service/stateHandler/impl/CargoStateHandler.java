@@ -12,10 +12,6 @@ import java.util.List;
 
 @Service
 public class CargoStateHandler implements BotStateHandler {
-    @Override
-    public SendMessage handleUpdate(Update update) {
-        return null;
-    }
 
     private InlineKeyboardMarkup inlineKeyboardMarkup() {
         List<Cargo> cargos = List.of(Cargo.values());
@@ -27,5 +23,15 @@ public class CargoStateHandler implements BotStateHandler {
                     return button;
                 }).toList();
         return new InlineKeyboardMarkup(List.of(buttons));
+    }
+
+    @Override
+    public void handleUpdate(Update update) {
+
+    }
+
+    @Override
+    public SendMessage getView(Update update) {
+        return null;
     }
 }

@@ -31,10 +31,10 @@ public class CallBackQueryInterceptor implements Interceptor {
             userDataFromCache.setBotStateFlow(botStateFlow);
             userDataFromCache.setBotState(botState);
         } catch (IllegalArgumentException illegalArgumentException) {
-            BotStateFlow botStateFlow = userDataFromCache.getBotStateFlow();
             BotState currentBotState = userDataFromCache.getBotState();
-            botState = botStateFlow.getNextState(currentBotState);
+            botStateHandlerFactory.getHandler(currentBotState).handleUpdate(update);
+            botState = userDataFromCache.getBotState();
         }
-        return botStateHandlerFactory.getHandler(botState).handleUpdate(update);
+        return botStateHandlerFactory.getHandler(botState).getView(update);
     }
 }

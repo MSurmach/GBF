@@ -22,10 +22,15 @@ public enum BotStateFlow {
 
     public BotState getNextState(BotState botState) {
         int currentBotStateIndex = this.flow.indexOf(botState);
-        return flow.get(++currentBotStateIndex);
+        return currentBotStateIndex == this.flow.size() - 1 ? MAIN_MENU : flow.get(++currentBotStateIndex);
     }
 
-    public BotState getFirstState(){
+    public BotState getPreviousState(BotState botState) {
+        int currentBotStateIndex = this.flow.indexOf(botState);
+        return currentBotStateIndex == 0 ? MAIN_MENU : flow.get(--currentBotStateIndex);
+    }
+
+    public BotState getFirstState() {
         return this.flow.get(0);
     }
 }
