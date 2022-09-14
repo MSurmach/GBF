@@ -1,30 +1,31 @@
-package com.godeltech.gbf.service.stateHandler.impl;
+package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.LocaleMessageSource;
 import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.model.BotState;
 import com.godeltech.gbf.model.BotStateFlow;
-import com.godeltech.gbf.model.Country;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.stateHandler.BotStateHandler;
+import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
+import com.godeltech.gbf.service.keyboard.Keyboard;
+import com.godeltech.gbf.service.keyboard.KeybordAddData;
+import com.godeltech.gbf.service.keyboard.impl.CityKeyboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
-public class CityStateHandler implements BotStateHandler {
+public class CityStateHandler extends LocaleBotStateHandler {
 
-    private LocaleMessageSource localeMessageSource;
+    private Keyboard keyboard;
 
     @Autowired
-    public void setLocaleMessageSource(LocaleMessageSource localeMessageSource) {
-        this.localeMessageSource = localeMessageSource;
+    public void setKeyboard(CityKeyboard keyboard) {
+        this.keyboard = keyboard;
+    }
+
+    public CityStateHandler(LocaleMessageSource localeMessageSource) {
+        super(localeMessageSource);
     }
 
     @Override
@@ -46,11 +47,13 @@ public class CityStateHandler implements BotStateHandler {
         UserData userDataFromCache = UserDataCache.getUserDataFromCache(update.getCallbackQuery().getFrom().getId());
         sendMessage.setText(textAnswer(userDataFromCache));
         BotState botState = userDataFromCache.getBotState();
-        if (botState == BotState.CITY_FROM) {
-            sendMessage.setReplyMarkup(inlineKeyboardMarkup(userDataFromCache.getCountryFrom()));
-        } else {
-            sendMessage.setReplyMarkup(inlineKeyboardMarkup(userDataFromCache.getCountryTo()));
+
+        if (keyboard instanceof KeybordAddData keyboardWithData) {
+            if (botState == BotState.CITY_FROM) {
+                keyboardWithData.addDataToKeyboard(userDataFromCache.getCountryFrom());
+            } else keyboardWithData.addDataToKeyboard(userDataFromCache.getCountryTo());
         }
+        sendMessage.setReplyMarkup(keyboard.getKeyboardMarkup());
         return sendMessage;
     }
 
@@ -59,26 +62,5 @@ public class CityStateHandler implements BotStateHandler {
         return botState == BotState.CITY_TO ?
                 localeMessageSource.getLocaleMessage("city.to.message", userData.getCountryTo()) :
                 localeMessageSource.getLocaleMessage("city.from.message", userData.getCountryFrom());
-    }
-
-    private InlineKeyboardMarkup inlineKeyboardMarkup(String countryName) {
-        Country country = Country.valueOf(countryName);
-        List<String> cities = country.getCities();
-        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        for (int index = 0; index < cities.size(); ) {
-            int countriesInRow = 3;
-            List<InlineKeyboardButton> rowWithButtons = new ArrayList<>();
-            while (countriesInRow > 0) {
-                InlineKeyboardButton button = new InlineKeyboardButton();
-                button.setText(cities.get(index));
-                button.setCallbackData(cities.get(index));
-                rowWithButtons.add(button);
-                countriesInRow--;
-                index++;
-                if (index == cities.size()) break;
-            }
-            keyboard.add(rowWithButtons);
-        }
-        return new InlineKeyboardMarkup(keyboard);
     }
 }

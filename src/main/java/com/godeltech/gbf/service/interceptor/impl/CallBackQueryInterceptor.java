@@ -5,7 +5,7 @@ import com.godeltech.gbf.model.BotState;
 import com.godeltech.gbf.model.BotStateFlow;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.interceptor.Interceptor;
-import com.godeltech.gbf.service.stateHandler.BotStateHandlerFactory;
+import com.godeltech.gbf.service.factory.BotStateHandlerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;

@@ -1,4 +1,4 @@
-package com.godeltech.gbf.service.interceptor;
+package com.godeltech.gbf.service.factory;
 
 import com.godeltech.gbf.service.interceptor.impl.CallBackQueryInterceptor;
 import com.godeltech.gbf.service.interceptor.impl.MessageInterceptor;

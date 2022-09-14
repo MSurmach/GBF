@@ -1,13 +1,19 @@
 package com.godeltech.gbf.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDate;
-import java.util.List;
+import java.time.Month;
 
 @Data
+@NoArgsConstructor
+@Entity
+@Table
 public class User {
     @Id
     @Column(name = "user_id")
@@ -25,7 +31,7 @@ public class User {
     @Column(name = "date_to")
     private LocalDate dateTo;
     @Column(name = "cargo")
-    private List<Cargo> cargoList;
+    private Load load;
 
     public User(UserData userData) {
         userId = userData.getId();
@@ -33,11 +39,15 @@ public class User {
         cityFrom = userData.getCityFrom();
         countryTo = userData.getCountryTo();
         cityTo = userData.getCityTo();
-        cargoList = userData.getCargo();
+        load = userData.getLoad();
+        dateFrom = mapLocalDate(userData.getYearFrom(), userData.getMonthFrom(), userData.getDayFrom());
+        dateTo = mapLocalDate(userData.getYearTo(), userData.getYearTo(), userData.getDayTo());
     }
 
-    private LocalDate localDate(String year, String month, String day) {
+    private LocalDate mapLocalDate(String year, String monthName, String day) {
         int yearAsInt = Integer.parseInt(year);
-        return null;
+        Month month = Month.valueOf(monthName);
+        int dayAsInt = Integer.parseInt(day);
+        return LocalDate.of(yearAsInt, month, dayAsInt);
     }
 }

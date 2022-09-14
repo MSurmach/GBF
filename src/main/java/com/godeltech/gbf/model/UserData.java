@@ -3,8 +3,6 @@ package com.godeltech.gbf.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 public class UserData {
@@ -20,7 +18,7 @@ public class UserData {
     private String yearFrom;
     private String monthFrom;
     private String dayFrom;
-    private List<Cargo> cargo;
+    private Load load;
     private BotState botState;
     private BotStateFlow botStateFlow;
 }

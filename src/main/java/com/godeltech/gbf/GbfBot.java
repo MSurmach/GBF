@@ -1,6 +1,6 @@
 package com.godeltech.gbf;
 
-import com.godeltech.gbf.service.interceptor.InterceptorFactory;
+import com.godeltech.gbf.service.factory.InterceptorFactory;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
@@ -42,7 +42,7 @@ public class GbfBot extends TelegramWebhookBot {
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         BotApiMethod<?> intercepted = interceptorFactory.intercept(update);
-        deleteMessage(update);
+        //deleteMessage(update);
         return intercepted;
     }
 

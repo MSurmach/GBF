@@ -1,9 +1,8 @@
-package com.godeltech.gbf.service.stateHandler.impl;
+package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.LocaleMessageSource;
 import com.godeltech.gbf.model.Command;
-import com.godeltech.gbf.service.stateHandler.BotStateHandler;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -11,10 +10,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.Arrays;
 
 @Service
-public class HelpStateHandler implements BotStateHandler {
+public class HelpStateHandler extends LocaleBotStateHandler {
 
-    @Autowired
-    private LocaleMessageSource localeMessageSource;
+    public HelpStateHandler(LocaleMessageSource localeMessageSource) {
+        super(localeMessageSource);
+    }
 
    /* @Override
     public SendMessage handleUpdate(Update update) {

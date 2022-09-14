@@ -1,6 +1,6 @@
 POST https://api.telegram.org/bot5706618703:AAGcJ_1iGj6c-CXrJ-ik_QNUpzbIb6S79t4/getWebhookInfo
 ###
-POST https://api.telegram.org/bot5706618703:AAGcJ_1iGj6c-CXrJ-ik_QNUpzbIb6S79t4/setWebhook?url=https://e997-178-124-214-152.eu.ngrok.io
+POST https://api.telegram.org/bot5706618703:AAGcJ_1iGj6c-CXrJ-ik_QNUpzbIb6S79t4/setWebhook?url=https://cbbe-178-124-214-152.eu.ngrok.io
 ###
 POST https://api.telegram.org/bot5706618703:AAGcJ_1iGj6c-CXrJ-ik_QNUpzbIb6S79t4/sendMessage?chat_id=621620935&text=Hello, it's me
 ###

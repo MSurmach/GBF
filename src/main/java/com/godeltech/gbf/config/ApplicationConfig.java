@@ -2,16 +2,18 @@ package com.godeltech.gbf.config;
 
 import com.godeltech.gbf.GbfBot;
 import com.godeltech.gbf.LocaleMessageSource;
-import com.godeltech.gbf.service.interceptor.InterceptorFactory;
+import com.godeltech.gbf.service.factory.InterceptorFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 
 import java.util.Locale;
 
 @Configuration
+@EnableJpaRepositories
 public class ApplicationConfig {
 
     @Bean
