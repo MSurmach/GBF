@@ -42,7 +42,7 @@ public class GbfBot extends TelegramWebhookBot {
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         BotApiMethod<?> intercepted = interceptorFactory.intercept(update);
-        deleteMessage(update);
+        //deleteMessage(update);
         return intercepted;
     }
 
