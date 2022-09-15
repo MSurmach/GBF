@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 @Data
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "courier", schema = "public")
 public class User {
     @Id
     @Column(name = "user_id")
@@ -47,7 +47,7 @@ public class User {
         cityTo = userData.getCityTo();
         load = userData.getLoad();
         dateFrom = mapLocalDate(userData.getYearFrom(), userData.getMonthFrom(), userData.getDayFrom());
-        dateTo = mapLocalDate(userData.getYearTo(), userData.getYearTo(), userData.getDayTo());
+        dateTo = mapLocalDate(userData.getYearTo(), userData.getMonthTo(), userData.getDayTo());
     }
 
     private LocalDate mapLocalDate(String year, String monthName, String day) {
@@ -55,17 +55,5 @@ public class User {
         Month month = Month.valueOf(monthName);
         int dayAsInt = Integer.parseInt(day);
         return LocalDate.of(yearAsInt, month, dayAsInt);
-    }
-
-    @Override
-    public String toString() {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
-        String formattedDateTo = dateTo.format(dateTimeFormatter);
-        String formattedDateFrom = dateFrom.format(dateTimeFormatter);
-        return """
-                @%s planned to visit %s, %s on %s, /
-                starting point is %s, %s on %s.
-                The load, which can be transferred: %s
-                """.formatted(username,countryTo, cityTo, formattedDateTo,countryFrom, cityFrom, formattedDateFrom, load);
     }
 }

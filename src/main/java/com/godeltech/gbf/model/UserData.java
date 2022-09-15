@@ -21,4 +21,12 @@ public class UserData {
     private Load load;
     private BotState botState;
     private BotStateFlow botStateFlow;
+
+    @Override
+    public String toString() {
+        return """
+                Starting point is %s, %s on %s %s %s, destination point is %s, %s on %s %s %s.
+                Your load is %s.
+                """.formatted(countryFrom, cityFrom, dayFrom, monthFrom, yearFrom, countryTo, cityTo, dayTo, monthTo, yearTo, load);
+    }
 }

@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -51,11 +52,23 @@ public class RegistrationsStateHandler extends LocaleBotStateHandler {
     }
 
     private String textAnswer(String username, List<User> registrations) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
         String mainMessage = registrations.isEmpty() ?
                 localeMessageSource.getLocaleMessage("registrations.not_exist", username) :
                 localeMessageSource.getLocaleMessage("registrations.exist", username);
-        StringBuilder stringBuilder = new StringBuilder(mainMessage).append(System.lineSeparator());
-        registrations.forEach(registration->stringBuilder.append(registration));
+        StringBuilder stringBuilder = new StringBuilder(mainMessage).append("\n\n");
+        registrations.forEach(registration -> {
+            String record = localeMessageSource.getLocaleMessage("registration.data",
+                    registration.getId().toString(),
+                    registration.getCountryFrom(),
+                    registration.getCityFrom(),
+                    registration.getDateFrom().format(dateTimeFormatter),
+                    registration.getCountryTo(),
+                    registration.getCityTo(),
+                    registration.getDateTo().format(dateTimeFormatter),
+                    registration.getLoad().name());
+            stringBuilder.append(record).append("\n\n");
+        });
         return stringBuilder.toString();
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class BotStateHandlerFactory {
 
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     public BotStateHandlerFactory(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
@@ -26,6 +26,9 @@ public class BotStateHandlerFactory {
             case CITY_FROM, CITY_TO -> applicationContext.getBean(CityStateHandler.class);
             case LOAD -> applicationContext.getBean(LoadStateHandler.class);
             case WRONG_INPUT -> applicationContext.getBean(WrongInputStateHandler.class);
+            case CONFIRM -> applicationContext.getBean(ConfirmStateHandler.class);
+            case SUCCESS -> applicationContext.getBean(SuccessBotStateHandler.class);
+            case USERS_LIST -> applicationContext.getBean(UsersListBotStateHandler.class);
             default -> null;
         };
     }
