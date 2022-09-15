@@ -35,7 +35,7 @@ public class CountryKeyboard extends LocaleKeyboard {
             List<InlineKeyboardButton> buttonRow = new ArrayList<>();
             while (columnCount > 0 && index != countries.length) {
                 var button = new InlineKeyboardButton();
-                button.setText(countries[index].getName());
+                button.setText(countries[index].getCountryName());
                 button.setCallbackData(countries[index].name());
                 buttonRow.add(button);
                 columnCount--;

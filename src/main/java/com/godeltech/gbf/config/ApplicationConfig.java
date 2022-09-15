@@ -13,7 +13,6 @@ import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import java.util.Locale;
 
 @Configuration
-@EnableJpaRepositories
 public class ApplicationConfig {
 
     @Bean

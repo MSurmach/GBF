@@ -34,7 +34,7 @@ public class DayStateHandler extends LocaleBotStateHandler {
         CallbackQuery callbackQuery = update.getCallbackQuery();
         Long telegramUserId = callbackQuery.getFrom().getId();
         String callBackData = callbackQuery.getData();
-        UserData cachedUserData = UserDataCache.getUserDataFromCache(telegramUserId);
+        UserData cachedUserData = UserDataCache.get(telegramUserId);
         BotState currentBotState = cachedUserData.getBotState();
         if (currentBotState == BotState.DAY_FROM) cachedUserData.setDayFrom(callBackData);
         else cachedUserData.setDayTo(callBackData);
@@ -47,7 +47,7 @@ public class DayStateHandler extends LocaleBotStateHandler {
         SendMessage sendMessage = new SendMessage();
         CallbackQuery callbackQuery = update.getCallbackQuery();
         sendMessage.setChatId(callbackQuery.getMessage().getChatId());
-        UserData cachedUserData = UserDataCache.getUserDataFromCache(callbackQuery.getFrom().getId());
+        UserData cachedUserData = UserDataCache.get(callbackQuery.getFrom().getId());
         sendMessage.setText(textAnswer(cachedUserData));
         BotState botState = cachedUserData.getBotState();
         if (keyboard instanceof KeybordAddData keyboardWithData) {
@@ -61,6 +61,6 @@ public class DayStateHandler extends LocaleBotStateHandler {
 
     private String textAnswer(UserData userData) {
         BotState botState = userData.getBotState();
-        return botState == BotState.DAY_TO ? localeMessageSource.getLocaleMessage("day.to.message", userData.getCountryTo(), userData.getCityTo()) : localeMessageSource.getLocaleMessage("day.from.message", userData.getCountryFrom(), userData.getCityFrom());
+        return botState == BotState.DAY_TO ? localeMessageSource.getLocaleMessage("day.to", userData.getCountryTo(), userData.getCityTo()) : localeMessageSource.getLocaleMessage("day.from", userData.getCountryFrom(), userData.getCityFrom());
     }
 }

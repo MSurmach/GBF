@@ -3,12 +3,10 @@ package com.godeltech.gbf.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @NoArgsConstructor
@@ -17,7 +15,14 @@ import java.time.Month;
 public class User {
     @Id
     @Column(name = "user_id")
-    private Long userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "telegram_id")
+    private Long telegramId;
+
+    @Column(name = "username")
+    private String username;
     @Column(name = "country_from")
     private String countryFrom;
     @Column(name = "city_from")
@@ -34,7 +39,8 @@ public class User {
     private Load load;
 
     public User(UserData userData) {
-        userId = userData.getId();
+        telegramId = userData.getId();
+        username = userData.getUsername();
         countryFrom = userData.getCountryFrom();
         cityFrom = userData.getCityFrom();
         countryTo = userData.getCountryTo();
@@ -49,5 +55,17 @@ public class User {
         Month month = Month.valueOf(monthName);
         int dayAsInt = Integer.parseInt(day);
         return LocalDate.of(yearAsInt, month, dayAsInt);
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+        String formattedDateTo = dateTo.format(dateTimeFormatter);
+        String formattedDateFrom = dateFrom.format(dateTimeFormatter);
+        return """
+                @%s planned to visit %s, %s on %s, /
+                starting point is %s, %s on %s.
+                The load, which can be transferred: %s
+                """.formatted(username,countryTo, cityTo, formattedDateTo,countryFrom, cityFrom, formattedDateFrom, load);
     }
 }

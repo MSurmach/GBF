@@ -23,18 +23,31 @@ public class CallBackQueryInterceptor implements Interceptor {
     @Override
     public BotApiMethod<?> intercept(Update update) {
         Long telegramUserId = update.getCallbackQuery().getFrom().getId();
-        UserData userDataFromCache = UserDataCache.getUserDataFromCache(telegramUserId);
-        BotState botState;
+        UserData userDataFromCache = UserDataCache.get(telegramUserId);
+        BotState nextBotState;
+        String callBackData = update.getCallbackQuery().getData();
         try {
-            BotStateFlow botStateFlow = BotStateFlow.valueOf(update.getCallbackQuery().getData());
-            botState = botStateFlow.getFirstState();
+            BotStateFlow botStateFlow = BotStateFlow.valueOf(callBackData);
+            nextBotState = botStateFlow.getFirstState();
             userDataFromCache.setBotStateFlow(botStateFlow);
-            userDataFromCache.setBotState(botState);
+            userDataFromCache.setBotState(nextBotState);
         } catch (IllegalArgumentException illegalArgumentException) {
-            BotState currentBotState = userDataFromCache.getBotState();
-            botStateHandlerFactory.getHandler(currentBotState).handleUpdate(update);
-            botState = userDataFromCache.getBotState();
+            switch (callBackData) {
+                case "BACK" -> {
+                    BotStateFlow currentBotFlow = userDataFromCache.getBotStateFlow();
+                    BotState previousState = currentBotFlow.getPreviousState(userDataFromCache.getBotState());
+                    userDataFromCache.setBotState(previousState);
+                }
+                case "MENU" -> {
+                    userDataFromCache.setBotState(BotState.MENU);
+                }
+                default -> {
+                    BotState currentBotState = userDataFromCache.getBotState();
+                    botStateHandlerFactory.getHandler(currentBotState).handleUpdate(update);
+                }
+            }
+            nextBotState = userDataFromCache.getBotState();
         }
-        return botStateHandlerFactory.getHandler(botState).getView(update);
+        return botStateHandlerFactory.getHandler(nextBotState).getView(update);
     }
 }

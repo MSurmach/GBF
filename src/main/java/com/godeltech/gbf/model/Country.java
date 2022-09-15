@@ -14,10 +14,10 @@ public enum Country {
     UKRAINE("Ukraine", List.of("Kyiv")),
     UAE("Emirates", List.of("Dubai"));
     private final List<String> cities;
-    private final String name;
+    private final String countryName;
 
-    Country(String name, List<String> cities) {
-        this.name = name;
+    Country(String countryName, List<String> cities) {
+        this.countryName = countryName;
         this.cities = cities;
     }
 }

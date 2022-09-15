@@ -8,6 +8,7 @@ import com.godeltech.gbf.service.factory.BotStateHandlerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Service
@@ -21,17 +22,21 @@ public class MessageInterceptor implements Interceptor {
     @Override
     public BotApiMethod<?> intercept(Update update) {
         String input = update.getMessage().getText();
-        if (input.equalsIgnoreCase(Command.START.getText())) {
-            BotState init = BotState.MENU;
-            BotStateHandler handler = botStateHandlerFactory.getHandler(init);
-            handler.handleUpdate(update);
+        try {
+            Command command = Command.valueOf(input.toUpperCase().replace("/",""));
+            return switch (command) {
+                case START -> {
+                    BotStateHandler handler = botStateHandlerFactory.getHandler(BotState.MENU);
+                    handler.handleUpdate(update);
+                    yield handler.getView(update);
+                }
+                case STOP -> {
+                    yield null;
+                }
+            };
+        } catch (IllegalArgumentException exception) {
+            BotStateHandler handler = botStateHandlerFactory.getHandler(BotState.WRONG_INPUT);
             return handler.getView(update);
         }
-        if (input.equalsIgnoreCase(Command.STOP.getText())) {
-//            BotState finish = BotState.FINISH;
-//            return botStateHandlerFactory.getHandler(finish).handleUpdate(update);
-            return null;
-        }
-        return null;
     }
 }

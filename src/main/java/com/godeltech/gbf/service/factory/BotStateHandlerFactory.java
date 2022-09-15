@@ -24,10 +24,8 @@ public class BotStateHandlerFactory {
             case DAY_FROM, DAY_TO -> applicationContext.getBean(DayStateHandler.class);
             case COUNTRY_FROM, COUNTRY_TO -> applicationContext.getBean(CountryStateHandler.class);
             case CITY_FROM, CITY_TO -> applicationContext.getBean(CityStateHandler.class);
-            case LOAD -> applicationContext.getBean(CargoStateHandler.class);
-            case FINISH -> null;
-            case HELP -> applicationContext.getBean(HelpStateHandler.class);
-            case BACK -> null;
+            case LOAD -> applicationContext.getBean(LoadStateHandler.class);
+            case WRONG_INPUT -> applicationContext.getBean(WrongInputStateHandler.class);
             default -> null;
         };
     }

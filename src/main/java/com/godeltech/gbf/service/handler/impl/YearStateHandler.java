@@ -33,7 +33,7 @@ public class YearStateHandler extends LocaleBotStateHandler {
         CallbackQuery callbackQuery = update.getCallbackQuery();
         Long telegramUserId = callbackQuery.getFrom().getId();
         String callBackData = callbackQuery.getData();
-        UserData cachedUserData = UserDataCache.getUserDataFromCache(telegramUserId);
+        UserData cachedUserData = UserDataCache.get(telegramUserId);
         BotState currentBotState = cachedUserData.getBotState();
         if (currentBotState == BotState.YEAR_TO) cachedUserData.setYearTo(callBackData);
         else cachedUserData.setYearFrom(callBackData);
@@ -46,7 +46,7 @@ public class YearStateHandler extends LocaleBotStateHandler {
         SendMessage sendMessage = new SendMessage();
         CallbackQuery callbackQuery = update.getCallbackQuery();
         sendMessage.setChatId(callbackQuery.getMessage().getChatId());
-        UserData userDataFromCache = UserDataCache.getUserDataFromCache(callbackQuery.getFrom().getId());
+        UserData userDataFromCache = UserDataCache.get(callbackQuery.getFrom().getId());
         sendMessage.setText(textAnswer(userDataFromCache));
         sendMessage.setReplyMarkup(keyboard.getKeyboardMarkup());
         return sendMessage;
@@ -55,7 +55,7 @@ public class YearStateHandler extends LocaleBotStateHandler {
     private String textAnswer(UserData userData) {
         BotState botState = userData.getBotState();
         return botState == BotState.YEAR_TO ?
-                localeMessageSource.getLocaleMessage("year.to.message", userData.getCountryTo(), userData.getCityTo()) :
-                localeMessageSource.getLocaleMessage("year.from.message", userData.getCountryFrom(), userData.getCityFrom());
+                localeMessageSource.getLocaleMessage("year.to", userData.getCountryTo(), userData.getCityTo()) :
+                localeMessageSource.getLocaleMessage("year.from", userData.getCountryFrom(), userData.getCityFrom());
     }
 }

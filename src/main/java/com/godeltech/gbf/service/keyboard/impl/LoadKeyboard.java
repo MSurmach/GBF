@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,7 +38,9 @@ public class LoadKeyboard extends LocaleKeyboard {
                     button.setCallbackData(load.name());
                     return button;
                 }).toList();
-        InlineKeyboardMarkup loadKeyboardMarkup = new InlineKeyboardMarkup(List.of(buttons));
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+        keyboard.add(buttons);
+        InlineKeyboardMarkup loadKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
         return new KeyboardAppender(loadKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup()).result();
     }
 }

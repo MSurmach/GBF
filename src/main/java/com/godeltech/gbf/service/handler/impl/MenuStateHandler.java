@@ -9,6 +9,7 @@ import com.godeltech.gbf.service.keyboard.impl.MenuKeyboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
@@ -28,25 +29,33 @@ public class MenuStateHandler extends LocaleBotStateHandler {
 
     @Override
     public void handleUpdate(Update update) {
-        User telegramUser = update.getMessage().getFrom();
+        User telegramUser = update.hasCallbackQuery() ?
+                update.getCallbackQuery().getFrom() : update.getMessage().getFrom();
         UserData userData = new UserData();
         userData.setId(telegramUser.getId());
         userData.setUsername(telegramUser.getUserName());
-        UserDataCache.addToCache(userData.getId(), userData);
+        UserDataCache.add(userData.getId(), userData);
     }
 
     @Override
     public SendMessage getView(Update update) {
-        Long chatId = update.getMessage().getChatId();
-        String username = update.getMessage().getFrom().getUserName();
-        SendMessage message = new SendMessage();
-        message.setText(textAnswer(username));
-        message.setReplyMarkup(keyboard.getKeyboardMarkup());
-        message.setChatId(chatId);
-        return message;
+        Message message;
+        String username;
+        if (update.hasCallbackQuery()) {
+            message = update.getCallbackQuery().getMessage();
+            username = update.getCallbackQuery().getFrom().getUserName();
+        } else {
+            message = update.getMessage();
+            username = message.getFrom().getUserName();
+        }
+        SendMessage answer = new SendMessage();
+        answer.setText(textAnswer(username));
+        answer.setReplyMarkup(keyboard.getKeyboardMarkup());
+        answer.setChatId(message.getChatId());
+        return answer;
     }
 
     private String textAnswer(String username) {
-        return localeMessageSource.getLocaleMessage("start.message", username);
+        return localeMessageSource.getLocaleMessage("menu", username);
     }
 }

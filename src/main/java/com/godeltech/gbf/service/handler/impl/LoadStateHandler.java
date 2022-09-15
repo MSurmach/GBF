@@ -16,7 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Service
-public class CargoStateHandler extends LocaleBotStateHandler {
+public class LoadStateHandler extends LocaleBotStateHandler {
     private Keyboard keyboard;
 
     @Autowired
@@ -24,7 +24,7 @@ public class CargoStateHandler extends LocaleBotStateHandler {
         this.keyboard = keyboard;
     }
 
-    public CargoStateHandler(LocaleMessageSource localeMessageSource) {
+    public LoadStateHandler(LocaleMessageSource localeMessageSource) {
         super(localeMessageSource);
     }
 
@@ -33,7 +33,7 @@ public class CargoStateHandler extends LocaleBotStateHandler {
         CallbackQuery callbackQuery = update.getCallbackQuery();
         Long telegramUserId = callbackQuery.getFrom().getId();
         String callBackData = callbackQuery.getData();
-        UserData cachedUserData = UserDataCache.getUserDataFromCache(telegramUserId);
+        UserData cachedUserData = UserDataCache.get(telegramUserId);
         BotState currentBotState = cachedUserData.getBotState();
         cachedUserData.setLoad(Load.valueOf(callBackData));
         BotStateFlow botStateFlow = cachedUserData.getBotStateFlow();
@@ -45,7 +45,7 @@ public class CargoStateHandler extends LocaleBotStateHandler {
         SendMessage sendMessage = new SendMessage();
         CallbackQuery callbackQuery = update.getCallbackQuery();
         sendMessage.setChatId(callbackQuery.getMessage().getChatId());
-        UserData cachedUserData = UserDataCache.getUserDataFromCache(callbackQuery.getFrom().getId());
+        UserData cachedUserData = UserDataCache.get(callbackQuery.getFrom().getId());
         sendMessage.setText(textAnswer(cachedUserData));
         sendMessage.setReplyMarkup(keyboard.getKeyboardMarkup());
         return sendMessage;
@@ -53,6 +53,6 @@ public class CargoStateHandler extends LocaleBotStateHandler {
 
     private String textAnswer(UserData userData) {
         BotStateFlow botState = userData.getBotStateFlow();
-        return botState == BotStateFlow.COURIER ? localeMessageSource.getLocaleMessage("cargo.courier.message") : localeMessageSource.getLocaleMessage("cargo.customer.message");
+        return botState == BotStateFlow.COURIER ? localeMessageSource.getLocaleMessage("load.courier") : localeMessageSource.getLocaleMessage("load.customer");
     }
 }

@@ -33,7 +33,7 @@ public class MonthStateHandler extends LocaleBotStateHandler {
         CallbackQuery callbackQuery = update.getCallbackQuery();
         Long telegramUserId = callbackQuery.getFrom().getId();
         String callBackData = callbackQuery.getData();
-        UserData cachedUserData = UserDataCache.getUserDataFromCache(telegramUserId);
+        UserData cachedUserData = UserDataCache.get(telegramUserId);
         BotState currentBotState = cachedUserData.getBotState();
         if (currentBotState == BotState.MONTH_TO) cachedUserData.setMonthTo(callBackData);
         else cachedUserData.setMonthFrom(callBackData);
@@ -46,7 +46,7 @@ public class MonthStateHandler extends LocaleBotStateHandler {
         SendMessage sendMessage = new SendMessage();
         CallbackQuery callbackQuery = update.getCallbackQuery();
         sendMessage.setChatId(callbackQuery.getMessage().getChatId());
-        UserData cachedUserData = UserDataCache.getUserDataFromCache(callbackQuery.getFrom().getId());
+        UserData cachedUserData = UserDataCache.get(callbackQuery.getFrom().getId());
         sendMessage.setText(textAnswer(cachedUserData));
         sendMessage.setReplyMarkup(keyboard.getKeyboardMarkup());
         return sendMessage;
@@ -54,6 +54,6 @@ public class MonthStateHandler extends LocaleBotStateHandler {
 
     private String textAnswer(UserData userData) {
         BotState botState = userData.getBotState();
-        return botState == BotState.MONTH_TO ? localeMessageSource.getLocaleMessage("month.to.message", userData.getCountryTo(), userData.getCityTo()) : localeMessageSource.getLocaleMessage("month.from.message", userData.getCountryFrom(), userData.getCityFrom());
+        return botState == BotState.MONTH_TO ? localeMessageSource.getLocaleMessage("month.to", userData.getCountryTo(), userData.getCityTo()) : localeMessageSource.getLocaleMessage("month.from", userData.getCountryFrom(), userData.getCityFrom());
     }
 }

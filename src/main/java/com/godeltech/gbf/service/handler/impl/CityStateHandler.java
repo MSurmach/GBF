@@ -32,7 +32,7 @@ public class CityStateHandler extends LocaleBotStateHandler {
     public void handleUpdate(Update update) {
         Long telegramUserId = update.getCallbackQuery().getFrom().getId();
         String callBackData = update.getCallbackQuery().getData();
-        UserData userDataFromCache = UserDataCache.getUserDataFromCache(telegramUserId);
+        UserData userDataFromCache = UserDataCache.get(telegramUserId);
         BotState currentBotState = userDataFromCache.getBotState();
         if (currentBotState == BotState.CITY_TO) userDataFromCache.setCityTo(callBackData);
         else userDataFromCache.setCityFrom(callBackData);
@@ -44,7 +44,7 @@ public class CityStateHandler extends LocaleBotStateHandler {
     public SendMessage getView(Update update) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(update.getCallbackQuery().getMessage().getChatId());
-        UserData userDataFromCache = UserDataCache.getUserDataFromCache(update.getCallbackQuery().getFrom().getId());
+        UserData userDataFromCache = UserDataCache.get(update.getCallbackQuery().getFrom().getId());
         sendMessage.setText(textAnswer(userDataFromCache));
         BotState botState = userDataFromCache.getBotState();
 
@@ -60,7 +60,7 @@ public class CityStateHandler extends LocaleBotStateHandler {
     private String textAnswer(UserData userData) {
         BotState botState = userData.getBotState();
         return botState == BotState.CITY_TO ?
-                localeMessageSource.getLocaleMessage("city.to.message", userData.getCountryTo()) :
-                localeMessageSource.getLocaleMessage("city.from.message", userData.getCountryFrom());
+                localeMessageSource.getLocaleMessage("city.to", userData.getCountryTo()) :
+                localeMessageSource.getLocaleMessage("city.from", userData.getCountryFrom());
     }
 }

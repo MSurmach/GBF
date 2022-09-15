@@ -6,7 +6,7 @@ import java.util.Locale;
 
 public class LocaleMessageSource {
 
-    private Locale locale;
+    private Locale locale=Locale.UK;
     private final MessageSource messageSource;
 
     public LocaleMessageSource(MessageSource messageSource) {

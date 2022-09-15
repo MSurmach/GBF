@@ -9,12 +9,15 @@ public class UserDataCache {
 
     private final static Map<Long, UserData> USERDATA_CACHE = new HashMap<>();
 
-    public static void addToCache(Long userId, UserData userData) {
+    public static void add(Long userId, UserData userData) {
         USERDATA_CACHE.put(userId, userData);
     }
 
-    public static UserData getUserDataFromCache(Long userId) {
+    public static UserData get(Long userId) {
         return USERDATA_CACHE.get(userId);
     }
 
+    public static void delete(Long userId) {
+        USERDATA_CACHE.remove(userId);
+    }
 }

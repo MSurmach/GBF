@@ -31,7 +31,7 @@ public class CountryStateHandler extends LocaleBotStateHandler {
     public void handleUpdate(Update update) {
         Long telegramUserId = update.getCallbackQuery().getFrom().getId();
         String callBackData = update.getCallbackQuery().getData();
-        UserData userDataFromCache = UserDataCache.getUserDataFromCache(telegramUserId);
+        UserData userDataFromCache = UserDataCache.get(telegramUserId);
         BotState currentBotState = userDataFromCache.getBotState();
         if (currentBotState == BotState.COUNTRY_TO) userDataFromCache.setCountryTo(callBackData);
         else userDataFromCache.setCountryFrom(callBackData);
@@ -43,7 +43,7 @@ public class CountryStateHandler extends LocaleBotStateHandler {
     public SendMessage getView(Update update) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(update.getCallbackQuery().getMessage().getChatId());
-        UserData userDataFromCache = UserDataCache.getUserDataFromCache(update.getCallbackQuery().getFrom().getId());
+        UserData userDataFromCache = UserDataCache.get(update.getCallbackQuery().getFrom().getId());
         BotState botState = userDataFromCache.getBotState();
         sendMessage.setText(textAnswer(botState));
         sendMessage.setReplyMarkup(keyboard.getKeyboardMarkup());
@@ -52,7 +52,7 @@ public class CountryStateHandler extends LocaleBotStateHandler {
 
     private String textAnswer(BotState botState) {
         return botState == BotState.COUNTRY_TO ?
-                localeMessageSource.getLocaleMessage("country.to.message") :
-                localeMessageSource.getLocaleMessage("country.from.message");
+                localeMessageSource.getLocaleMessage("country.to") :
+                localeMessageSource.getLocaleMessage("country.from");
     }
 }
