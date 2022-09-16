@@ -2,7 +2,7 @@ package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocaleMessageSource;
 import com.godeltech.gbf.service.keyboard.Keyboard;
-import com.godeltech.gbf.service.keyboard.KeyboardAppender;
+import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +45,6 @@ public class MonthKeyboard extends LocaleKeyboard {
             keyboard.add(buttonRow);
         }
         InlineKeyboardMarkup monthKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardAppender(monthKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup()).result();
+        return new KeyboardMarkupAppender(monthKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup()).result();
     }
 }

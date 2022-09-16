@@ -2,6 +2,7 @@ package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocaleMessageSource;
 import com.godeltech.gbf.service.keyboard.Keyboard;
+import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.service.keyboard.KeybordAddData;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,37 +35,25 @@ public class DayKeyboard extends LocaleKeyboard implements KeybordAddData {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup() {
+        int month = Month.valueOf(monthName).getValue();
+        YearMonth yearMonth = YearMonth.of(Integer.parseInt(year), month);
+        int countOfDays = yearMonth.lengthOfMonth();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        keyboard.add(getHeader(year));
-        keyboard.add(getHeader(monthName));
-        keyboard.add(getWeekDayRow());
-
-        LocalDate givenDate = getLocalDate(year, monthName);
-        var shift = givenDate.getDayOfWeek().getValue();
-        var dayCount = givenDate.lengthOfMonth();
-
-        for (var day = 1; day <= dayCount; day++) {
-            var columnCount = 7;
-
+        for (int day = 1; day <= countOfDays; ) {
+            int columnCount = 7;
+            List<InlineKeyboardButton> rowWithButtons = new ArrayList<>();
+            while (columnCount > 0 && day <= countOfDays) {
+                InlineKeyboardButton button = new InlineKeyboardButton();
+                button.setText(String.valueOf(day));
+                button.setCallbackData(String.valueOf(day));
+                rowWithButtons.add(button);
+                columnCount--;
+                day++;
+            }
+            keyboard.add(rowWithButtons);
         }
-
-//
-//        for (int day = 1; day <= countOfDays; ) {
-//            int columnCount = 7;
-//            List<InlineKeyboardButton> rowWithButtons = new ArrayList<>();
-//            while (columnCount > 0 && day <= countOfDays) {
-//                InlineKeyboardButton button = new InlineKeyboardButton();
-//                button.setText(String.valueOf(day));
-//                button.setCallbackData(String.valueOf(day));
-//                rowWithButtons.add(button);
-//                columnCount--;
-//                day++;
-//            }
-//            keyboard.add(rowWithButtons);
-//        }
         InlineKeyboardMarkup dayKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        //     return new KeyboardAppender(dayKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup()).result();
-        return dayKeyboardMarkup;
+        return new KeyboardMarkupAppender(dayKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup()).result();
     }
 
     @Override

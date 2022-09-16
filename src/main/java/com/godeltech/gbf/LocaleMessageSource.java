@@ -1,17 +1,20 @@
 package com.godeltech.gbf;
 
+import lombok.Getter;
 import org.springframework.context.MessageSource;
 
 import java.util.Locale;
 
 public class LocaleMessageSource {
 
-    private Locale locale=Locale.UK;
+    @Getter
+    private Locale locale = Locale.UK;
     private final MessageSource messageSource;
 
     public LocaleMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
+
     public void setLocale(String languageCode) {
         this.locale = new Locale(languageCode);
     }

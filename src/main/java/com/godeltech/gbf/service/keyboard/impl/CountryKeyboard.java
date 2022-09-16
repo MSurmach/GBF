@@ -3,7 +3,7 @@ package com.godeltech.gbf.service.keyboard.impl;
 import com.godeltech.gbf.LocaleMessageSource;
 import com.godeltech.gbf.model.Country;
 import com.godeltech.gbf.service.keyboard.Keyboard;
-import com.godeltech.gbf.service.keyboard.KeyboardAppender;
+import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +44,6 @@ public class CountryKeyboard extends LocaleKeyboard {
             keyboard.add(buttonRow);
         }
         InlineKeyboardMarkup countryKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardAppender(countryKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup()).result();
+        return new KeyboardMarkupAppender(countryKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup()).result();
     }
 }

@@ -7,7 +7,8 @@ import com.godeltech.gbf.model.BotStateFlow;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
 import com.godeltech.gbf.service.keyboard.Keyboard;
-import com.godeltech.gbf.service.keyboard.impl.YearKeyboard;
+import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
+import com.godeltech.gbf.service.keyboard.impl.CalendarKeyboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -24,9 +25,13 @@ public class YearStateHandler extends LocaleBotStateHandler {
     }
 
     @Autowired
-    public void setKeyboard(YearKeyboard keyboard) {
+    public void setKeyboard(CalendarKeyboard keyboard) {
         this.keyboard = keyboard;
     }
+//    @Autowired
+//    public void setKeyboard(YearKeyboard keyboard) {
+//        this.keyboard = keyboard;
+//    }
 
     @Override
     public void handleUpdate(Update update) {
