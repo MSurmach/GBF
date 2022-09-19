@@ -23,5 +23,7 @@ public enum BotState {
     CONFIRM,
     WRONG_INPUT,
     SUCCESS,
-    USERS_LIST
+    USERS_LIST,
+    DATE_FROM,
+    DATE_TO
 }
