@@ -1,48 +1,44 @@
 package com.godeltech.gbf;
 
+import com.godeltech.gbf.config.TelegramBotConfig;
 import com.godeltech.gbf.service.factory.InterceptorFactory;
-import org.telegram.telegrambots.bots.TelegramWebhookBot;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.starter.SpringWebhookBot;
 
-public class GbfBot extends TelegramWebhookBot {
-
-    private final String botUsername;
-
-    private final String botToken;
-
-    private final String botPath;
-
+public class GbfBot extends SpringWebhookBot {
     private final InterceptorFactory interceptorFactory;
+    private final TelegramBotConfig telegramBotConfig;
 
-    public GbfBot(String botUsername, String botToken, String botPath, InterceptorFactory interceptorFactory) {
-        this.botUsername = botUsername;
-        this.botToken = botToken;
-        this.botPath = botPath;
+    public GbfBot(DefaultBotOptions options, SetWebhook setWebhook, InterceptorFactory interceptorFactory, TelegramBotConfig telegramBotConfig) {
+        super(options, setWebhook);
         this.interceptorFactory = interceptorFactory;
+        this.telegramBotConfig = telegramBotConfig;
     }
 
     @Override
     public String getBotUsername() {
-        return botUsername;
+        return telegramBotConfig.getBotUserName();
     }
 
     @Override
     public String getBotToken() {
-        return botToken;
+        return telegramBotConfig.getBotToken();
     }
 
     @Override
     public String getBotPath() {
-        return botPath;
+        return telegramBotConfig.getBotEndpoint();
     }
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         BotApiMethod<?> intercepted = interceptorFactory.intercept(update);
-        //deleteMessage(update);
+        deleteMessage(update);
         return intercepted;
     }
 
