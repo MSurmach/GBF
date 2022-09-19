@@ -5,5 +5,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public interface BotStateHandler {
     void handleUpdate(Update update);
-    SendMessage getView(Update update);
+
+    SendMessage getView(Long chatId, Long userId);
 }

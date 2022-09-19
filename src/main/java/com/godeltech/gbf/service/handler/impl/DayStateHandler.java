@@ -5,11 +5,10 @@ import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.model.BotState;
 import com.godeltech.gbf.model.BotStateFlow;
 import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.service.answer.LocalAnswerService;
 import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
-import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeybordAddData;
 import com.godeltech.gbf.service.keyboard.impl.DayKeyboard;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -18,15 +17,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Service
 public class DayStateHandler extends LocaleBotStateHandler {
 
-    private Keyboard keyboard;
-
-    public DayStateHandler(LocaleMessageSource localeMessageSource) {
-        super(localeMessageSource);
-    }
-
-    @Autowired
-    public void setKeyboard(DayKeyboard keyboard) {
-        this.keyboard = keyboard;
+    public DayStateHandler(LocaleMessageSource localeMessageSource, DayKeyboard keyboard, LocalAnswerService localAnswerService) {
+        super(localeMessageSource, keyboard, localAnswerService);
     }
 
     @Override
@@ -43,24 +35,15 @@ public class DayStateHandler extends LocaleBotStateHandler {
     }
 
     @Override
-    public SendMessage getView(Update update) {
-        SendMessage sendMessage = new SendMessage();
-        CallbackQuery callbackQuery = update.getCallbackQuery();
-        sendMessage.setChatId(callbackQuery.getMessage().getChatId());
-        UserData cachedUserData = UserDataCache.get(callbackQuery.getFrom().getId());
-        sendMessage.setText(textAnswer(cachedUserData));
+    public SendMessage getView(Long chatId, Long userId) {
+        UserData cachedUserData = UserDataCache.get(userId);
         BotState botState = cachedUserData.getBotState();
+        String answer = localAnswerService.getTextAnswer(cachedUserData);
         if (keyboard instanceof KeybordAddData keyboardWithData) {
             if (botState == BotState.DAY_TO) {
                 keyboardWithData.addDataToKeyboard(cachedUserData.getYearTo(), cachedUserData.getMonthTo());
             } else keyboardWithData.addDataToKeyboard(cachedUserData.getYearFrom(), cachedUserData.getMonthFrom());
         }
-        sendMessage.setReplyMarkup(keyboard.getKeyboardMarkup());
-        return sendMessage;
-    }
-
-    private String textAnswer(UserData userData) {
-        BotState botState = userData.getBotState();
-        return botState == BotState.DAY_TO ? localeMessageSource.getLocaleMessage("day.to", userData.getCountryTo(), userData.getCityTo()) : localeMessageSource.getLocaleMessage("day.from", userData.getCountryFrom(), userData.getCityFrom());
+        return createMessage(chatId, answer, keyboard.getKeyboardMarkup());
     }
 }

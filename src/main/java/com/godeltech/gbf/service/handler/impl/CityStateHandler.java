@@ -5,11 +5,10 @@ import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.model.BotState;
 import com.godeltech.gbf.model.BotStateFlow;
 import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.service.answer.LocalAnswerService;
 import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
-import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeybordAddData;
 import com.godeltech.gbf.service.keyboard.impl.CityKeyboard;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -17,15 +16,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Service
 public class CityStateHandler extends LocaleBotStateHandler {
 
-    private Keyboard keyboard;
-
-    @Autowired
-    public void setKeyboard(CityKeyboard keyboard) {
-        this.keyboard = keyboard;
-    }
-
-    public CityStateHandler(LocaleMessageSource localeMessageSource) {
-        super(localeMessageSource);
+    public CityStateHandler(LocaleMessageSource localeMessageSource, CityKeyboard keyboard, LocalAnswerService localAnswerService) {
+        super(localeMessageSource, keyboard, localAnswerService);
     }
 
     @Override
@@ -41,26 +33,18 @@ public class CityStateHandler extends LocaleBotStateHandler {
     }
 
     @Override
-    public SendMessage getView(Update update) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(update.getCallbackQuery().getMessage().getChatId());
-        UserData userDataFromCache = UserDataCache.get(update.getCallbackQuery().getFrom().getId());
-        sendMessage.setText(textAnswer(userDataFromCache));
-        BotState botState = userDataFromCache.getBotState();
-
+    public SendMessage getView(Long chatId, Long userId) {
+        UserData cachedUserData = UserDataCache.get(userId);
+        BotState botState = cachedUserData.getBotState();
         if (keyboard instanceof KeybordAddData keyboardWithData) {
             if (botState == BotState.CITY_FROM) {
-                keyboardWithData.addDataToKeyboard(userDataFromCache.getCountryFrom());
-            } else keyboardWithData.addDataToKeyboard(userDataFromCache.getCountryTo());
+                keyboardWithData.addDataToKeyboard(cachedUserData.getCountryFrom());
+            } else keyboardWithData.addDataToKeyboard(cachedUserData.getCountryTo());
         }
-        sendMessage.setReplyMarkup(keyboard.getKeyboardMarkup());
-        return sendMessage;
-    }
-
-    private String textAnswer(UserData userData) {
-        BotState botState = userData.getBotState();
-        return botState == BotState.CITY_TO ?
-                localeMessageSource.getLocaleMessage("city.to", userData.getCountryTo()) :
-                localeMessageSource.getLocaleMessage("city.from", userData.getCountryFrom());
+        return SendMessage.builder().
+                chatId(chatId).
+                text(localAnswerService.getTextAnswer(cachedUserData)).
+                replyMarkup(keyboard.getKeyboardMarkup()).
+                build();
     }
 }

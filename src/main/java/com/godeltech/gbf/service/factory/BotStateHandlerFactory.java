@@ -19,9 +19,10 @@ public class BotStateHandlerFactory {
         return switch (botState) {
             case MENU -> applicationContext.getBean(MenuStateHandler.class);
             case REGISTRATIONS -> applicationContext.getBean(RegistrationsStateHandler.class);
-            case YEAR_FROM, YEAR_TO -> applicationContext.getBean(YearStateHandler.class);
-            case MONTH_FROM, MONTH_TO -> applicationContext.getBean(MonthStateHandler.class);
-            case DAY_FROM, DAY_TO -> applicationContext.getBean(DayStateHandler.class);
+            case DATE_FROM, DATE_TO -> applicationContext.getBean(DateStateHandler.class);
+            //case YEAR_FROM, YEAR_TO -> applicationContext.getBean(YearStateHandler.class);
+            // case MONTH_FROM, MONTH_TO -> applicationContext.getBean(MonthStateHandler.class);
+            //case DAY_FROM, DAY_TO -> applicationContext.getBean(DayStateHandler.class);
             case COUNTRY_FROM, COUNTRY_TO -> applicationContext.getBean(CountryStateHandler.class);
             case CITY_FROM, CITY_TO -> applicationContext.getBean(CityStateHandler.class);
             case LOAD -> applicationContext.getBean(LoadStateHandler.class);
