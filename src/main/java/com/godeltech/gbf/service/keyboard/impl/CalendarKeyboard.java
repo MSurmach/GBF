@@ -38,12 +38,16 @@ public class CalendarKeyboard extends LocaleKeyboard implements KeybordAddData {
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup() {
         LocalDate localDate = LocalDate.now();
+        var monthYearHeader = createMonthYearRow(localDate);
+        var weekDayRow = createWeekDayRow();
+        var daysMarkup = createDaysMarkup(localDate);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        keyboard.add(createMonthYearRow(localDate));
-        keyboard.add(createWeekDayRow());
-        keyboard.addAll(createDaysMarkup(localDate));
+        keyboard.add(monthYearHeader);
+        keyboard.add(weekDayRow);
+        keyboard.addAll(daysMarkup);
         var calendarKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(calendarKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup()).result();
+       // return new KeyboardMarkupAppender(calendarKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup()).result();
+        return calendarKeyboardMarkup;
     }
 
     private List<InlineKeyboardButton> createMonthYearRow(LocalDate localDate) {
@@ -53,7 +57,11 @@ public class CalendarKeyboard extends LocaleKeyboard implements KeybordAddData {
         DateTimeFormatter monthYearFormatter = DateTimeFormatter.ofPattern(monthYearPattern, localeMessageSource.getLocale());
         String header = localDate.format(monthYearFormatter);
         var monthYearHeader = createButton(header);
-        return List.of(prevMonthButton, monthYearHeader, nextMonthButton);
+        List<InlineKeyboardButton> row = new ArrayList<>();
+        row.add(prevMonthButton);
+        row.add(monthYearHeader);
+        row.add(nextMonthButton);
+        return row;
     }
 
     private List<InlineKeyboardButton> createWeekDayRow() {
@@ -71,26 +79,30 @@ public class CalendarKeyboard extends LocaleKeyboard implements KeybordAddData {
         int lengthOfMonth = localDate.lengthOfMonth();
         int numOfRows = (int) Math.ceil(((double) shift + lengthOfMonth) / columnCount);
         List<List<InlineKeyboardButton>> daysMarkup = new ArrayList<>();
-        for (int row = 0, day = 1; row < numOfRows; row++) {
-            List<InlineKeyboardButton> rowOfButton = new ArrayList<>();
-            for (int column = 0; column < columnCount; column++) {
-                if (shift-- > 0 || day > lengthOfMonth) rowOfButton.add(createButton());
-                else {
-                    String callback = dateCallback(day, localDate);
-                    String label = String.valueOf(day);
-                    day++;
-                    rowOfButton.add(createButton(label, callback));
-                }
-            }
-            daysMarkup.add(rowOfButton);
+        for (int index = 0; index < numOfRows; index++) {
+            daysMarkup.add(buildRow(firstDayDate, shift, columnCount));
+            firstDayDate = firstDayDate.plusDays(columnCount - shift);
+            shift = 0;
         }
         return daysMarkup;
     }
 
-    private String dateCallback(int day, LocalDate localDate) {
-        String datePattern = "dd-MM-yyyy";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(datePattern);
-        return LocalDate.of(localDate.getYear(), localDate.getMonth(), day).format(formatter);
+    private List<InlineKeyboardButton> buildRow(LocalDate date, int shift, int columnCount) {
+        List<InlineKeyboardButton> row = new ArrayList<>();
+        int day = date.getDayOfMonth();
+        LocalDate callbackDate = date;
+        for (int index = 0; index < shift; index++) {
+            row.add(createButton());
+        }
+        for (int index = shift; index < columnCount; index++) {
+            if (day <= date.lengthOfMonth()) {
+                row.add(createButton(Integer.toString(day++), callbackDate.toString()));
+                callbackDate = callbackDate.plusDays(1);
+            } else {
+                row.add(createButton());
+            }
+        }
+        return row;
     }
 
     @Override
