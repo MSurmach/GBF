@@ -31,23 +31,23 @@ public class CallBackQueryInterceptor implements Interceptor {
             BotStateFlow botStateFlow = BotStateFlow.valueOf(callBackData);
             nextBotState = botStateFlow.getFirstState();
             cachedUserData.setBotStateFlow(botStateFlow);
-            cachedUserData.setBotState(nextBotState);
+            cachedUserData.setCurrentBotState(nextBotState);
         } catch (IllegalArgumentException illegalArgumentException) {
             switch (callBackData) {
                 case "BACK" -> {
                     BotStateFlow currentBotFlow = cachedUserData.getBotStateFlow();
-                    BotState previousState = currentBotFlow.getPreviousState(cachedUserData.getBotState());
-                    cachedUserData.setBotState(previousState);
+                    BotState previousState = currentBotFlow.getPreviousState(cachedUserData.getCurrentBotState());
+                    cachedUserData.setCurrentBotState(previousState);
                 }
                 case "MENU" -> {
-                    cachedUserData.setBotState(BotState.MENU);
+                    cachedUserData.setCurrentBotState(BotState.MENU);
                 }
                 default -> {
-                    BotState currentBotState = cachedUserData.getBotState();
+                    BotState currentBotState = cachedUserData.getCurrentBotState();
                     botStateHandlerFactory.getHandler(currentBotState).handleUpdate(update);
                 }
             }
-            nextBotState = cachedUserData.getBotState();
+            nextBotState = cachedUserData.getCurrentBotState();
         }
         return botStateHandlerFactory.getHandler(nextBotState).getView(chat_id, userId);
     }

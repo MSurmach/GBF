@@ -27,17 +27,17 @@ public class DayStateHandler extends LocaleBotStateHandler {
         Long telegramUserId = callbackQuery.getFrom().getId();
         String callBackData = callbackQuery.getData();
         UserData cachedUserData = UserDataCache.get(telegramUserId);
-        BotState currentBotState = cachedUserData.getBotState();
+        BotState currentBotState = cachedUserData.getCurrentBotState();
         if (currentBotState == BotState.DAY_FROM) cachedUserData.setDayFrom(callBackData);
         else cachedUserData.setDayTo(callBackData);
         BotStateFlow botStateFlow = cachedUserData.getBotStateFlow();
-        cachedUserData.setBotState(botStateFlow.getNextState(currentBotState));
+        cachedUserData.setCurrentBotState(botStateFlow.getNextState(currentBotState));
     }
 
     @Override
     public SendMessage getView(Long chatId, Long userId) {
         UserData cachedUserData = UserDataCache.get(userId);
-        BotState botState = cachedUserData.getBotState();
+        BotState botState = cachedUserData.getCurrentBotState();
         String answer = localAnswerService.getTextAnswer(cachedUserData);
         if (keyboard instanceof KeybordAddData keyboardWithData) {
             if (botState == BotState.DAY_TO) {

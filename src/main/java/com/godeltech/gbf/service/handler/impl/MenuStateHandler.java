@@ -25,7 +25,7 @@ public class MenuStateHandler extends LocaleBotStateHandler {
         UserData userData = new UserData();
         userData.setId(telegramUser.getId());
         userData.setUsername(telegramUser.getUserName());
-        userData.setBotState(BotState.MENU);
+        userData.setCurrentBotState(BotState.MENU);
         UserDataCache.add(userData.getId(), userData);
     }
 }

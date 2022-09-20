@@ -8,7 +8,7 @@ import java.util.Locale;
 public class LocaleMessageSource {
 
     @Getter
-    private Locale locale = Locale.UK;
+    private Locale locale = new Locale("ru");
     private final MessageSource messageSource;
 
     public LocaleMessageSource(MessageSource messageSource) {

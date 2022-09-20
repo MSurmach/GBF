@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import org.telegram.telegrambots.updatesreceivers.DefaultWebhook;
@@ -16,24 +15,26 @@ public class RegistrationBotConfiguration {
 
     @Value("${telegram.bot.internalURL}")
     private String internalURL;
-    @Autowired
+
     private GbfBot gbfBot;
+
     @Autowired
-    private SetWebhook setWebhook;
+    public void setGbfBot(GbfBot gbfBot) {
+        this.gbfBot = gbfBot;
+    }
 
     @Bean
     public DefaultWebhook defaultWebhook() {
         DefaultWebhook defaultWebhook = new DefaultWebhook();
         defaultWebhook.setInternalUrl(internalURL);
+        defaultWebhook.registerWebhook(gbfBot);
         return defaultWebhook;
     }
 
     @Bean
     public TelegramBotsApi telegramBotsApi() {
         try {
-            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class, defaultWebhook());
-            telegramBotsApi.registerBot(gbfBot, setWebhook);
-            return telegramBotsApi;
+            return new TelegramBotsApi(DefaultBotSession.class, defaultWebhook());
         } catch (TelegramApiException e) {
             throw new RuntimeException("Can not register a bot: " + e);
         }

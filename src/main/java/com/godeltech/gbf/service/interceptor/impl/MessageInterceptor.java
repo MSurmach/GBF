@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.interceptor.impl;
 
 import com.godeltech.gbf.model.BotState;
-import com.godeltech.gbf.model.Command;
+import com.godeltech.gbf.model.TextCommand;
 import com.godeltech.gbf.service.factory.BotStateHandlerFactory;
 import com.godeltech.gbf.service.handler.BotStateHandler;
 import com.godeltech.gbf.service.interceptor.Interceptor;
@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Service
 public class MessageInterceptor implements Interceptor {
 
-    private Command command;
+    private TextCommand textCommand;
 
     @Autowired
     private BotStateHandlerFactory botStateHandlerFactory;
@@ -24,8 +24,8 @@ public class MessageInterceptor implements Interceptor {
         Long chatId = update.getMessage().getChatId();
         Long userId = update.getMessage().getFrom().getId();
         try {
-            Command command = Command.valueOf(input.toUpperCase().replace("/", ""));
-            return switch (command) {
+            TextCommand textCommand = TextCommand.valueOf(input.toUpperCase().replace("/", ""));
+            return switch (textCommand) {
                 case START -> {
                     BotStateHandler handler = botStateHandlerFactory.getHandler(BotState.MENU);
                     handler.handleUpdate(update);
@@ -34,6 +34,7 @@ public class MessageInterceptor implements Interceptor {
                 case STOP -> {
                     yield null;
                 }
+                default -> null;
             };
         } catch (IllegalArgumentException exception) {
             BotStateHandler handler = botStateHandlerFactory.getHandler(BotState.WRONG_INPUT);

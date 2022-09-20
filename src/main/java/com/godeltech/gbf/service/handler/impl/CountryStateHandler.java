@@ -23,10 +23,10 @@ public class CountryStateHandler extends LocaleBotStateHandler {
         Long telegramUserId = update.getCallbackQuery().getFrom().getId();
         String callBackData = update.getCallbackQuery().getData();
         UserData userDataFromCache = UserDataCache.get(telegramUserId);
-        BotState currentBotState = userDataFromCache.getBotState();
+        BotState currentBotState = userDataFromCache.getCurrentBotState();
         if (currentBotState == BotState.COUNTRY_TO) userDataFromCache.setCountryTo(callBackData);
         else userDataFromCache.setCountryFrom(callBackData);
         BotStateFlow botStateFlow = userDataFromCache.getBotStateFlow();
-        userDataFromCache.setBotState(botStateFlow.getNextState(currentBotState));
+        userDataFromCache.setCurrentBotState(botStateFlow.getNextState(currentBotState));
     }
 }

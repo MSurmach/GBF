@@ -5,6 +5,7 @@ import com.godeltech.gbf.model.*;
 import com.godeltech.gbf.service.answer.LocalAnswerService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
@@ -18,9 +19,11 @@ public class AnswerServiceImpl extends LocalAnswerService {
         super(localeMessageSource);
     }
 
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+
     @Override
     public String getTextAnswer(UserData userData) {
-        BotState currentBotState = userData.getBotState();
+        BotState currentBotState = userData.getCurrentBotState();
         BotStateFlow currentBotStateFlow = userData.getBotStateFlow();
         return switch (currentBotState) {
             case MENU -> localeMessageSource.getLocaleMessage("menu", userData.getUsername());
@@ -51,15 +54,15 @@ public class AnswerServiceImpl extends LocalAnswerService {
             case USERS_LIST -> constructUsersListMessage(null);
             case WRONG_INPUT -> constructWrongInputMessage(userData);
             case DATE_FROM ->
-                    localeMessageSource.getLocaleMessage("date.from", userData.getCountryFrom(), userData.getCityFrom());
+                    localeMessageSource.getLocaleMessage("date.from", userData.getCountryFrom(), userData.getCityFrom(), LocalDate.now().format(dateTimeFormatter));
             case DATE_TO ->
-                    localeMessageSource.getLocaleMessage("date.to", userData.getCountryTo(), userData.getCityTo());
+                    localeMessageSource.getLocaleMessage("date.to", userData.getCountryTo(), userData.getCityTo(), LocalDate.now().format(dateTimeFormatter));
             default -> null;
         };
     }
 
     private String constructUsersListMessage(List<User> users) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+
         StringBuilder stringBuilder = new StringBuilder();
         users.forEach(user -> {
             String record = localeMessageSource.getLocaleMessage("list.user.data",
@@ -84,14 +87,10 @@ public class AnswerServiceImpl extends LocalAnswerService {
         String confirmationData = localeMessageSource.getLocaleMessage("courier.user.data",
                 userData.getCountryFrom(),
                 userData.getCityFrom(),
-                userData.getDayFrom(),
-                userData.getMonthFrom(),
-                userData.getYearFrom(),
+                userData.getDateFrom().format(dateTimeFormatter),
                 userData.getCountryTo(),
                 userData.getCityTo(),
-                userData.getDayTo(),
-                userData.getMonthTo(),
-                userData.getYearTo(),
+                userData.getDateTo().format(dateTimeFormatter),
                 userData.getLoad().name());
         stringBuilder.append(confirmationData);
         return stringBuilder.toString();
@@ -139,7 +138,7 @@ public class AnswerServiceImpl extends LocalAnswerService {
         StringBuilder stringBuilder = new StringBuilder();
         String headerMessage = localeMessageSource.getLocaleMessage("wrong_input", username);
         stringBuilder.append(headerMessage).append(System.lineSeparator());
-        Arrays.asList(Command.values()).forEach(command -> stringBuilder.append(command.getText()).append(System.lineSeparator()));
+        Arrays.asList(TextCommand.values()).forEach(textCommand -> stringBuilder.append(textCommand.getText()).append(System.lineSeparator()));
         return stringBuilder.toString();
     }
 

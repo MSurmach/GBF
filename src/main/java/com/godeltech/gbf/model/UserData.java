@@ -3,6 +3,8 @@ package com.godeltech.gbf.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 public class UserData {
@@ -15,11 +17,15 @@ public class UserData {
     private String yearTo;
     private String monthTo;
     private String dayTo;
+
+    private LocalDate dateTo;
+    private LocalDate dateFrom;
     private String yearFrom;
     private String monthFrom;
     private String dayFrom;
     private Load load;
-    private BotState botState;
+    private BotState currentBotState;
+    private BotState previousBotState;
     private BotStateFlow botStateFlow;
 
     @Override

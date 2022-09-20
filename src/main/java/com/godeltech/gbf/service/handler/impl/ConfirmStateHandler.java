@@ -34,6 +34,6 @@ public class ConfirmStateHandler extends LocaleBotStateHandler {
             User user = new User(cachedUserData);
             userRepository.save(user);
         }
-        cachedUserData.setBotState(botStateFlow.getNextState(cachedUserData.getBotState()));
+        cachedUserData.setCurrentBotState(botStateFlow.getNextState(cachedUserData.getCurrentBotState()));
     }
 }

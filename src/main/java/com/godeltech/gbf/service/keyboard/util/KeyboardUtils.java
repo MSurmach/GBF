@@ -19,7 +19,7 @@ public class KeyboardUtils {
     }
 
     public static InlineKeyboardButton createButton() {
-        var button = new InlineKeyboardButton();
+        var button = new InlineKeyboardButton(" ");
         button.setCallbackData(IGNORE);
         return button;
     }

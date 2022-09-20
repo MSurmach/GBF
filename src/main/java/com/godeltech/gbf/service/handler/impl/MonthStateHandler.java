@@ -26,11 +26,11 @@ public class MonthStateHandler extends LocaleBotStateHandler {
         Long telegramUserId = callbackQuery.getFrom().getId();
         String callBackData = callbackQuery.getData();
         UserData cachedUserData = UserDataCache.get(telegramUserId);
-        BotState currentBotState = cachedUserData.getBotState();
+        BotState currentBotState = cachedUserData.getCurrentBotState();
         if (currentBotState == BotState.MONTH_TO) cachedUserData.setMonthTo(callBackData);
         else cachedUserData.setMonthFrom(callBackData);
         BotStateFlow botStateFlow = cachedUserData.getBotStateFlow();
-        cachedUserData.setBotState(botStateFlow.getNextState(currentBotState));
+        cachedUserData.setCurrentBotState(botStateFlow.getNextState(currentBotState));
     }
 
     @Override

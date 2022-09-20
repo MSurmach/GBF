@@ -29,6 +29,7 @@ public class ApplicationConfig {
         return SetWebhook.builder().
                 url(telegramBotConfig.getWebhookHost()).
                 dropPendingUpdates(true).
+                maxConnections(100).
                 build();
     }
 
@@ -49,7 +50,7 @@ public class ApplicationConfig {
         ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();
         resourceBundleMessageSource.setDefaultLocale(Locale.UK);
         resourceBundleMessageSource.setDefaultEncoding("UTF-8");
-        resourceBundleMessageSource.setBasenames("content", "buttons");
+        resourceBundleMessageSource.setBasenames("message", "buttons", "model");
         return resourceBundleMessageSource;
     }
 }

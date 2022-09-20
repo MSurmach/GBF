@@ -25,17 +25,17 @@ public class CityStateHandler extends LocaleBotStateHandler {
         Long telegramUserId = update.getCallbackQuery().getFrom().getId();
         String callBackData = update.getCallbackQuery().getData();
         UserData userDataFromCache = UserDataCache.get(telegramUserId);
-        BotState currentBotState = userDataFromCache.getBotState();
+        BotState currentBotState = userDataFromCache.getCurrentBotState();
         if (currentBotState == BotState.CITY_TO) userDataFromCache.setCityTo(callBackData);
         else userDataFromCache.setCityFrom(callBackData);
         BotStateFlow botStateFlow = userDataFromCache.getBotStateFlow();
-        userDataFromCache.setBotState(botStateFlow.getNextState(currentBotState));
+        userDataFromCache.setCurrentBotState(botStateFlow.getNextState(currentBotState));
     }
 
     @Override
     public SendMessage getView(Long chatId, Long userId) {
         UserData cachedUserData = UserDataCache.get(userId);
-        BotState botState = cachedUserData.getBotState();
+        BotState botState = cachedUserData.getCurrentBotState();
         if (keyboard instanceof KeybordAddData keyboardWithData) {
             if (botState == BotState.CITY_FROM) {
                 keyboardWithData.addDataToKeyboard(cachedUserData.getCountryFrom());

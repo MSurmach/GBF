@@ -32,7 +32,7 @@ public class CityKeyboard extends LocaleKeyboard implements KeybordAddData {
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup() {
         Country country = Country.valueOf(countryName.toUpperCase());
-        List<String> cities = country.getCities();
+        List<String> cities = country.getCities(localeMessageSource);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         for (var index = 0; index < cities.size(); ) {
             var columnCount = 3;

@@ -34,7 +34,7 @@ public class LoadKeyboard extends LocaleKeyboard {
         List<InlineKeyboardButton> buttons = Arrays.stream(loads).
                 map(load -> {
                     InlineKeyboardButton button = new InlineKeyboardButton();
-                    button.setText(load.name());
+                    button.setText(load.getDescription(localeMessageSource));
                     button.setCallbackData(load.name());
                     return button;
                 }).toList();

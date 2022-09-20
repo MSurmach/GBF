@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Command {
-    START("/start"), STOP("/stop");
+public enum TextCommand {
+    START("/start"), STOP("/stop"), HELP("/help");
     private final String text;
 
 }

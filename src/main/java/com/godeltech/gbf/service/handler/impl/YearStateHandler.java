@@ -26,10 +26,10 @@ public class YearStateHandler extends LocaleBotStateHandler {
         Long telegramUserId = callbackQuery.getFrom().getId();
         String callBackData = callbackQuery.getData();
         UserData cachedUserData = UserDataCache.get(telegramUserId);
-        BotState currentBotState = cachedUserData.getBotState();
+        BotState currentBotState = cachedUserData.getCurrentBotState();
         if (currentBotState == BotState.YEAR_TO) cachedUserData.setYearTo(callBackData);
         else cachedUserData.setYearFrom(callBackData);
         BotStateFlow botStateFlow = cachedUserData.getBotStateFlow();
-        cachedUserData.setBotState(botStateFlow.getNextState(currentBotState));
+        cachedUserData.setCurrentBotState(botStateFlow.getNextState(currentBotState));
     }
 }
