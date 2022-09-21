@@ -1,9 +1,11 @@
 package com.godeltech.gbf.model;
 
 import com.godeltech.gbf.LocaleMessageSource;
+import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 public enum Country {
     BELARUS("Belarus", List.of("Brest", "Vitebsk", "Gomel", "Grodno", "Mogilev", "Minsk")),
 
@@ -19,19 +21,20 @@ public enum Country {
 
     UAE("UAE", List.of("Dubai"));
 
-    private final String countryNameDescription;
-    private final List<String> citiesDescription;
+    private final String countryName;
 
-    Country(String countryNameDescription, List<String> citiesDescription) {
-        this.countryNameDescription = countryNameDescription;
-        this.citiesDescription = citiesDescription;
+    private final List<String> cities;
+
+    Country(String countryName, List<String> citiesDescription) {
+        this.countryName = countryName;
+        this.cities = citiesDescription;
     }
 
     public String getCountryName(LocaleMessageSource localeMessageSource) {
-        return localeMessageSource.getLocaleMessage(this.countryNameDescription);
+        return localeMessageSource.getLocaleMessage(this.countryName);
     }
 
     public List<String> getCities(LocaleMessageSource localeMessageSource) {
-        return this.citiesDescription.stream().map(localeMessageSource::getLocaleMessage).toList();
+        return this.cities.stream().map(localeMessageSource::getLocaleMessage).toList();
     }
 }

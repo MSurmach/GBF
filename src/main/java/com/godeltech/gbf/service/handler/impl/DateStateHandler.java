@@ -1,20 +1,17 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.LocaleMessageSource;
-import com.godeltech.gbf.cache.UserDataCache;
-import com.godeltech.gbf.model.BotState;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.CalendarCommand;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.LocalAnswerService;
 import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
-import com.godeltech.gbf.service.keyboard.KeybordAddData;
 import com.godeltech.gbf.service.keyboard.impl.CalendarKeyboard;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.time.LocalDate;
 
-import static com.godeltech.gbf.model.BotState.DATE_FROM;
+import static com.godeltech.gbf.model.State.DATE_FROM;
 
 @Service
 public class DateStateHandler extends LocaleBotStateHandler {
@@ -24,34 +21,28 @@ public class DateStateHandler extends LocaleBotStateHandler {
     }
 
     @Override
-    public void handleUpdate(Update update) {
-        String callback = update.getCallbackQuery().getData();
-        Long userId = update.getCallbackQuery().getFrom().getId();
-        UserData cachedUserData = UserDataCache.get(userId);
+    public String handle(Long userId, String callback, UserData userData) {
         String[] split = callback.split(":");
         CalendarCommand callbackCommand = CalendarCommand.valueOf(split[0]);
         String callbackDate = split[1];
-        BotState currentBotState = cachedUserData.getCurrentBotState();
+        State currentState = userData.getCurrentState();
         switch (callbackCommand) {
             case MONTH -> {
-                cachedUserData.setPreviousBotState(currentBotState);
-                if (currentBotState == DATE_FROM) cachedUserData.setCurrentBotState(BotState.MONTH_FROM);
-                else cachedUserData.setCurrentBotState(BotState.MONTH_TO);
-            }
-            case PREV_MONTH, NEXT_MONTH -> {
-                if (keyboard instanceof KeybordAddData keybordAddData)
-                    keybordAddData.addDataToKeyboard(callbackDate);
+                userData.setPreviousState(currentState);
+                if (currentState == DATE_FROM) userData.setCurrentState(State.MONTH_FROM);
+                else userData.setCurrentState(State.MONTH_TO);
             }
             case DAY -> {
                 LocalDate parsedDate = LocalDate.parse(callbackDate);
-                if (currentBotState == DATE_FROM) {
-                    cachedUserData.setDateFrom(parsedDate);
-                    cachedUserData.setCurrentBotState(BotState.DATE_TO);
+                if (currentState == DATE_FROM) {
+                    userData.setDateFrom(parsedDate);
+                    userData.setCurrentState(State.COUNTRY_TO);
                 } else {
-                    cachedUserData.setDateTo(parsedDate);
-                    cachedUserData.setCurrentBotState(BotState.LOAD);
+                    userData.setDateTo(parsedDate);
+                    userData.setCurrentState(State.LOAD);
                 }
             }
         }
+        return callback;
     }
 }

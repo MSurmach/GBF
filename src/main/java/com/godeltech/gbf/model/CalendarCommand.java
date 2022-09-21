@@ -4,10 +4,17 @@ import lombok.Getter;
 
 @Getter
 public enum CalendarCommand {
-    PREV_MONTH("<<"), NEXT_MONTH(">>"), MONTH("MONTH"), DAY("DAY");
-    final String callback;
+    INIT("INIT"),
+    PREV("<<"),
+    NEXT(">>"),
+    YEAR("YEAR"),
+    RETURNEDYEAR("RETURNEDYEAR"),
+    MONTH("MONTH"),
+    RETURNEDMONTH("RETURNEDMONTH"),
+    DAY("DAY");
+    final String description;
 
-    CalendarCommand(String callback) {
-        this.callback = callback;
+    CalendarCommand(String description) {
+        this.description = description;
     }
 }

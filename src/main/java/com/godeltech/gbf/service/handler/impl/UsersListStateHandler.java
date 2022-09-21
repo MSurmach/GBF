@@ -11,12 +11,11 @@ import com.godeltech.gbf.service.keyboard.impl.ControlKeyboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
 @Service
-public class UsersListBotStateHandler extends LocaleBotStateHandler {
+public class UsersListStateHandler extends LocaleBotStateHandler {
     private UserRepository userRepository;
 
     @Autowired
@@ -24,19 +23,14 @@ public class UsersListBotStateHandler extends LocaleBotStateHandler {
         this.userRepository = userRepository;
     }
 
-    public UsersListBotStateHandler(LocaleMessageSource localeMessageSource, ControlKeyboard keyboard, LocalAnswerService localAnswerService) {
+    public UsersListStateHandler(LocaleMessageSource localeMessageSource, ControlKeyboard keyboard, LocalAnswerService localAnswerService) {
         super(localeMessageSource, keyboard, localAnswerService);
     }
 
     @Override
-    public void handleUpdate(Update update) {
-
-    }
-
-    @Override
-    public SendMessage getView(Long chatId, Long userId) {
+    public SendMessage getView(Long chatId, Long userId, String callback) {
         UserData cachedUserData = UserDataCache.get(userId);
         List<User> users = userRepository.findUsersByCityFromAndCityTo(cachedUserData.getCityFrom(), cachedUserData.getCityTo());
-        return createMessage(chatId, localAnswerService.getTextAnswer(cachedUserData), keyboard.getKeyboardMarkup());
+        return createMessage(chatId, localAnswerService.getTextAnswer(cachedUserData), keyboard.getKeyboardMarkup(callback));
     }
 }

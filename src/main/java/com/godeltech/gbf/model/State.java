@@ -3,7 +3,7 @@ package com.godeltech.gbf.model;
 import lombok.Getter;
 
 @Getter
-public enum BotState {
+public enum State {
     MENU,
     REGISTRATIONS,
     COUNTRY_FROM,
@@ -25,5 +25,11 @@ public enum BotState {
     SUCCESS,
     USERS_LIST,
     DATE_FROM,
-    DATE_TO
+    DATE_TO;
+
+    private String callback = null;
+
+    public void setCallback(String callback) {
+        this.callback = callback;
+    }
 }

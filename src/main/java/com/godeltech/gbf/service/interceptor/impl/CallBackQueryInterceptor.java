@@ -1,8 +1,8 @@
 package com.godeltech.gbf.service.interceptor.impl;
 
 import com.godeltech.gbf.cache.UserDataCache;
-import com.godeltech.gbf.model.BotState;
-import com.godeltech.gbf.model.BotStateFlow;
+import com.godeltech.gbf.model.State;
+import com.godeltech.gbf.model.StateFlow;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.factory.BotStateHandlerFactory;
 import com.godeltech.gbf.service.interceptor.Interceptor;
@@ -25,30 +25,31 @@ public class CallBackQueryInterceptor implements Interceptor {
         Long userId = update.getCallbackQuery().getFrom().getId();
         Long chat_id = update.getCallbackQuery().getMessage().getChatId();
         UserData cachedUserData = UserDataCache.get(userId);
-        BotState nextBotState;
+        State nextState;
         String callBackData = update.getCallbackQuery().getData();
         try {
-            BotStateFlow botStateFlow = BotStateFlow.valueOf(callBackData);
-            nextBotState = botStateFlow.getFirstState();
-            cachedUserData.setBotStateFlow(botStateFlow);
-            cachedUserData.setCurrentBotState(nextBotState);
+            StateFlow stateFlow = StateFlow.valueOf(callBackData);
+            nextState = stateFlow.getFirstState();
+            cachedUserData.setStateFlow(stateFlow);
+            cachedUserData.setCurrentState(nextState);
+            cachedUserData.setPreviousState(nextState);
         } catch (IllegalArgumentException illegalArgumentException) {
             switch (callBackData) {
                 case "BACK" -> {
-                    BotStateFlow currentBotFlow = cachedUserData.getBotStateFlow();
-                    BotState previousState = currentBotFlow.getPreviousState(cachedUserData.getCurrentBotState());
-                    cachedUserData.setCurrentBotState(previousState);
+                    State previousState = cachedUserData.getPreviousState();
+                    callBackData = previousState.getCallback();
+                    cachedUserData.setCurrentState(previousState);
                 }
                 case "MENU" -> {
-                    cachedUserData.setCurrentBotState(BotState.MENU);
+                    cachedUserData.setCurrentState(State.MENU);
                 }
                 default -> {
-                    BotState currentBotState = cachedUserData.getCurrentBotState();
-                    botStateHandlerFactory.getHandler(currentBotState).handleUpdate(update);
+                    State currentState = cachedUserData.getCurrentState();
+                    callBackData = botStateHandlerFactory.getHandler(currentState).handle(userId, callBackData, cachedUserData);
                 }
             }
-            nextBotState = cachedUserData.getCurrentBotState();
+            nextState = cachedUserData.getCurrentState();
         }
-        return botStateHandlerFactory.getHandler(nextBotState).getView(chat_id, userId);
+        return botStateHandlerFactory.getHandler(nextState).getView(chat_id, userId, callBackData);
     }
 }

@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
+
 @Service
 public class LoadKeyboard extends LocaleKeyboard {
 
@@ -29,18 +31,17 @@ public class LoadKeyboard extends LocaleKeyboard {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup() {
+    public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
         Load[] loads = Load.values();
         List<InlineKeyboardButton> buttons = Arrays.stream(loads).
                 map(load -> {
-                    InlineKeyboardButton button = new InlineKeyboardButton();
-                    button.setText(load.getDescription(localeMessageSource));
-                    button.setCallbackData(load.name());
-                    return button;
+                    String label = load.getDescription(localeMessageSource);
+                    String buttonCallback = load.name();
+                    return createButton(label, buttonCallback);
                 }).toList();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(buttons);
         InlineKeyboardMarkup loadKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(loadKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup()).result();
+        return new KeyboardMarkupAppender(loadKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(null)).result();
     }
 }

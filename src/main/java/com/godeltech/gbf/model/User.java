@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.format.DateTimeFormatter;
 
 @Data
 @NoArgsConstructor
@@ -46,14 +44,7 @@ public class User {
         countryTo = userData.getCountryTo();
         cityTo = userData.getCityTo();
         load = userData.getLoad();
-        dateFrom = mapLocalDate(userData.getYearFrom(), userData.getMonthFrom(), userData.getDayFrom());
-        dateTo = mapLocalDate(userData.getYearTo(), userData.getMonthTo(), userData.getDayTo());
-    }
-
-    private LocalDate mapLocalDate(String year, String monthName, String day) {
-        int yearAsInt = Integer.parseInt(year);
-        Month month = Month.valueOf(monthName);
-        int dayAsInt = Integer.parseInt(day);
-        return LocalDate.of(yearAsInt, month, dayAsInt);
+        dateFrom = userData.getDateFrom();
+        dateTo = userData.getDateTo();
     }
 }

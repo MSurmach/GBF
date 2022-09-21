@@ -4,7 +4,6 @@ import com.godeltech.gbf.LocaleMessageSource;
 import com.godeltech.gbf.model.Country;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
-import com.godeltech.gbf.service.keyboard.KeybordAddData;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +13,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
+
 @Service
-public class CityKeyboard extends LocaleKeyboard implements KeybordAddData {
+public class CityKeyboard extends LocaleKeyboard {
 
     private Keyboard controlKeyboard;
-    private String countryName;
 
     @Autowired
     public void setControlKeyboard(ControlKeyboard controlKeyboard) {
@@ -30,30 +30,23 @@ public class CityKeyboard extends LocaleKeyboard implements KeybordAddData {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup() {
-        Country country = Country.valueOf(countryName.toUpperCase());
-        List<String> cities = country.getCities(localeMessageSource);
+    public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
+        Country country = Country.valueOf(callback.toUpperCase());
+        List<String> cities = country.getCities();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         for (var index = 0; index < cities.size(); ) {
             var columnCount = 3;
             List<InlineKeyboardButton> buttonRow = new ArrayList<>();
             while (columnCount > 0 && index != cities.size()) {
-                var button = new InlineKeyboardButton();
-                button.setText(cities.get(index));
-                button.setCallbackData(cities.get(index));
-                buttonRow.add(button);
+                String buttonCallback = cities.get(index);
+                String label = country.getCities(localeMessageSource).get(index);
+                buttonRow.add(createButton(label, buttonCallback));
                 columnCount--;
                 index++;
             }
             keyboard.add(buttonRow);
         }
         InlineKeyboardMarkup countryKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(countryKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup()).result();
-    }
-
-    @Override
-    public void addDataToKeyboard(String... args) {
-        if (args.length > 1) throw new IllegalArgumentException();
-        countryName = args[0];
+        return new KeyboardMarkupAppender(countryKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(null)).result();
     }
 }

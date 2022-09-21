@@ -2,21 +2,16 @@ package com.godeltech.gbf.model;
 
 import com.godeltech.gbf.LocaleMessageSource;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public enum Load {
-    DOCUMENTS, THINGS, PEOPLE;
+    DOCUMENTS("documents"), THINGS("things"), PEOPLE("people");
 
-    public static final Map<Load, String> descriptions = new HashMap<>();
+    private final String description;
 
-    static {
-        descriptions.put(DOCUMENTS, "documents");
-        descriptions.put(THINGS, "things");
-        descriptions.put(PEOPLE, "people");
+    Load(String description) {
+        this.description = description;
     }
 
     public String getDescription(LocaleMessageSource localeMessageSource) {
-        return localeMessageSource.getLocaleMessage(descriptions.get(this));
+        return localeMessageSource.getLocaleMessage(description);
     }
 }

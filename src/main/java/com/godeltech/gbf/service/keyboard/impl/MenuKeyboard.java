@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocaleMessageSource;
-import com.godeltech.gbf.model.BotStateFlow;
+import com.godeltech.gbf.model.StateFlow;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +9,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.List;
+
+import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
 public class MenuKeyboard extends LocaleKeyboard {
@@ -19,18 +21,18 @@ public class MenuKeyboard extends LocaleKeyboard {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup() {
-        var courierButton = new InlineKeyboardButton();
-        courierButton.setText(localeMessageSource.getLocaleMessage("start.button.courier"));
-        courierButton.setCallbackData(BotStateFlow.COURIER.name());
+    public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
+        String courierLabel = localeMessageSource.getLocaleMessage("start.button.courier");
+        String courierCallback = StateFlow.COURIER.name();
+        var courierButton = createButton(courierLabel, courierCallback);
 
-        var customerButton = new InlineKeyboardButton();
-        customerButton.setText(localeMessageSource.getLocaleMessage("start.button.customer"));
-        customerButton.setCallbackData(BotStateFlow.CUSTOMER.name());
+        String customerLabel = localeMessageSource.getLocaleMessage("start.button.customer");
+        String customerCallback = StateFlow.CUSTOMER.name();
+        var customerButton = createButton(customerLabel, customerCallback);
 
-        var registrationsButton = new InlineKeyboardButton();
-        registrationsButton.setText(localeMessageSource.getLocaleMessage("start.button.registrations"));
-        registrationsButton.setCallbackData(BotStateFlow.VIEWER.name());
+        String registrationsCourierLabel = localeMessageSource.getLocaleMessage("start.button.registrations");
+        String registrationsCourierCallback = StateFlow.VIEWER.name();
+        var registrationsButton = createButton(registrationsCourierLabel, registrationsCourierCallback);
 
         List<InlineKeyboardButton> buttons = List.of(courierButton, customerButton, registrationsButton);
         List<List<InlineKeyboardButton>> keyboard = buttons.stream().map(List::of).toList();

@@ -3,7 +3,6 @@ package com.godeltech.gbf.service.keyboard.impl;
 import com.godeltech.gbf.LocaleMessageSource;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
-import com.godeltech.gbf.service.keyboard.KeybordAddData;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,9 +21,8 @@ import static com.godeltech.gbf.model.CalendarCommand.*;
 import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
-public class CalendarKeyboard extends LocaleKeyboard implements KeybordAddData {
+public class CalendarKeyboard extends LocaleKeyboard {
     private Keyboard controlKeyboard;
-    private LocalDate localDate = LocalDate.now();
 
     public CalendarKeyboard(LocaleMessageSource localeMessageSource) {
         super(localeMessageSource);
@@ -36,13 +34,15 @@ public class CalendarKeyboard extends LocaleKeyboard implements KeybordAddData {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup() {
+    public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
+        String givenDate = callback.split(":")[1];
+        LocalDate date = LocalDate.parse(givenDate);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        addMonthYear(localDate, keyboard);
+        addMonthYear(date, keyboard);
         addWeekDayRow(keyboard);
-        addDayRows(localDate, keyboard);
+        addDayRows(date, keyboard);
         var calendarKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(calendarKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup()).result();
+        return new KeyboardMarkupAppender(calendarKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(null)).result();
     }
 
     private void addDayRows(LocalDate localDate, List<List<InlineKeyboardButton>> keyboard) {
@@ -60,14 +60,14 @@ public class CalendarKeyboard extends LocaleKeyboard implements KeybordAddData {
 
     private void addMonthYear(LocalDate date, List<List<InlineKeyboardButton>> keyboard) {
         var prevMonthButton = createButton(
-                PREV_MONTH.getCallback(),
-                PREV_MONTH.name() + ":" + date.minusMonths(1));
+                PREV.getDescription(),
+                PREV.name() + ":" + date.minusMonths(1));
         var nextMonthButton = createButton(
-                NEXT_MONTH.getCallback(),
-                NEXT_MONTH.name() + ":" + date.plusMonths(1));
-        String monthYearPattern = "MMMM yyyy";
-        DateTimeFormatter monthYearFormatter = DateTimeFormatter.ofPattern(monthYearPattern, localeMessageSource.getLocale());
-        String header = date.format(monthYearFormatter);
+                NEXT.getDescription(),
+                NEXT.name() + ":" + date.plusMonths(1));
+        String monthYearPattern = "LLLL yyyy";
+        DateTimeFormatter monthYearFormatter = DateTimeFormatter.ofPattern(monthYearPattern).withLocale(localeMessageSource.getLocale());
+        String header = date.format(monthYearFormatter).substring(0, 1).toUpperCase() + date.format(monthYearFormatter).substring(1);
         var monthYearHeader = createButton(
                 header,
                 MONTH.name() + ":" + date);
@@ -98,11 +98,5 @@ public class CalendarKeyboard extends LocaleKeyboard implements KeybordAddData {
             }
         }
         return row;
-    }
-
-    @Override
-    public void addDataToKeyboard(String... args) {
-        if (args.length > 1) throw new IllegalArgumentException();
-        localDate = LocalDate.parse(args[0]);
     }
 }

@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocaleMessageSource;
-import com.godeltech.gbf.model.BotState;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
@@ -12,6 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
 public class ConfirmKeyboard extends LocaleKeyboard {
@@ -27,13 +29,14 @@ public class ConfirmKeyboard extends LocaleKeyboard {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup() {
-        var confirmButton = new InlineKeyboardButton(localeMessageSource.getLocaleMessage("confirm"));
-        confirmButton.setCallbackData(BotState.CONFIRM.name());
+    public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
+        String label = localeMessageSource.getLocaleMessage("confirm");
+        String buttonCallback = State.CONFIRM.name();
+        var confirmButton = createButton(label, buttonCallback);
         List<InlineKeyboardButton> row = List.of(confirmButton);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(row);
         InlineKeyboardMarkup countryKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(countryKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup()).result();
+        return new KeyboardMarkupAppender(countryKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(null)).result();
     }
 }

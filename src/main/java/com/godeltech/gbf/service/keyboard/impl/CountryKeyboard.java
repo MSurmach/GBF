@@ -13,6 +13,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
+
 @Service
 public class CountryKeyboard extends LocaleKeyboard {
     private Keyboard controlKeyboard;
@@ -27,23 +29,22 @@ public class CountryKeyboard extends LocaleKeyboard {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup() {
+    public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
         Country[] countries = Country.values();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         for (var index = 0; index < countries.length; ) {
             var columnCount = 3;
             List<InlineKeyboardButton> buttonRow = new ArrayList<>();
             while (columnCount > 0 && index != countries.length) {
-                var button = new InlineKeyboardButton();
-                button.setText(countries[index].getCountryName(localeMessageSource));
-                button.setCallbackData(countries[index].name());
-                buttonRow.add(button);
+                String buttonCallback = countries[index].getCountryName();
+                String label = countries[index].getCountryName(localeMessageSource);
+                buttonRow.add(createButton(label, buttonCallback));
                 columnCount--;
                 index++;
             }
             keyboard.add(buttonRow);
         }
         InlineKeyboardMarkup countryKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(countryKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup()).result();
+        return new KeyboardMarkupAppender(countryKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(null)).result();
     }
 }

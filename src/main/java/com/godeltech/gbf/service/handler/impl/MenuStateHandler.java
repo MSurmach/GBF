@@ -2,14 +2,12 @@ package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.LocaleMessageSource;
 import com.godeltech.gbf.cache.UserDataCache;
-import com.godeltech.gbf.model.BotState;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.LocalAnswerService;
 import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
 import com.godeltech.gbf.service.keyboard.impl.MenuKeyboard;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
 
 @Service
 public class MenuStateHandler extends LocaleBotStateHandler {
@@ -19,13 +17,12 @@ public class MenuStateHandler extends LocaleBotStateHandler {
     }
 
     @Override
-    public void handleUpdate(Update update) {
-        User telegramUser = update.hasCallbackQuery() ?
-                update.getCallbackQuery().getFrom() : update.getMessage().getFrom();
-        UserData userData = new UserData();
-        userData.setId(telegramUser.getId());
-        userData.setUsername(telegramUser.getUserName());
-        userData.setCurrentBotState(BotState.MENU);
-        UserDataCache.add(userData.getId(), userData);
+    public String handle(Long userId, String callback, UserData userData) {
+        UserData newUserData = new UserData();
+        newUserData.setId(userId);
+        newUserData.setUsername(callback);
+        newUserData.setCurrentState(State.MENU);
+        UserDataCache.add(userId, newUserData);
+        return callback;
     }
 }

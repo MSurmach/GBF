@@ -1,6 +1,6 @@
 package com.godeltech.gbf.service.interceptor.impl;
 
-import com.godeltech.gbf.model.BotState;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.TextCommand;
 import com.godeltech.gbf.service.factory.BotStateHandlerFactory;
 import com.godeltech.gbf.service.handler.BotStateHandler;
@@ -23,13 +23,14 @@ public class MessageInterceptor implements Interceptor {
         String input = update.getMessage().getText();
         Long chatId = update.getMessage().getChatId();
         Long userId = update.getMessage().getFrom().getId();
+        String username = update.getMessage().getFrom().getUserName();
         try {
             TextCommand textCommand = TextCommand.valueOf(input.toUpperCase().replace("/", ""));
             return switch (textCommand) {
                 case START -> {
-                    BotStateHandler handler = botStateHandlerFactory.getHandler(BotState.MENU);
-                    handler.handleUpdate(update);
-                    yield handler.getView(chatId, userId);
+                    BotStateHandler handler = botStateHandlerFactory.getHandler(State.MENU);
+                    handler.handle(userId, username, null);
+                    yield handler.getView(chatId, userId, null);
                 }
                 case STOP -> {
                     yield null;
@@ -37,8 +38,8 @@ public class MessageInterceptor implements Interceptor {
                 default -> null;
             };
         } catch (IllegalArgumentException exception) {
-            BotStateHandler handler = botStateHandlerFactory.getHandler(BotState.WRONG_INPUT);
-            return handler.getView(chatId, userId);
+            BotStateHandler handler = botStateHandlerFactory.getHandler(State.WRONG_INPUT);
+            return handler.getView(chatId, userId, null);
         }
     }
 }

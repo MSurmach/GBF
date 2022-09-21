@@ -1,8 +1,7 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.LocaleMessageSource;
-import com.godeltech.gbf.cache.UserDataCache;
-import com.godeltech.gbf.model.BotStateFlow;
+import com.godeltech.gbf.model.StateFlow;
 import com.godeltech.gbf.model.User;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.repository.UserRepository;
@@ -11,7 +10,6 @@ import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
 import com.godeltech.gbf.service.keyboard.impl.ConfirmKeyboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Service
 public class ConfirmStateHandler extends LocaleBotStateHandler {
@@ -27,13 +25,13 @@ public class ConfirmStateHandler extends LocaleBotStateHandler {
     }
 
     @Override
-    public void handleUpdate(Update update) {
-        UserData cachedUserData = UserDataCache.get(update.getCallbackQuery().getFrom().getId());
-        BotStateFlow botStateFlow = cachedUserData.getBotStateFlow();
-        if (botStateFlow == BotStateFlow.COURIER) {
-            User user = new User(cachedUserData);
+    public String handle(Long userId, String callback, UserData userData) {
+        StateFlow stateFlow = userData.getStateFlow();
+        if (stateFlow == StateFlow.COURIER) {
+            User user = new User(userData);
             userRepository.save(user);
         }
-        cachedUserData.setCurrentBotState(botStateFlow.getNextState(cachedUserData.getCurrentBotState()));
+        userData.setCurrentState(stateFlow.getNextState(userData.getCurrentState()));
+        return callback;
     }
 }

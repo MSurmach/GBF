@@ -2,6 +2,7 @@ package com.godeltech.gbf.service.handler;
 
 import com.godeltech.gbf.LocaleMessageSource;
 import com.godeltech.gbf.cache.UserDataCache;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.LocalAnswerService;
 import com.godeltech.gbf.service.keyboard.Keyboard;
@@ -30,13 +31,24 @@ public abstract class LocaleBotStateHandler implements BotStateHandler {
     }
 
     @Override
-    public SendMessage getView(Long chatId, Long userId) {
+    public String handle(Long userId, String callback, UserData userData) {
+        return callback;
+    }
+
+    @Override
+    public SendMessage getView(Long chatId, Long userId, String callback) {
         UserData cachedUserData = UserDataCache.get(userId);
         return SendMessage.builder().
                 parseMode("html").
                 chatId(chatId).
                 text(localAnswerService.getTextAnswer(cachedUserData)).
-                replyMarkup(keyboard.getKeyboardMarkup()).
+                replyMarkup(keyboard.getKeyboardMarkup(callback)).
                 build();
+    }
+
+    @Override
+    public void rememberState(State currentState, UserData userData, String callback) {
+        currentState.setCallback(callback);
+        userData.setPreviousState(currentState);
     }
 }

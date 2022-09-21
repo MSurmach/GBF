@@ -1,17 +1,13 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.LocaleMessageSource;
-import com.godeltech.gbf.cache.UserDataCache;
-import com.godeltech.gbf.model.BotState;
-import com.godeltech.gbf.model.BotStateFlow;
+import com.godeltech.gbf.model.State;
+import com.godeltech.gbf.model.CalendarCommand;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.LocalAnswerService;
 import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
 import com.godeltech.gbf.service.keyboard.impl.MonthKeyboard;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Service
 public class MonthStateHandler extends LocaleBotStateHandler {
@@ -21,20 +17,21 @@ public class MonthStateHandler extends LocaleBotStateHandler {
     }
 
     @Override
-    public void handleUpdate(Update update) {
-        CallbackQuery callbackQuery = update.getCallbackQuery();
-        Long telegramUserId = callbackQuery.getFrom().getId();
-        String callBackData = callbackQuery.getData();
-        UserData cachedUserData = UserDataCache.get(telegramUserId);
-        BotState currentBotState = cachedUserData.getCurrentBotState();
-        if (currentBotState == BotState.MONTH_TO) cachedUserData.setMonthTo(callBackData);
-        else cachedUserData.setMonthFrom(callBackData);
-        BotStateFlow botStateFlow = cachedUserData.getBotStateFlow();
-        cachedUserData.setCurrentBotState(botStateFlow.getNextState(currentBotState));
-    }
-
-    @Override
-    public SendMessage getView(Long chatId, Long userId) {
-        return null;
+    public String handle(Long userId, String callback, UserData userData) {
+        String[] split = callback.split(":");
+        CalendarCommand callbackCommand = CalendarCommand.valueOf(split[0]);
+        State currentState = userData.getCurrentState();
+        userData.setPreviousState(currentState);
+        switch (callbackCommand) {
+            case RETURNEDMONTH -> {
+                if (currentState == State.MONTH_TO) userData.setCurrentState(State.DATE_TO);
+                else userData.setCurrentState(State.DATE_FROM);
+            }
+            case YEAR -> {
+                if (currentState == State.MONTH_TO) userData.setCurrentState(State.YEAR_TO);
+                else userData.setCurrentState(State.YEAR_FROM);
+            }
+        }
+        return callback;
     }
 }

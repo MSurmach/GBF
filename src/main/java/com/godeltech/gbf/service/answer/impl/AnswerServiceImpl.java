@@ -10,53 +10,60 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.godeltech.gbf.model.BotStateFlow.COURIER;
+import static com.godeltech.gbf.model.StateFlow.COURIER;
 
 @Service
 public class AnswerServiceImpl extends LocalAnswerService {
+    private final DateTimeFormatter dateTimeFormatter;
 
-    protected AnswerServiceImpl(LocaleMessageSource localeMessageSource) {
+
+    public AnswerServiceImpl(LocaleMessageSource localeMessageSource) {
         super(localeMessageSource);
+        dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy").withLocale(localeMessageSource.getLocale());
     }
-
-    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
 
     @Override
     public String getTextAnswer(UserData userData) {
-        BotState currentBotState = userData.getCurrentBotState();
-        BotStateFlow currentBotStateFlow = userData.getBotStateFlow();
-        return switch (currentBotState) {
+        State currentState = userData.getCurrentState();
+        StateFlow currentStateFlow = userData.getStateFlow();
+        return switch (currentState) {
             case MENU -> localeMessageSource.getLocaleMessage("menu", userData.getUsername());
-            case CONFIRM -> currentBotStateFlow == COURIER ?
+            case CONFIRM -> currentStateFlow == COURIER ?
                     constructConfirmationMessageForCourier(userData) :
                     constructConfirmationMessageForCustomer(userData);
             case COUNTRY_TO -> localeMessageSource.getLocaleMessage("country.to");
             case COUNTRY_FROM -> localeMessageSource.getLocaleMessage("country.from");
-            case CITY_FROM -> localeMessageSource.getLocaleMessage("city.from", userData.getCountryFrom());
-            case CITY_TO -> localeMessageSource.getLocaleMessage("city.to", userData.getCountryTo());
-            case YEAR_FROM ->
-                    localeMessageSource.getLocaleMessage("year.to", userData.getCountryTo(), userData.getCityTo());
-            case YEAR_TO ->
-                    localeMessageSource.getLocaleMessage("year.from", userData.getCountryFrom(), userData.getCityFrom());
-            case DAY_TO ->
-                    localeMessageSource.getLocaleMessage("day.to", userData.getCountryTo(), userData.getCityTo());
-            case DAY_FROM ->
-                    localeMessageSource.getLocaleMessage("day.from", userData.getCountryFrom(), userData.getCityFrom());
-            case LOAD -> currentBotStateFlow == COURIER ?
+            case CITY_FROM -> {
+                String localeCountryFrom = localeMessageSource.getLocaleMessage(userData.getCountryFrom());
+                yield localeMessageSource.getLocaleMessage("city.from", localeCountryFrom);
+            }
+            case CITY_TO -> {
+                String localeCountryTo = localeMessageSource.getLocaleMessage(userData.getCountryTo());
+                yield localeMessageSource.getLocaleMessage("city.to", localeCountryTo);
+            }
+            case YEAR_FROM, YEAR_TO ->
+                    localeMessageSource.getLocaleMessage("year");
+            case LOAD -> currentStateFlow == COURIER ?
                     localeMessageSource.getLocaleMessage("load.courier") :
                     localeMessageSource.getLocaleMessage("load.customer");
-            case MONTH_FROM ->
-                    localeMessageSource.getLocaleMessage("month.to", userData.getCountryTo(), userData.getCityTo());
-            case MONTH_TO ->
-                    localeMessageSource.getLocaleMessage("month.from", userData.getCountryFrom(), userData.getCityFrom());
+            case MONTH_FROM, MONTH_TO ->
+                    localeMessageSource.getLocaleMessage("month");
             case REGISTRATIONS -> constructRegistrationsMessage(userData, null);
             case SUCCESS -> localeMessageSource.getLocaleMessage("courier.registration.success");
             case USERS_LIST -> constructUsersListMessage(null);
             case WRONG_INPUT -> constructWrongInputMessage(userData);
-            case DATE_FROM ->
-                    localeMessageSource.getLocaleMessage("date.from", userData.getCountryFrom(), userData.getCityFrom(), LocalDate.now().format(dateTimeFormatter));
-            case DATE_TO ->
-                    localeMessageSource.getLocaleMessage("date.to", userData.getCountryTo(), userData.getCityTo(), LocalDate.now().format(dateTimeFormatter));
+            case DATE_FROM -> {
+                String localeCountryFrom = localeMessageSource.getLocaleMessage(userData.getCountryFrom());
+                String localeCityFrom = localeMessageSource.getLocaleMessage(userData.getCityFrom());
+                String localDateNow = LocalDate.now().format(dateTimeFormatter);
+                yield localeMessageSource.getLocaleMessage("date.from", localeCountryFrom, localeCityFrom, localDateNow);
+            }
+            case DATE_TO -> {
+                String localeCountryTo = localeMessageSource.getLocaleMessage(userData.getCountryTo());
+                String localeCityTo = localeMessageSource.getLocaleMessage(userData.getCityTo());
+                String localDateNow = LocalDate.now().format(dateTimeFormatter);
+                yield localeMessageSource.getLocaleMessage("date.from", localeCountryTo, localeCityTo, localDateNow);
+            }
             default -> null;
         };
     }
@@ -85,13 +92,13 @@ public class AnswerServiceImpl extends LocalAnswerService {
         stringBuilder.append(localeMessageSource.getLocaleMessage("confirm.courier", username));
         stringBuilder.append("\n\n");
         String confirmationData = localeMessageSource.getLocaleMessage("courier.user.data",
-                userData.getCountryFrom(),
-                userData.getCityFrom(),
+                localeMessageSource.getLocaleMessage(userData.getCountryFrom()),
+                localeMessageSource.getLocaleMessage(userData.getCityFrom()),
                 userData.getDateFrom().format(dateTimeFormatter),
-                userData.getCountryTo(),
-                userData.getCityTo(),
+                localeMessageSource.getLocaleMessage(userData.getCountryTo()),
+                localeMessageSource.getLocaleMessage(userData.getCityTo()),
                 userData.getDateTo().format(dateTimeFormatter),
-                userData.getLoad().name());
+                userData.getLoad().getDescription(localeMessageSource));
         stringBuilder.append(confirmationData);
         return stringBuilder.toString();
     }

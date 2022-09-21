@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.time.Year;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
+
+import static com.godeltech.gbf.model.CalendarCommand.RETURNEDYEAR;
+import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
 public class YearKeyboard extends LocaleKeyboard {
@@ -30,23 +32,26 @@ public class YearKeyboard extends LocaleKeyboard {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup() {
-        int[] years = getYearsArray(2);
+    public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
+        String givenDate = callback.split(":")[1];
+        LocalDate[] years = getYearsArray(4);
         List<InlineKeyboardButton> yearButtons = Arrays.stream(years)
-                .mapToObj(String::valueOf)
-                .map(year -> {
-                    var button = new InlineKeyboardButton(year);
-                    button.setCallbackData(year);
-                    return button;
+                .map(date -> {
+                    String buttonCallback = RETURNEDYEAR.name() + ":" + date;
+                    return createButton(Integer.toString(date.getYear()), buttonCallback);
                 }).toList();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(yearButtons);
         InlineKeyboardMarkup yearKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(yearKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup()).result();
+        return new KeyboardMarkupAppender(yearKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(null)).result();
     }
 
-    private int[] getYearsArray(int countYear) {
-        var currentYear = Year.now().getValue();
-        return IntStream.iterate(currentYear, year -> year + 1).limit(countYear).toArray();
+    private LocalDate[] getYearsArray(int countYear) {
+        LocalDate startDate = LocalDate.now();
+        LocalDate[] result = new LocalDate[countYear];
+        for (int index = 0; index < countYear; index++) {
+            result[index] = startDate.plusYears(index);
+        }
+        return result;
     }
 }
