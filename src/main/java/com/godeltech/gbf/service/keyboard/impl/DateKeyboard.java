@@ -1,6 +1,6 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
-import com.godeltech.gbf.LocaleMessageSource;
+import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
@@ -17,15 +17,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.godeltech.gbf.model.CalendarCommand.*;
+import static com.godeltech.gbf.controls.CalendarCommand.*;
 import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
-public class CalendarKeyboard extends LocaleKeyboard {
+public class DateKeyboard extends LocaleKeyboard {
     private Keyboard controlKeyboard;
 
-    public CalendarKeyboard(LocaleMessageSource localeMessageSource) {
-        super(localeMessageSource);
+    public DateKeyboard(LocalMessageSource localMessageSource) {
+        super(localMessageSource);
     }
 
     @Autowired
@@ -66,7 +66,7 @@ public class CalendarKeyboard extends LocaleKeyboard {
                 NEXT.getDescription(),
                 NEXT.name() + ":" + date.plusMonths(1));
         String monthYearPattern = "LLLL yyyy";
-        DateTimeFormatter monthYearFormatter = DateTimeFormatter.ofPattern(monthYearPattern).withLocale(localeMessageSource.getLocale());
+        DateTimeFormatter monthYearFormatter = DateTimeFormatter.ofPattern(monthYearPattern).withLocale(localMessageSource.getLocale());
         String header = date.format(monthYearFormatter).substring(0, 1).toUpperCase() + date.format(monthYearFormatter).substring(1);
         var monthYearHeader = createButton(
                 header,
@@ -77,7 +77,7 @@ public class CalendarKeyboard extends LocaleKeyboard {
     private void addWeekDayRow(List<List<InlineKeyboardButton>> keyboard) {
         List<InlineKeyboardButton> weekDayRow = new ArrayList<>();
         Arrays.stream(DayOfWeek.values()).
-                map(day -> day.getDisplayName(TextStyle.SHORT, localeMessageSource.getLocale())).
+                map(day -> day.getDisplayName(TextStyle.SHORT, localMessageSource.getLocale())).
                 forEach(day -> weekDayRow.add(createButton(day)));
         keyboard.add(weekDayRow);
     }

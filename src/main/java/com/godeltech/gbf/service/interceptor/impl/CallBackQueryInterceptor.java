@@ -1,8 +1,8 @@
 package com.godeltech.gbf.service.interceptor.impl;
 
 import com.godeltech.gbf.cache.UserDataCache;
-import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.StateFlow;
+import com.godeltech.gbf.controls.State;
+import com.godeltech.gbf.controls.StateFlow;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.factory.BotStateHandlerFactory;
 import com.godeltech.gbf.service.interceptor.Interceptor;
@@ -29,16 +29,16 @@ public class CallBackQueryInterceptor implements Interceptor {
         String callBackData = update.getCallbackQuery().getData();
         try {
             StateFlow stateFlow = StateFlow.valueOf(callBackData);
+            //UserDataCache.saveCallback(userId, callBackData);
             nextState = stateFlow.getFirstState();
             cachedUserData.setStateFlow(stateFlow);
             cachedUserData.setCurrentState(nextState);
-            cachedUserData.setPreviousState(nextState);
         } catch (IllegalArgumentException illegalArgumentException) {
             switch (callBackData) {
                 case "BACK" -> {
                     State previousState = cachedUserData.getPreviousState();
-                    callBackData = previousState.getCallback();
                     cachedUserData.setCurrentState(previousState);
+                    //callBackData = UserDataCache.getPreviousCallBack(userId);
                 }
                 case "MENU" -> {
                     cachedUserData.setCurrentState(State.MENU);
@@ -46,6 +46,7 @@ public class CallBackQueryInterceptor implements Interceptor {
                 default -> {
                     State currentState = cachedUserData.getCurrentState();
                     callBackData = botStateHandlerFactory.getHandler(currentState).handle(userId, callBackData, cachedUserData);
+                    //UserDataCache.saveCallback(userId, callBackData);
                 }
             }
             nextState = cachedUserData.getCurrentState();

@@ -1,6 +1,6 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
-import com.godeltech.gbf.LocaleMessageSource;
+import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.model.Country;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
@@ -25,8 +25,8 @@ public class CityKeyboard extends LocaleKeyboard {
         this.controlKeyboard = controlKeyboard;
     }
 
-    public CityKeyboard(LocaleMessageSource localeMessageSource) {
-        super(localeMessageSource);
+    public CityKeyboard(LocalMessageSource localMessageSource) {
+        super(localMessageSource);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class CityKeyboard extends LocaleKeyboard {
             List<InlineKeyboardButton> buttonRow = new ArrayList<>();
             while (columnCount > 0 && index != cities.size()) {
                 String buttonCallback = cities.get(index);
-                String label = country.getCities(localeMessageSource).get(index);
+                String label = country.getCities(localMessageSource).get(index);
                 buttonRow.add(createButton(label, buttonCallback));
                 columnCount--;
                 index++;

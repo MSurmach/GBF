@@ -1,11 +1,11 @@
 package com.godeltech.gbf.service.answer;
 
-import com.godeltech.gbf.LocaleMessageSource;
+import com.godeltech.gbf.LocalMessageSource;
 
 public abstract class LocalAnswerService implements AnswerService {
-    protected LocaleMessageSource localeMessageSource;
+    protected LocalMessageSource localMessageSource;
 
-    protected LocalAnswerService(LocaleMessageSource localeMessageSource) {
-        this.localeMessageSource = localeMessageSource;
+    protected LocalAnswerService(LocalMessageSource localMessageSource) {
+        this.localMessageSource = localMessageSource;
     }
 }

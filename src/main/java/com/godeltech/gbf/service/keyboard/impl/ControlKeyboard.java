@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
-import com.godeltech.gbf.LocaleMessageSource;
-import com.godeltech.gbf.model.State;
+import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.controls.State;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -14,17 +14,17 @@ import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton
 @Service
 public class ControlKeyboard extends LocaleKeyboard {
 
-    public ControlKeyboard(LocaleMessageSource localeMessageSource) {
-        super(localeMessageSource);
+    public ControlKeyboard(LocalMessageSource localMessageSource) {
+        super(localMessageSource);
     }
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
-        String backLabel = localeMessageSource.getLocaleMessage("back");
+        String backLabel = localMessageSource.getLocaleMessage("back");
         String backCallback = State.BACK.name();
         var backButton = createButton(backLabel, backCallback);
 
-        String menuLabel = localeMessageSource.getLocaleMessage("main_menu");
+        String menuLabel = localMessageSource.getLocaleMessage("main_menu");
         String menuCallback = State.MENU.name();
         var menuButton = createButton(menuLabel, menuCallback);
 

@@ -1,5 +1,7 @@
 package com.godeltech.gbf.model;
 
+import com.godeltech.gbf.controls.State;
+import com.godeltech.gbf.controls.StateFlow;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,8 +18,10 @@ public class UserData {
     private String cityTo;
     private LocalDate dateTo;
     private LocalDate dateFrom;
-    private Load load;
     private State currentState;
     private State previousState;
     private StateFlow stateFlow;
+    private Boolean documents;
+    private String cargo;
+    private int companionCount;
 }

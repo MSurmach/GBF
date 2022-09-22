@@ -1,4 +1,4 @@
-package com.godeltech.gbf.model;
+package com.godeltech.gbf.controls;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

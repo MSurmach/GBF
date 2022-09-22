@@ -1,6 +1,6 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
-import com.godeltech.gbf.LocaleMessageSource;
+import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.godeltech.gbf.model.CalendarCommand.RETURNEDYEAR;
+import static com.godeltech.gbf.controls.CalendarCommand.RETURNEDYEAR;
 import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
@@ -27,8 +27,8 @@ public class YearKeyboard extends LocaleKeyboard {
         this.controlKeyboard = controlKeyboard;
     }
 
-    public YearKeyboard(LocaleMessageSource localeMessageSource) {
-        super(localeMessageSource);
+    public YearKeyboard(LocalMessageSource localMessageSource) {
+        super(localMessageSource);
     }
 
     @Override

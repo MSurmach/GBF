@@ -1,48 +1,46 @@
 package com.godeltech.gbf.service.handler.impl;
 
-import com.godeltech.gbf.LocaleMessageSource;
-import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.CalendarCommand;
+import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.controls.Command;
+import com.godeltech.gbf.controls.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.LocalAnswerService;
 import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
-import com.godeltech.gbf.service.keyboard.impl.CalendarKeyboard;
+import com.godeltech.gbf.service.keyboard.impl.DateKeyboard;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-import static com.godeltech.gbf.model.State.DATE_FROM;
+import static com.godeltech.gbf.controls.State.*;
 
 @Service
 public class DateStateHandler extends LocaleBotStateHandler {
 
-    public DateStateHandler(LocaleMessageSource localeMessageSource, CalendarKeyboard keyboard, LocalAnswerService localAnswerService) {
-        super(localeMessageSource, keyboard, localAnswerService);
+    public DateStateHandler(LocalMessageSource localMessageSource, DateKeyboard keyboard, LocalAnswerService localAnswerService) {
+        super(localMessageSource, keyboard, localAnswerService);
     }
 
     @Override
     public String handle(Long userId, String callback, UserData userData) {
         String[] split = callback.split(":");
-        CalendarCommand callbackCommand = CalendarCommand.valueOf(split[0]);
-        String callbackDate = split[1];
+        var command = Command.Calendar.valueOf(split[0]);
         State currentState = userData.getCurrentState();
-        switch (callbackCommand) {
-            case MONTH -> {
-                userData.setPreviousState(currentState);
-                if (currentState == DATE_FROM) userData.setCurrentState(State.MONTH_FROM);
-                else userData.setCurrentState(State.MONTH_TO);
+        userData.setPreviousState(currentState);
+        return switch (command) {
+            case CHANGE_MONTH -> {
+                if (currentState == DATE_FROM) userData.setCurrentState(MONTH_FROM);
+                else userData.setCurrentState(MONTH_TO);
+                yield callback;
             }
-            case DAY -> {
-                LocalDate parsedDate = LocalDate.parse(callbackDate);
-                if (currentState == DATE_FROM) {
-                    userData.setDateFrom(parsedDate);
-                    userData.setCurrentState(State.COUNTRY_TO);
-                } else {
-                    userData.setDateTo(parsedDate);
-                    userData.setCurrentState(State.LOAD);
-                }
+            case SELECT_DAY -> {
+                LocalDate parsedDate = LocalDate.parse(split[1]);
+                if (currentState == DATE_FROM) userData.setDateFrom(parsedDate);
+                else userData.setDateTo(parsedDate);
+                State nextState = userData.getStateFlow().getNextState(currentState);
+                userData.setCurrentState(nextState);
+                yield null;
             }
-        }
-        return callback;
+            default -> null;
+        };
     }
 }

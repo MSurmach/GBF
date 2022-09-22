@@ -1,6 +1,6 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
-import com.godeltech.gbf.LocaleMessageSource;
+import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
@@ -16,14 +16,14 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.godeltech.gbf.model.CalendarCommand.*;
+import static com.godeltech.gbf.controls.CalendarCommand.*;
 import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
 public class MonthKeyboard extends LocaleKeyboard {
 
-    public MonthKeyboard(LocaleMessageSource localeMessageSource) {
-        super(localeMessageSource);
+    public MonthKeyboard(LocalMessageSource localMessageSource) {
+        super(localMessageSource);
     }
 
     private Keyboard controlKeyboard;
@@ -44,7 +44,7 @@ public class MonthKeyboard extends LocaleKeyboard {
             var columnCount = 3;
             List<InlineKeyboardButton> buttonRow = new ArrayList<>();
             while (columnCount > 0 && index != months.length) {
-                String monthName = months[index].getDisplayName(TextStyle.FULL_STANDALONE, localeMessageSource.getLocale());
+                String monthName = months[index].getDisplayName(TextStyle.FULL_STANDALONE, localMessageSource.getLocale());
                 String monthLabel = monthName.substring(0, 1).toUpperCase() + monthName.substring(1);
                 String monthCallback = RETURNEDMONTH.getDescription() + ":" + LocalDate.of(callBackDate.getYear(), months[index], callBackDate.getDayOfMonth());
                 buttonRow.add(createButton(monthLabel, monthCallback));

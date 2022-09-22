@@ -1,7 +1,7 @@
 package com.godeltech.gbf.config;
 
-import com.godeltech.gbf.GbfBot;
-import com.godeltech.gbf.LocaleMessageSource;
+import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.controller.GbfBot;
 import com.godeltech.gbf.service.factory.InterceptorFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -16,13 +16,7 @@ import java.util.Locale;
 @Configuration
 @AllArgsConstructor
 public class ApplicationConfig {
-
     private TelegramBotConfig telegramBotConfig;
-
-    @Bean
-    public GbfBot gbfBot(DefaultBotOptions options, SetWebhook setWebhook, InterceptorFactory interceptorFactory, TelegramBotConfig telegramBotConfig) {
-        return new GbfBot(options, setWebhook, interceptorFactory, telegramBotConfig);
-    }
 
     @Bean
     public SetWebhook setWebhookInstance() {
@@ -41,8 +35,8 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public LocaleMessageSource localeMessageSource(MessageSource messageSource) {
-        return new LocaleMessageSource(messageSource);
+    public LocalMessageSource localeMessageSource(MessageSource messageSource) {
+        return new LocalMessageSource(messageSource);
     }
 
     @Bean

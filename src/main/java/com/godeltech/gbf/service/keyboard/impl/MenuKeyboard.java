@@ -1,7 +1,6 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
-import com.godeltech.gbf.LocaleMessageSource;
-import com.godeltech.gbf.model.StateFlow;
+import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,28 +9,29 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.List;
 
+import static com.godeltech.gbf.controls.Command.*;
 import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
 public class MenuKeyboard extends LocaleKeyboard {
 
     @Autowired
-    public MenuKeyboard(LocaleMessageSource localeMessageSource) {
-        super(localeMessageSource);
+    public MenuKeyboard(LocalMessageSource localMessageSource) {
+        super(localMessageSource);
     }
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
-        String courierLabel = localeMessageSource.getLocaleMessage("start.button.courier");
-        String courierCallback = StateFlow.COURIER.name();
+        String courierLabel = COURIER.getLocalDescription(localMessageSource);
+        String courierCallback = COURIER.name();
         var courierButton = createButton(courierLabel, courierCallback);
 
-        String customerLabel = localeMessageSource.getLocaleMessage("start.button.customer");
-        String customerCallback = StateFlow.CUSTOMER.name();
+        String customerLabel = CUSTOMER.getLocalDescription(localMessageSource);
+        String customerCallback = CUSTOMER.name();
         var customerButton = createButton(customerLabel, customerCallback);
 
-        String registrationsCourierLabel = localeMessageSource.getLocaleMessage("start.button.registrations");
-        String registrationsCourierCallback = StateFlow.VIEWER.name();
+        String registrationsCourierLabel = REGISTRATIONS.getLocalDescription(localMessageSource);
+        String registrationsCourierCallback = REGISTRATIONS.name();
         var registrationsButton = createButton(registrationsCourierLabel, registrationsCourierCallback);
 
         List<InlineKeyboardButton> buttons = List.of(courierButton, customerButton, registrationsButton);

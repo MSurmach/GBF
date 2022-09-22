@@ -1,7 +1,11 @@
 package com.godeltech.gbf.service.answer.impl;
 
-import com.godeltech.gbf.LocaleMessageSource;
-import com.godeltech.gbf.model.*;
+import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.controls.State;
+import com.godeltech.gbf.controls.StateFlow;
+import com.godeltech.gbf.controls.TextCommand;
+import com.godeltech.gbf.model.User;
+import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.LocalAnswerService;
 import org.springframework.stereotype.Service;
 
@@ -10,16 +14,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.godeltech.gbf.model.StateFlow.COURIER;
+import static com.godeltech.gbf.controls.StateFlow.COURIER;
 
 @Service
 public class AnswerServiceImpl extends LocalAnswerService {
     private final DateTimeFormatter dateTimeFormatter;
 
 
-    public AnswerServiceImpl(LocaleMessageSource localeMessageSource) {
-        super(localeMessageSource);
-        dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy").withLocale(localeMessageSource.getLocale());
+    public AnswerServiceImpl(LocalMessageSource localMessageSource) {
+        super(localMessageSource);
+        dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy").withLocale(localMessageSource.getLocale());
     }
 
     @Override
@@ -27,42 +31,40 @@ public class AnswerServiceImpl extends LocalAnswerService {
         State currentState = userData.getCurrentState();
         StateFlow currentStateFlow = userData.getStateFlow();
         return switch (currentState) {
-            case MENU -> localeMessageSource.getLocaleMessage("menu", userData.getUsername());
-            case CONFIRM -> currentStateFlow == COURIER ?
+            case MENU -> localMessageSource.getLocaleMessage("menu", userData.getUsername());
+            case CONFIRMATION -> currentStateFlow == COURIER ?
                     constructConfirmationMessageForCourier(userData) :
                     constructConfirmationMessageForCustomer(userData);
-            case COUNTRY_TO -> localeMessageSource.getLocaleMessage("country.to");
-            case COUNTRY_FROM -> localeMessageSource.getLocaleMessage("country.from");
+            case COUNTRY_TO -> localMessageSource.getLocaleMessage("country.to");
+            case COUNTRY_FROM -> localMessageSource.getLocaleMessage("country.from");
             case CITY_FROM -> {
-                String localeCountryFrom = localeMessageSource.getLocaleMessage(userData.getCountryFrom());
-                yield localeMessageSource.getLocaleMessage("city.from", localeCountryFrom);
+                String localeCountryFrom = localMessageSource.getLocaleMessage(userData.getCountryFrom());
+                yield localMessageSource.getLocaleMessage("city.from", localeCountryFrom);
             }
             case CITY_TO -> {
-                String localeCountryTo = localeMessageSource.getLocaleMessage(userData.getCountryTo());
-                yield localeMessageSource.getLocaleMessage("city.to", localeCountryTo);
+                String localeCountryTo = localMessageSource.getLocaleMessage(userData.getCountryTo());
+                yield localMessageSource.getLocaleMessage("city.to", localeCountryTo);
             }
-            case YEAR_FROM, YEAR_TO ->
-                    localeMessageSource.getLocaleMessage("year");
-            case LOAD -> currentStateFlow == COURIER ?
-                    localeMessageSource.getLocaleMessage("load.courier") :
-                    localeMessageSource.getLocaleMessage("load.customer");
-            case MONTH_FROM, MONTH_TO ->
-                    localeMessageSource.getLocaleMessage("month");
+            case YEAR_FROM, YEAR_TO -> localMessageSource.getLocaleMessage("year");
+            case CARGO -> currentStateFlow == COURIER ?
+                    localMessageSource.getLocaleMessage("loadCategory.courier") :
+                    localMessageSource.getLocaleMessage("loadCategory.customer");
+            case MONTH_FROM, MONTH_TO -> localMessageSource.getLocaleMessage("month");
             case REGISTRATIONS -> constructRegistrationsMessage(userData, null);
-            case SUCCESS -> localeMessageSource.getLocaleMessage("courier.registration.success");
+            case SUCCESS -> localMessageSource.getLocaleMessage("courier.registration.success");
             case USERS_LIST -> constructUsersListMessage(null);
             case WRONG_INPUT -> constructWrongInputMessage(userData);
             case DATE_FROM -> {
-                String localeCountryFrom = localeMessageSource.getLocaleMessage(userData.getCountryFrom());
-                String localeCityFrom = localeMessageSource.getLocaleMessage(userData.getCityFrom());
+                String localeCountryFrom = localMessageSource.getLocaleMessage(userData.getCountryFrom());
+                String localeCityFrom = localMessageSource.getLocaleMessage(userData.getCityFrom());
                 String localDateNow = LocalDate.now().format(dateTimeFormatter);
-                yield localeMessageSource.getLocaleMessage("date.from", localeCountryFrom, localeCityFrom, localDateNow);
+                yield localMessageSource.getLocaleMessage("date.from", localeCountryFrom, localeCityFrom, localDateNow);
             }
             case DATE_TO -> {
-                String localeCountryTo = localeMessageSource.getLocaleMessage(userData.getCountryTo());
-                String localeCityTo = localeMessageSource.getLocaleMessage(userData.getCityTo());
+                String localeCountryTo = localMessageSource.getLocaleMessage(userData.getCountryTo());
+                String localeCityTo = localMessageSource.getLocaleMessage(userData.getCityTo());
                 String localDateNow = LocalDate.now().format(dateTimeFormatter);
-                yield localeMessageSource.getLocaleMessage("date.from", localeCountryTo, localeCityTo, localDateNow);
+                yield localMessageSource.getLocaleMessage("date.to", localeCountryTo, localeCityTo, localDateNow);
             }
             default -> null;
         };
@@ -72,15 +74,15 @@ public class AnswerServiceImpl extends LocalAnswerService {
 
         StringBuilder stringBuilder = new StringBuilder();
         users.forEach(user -> {
-            String record = localeMessageSource.getLocaleMessage("list.user.data",
+            String record = localMessageSource.getLocaleMessage("list.user.data",
                     user.getUsername(),
                     user.getCountryFrom(),
                     user.getCityFrom(),
                     user.getDateFrom().format(dateTimeFormatter),
                     user.getCountryTo(),
                     user.getCityTo(),
-                    user.getDateTo().format(dateTimeFormatter),
-                    user.getLoad().name());
+                    user.getDateTo().format(dateTimeFormatter));
+//                    user.getCARGO().name());
             stringBuilder.append(record).append("\n\n");
         });
         return stringBuilder.toString();
@@ -89,16 +91,16 @@ public class AnswerServiceImpl extends LocalAnswerService {
     private String constructConfirmationMessageForCourier(UserData userData) {
         String username = userData.getUsername();
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(localeMessageSource.getLocaleMessage("confirm.courier", username));
+        stringBuilder.append(localMessageSource.getLocaleMessage("confirm.courier", username));
         stringBuilder.append("\n\n");
-        String confirmationData = localeMessageSource.getLocaleMessage("courier.user.data",
-                localeMessageSource.getLocaleMessage(userData.getCountryFrom()),
-                localeMessageSource.getLocaleMessage(userData.getCityFrom()),
+        String confirmationData = localMessageSource.getLocaleMessage("courier.user.data",
+                localMessageSource.getLocaleMessage(userData.getCountryFrom()),
+                localMessageSource.getLocaleMessage(userData.getCityFrom()),
                 userData.getDateFrom().format(dateTimeFormatter),
-                localeMessageSource.getLocaleMessage(userData.getCountryTo()),
-                localeMessageSource.getLocaleMessage(userData.getCityTo()),
-                userData.getDateTo().format(dateTimeFormatter),
-                userData.getLoad().getDescription(localeMessageSource));
+                localMessageSource.getLocaleMessage(userData.getCountryTo()),
+                localMessageSource.getLocaleMessage(userData.getCityTo()),
+                userData.getDateTo().format(dateTimeFormatter));
+        //userData.getLoadCategory().getLocalDescription(localMessageSource));
         stringBuilder.append(confirmationData);
         return stringBuilder.toString();
     }
@@ -106,14 +108,14 @@ public class AnswerServiceImpl extends LocalAnswerService {
     private String constructConfirmationMessageForCustomer(UserData userData) {
         String username = userData.getUsername();
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(localeMessageSource.getLocaleMessage("confirm.customer", username));
+        stringBuilder.append(localMessageSource.getLocaleMessage("confirm.customer", username));
         stringBuilder.append("\n\n");
-        String confirmationData = localeMessageSource.getLocaleMessage("customer.user.data",
+        String confirmationData = localMessageSource.getLocaleMessage("customer.user.data",
                 userData.getCountryFrom(),
                 userData.getCityFrom(),
                 userData.getCountryTo(),
-                userData.getCityTo(),
-                userData.getLoad().name());
+                userData.getCityTo());
+        //userData.getLoadCategory().name());
         stringBuilder.append(confirmationData);
         return stringBuilder.toString();
     }
@@ -122,19 +124,19 @@ public class AnswerServiceImpl extends LocalAnswerService {
         String username = userData.getUsername();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
         String mainMessage = registrations.isEmpty() ?
-                localeMessageSource.getLocaleMessage("registrations.not_exist", username) :
-                localeMessageSource.getLocaleMessage("registrations.exist", username);
+                localMessageSource.getLocaleMessage("registrations.not_exist", username) :
+                localMessageSource.getLocaleMessage("registrations.exist", username);
         StringBuilder stringBuilder = new StringBuilder(mainMessage).append("\n\n");
         registrations.forEach(registration -> {
-            String record = localeMessageSource.getLocaleMessage("registration.data",
+            String record = localMessageSource.getLocaleMessage("registration.data",
                     registration.getId().toString(),
                     registration.getCountryFrom(),
                     registration.getCityFrom(),
                     registration.getDateFrom().format(dateTimeFormatter),
                     registration.getCountryTo(),
                     registration.getCityTo(),
-                    registration.getDateTo().format(dateTimeFormatter),
-                    registration.getLoad().name());
+                    registration.getDateTo().format(dateTimeFormatter));
+            //registration.getCARGO().name());
             stringBuilder.append(record).append("\n\n");
         });
         return stringBuilder.toString();
@@ -143,7 +145,7 @@ public class AnswerServiceImpl extends LocalAnswerService {
     private String constructWrongInputMessage(UserData userData) {
         String username = userData.getUsername();
         StringBuilder stringBuilder = new StringBuilder();
-        String headerMessage = localeMessageSource.getLocaleMessage("wrong_input", username);
+        String headerMessage = localMessageSource.getLocaleMessage("wrong_input", username);
         stringBuilder.append(headerMessage).append(System.lineSeparator());
         Arrays.asList(TextCommand.values()).forEach(textCommand -> stringBuilder.append(textCommand.getText()).append(System.lineSeparator()));
         return stringBuilder.toString();

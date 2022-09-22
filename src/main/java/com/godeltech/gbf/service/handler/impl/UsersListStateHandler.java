@@ -1,6 +1,6 @@
 package com.godeltech.gbf.service.handler.impl;
 
-import com.godeltech.gbf.LocaleMessageSource;
+import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.model.User;
 import com.godeltech.gbf.model.UserData;
@@ -23,8 +23,8 @@ public class UsersListStateHandler extends LocaleBotStateHandler {
         this.userRepository = userRepository;
     }
 
-    public UsersListStateHandler(LocaleMessageSource localeMessageSource, ControlKeyboard keyboard, LocalAnswerService localAnswerService) {
-        super(localeMessageSource, keyboard, localAnswerService);
+    public UsersListStateHandler(LocalMessageSource localMessageSource, ControlKeyboard keyboard, LocalAnswerService localAnswerService) {
+        super(localMessageSource, keyboard, localAnswerService);
     }
 
     @Override

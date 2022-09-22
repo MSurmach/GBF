@@ -1,7 +1,6 @@
 package com.godeltech.gbf.config;
 
-import com.godeltech.gbf.GbfBot;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.godeltech.gbf.controller.GbfBot;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,10 +15,9 @@ public class RegistrationBotConfiguration {
     @Value("${telegram.bot.internalURL}")
     private String internalURL;
 
-    private GbfBot gbfBot;
+    private final GbfBot gbfBot;
 
-    @Autowired
-    public void setGbfBot(GbfBot gbfBot) {
+    public RegistrationBotConfiguration(GbfBot gbfBot) {
         this.gbfBot = gbfBot;
     }
 

@@ -5,13 +5,13 @@ import org.springframework.context.MessageSource;
 
 import java.util.Locale;
 
-public class LocaleMessageSource {
+public class LocalMessageSource {
 
     @Getter
     private Locale locale = new Locale("ru");
     private final MessageSource messageSource;
 
-    public LocaleMessageSource(MessageSource messageSource) {
+    public LocalMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 

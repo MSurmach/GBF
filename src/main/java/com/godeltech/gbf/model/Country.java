@@ -1,6 +1,6 @@
 package com.godeltech.gbf.model;
 
-import com.godeltech.gbf.LocaleMessageSource;
+import com.godeltech.gbf.LocalMessageSource;
 import lombok.Getter;
 
 import java.util.List;
@@ -8,18 +8,14 @@ import java.util.List;
 @Getter
 public enum Country {
     BELARUS("Belarus", List.of("Brest", "Vitebsk", "Gomel", "Grodno", "Mogilev", "Minsk")),
-
     POLAND("Poland", List.of("Bialystok", "Gdansk", "Krakow", "Lodz", "Poznan", "Warsaw", "Wroclaw")),
-
     BULGARIA("Bulgaria", List.of("Sofia")),
-
     GEORGIA("Georgia", List.of("Tbilisi")),
-
-    UK("UK", List.of("London", "Manchester")),
-
+    UAE("UAE", List.of("Dubai")),
     UKRAINE("Ukraine", List.of("Kyiv")),
+    UK("UK", List.of("London", "Manchester")),
+    LITHUANIA("Lithuania", List.of("Vilnius"));
 
-    UAE("UAE", List.of("Dubai"));
 
     private final String countryName;
 
@@ -30,11 +26,11 @@ public enum Country {
         this.cities = citiesDescription;
     }
 
-    public String getCountryName(LocaleMessageSource localeMessageSource) {
-        return localeMessageSource.getLocaleMessage(this.countryName);
+    public String getCountryName(LocalMessageSource localMessageSource) {
+        return localMessageSource.getLocaleMessage(this.countryName);
     }
 
-    public List<String> getCities(LocaleMessageSource localeMessageSource) {
-        return this.cities.stream().map(localeMessageSource::getLocaleMessage).toList();
+    public List<String> getCities(LocalMessageSource localMessageSource) {
+        return this.cities.stream().map(localMessageSource::getLocaleMessage).toList();
     }
 }

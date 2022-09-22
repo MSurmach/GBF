@@ -33,8 +33,12 @@ public class User {
     private LocalDate dateFrom;
     @Column(name = "date_to")
     private LocalDate dateTo;
-    @Column(name = "cargo")
-    private Load load;
+    @Column(name = "documents")
+    private Boolean documents;
+    @Column(name = "companions")
+    private int companionCount;
+    @Column(name = "package")
+    private String cargo;
 
     public User(UserData userData) {
         telegramId = userData.getId();
@@ -43,8 +47,10 @@ public class User {
         cityFrom = userData.getCityFrom();
         countryTo = userData.getCountryTo();
         cityTo = userData.getCityTo();
-        load = userData.getLoad();
         dateFrom = userData.getDateFrom();
         dateTo = userData.getDateTo();
+        documents = userData.getDocuments();
+        companionCount = userData.getCompanionCount();
+        cargo = userData.getCargo();
     }
 }

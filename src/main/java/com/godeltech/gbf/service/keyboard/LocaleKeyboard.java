@@ -1,11 +1,11 @@
 package com.godeltech.gbf.service.keyboard;
 
-import com.godeltech.gbf.LocaleMessageSource;
+import com.godeltech.gbf.LocalMessageSource;
 
 public abstract class LocaleKeyboard implements Keyboard {
-    protected LocaleMessageSource localeMessageSource;
+    protected LocalMessageSource localMessageSource;
 
-    public LocaleKeyboard(LocaleMessageSource localeMessageSource) {
-        this.localeMessageSource = localeMessageSource;
+    public LocaleKeyboard(LocalMessageSource localMessageSource) {
+        this.localMessageSource = localMessageSource;
     }
 }
