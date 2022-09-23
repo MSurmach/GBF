@@ -2,24 +2,43 @@ package com.godeltech.gbf.config;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.controller.GbfBot;
-import com.godeltech.gbf.service.factory.InterceptorFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import org.telegram.telegrambots.updatesreceivers.DefaultWebhook;
 
 import java.util.Locale;
 
 @Configuration
 @AllArgsConstructor
 public class ApplicationConfig {
-    private TelegramBotConfig telegramBotConfig;
 
     @Bean
-    public SetWebhook setWebhookInstance() {
+    public TelegramBotsApi telegramBotsApi(DefaultWebhook defaultWebhook) {
+        try {
+            return new TelegramBotsApi(DefaultBotSession.class, defaultWebhook);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException("Can not register a bot: " + e);
+        }
+    }
+
+    @Bean
+    public DefaultWebhook defaultWebhook(TelegramBotConfig telegramBotConfig, GbfBot gbfBot) {
+        DefaultWebhook defaultWebhook = new DefaultWebhook();
+        defaultWebhook.setInternalUrl(telegramBotConfig.getInternalURL());
+        defaultWebhook.registerWebhook(gbfBot);
+        return defaultWebhook;
+    }
+
+    @Bean
+    public SetWebhook setWebhookInstance(TelegramBotConfig telegramBotConfig) {
         return SetWebhook.builder().
                 url(telegramBotConfig.getWebhookHost()).
                 dropPendingUpdates(true).

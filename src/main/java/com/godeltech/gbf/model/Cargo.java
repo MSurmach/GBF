@@ -5,17 +5,11 @@ import lombok.Getter;
 
 @Getter
 public enum Cargo {
-    DOCUMENTS("Documents"),
-    PACKAGE("Package"),
-    PEOPLE("People");
-
-    private final String description;
-
-    Cargo(String description) {
-        this.description = description;
-    }
+    DOCUMENTS,
+    PACKAGE,
+    PEOPLE;
 
     public String getLocalDescription(LocalMessageSource localMessageSource) {
-        return localMessageSource.getLocaleMessage(description);
+        return localMessageSource.getLocaleMessage(this.name());
     }
 }

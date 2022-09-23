@@ -20,16 +20,25 @@ public enum Command {
         Text(String text) {
             this.text = text;
         }
+
+        public String getText(){
+            return text;
+        }
     }
 
     public enum Calendar {
         INIT, PREVIOUS, NEXT,
         CHANGE_YEAR, SELECT_YEAR,
         CHANGE_MONTH, SELECT_MONTH,
-        SELECT_DAY
+        SELECT_DAY;
+
+        public String getLocalDescription(LocalMessageSource localMessageSource) {
+            return localMessageSource.getLocaleMessage(this.name());
+        }
+
     }
 
     public enum Cargo {
-        SELECT_DOCUMENTS, SELECT_PACKAGE, SELECT_PEOPLE, CONFIRM_CARGO
+        INIT, SELECT_DOCUMENTS,CANCEL_DOCUMENTS, SELECT_PACKAGE, SELECT_PEOPLE, CONFIRM_CARGO;
     }
 }

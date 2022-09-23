@@ -18,4 +18,7 @@ public class TelegramBotConfig {
 
     @Value("${telegram.bot.token}")
     private String botToken;
+
+    @Value("${telegram.bot.internalURL}")
+    private String internalURL;
 }

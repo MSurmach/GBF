@@ -22,6 +22,6 @@ public class UserData {
     private State previousState;
     private StateFlow stateFlow;
     private Boolean documents;
-    private String cargo;
+    private String packageSize;
     private int companionCount;
 }

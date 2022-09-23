@@ -1,7 +1,6 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.controls.CalendarCommand;
 import com.godeltech.gbf.controls.State;
 import com.godeltech.gbf.controls.StateFlow;
 import com.godeltech.gbf.model.UserData;
@@ -11,6 +10,9 @@ import com.godeltech.gbf.service.keyboard.impl.CityKeyboard;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+
+import static com.godeltech.gbf.controls.Command.Calendar.INIT;
+import static com.godeltech.gbf.controls.State.CITY_TO;
 
 @Service
 public class CityStateHandler extends LocaleBotStateHandler {
@@ -22,11 +24,11 @@ public class CityStateHandler extends LocaleBotStateHandler {
     @Override
     public String handle(Long userId, String callback, UserData userData) {
         State currentState = userData.getCurrentState();
-        if (currentState == State.CITY_TO) userData.setCityTo(callback);
+        if (currentState == CITY_TO) userData.setCityTo(callback);
         else userData.setCityFrom(callback);
         StateFlow stateFlow = userData.getStateFlow();
         userData.setPreviousState(currentState);
         userData.setCurrentState(stateFlow.getNextState(currentState));
-        return CalendarCommand.INIT + ":" + LocalDate.now();
+        return INIT + ":" + LocalDate.now();
     }
 }

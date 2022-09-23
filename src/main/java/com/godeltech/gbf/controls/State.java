@@ -11,5 +11,7 @@ public enum State {
     MONTH_FROM, MONTH_TO,
     DATE_FROM, DATE_TO,
     CARGO,
-    USERS_LIST
+    USERS_LIST,
+    PACKAGE,
+    PEOPLE
 }

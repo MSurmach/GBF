@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.godeltech.gbf.controls.CalendarCommand.RETURNEDYEAR;
+import static com.godeltech.gbf.controls.Command.Calendar.CHANGE_YEAR;
 import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
@@ -22,13 +22,13 @@ public class YearKeyboard extends LocaleKeyboard {
 
     private Keyboard controlKeyboard;
 
+    public YearKeyboard(LocalMessageSource localMessageSource) {
+        super(localMessageSource);
+    }
+
     @Autowired
     public void setControlKeyboard(ControlKeyboard controlKeyboard) {
         this.controlKeyboard = controlKeyboard;
-    }
-
-    public YearKeyboard(LocalMessageSource localMessageSource) {
-        super(localMessageSource);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class YearKeyboard extends LocaleKeyboard {
         LocalDate[] years = getYearsArray(4);
         List<InlineKeyboardButton> yearButtons = Arrays.stream(years)
                 .map(date -> {
-                    String buttonCallback = RETURNEDYEAR.name() + ":" + date;
+                    String buttonCallback = CHANGE_YEAR + ":" + date;
                     return createButton(Integer.toString(date.getYear()), buttonCallback);
                 }).toList();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();

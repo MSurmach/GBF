@@ -26,11 +26,10 @@ public class DateStateHandler extends LocaleBotStateHandler {
         var command = Command.Calendar.valueOf(split[0]);
         State currentState = userData.getCurrentState();
         userData.setPreviousState(currentState);
-        return switch (command) {
+        switch (command) {
             case CHANGE_MONTH -> {
                 if (currentState == DATE_FROM) userData.setCurrentState(MONTH_FROM);
                 else userData.setCurrentState(MONTH_TO);
-                yield callback;
             }
             case SELECT_DAY -> {
                 LocalDate parsedDate = LocalDate.parse(split[1]);
@@ -38,9 +37,9 @@ public class DateStateHandler extends LocaleBotStateHandler {
                 else userData.setDateTo(parsedDate);
                 State nextState = userData.getStateFlow().getNextState(currentState);
                 userData.setCurrentState(nextState);
-                yield null;
+                callback = Command.Cargo.INIT.name();
             }
-            default -> null;
         };
+        return callback;
     }
 }

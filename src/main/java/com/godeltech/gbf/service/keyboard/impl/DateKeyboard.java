@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.godeltech.gbf.controls.CalendarCommand.*;
+import static com.godeltech.gbf.controls.Command.Calendar.*;
 import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
@@ -60,17 +60,17 @@ public class DateKeyboard extends LocaleKeyboard {
 
     private void addMonthYear(LocalDate date, List<List<InlineKeyboardButton>> keyboard) {
         var prevMonthButton = createButton(
-                PREV.getDescription(),
-                PREV.name() + ":" + date.minusMonths(1));
+                PREVIOUS.getLocalDescription(localMessageSource),
+                PREVIOUS + ":" + date.minusMonths(1));
         var nextMonthButton = createButton(
-                NEXT.getDescription(),
-                NEXT.name() + ":" + date.plusMonths(1));
+                NEXT.getLocalDescription(localMessageSource),
+                NEXT + ":" + date.plusMonths(1));
         String monthYearPattern = "LLLL yyyy";
         DateTimeFormatter monthYearFormatter = DateTimeFormatter.ofPattern(monthYearPattern).withLocale(localMessageSource.getLocale());
         String header = date.format(monthYearFormatter).substring(0, 1).toUpperCase() + date.format(monthYearFormatter).substring(1);
         var monthYearHeader = createButton(
                 header,
-                MONTH.name() + ":" + date);
+                SELECT_MONTH + ":" + date);
         keyboard.add(List.of(prevMonthButton, monthYearHeader, nextMonthButton));
     }
 
@@ -91,7 +91,7 @@ public class DateKeyboard extends LocaleKeyboard {
         }
         for (int index = shift; index < columnCount; index++) {
             if (day <= date.lengthOfMonth()) {
-                row.add(createButton(Integer.toString(day++), DAY.name() + ":" + callbackDate));
+                row.add(createButton(Integer.toString(day++), SELECT_DAY + ":" + callbackDate));
                 callbackDate = callbackDate.plusDays(1);
             } else {
                 row.add(createButton());

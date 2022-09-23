@@ -51,6 +51,6 @@ public class User {
         dateTo = userData.getDateTo();
         documents = userData.getDocuments();
         companionCount = userData.getCompanionCount();
-        cargo = userData.getCargo();
+        cargo = userData.getPackageSize();
     }
 }

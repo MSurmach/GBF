@@ -1,9 +1,9 @@
 package com.godeltech.gbf.service.answer.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.controls.Command;
 import com.godeltech.gbf.controls.State;
 import com.godeltech.gbf.controls.StateFlow;
-import com.godeltech.gbf.controls.TextCommand;
 import com.godeltech.gbf.model.User;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.LocalAnswerService;
@@ -47,8 +47,8 @@ public class AnswerServiceImpl extends LocalAnswerService {
             }
             case YEAR_FROM, YEAR_TO -> localMessageSource.getLocaleMessage("year");
             case CARGO -> currentStateFlow == COURIER ?
-                    localMessageSource.getLocaleMessage("loadCategory.courier") :
-                    localMessageSource.getLocaleMessage("loadCategory.customer");
+                    localMessageSource.getLocaleMessage("CARGO.courier") :
+                    localMessageSource.getLocaleMessage("CARGO.customer");
             case MONTH_FROM, MONTH_TO -> localMessageSource.getLocaleMessage("month");
             case REGISTRATIONS -> constructRegistrationsMessage(userData, null);
             case SUCCESS -> localMessageSource.getLocaleMessage("courier.registration.success");
@@ -147,7 +147,9 @@ public class AnswerServiceImpl extends LocalAnswerService {
         StringBuilder stringBuilder = new StringBuilder();
         String headerMessage = localMessageSource.getLocaleMessage("wrong_input", username);
         stringBuilder.append(headerMessage).append(System.lineSeparator());
-        Arrays.asList(TextCommand.values()).forEach(textCommand -> stringBuilder.append(textCommand.getText()).append(System.lineSeparator()));
+        Arrays.asList(Command.Text.values()).
+                forEach(textCommand -> stringBuilder.append(textCommand.getText()).
+                        append(System.lineSeparator()));
         return stringBuilder.toString();
     }
 

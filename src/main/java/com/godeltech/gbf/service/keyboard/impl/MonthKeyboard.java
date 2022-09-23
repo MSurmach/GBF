@@ -16,17 +16,17 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.godeltech.gbf.controls.CalendarCommand.*;
+import static com.godeltech.gbf.controls.Command.Calendar.*;
 import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
 public class MonthKeyboard extends LocaleKeyboard {
 
+    private Keyboard controlKeyboard;
+
     public MonthKeyboard(LocalMessageSource localMessageSource) {
         super(localMessageSource);
     }
-
-    private Keyboard controlKeyboard;
 
     @Autowired
     public void setControlKeyboard(ControlKeyboard controlKeyboard) {
@@ -46,7 +46,7 @@ public class MonthKeyboard extends LocaleKeyboard {
             while (columnCount > 0 && index != months.length) {
                 String monthName = months[index].getDisplayName(TextStyle.FULL_STANDALONE, localMessageSource.getLocale());
                 String monthLabel = monthName.substring(0, 1).toUpperCase() + monthName.substring(1);
-                String monthCallback = RETURNEDMONTH.getDescription() + ":" + LocalDate.of(callBackDate.getYear(), months[index], callBackDate.getDayOfMonth());
+                String monthCallback = CHANGE_MONTH + ":" + LocalDate.of(callBackDate.getYear(), months[index], callBackDate.getDayOfMonth());
                 buttonRow.add(createButton(monthLabel, monthCallback));
                 columnCount--;
                 index++;
@@ -59,17 +59,17 @@ public class MonthKeyboard extends LocaleKeyboard {
 
     private void addYearHeader(LocalDate date, List<List<InlineKeyboardButton>> keyboard) {
         var prevYearButton = createButton(
-                PREV.getDescription(),
-                PREV.name() + ":" + date.minusYears(1));
+                PREVIOUS.getLocalDescription(localMessageSource),
+                PREVIOUS + ":" + date.minusYears(1));
         var nextYearButton = createButton(
-                NEXT.getDescription(),
-                NEXT.name() + ":" + date.plusYears(1));
+                NEXT.getLocalDescription(localMessageSource),
+                NEXT + ":" + date.plusYears(1));
         String yearPattern = "yyyy";
         DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern(yearPattern);
         String header = date.format(yearFormatter);
         var yearHeader = createButton(
                 header,
-                YEAR.name() + ":" + date);
+                SELECT_YEAR + ":" + date);
         keyboard.add(List.of(prevYearButton, yearHeader, nextYearButton));
     }
 }

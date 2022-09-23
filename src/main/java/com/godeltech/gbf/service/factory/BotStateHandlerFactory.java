@@ -29,6 +29,8 @@ public class BotStateHandlerFactory {
             case CONFIRMATION -> applicationContext.getBean(ConfirmStateHandler.class);
             case SUCCESS -> applicationContext.getBean(SuccessStateHandler.class);
             case USERS_LIST -> applicationContext.getBean(UsersListStateHandler.class);
+            case PACKAGE -> applicationContext.getBean(PackageStateHandler.class);
+//            case PEOPLE -> applicationContext.getBean()
             default -> null;
         };
     }
