@@ -1,16 +1,13 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.controls.Command;
-import com.godeltech.gbf.controls.State;
+import com.godeltech.gbf.management.button.BotButton;
+import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.LocalAnswerService;
 import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
 import com.godeltech.gbf.service.keyboard.impl.MonthKeyboard;
 import org.springframework.stereotype.Service;
-
-import static com.godeltech.gbf.controls.Command.Calendar.CHANGE_YEAR;
-import static com.godeltech.gbf.controls.Command.Calendar.SELECT_MONTH;
 
 @Service
 public class MonthStateHandler extends LocaleBotStateHandler {
@@ -22,7 +19,7 @@ public class MonthStateHandler extends LocaleBotStateHandler {
     @Override
     public String handle(Long userId, String callback, UserData userData) {
         String[] split = callback.split(":");
-        var command = Command.Calendar.valueOf(split[0]);
+        var command = BotButton.Calendar.valueOf(split[0]);
         State currentState = userData.getCurrentState();
         userData.setPreviousState(currentState);
         switch (command) {

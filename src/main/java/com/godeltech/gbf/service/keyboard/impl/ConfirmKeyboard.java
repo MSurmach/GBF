@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.controls.State;
+import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;

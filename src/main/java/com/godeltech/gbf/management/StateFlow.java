@@ -1,16 +1,16 @@
-package com.godeltech.gbf.controls;
+package com.godeltech.gbf.management;
 
 import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.godeltech.gbf.controls.State.*;
+import static com.godeltech.gbf.management.State.*;
 
 @Getter
 public enum StateFlow {
-    COURIER(COUNTRY_FROM, CITY_FROM, DATE_FROM, COUNTRY_TO, CITY_TO, DATE_TO, CARGO, CONFIRMATION, SUCCESS),
-    CUSTOMER(COUNTRY_FROM, CITY_FROM, COUNTRY_TO, CITY_TO, CARGO, CONFIRMATION, USERS_LIST),
+    COURIER(COUNTRY_FROM, CITY_FROM, DATE_FROM, COUNTRY_TO, CITY_TO, DATE_TO, CARGO_MENU, COMMENT, CONFIRMATION),
+    CUSTOMER(COUNTRY_FROM, CITY_FROM, DATE_FROM, COUNTRY_TO, CITY_TO, DATE_TO, CARGO_MENU, CONFIRMATION, USERS_LIST),
     VIEWER(REGISTRATIONS);
 
     private final List<State> flow;

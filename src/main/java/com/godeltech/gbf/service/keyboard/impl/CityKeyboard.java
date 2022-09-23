@@ -5,6 +5,7 @@ import com.godeltech.gbf.model.Country;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
+import com.godeltech.gbf.service.keyboard.util.KeyboardUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -12,8 +13,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
 public class CityKeyboard extends LocaleKeyboard {
@@ -39,8 +38,8 @@ public class CityKeyboard extends LocaleKeyboard {
             List<InlineKeyboardButton> buttonRow = new ArrayList<>();
             while (columnCount > 0 && index != cities.size()) {
                 String buttonCallback = cities.get(index);
-                String label = country.getCities(localMessageSource).get(index);
-                buttonRow.add(createButton(label, buttonCallback));
+                String label = country.getLocalCities(localMessageSource).get(index);
+                buttonRow.add(KeyboardUtils.createButton(label, buttonCallback));
                 columnCount--;
                 index++;
             }

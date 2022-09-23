@@ -17,20 +17,20 @@ public enum Country {
     LITHUANIA("Lithuania", List.of("Vilnius"));
 
 
-    private final String countryName;
+    private final String label;
 
     private final List<String> cities;
 
-    Country(String countryName, List<String> citiesDescription) {
-        this.countryName = countryName;
+    Country(String label, List<String> citiesDescription) {
+        this.label = label;
         this.cities = citiesDescription;
     }
 
-    public String getCountryName(LocalMessageSource localMessageSource) {
-        return localMessageSource.getLocaleMessage(this.countryName);
+    public String getLocalLabel(LocalMessageSource localMessageSource) {
+        return localMessageSource.getLocaleMessage(this.label);
     }
 
-    public List<String> getCities(LocalMessageSource localMessageSource) {
+    public List<String> getLocalCities(LocalMessageSource localMessageSource) {
         return this.cities.stream().map(localMessageSource::getLocaleMessage).toList();
     }
 }

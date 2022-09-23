@@ -1,8 +1,8 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.controls.Command;
-import com.godeltech.gbf.controls.State;
+import com.godeltech.gbf.management.button.BotButton;
+import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.LocalAnswerService;
 import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-import static com.godeltech.gbf.controls.State.*;
+import static com.godeltech.gbf.management.button.BotButton.IGNORE;
+import static com.godeltech.gbf.management.State.*;
 
 @Service
 public class DateStateHandler extends LocaleBotStateHandler {
@@ -23,13 +24,14 @@ public class DateStateHandler extends LocaleBotStateHandler {
     @Override
     public String handle(Long userId, String callback, UserData userData) {
         String[] split = callback.split(":");
-        var command = Command.Calendar.valueOf(split[0]);
+        var command = BotButton.Calendar.valueOf(split[0]);
         State currentState = userData.getCurrentState();
         userData.setPreviousState(currentState);
-        switch (command) {
+        return switch (command) {
             case CHANGE_MONTH -> {
                 if (currentState == DATE_FROM) userData.setCurrentState(MONTH_FROM);
                 else userData.setCurrentState(MONTH_TO);
+                yield callback;
             }
             case SELECT_DAY -> {
                 LocalDate parsedDate = LocalDate.parse(split[1]);
@@ -37,9 +39,9 @@ public class DateStateHandler extends LocaleBotStateHandler {
                 else userData.setDateTo(parsedDate);
                 State nextState = userData.getStateFlow().getNextState(currentState);
                 userData.setCurrentState(nextState);
-                callback = Command.Cargo.INIT.name();
+                yield userId.toString();
             }
+            default -> IGNORE.name();
         };
-        return callback;
     }
 }

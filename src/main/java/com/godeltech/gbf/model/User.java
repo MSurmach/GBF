@@ -49,7 +49,7 @@ public class User {
         cityTo = userData.getCityTo();
         dateFrom = userData.getDateFrom();
         dateTo = userData.getDateTo();
-        documents = userData.getDocuments();
+        documents = userData.isDocuments();
         companionCount = userData.getCompanionCount();
         cargo = userData.getPackageSize();
     }

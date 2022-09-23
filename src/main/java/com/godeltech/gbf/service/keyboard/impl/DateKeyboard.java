@@ -1,8 +1,9 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
+import com.godeltech.gbf.service.keyboard.util.KeyboardUtils;
+import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.godeltech.gbf.controls.Command.Calendar.*;
+import static com.godeltech.gbf.management.button.BotButton.Calendar.*;
 import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
@@ -59,16 +60,16 @@ public class DateKeyboard extends LocaleKeyboard {
     }
 
     private void addMonthYear(LocalDate date, List<List<InlineKeyboardButton>> keyboard) {
-        var prevMonthButton = createButton(
-                PREVIOUS.getLocalDescription(localMessageSource),
+        var prevMonthButton = KeyboardUtils.createButton(
+                PREVIOUS.getLocalLabel(localMessageSource),
                 PREVIOUS + ":" + date.minusMonths(1));
-        var nextMonthButton = createButton(
-                NEXT.getLocalDescription(localMessageSource),
+        var nextMonthButton = KeyboardUtils.createButton(
+                NEXT.getLocalLabel(localMessageSource),
                 NEXT + ":" + date.plusMonths(1));
         String monthYearPattern = "LLLL yyyy";
         DateTimeFormatter monthYearFormatter = DateTimeFormatter.ofPattern(monthYearPattern).withLocale(localMessageSource.getLocale());
         String header = date.format(monthYearFormatter).substring(0, 1).toUpperCase() + date.format(monthYearFormatter).substring(1);
-        var monthYearHeader = createButton(
+        var monthYearHeader = KeyboardUtils.createButton(
                 header,
                 SELECT_MONTH + ":" + date);
         keyboard.add(List.of(prevMonthButton, monthYearHeader, nextMonthButton));
@@ -78,7 +79,7 @@ public class DateKeyboard extends LocaleKeyboard {
         List<InlineKeyboardButton> weekDayRow = new ArrayList<>();
         Arrays.stream(DayOfWeek.values()).
                 map(day -> day.getDisplayName(TextStyle.SHORT, localMessageSource.getLocale())).
-                forEach(day -> weekDayRow.add(createButton(day)));
+                forEach(day -> weekDayRow.add(KeyboardUtils.createButton(day)));
         keyboard.add(weekDayRow);
     }
 
@@ -87,14 +88,14 @@ public class DateKeyboard extends LocaleKeyboard {
         int day = date.getDayOfMonth();
         LocalDate callbackDate = date;
         for (int index = 0; index < shift; index++) {
-            row.add(createButton());
+            row.add(KeyboardUtils.createButton());
         }
         for (int index = shift; index < columnCount; index++) {
             if (day <= date.lengthOfMonth()) {
-                row.add(createButton(Integer.toString(day++), SELECT_DAY + ":" + callbackDate));
+                row.add(KeyboardUtils.createButton(Integer.toString(day++), SELECT_DAY + ":" + callbackDate));
                 callbackDate = callbackDate.plusDays(1);
             } else {
-                row.add(createButton());
+                row.add(KeyboardUtils.createButton());
             }
         }
         return row;

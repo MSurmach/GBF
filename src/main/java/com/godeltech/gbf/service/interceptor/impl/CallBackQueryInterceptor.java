@@ -1,10 +1,10 @@
 package com.godeltech.gbf.service.interceptor.impl;
 
 import com.godeltech.gbf.cache.UserDataCache;
-import com.godeltech.gbf.controls.State;
-import com.godeltech.gbf.controls.StateFlow;
+import com.godeltech.gbf.management.State;
+import com.godeltech.gbf.management.StateFlow;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.factory.BotStateHandlerFactory;
+import com.godeltech.gbf.service.factory.StateHandlerFactory;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,11 +13,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Service
 public class CallBackQueryInterceptor implements Interceptor {
-    private BotStateHandlerFactory botStateHandlerFactory;
+    private StateHandlerFactory stateHandlerFactory;
 
     @Autowired
-    public void setBotStateHandlerFactory(BotStateHandlerFactory botStateHandlerFactory) {
-        this.botStateHandlerFactory = botStateHandlerFactory;
+    public void setBotStateHandlerFactory(StateHandlerFactory stateHandlerFactory) {
+        this.stateHandlerFactory = stateHandlerFactory;
     }
 
     @Override
@@ -45,12 +45,12 @@ public class CallBackQueryInterceptor implements Interceptor {
                 }
                 default -> {
                     State currentState = cachedUserData.getCurrentState();
-                    callBackData = botStateHandlerFactory.getHandler(currentState).handle(userId, callBackData, cachedUserData);
+                    callBackData = stateHandlerFactory.getHandler(currentState).handle(userId, callBackData, cachedUserData);
                     //UserDataCache.saveCallback(userId, callBackData);
                 }
             }
             nextState = cachedUserData.getCurrentState();
         }
-        return botStateHandlerFactory.getHandler(nextState).getView(chat_id, userId, callBackData);
+        return stateHandlerFactory.getHandler(nextState).getView(chat_id, userId, callBackData);
     }
 }

@@ -1,7 +1,7 @@
 package com.godeltech.gbf.model;
 
-import com.godeltech.gbf.controls.State;
-import com.godeltech.gbf.controls.StateFlow;
+import com.godeltech.gbf.management.State;
+import com.godeltech.gbf.management.StateFlow;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +21,7 @@ public class UserData {
     private State currentState;
     private State previousState;
     private StateFlow stateFlow;
-    private Boolean documents;
+    private boolean documents;
     private String packageSize;
     private int companionCount;
 }

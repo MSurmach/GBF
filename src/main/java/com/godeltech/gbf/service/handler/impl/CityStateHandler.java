@@ -1,8 +1,8 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.controls.State;
-import com.godeltech.gbf.controls.StateFlow;
+import com.godeltech.gbf.management.State;
+import com.godeltech.gbf.management.StateFlow;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.LocalAnswerService;
 import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-import static com.godeltech.gbf.controls.Command.Calendar.INIT;
-import static com.godeltech.gbf.controls.State.CITY_TO;
+import static com.godeltech.gbf.management.button.BotButton.Calendar.INIT;
+import static com.godeltech.gbf.management.State.CITY_TO;
 
 @Service
 public class CityStateHandler extends LocaleBotStateHandler {

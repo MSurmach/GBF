@@ -1,9 +1,9 @@
 package com.godeltech.gbf.service.answer.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.controls.Command;
-import com.godeltech.gbf.controls.State;
-import com.godeltech.gbf.controls.StateFlow;
+import com.godeltech.gbf.management.button.BotButton;
+import com.godeltech.gbf.management.State;
+import com.godeltech.gbf.management.StateFlow;
 import com.godeltech.gbf.model.User;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.LocalAnswerService;
@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.godeltech.gbf.controls.StateFlow.COURIER;
+import static com.godeltech.gbf.management.StateFlow.COURIER;
 
 @Service
 public class AnswerServiceImpl extends LocalAnswerService {
@@ -46,7 +46,7 @@ public class AnswerServiceImpl extends LocalAnswerService {
                 yield localMessageSource.getLocaleMessage("city.to", localeCountryTo);
             }
             case YEAR_FROM, YEAR_TO -> localMessageSource.getLocaleMessage("year");
-            case CARGO -> currentStateFlow == COURIER ?
+            case CARGO_MENU -> currentStateFlow == COURIER ?
                     localMessageSource.getLocaleMessage("CARGO.courier") :
                     localMessageSource.getLocaleMessage("CARGO.customer");
             case MONTH_FROM, MONTH_TO -> localMessageSource.getLocaleMessage("month");
@@ -66,6 +66,7 @@ public class AnswerServiceImpl extends LocalAnswerService {
                 String localDateNow = LocalDate.now().format(dateTimeFormatter);
                 yield localMessageSource.getLocaleMessage("date.to", localeCountryTo, localeCityTo, localDateNow);
             }
+            case CARGO_PEOPLE -> localMessageSource.getLocaleMessage("CARGO.people");
             default -> null;
         };
     }
@@ -147,7 +148,7 @@ public class AnswerServiceImpl extends LocalAnswerService {
         StringBuilder stringBuilder = new StringBuilder();
         String headerMessage = localMessageSource.getLocaleMessage("wrong_input", username);
         stringBuilder.append(headerMessage).append(System.lineSeparator());
-        Arrays.asList(Command.Text.values()).
+        Arrays.asList(BotButton.Text.values()).
                 forEach(textCommand -> stringBuilder.append(textCommand.getText()).
                         append(System.lineSeparator()));
         return stringBuilder.toString();
