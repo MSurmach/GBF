@@ -1,14 +1,12 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.management.button.BotButton;
 import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.service.keyboard.util.KeyboardUtils;
-import com.godeltech.gbf.service.keyboard.Keyboard;
-import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -17,32 +15,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.godeltech.gbf.management.button.BotButton.Cargo.*;
-import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
-public class CargoKeyboard extends LocaleKeyboard {
+@AllArgsConstructor
+public class CargoMenuKeyboard implements Keyboard {
 
-    private Keyboard controlKeyboard;
-
-    public CargoKeyboard(LocalMessageSource localMessageSource) {
-        super(localMessageSource);
-    }
-
-    @Autowired
-    public void setControlKeyboard(ControlKeyboard controlKeyboard) {
-        this.controlKeyboard = controlKeyboard;
-    }
+    private ControlKeyboard controlKeyboard;
+    private LocalMessageSource localMessageSource;
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
-        UserData userData = UserDataCache.get(Long.parseLong(callback));
+    public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(documentsRow(userData));
         keyboard.add(packageRow(userData));
         keyboard.add(companionRow(userData));
         keyboard.add(confirmCargoRow());
         InlineKeyboardMarkup loadKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(loadKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(null)).result();
+        return new KeyboardMarkupAppender(loadKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
     }
 
     private List<InlineKeyboardButton> confirmCargoRow() {

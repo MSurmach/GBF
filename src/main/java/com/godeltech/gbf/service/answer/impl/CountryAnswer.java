@@ -1,9 +1,9 @@
-package com.godeltech.gbf.service.message.impl;
+package com.godeltech.gbf.service.answer.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.message.Answer;
+import com.godeltech.gbf.service.answer.Answer;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,9 +19,9 @@ public class CountryAnswer implements Answer {
     }
 
     @Override
-    public String getBotMessage(UserData userData, List<UserData>... users) {
+    public String getAnswer(UserData userData, List<UserData>... users) {
         State state = userData.getCurrentState();
-        String neededCode = state == State.COUNTRY_TO ? COUNTRY_FROM_CODE : COUNTRY_TO_CODE;
+        String neededCode = state == State.COUNTRY_FROM ? COUNTRY_FROM_CODE : COUNTRY_TO_CODE;
         return localMessageSource.getLocaleMessage(neededCode);
     }
 }

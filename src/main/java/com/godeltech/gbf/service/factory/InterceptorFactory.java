@@ -1,6 +1,6 @@
 package com.godeltech.gbf.service.factory;
 
-import com.godeltech.gbf.service.interceptor.impl.CallBackQueryInterceptor;
+import com.godeltech.gbf.service.interceptor.impl.CallbackInterceptor;
 import com.godeltech.gbf.service.interceptor.impl.MessageInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -20,7 +20,7 @@ public class InterceptorFactory {
 
     public BotApiMethod<?> intercept(Update update) {
         if (update.hasCallbackQuery()) {
-            return applicationContext.getBean(CallBackQueryInterceptor.class).intercept(update);
+            return applicationContext.getBean(CallbackInterceptor.class).intercept(update);
         } else return applicationContext.getBean(MessageInterceptor.class).intercept(update);
     }
 }

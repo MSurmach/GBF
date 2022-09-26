@@ -1,28 +1,19 @@
 package com.godeltech.gbf.service.handler.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
-import com.godeltech.gbf.service.keyboard.impl.MenuKeyboard;
+import com.godeltech.gbf.service.handler.StateHandler;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MenuStateHandler extends LocaleBotStateHandler {
-
-    public MenuStateHandler(LocalMessageSource localMessageSource, MenuKeyboard keyboard, LocalAnswer localBotMessage) {
-        super(localMessageSource, keyboard, localBotMessage);
-    }
+public class MenuStateHandler implements StateHandler {
 
     @Override
-    public String handle(Long userId, String callback, UserData userData) {
-        UserData newUserData = new UserData();
-        newUserData.setId(userId);
-        newUserData.setUsername(callback);
-        newUserData.setCurrentState(State.MENU);
-        newUserData.setPreviousState(State.MENU);
-        UserDataCache.add(userId, newUserData);
-        return callback;
+    public void handle(Long userId, UserData userData) {
+        userData.setId(userId);
+        userData.setCurrentState(State.MENU);
+        userData.setPreviousState(State.MENU);
+        UserDataCache.add(userId, userData);
     }
 }

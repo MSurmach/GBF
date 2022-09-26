@@ -1,10 +1,12 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.service.keyboard.util.KeyboardUtils;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -19,22 +21,14 @@ import static com.godeltech.gbf.management.button.BotButton.Calendar.CHANGE_YEAR
 import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
-public class YearKeyboard extends LocaleKeyboard {
+@AllArgsConstructor
+public class YearKeyboard implements Keyboard {
 
-    private Keyboard controlKeyboard;
-
-    public YearKeyboard(LocalMessageSource localMessageSource) {
-        super(localMessageSource);
-    }
-
-    @Autowired
-    public void setControlKeyboard(ControlKeyboard controlKeyboard) {
-        this.controlKeyboard = controlKeyboard;
-    }
+    private ControlKeyboard controlKeyboard;
+    private LocalMessageSource localMessageSource;
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
-        String givenDate = callback.split(":")[1];
+    public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         LocalDate[] years = getYearsArray(4);
         List<InlineKeyboardButton> yearButtons = Arrays.stream(years)
                 .map(date -> {
@@ -44,7 +38,7 @@ public class YearKeyboard extends LocaleKeyboard {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(yearButtons);
         InlineKeyboardMarkup yearKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(yearKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(null)).result();
+        return new KeyboardMarkupAppender(yearKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
     }
 
     private LocalDate[] getYearsArray(int countYear) {

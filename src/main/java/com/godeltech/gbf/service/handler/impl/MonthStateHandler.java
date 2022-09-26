@@ -1,22 +1,19 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.management.button.BotButton;
 import com.godeltech.gbf.management.State;
+import com.godeltech.gbf.management.button.BotButton;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
+import com.godeltech.gbf.service.handler.StateHandler;
 import com.godeltech.gbf.service.keyboard.impl.MonthKeyboard;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MonthStateHandler extends LocaleBotStateHandler {
-
-    public MonthStateHandler(LocalMessageSource localMessageSource, MonthKeyboard keyboard, LocalAnswer localBotMessage) {
-        super(localMessageSource, keyboard, localBotMessage);
-    }
+public class MonthStateHandler implements StateHandler {
 
     @Override
-    public String handle(Long userId, String callback, UserData userData) {
+    public void handle(Long userId, UserData userData) {
+        String callback = userData.getCallback();
         String[] split = callback.split(":");
         var command = BotButton.Calendar.valueOf(split[0]);
         State currentState = userData.getCurrentState();
@@ -31,6 +28,5 @@ public class MonthStateHandler extends LocaleBotStateHandler {
                 else userData.setCurrentState(State.YEAR_FROM);
             }
         }
-        return callback;
     }
 }

@@ -2,15 +2,17 @@ package com.godeltech.gbf.view.impl;
 
 import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.service.answer.Answer;
 import com.godeltech.gbf.service.factory.StateAnswerFactory;
 import com.godeltech.gbf.service.factory.StateKeyboardFactory;
 import com.godeltech.gbf.service.keyboard.Keyboard;
-import com.godeltech.gbf.service.message.Answer;
 import com.godeltech.gbf.view.StateView;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Service
+@AllArgsConstructor
 public class StateViewImpl implements StateView<SendMessage> {
     private StateAnswerFactory stateAnswerFactory;
     private StateKeyboardFactory stateKeyboardFactory;
@@ -24,8 +26,7 @@ public class StateViewImpl implements StateView<SendMessage> {
                 builder().
                 chatId(chatId).
                 parseMode("html").
-                text(answer.getBotMessage(userData)).
-                replyMarkup(keyboard.getKeyboardMarkup(null)).
-                build();
+                text(answer.getAnswer(userData)).
+                replyMarkup(keyboard.getKeyboardMarkup(userData)).build();
     }
 }

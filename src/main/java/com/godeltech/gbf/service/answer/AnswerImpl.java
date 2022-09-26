@@ -1,18 +1,4 @@
-package com.godeltech.gbf.service.message;
-
-import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.management.button.BotButton;
-import com.godeltech.gbf.management.State;
-import com.godeltech.gbf.management.StateFlow;
-import com.godeltech.gbf.model.User;
-import com.godeltech.gbf.model.UserData;
-import org.springframework.stereotype.Service;
-
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
-
-import static com.godeltech.gbf.management.StateFlow.COURIER;
+package com.godeltech.gbf.service.answer;
 
 public class AnswerImpl {
 //    private final DateTimeFormatter dateTimeFormatter;

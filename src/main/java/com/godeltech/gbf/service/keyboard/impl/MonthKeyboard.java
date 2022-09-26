@@ -1,12 +1,14 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.service.keyboard.util.KeyboardUtils;
-import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -18,24 +20,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.godeltech.gbf.management.button.BotButton.Calendar.*;
-import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
-public class MonthKeyboard extends LocaleKeyboard {
+@AllArgsConstructor
+public class MonthKeyboard implements Keyboard {
 
-    private Keyboard controlKeyboard;
-
-    public MonthKeyboard(LocalMessageSource localMessageSource) {
-        super(localMessageSource);
-    }
-
-    @Autowired
-    public void setControlKeyboard(ControlKeyboard controlKeyboard) {
-        this.controlKeyboard = controlKeyboard;
-    }
+    private ControlKeyboard controlKeyboard;
+    private LocalMessageSource localMessageSource;
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
+    public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
+        String callback = userData.getCallback();
         String date = callback.split(":")[1];
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         LocalDate callBackDate = LocalDate.parse(date);
@@ -55,7 +50,7 @@ public class MonthKeyboard extends LocaleKeyboard {
             keyboard.add(buttonRow);
         }
         InlineKeyboardMarkup monthKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(monthKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(null)).result();
+        return new KeyboardMarkupAppender(monthKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
     }
 
     private void addYearHeader(LocalDate date, List<List<InlineKeyboardButton>> keyboard) {

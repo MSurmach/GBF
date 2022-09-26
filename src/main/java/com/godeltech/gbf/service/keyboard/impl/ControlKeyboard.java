@@ -1,8 +1,10 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.util.KeyboardUtils;
-import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -11,17 +13,14 @@ import java.util.List;
 
 import static com.godeltech.gbf.management.button.BotButton.GLOBAL_BACK;
 import static com.godeltech.gbf.management.button.BotButton.MENU_BACK;
-import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
-public class ControlKeyboard extends LocaleKeyboard {
-
-    public ControlKeyboard(LocalMessageSource localMessageSource) {
-        super(localMessageSource);
-    }
+@AllArgsConstructor
+public class ControlKeyboard implements Keyboard {
+    private LocalMessageSource localMessageSource;
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
+    public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         String backLabel = GLOBAL_BACK.getLocalMessage(localMessageSource);
         String backCallback = GLOBAL_BACK.name();
         var backButton = KeyboardUtils.createButton(backLabel, backCallback);

@@ -1,10 +1,12 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.service.keyboard.util.KeyboardUtils;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -22,20 +24,14 @@ import static com.godeltech.gbf.management.button.BotButton.Calendar.*;
 import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
-public class DateKeyboard extends LocaleKeyboard {
-    private Keyboard controlKeyboard;
-
-    public DateKeyboard(LocalMessageSource localMessageSource) {
-        super(localMessageSource);
-    }
-
-    @Autowired
-    public void setControlKeyboard(ControlKeyboard controlKeyboard) {
-        this.controlKeyboard = controlKeyboard;
-    }
+@AllArgsConstructor
+public class DateKeyboard implements Keyboard {
+    private ControlKeyboard controlKeyboard;
+    private LocalMessageSource localMessageSource;
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
+    public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
+        String callback = userData.getCallback();
         String givenDate = callback.split(":")[1];
         LocalDate date = LocalDate.parse(givenDate);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
@@ -43,7 +39,7 @@ public class DateKeyboard extends LocaleKeyboard {
         addWeekDayRow(keyboard);
         addDayRows(date, keyboard);
         var calendarKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(calendarKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(null)).result();
+        return new KeyboardMarkupAppender(calendarKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
     }
 
     private void addDayRows(LocalDate localDate, List<List<InlineKeyboardButton>> keyboard) {

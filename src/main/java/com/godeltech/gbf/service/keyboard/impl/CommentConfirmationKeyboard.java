@@ -1,7 +1,6 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.model.Country;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
@@ -14,28 +13,28 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.godeltech.gbf.management.button.BotButton.Comment.COMMENT_CONFIRM;
+import static com.godeltech.gbf.management.button.BotButton.Comment.COMMENT_EDIT;
+
 @Service
 @AllArgsConstructor
-public class CountryKeyboard implements Keyboard {
+public class CommentConfirmationKeyboard implements Keyboard {
     private ControlKeyboard controlKeyboard;
     private LocalMessageSource localMessageSource;
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        Country[] countries = Country.values();
+        String confirmLabel = COMMENT_CONFIRM.getLocalMessage(localMessageSource);
+        String confirmCallback = COMMENT_CONFIRM.name();
+        var confirmButton = KeyboardUtils.createButton(confirmLabel, confirmCallback);
+
+        String editLabel = COMMENT_EDIT.getLocalMessage(localMessageSource);
+        String editCallback = COMMENT_EDIT.name();
+        var editButton = KeyboardUtils.createButton(editLabel, editCallback);
+
+        List<InlineKeyboardButton> row = List.of(confirmButton, editButton);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        for (var index = 0; index < countries.length; ) {
-            var columnCount = 2;
-            List<InlineKeyboardButton> buttonRow = new ArrayList<>();
-            while (columnCount > 0 && index != countries.length) {
-                String buttonCallback = countries[index].getLabel();
-                String label = countries[index].getLocalLabel(localMessageSource);
-                buttonRow.add(KeyboardUtils.createButton(label, buttonCallback));
-                columnCount--;
-                index++;
-            }
-            keyboard.add(buttonRow);
-        }
+        keyboard.add(row);
         InlineKeyboardMarkup countryKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
         return new KeyboardMarkupAppender(countryKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
     }

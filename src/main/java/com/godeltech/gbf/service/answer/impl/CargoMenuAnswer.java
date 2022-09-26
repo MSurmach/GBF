@@ -1,14 +1,16 @@
-package com.godeltech.gbf.service.message.impl;
+package com.godeltech.gbf.service.answer.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.management.StateFlow;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.message.Answer;
-import org.springframework.stereotype.Component;
+import com.godeltech.gbf.service.answer.Answer;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
+@AllArgsConstructor
 public class CargoMenuAnswer implements Answer {
     public final static String CARGO_MENU_COURIER_CODE = "cargo.menu.courier";
     public final static String CARGO_MENU_CUSTOMER_CODE = "cargo.menu.customer";
@@ -20,26 +22,28 @@ public class CargoMenuAnswer implements Answer {
     public final static String EMPTY = "";
     private final LocalMessageSource localMessageSource;
 
-    public CargoMenuAnswer(LocalMessageSource localMessageSource) {
-        this.localMessageSource = localMessageSource;
-    }
-
     @Override
-    public String getBotMessage(UserData userData, List<UserData>... users) {
-        String selectedLine = selectedRecord(userData) + documentsRecord(userData) + packageRecord(userData) + companionRecord(userData);
+    public String getAnswer(UserData userData, List<UserData>... users) {
+        String selectedContent = buildSelectedContent(userData);
+        String selectedCode = selectedCode(userData);
+        String selectedAnswer = localMessageSource.getLocaleMessage(selectedCode, selectedContent);
         StateFlow stateFlow = userData.getStateFlow();
-        return stateFlow==StateFlow.COURIER?
-                selectedLine+System.lineSeparator()+localMessageSource.getLocaleMessage(CARGO_MENU_COURIER_CODE):
-                selectedLine+System.lineSeparator()+localMessageSource.getLocaleMessage(CARGO_MENU_CUSTOMER_CODE);
+        return stateFlow == StateFlow.COURIER ?
+                selectedAnswer + System.lineSeparator() + localMessageSource.getLocaleMessage(CARGO_MENU_COURIER_CODE) :
+                selectedAnswer + System.lineSeparator() + localMessageSource.getLocaleMessage(CARGO_MENU_CUSTOMER_CODE);
     }
 
-    private String selectedRecord(UserData userData) {
+    private String buildSelectedContent(UserData userData) {
+        return documentsRecord(userData) + packageRecord(userData) + companionRecord(userData);
+    }
+
+    private String selectedCode(UserData userData) {
         String selected;
         if (!userData.isDocuments() &&
                 userData.getPackageSize() == null &&
                 userData.getCompanionCount() == 0)
-            selected = localMessageSource.getLocaleMessage(CARGO_MENU_NOT_SELECTED_CODE);
-        selected = localMessageSource.getLocaleMessage(CARGO_MENU_SELECTED_CODE);
+            selected = CARGO_MENU_NOT_SELECTED_CODE;
+        else selected = CARGO_MENU_SELECTED_CODE;
         return selected;
     }
 

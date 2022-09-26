@@ -1,8 +1,8 @@
-package com.godeltech.gbf.service.message.impl;
+package com.godeltech.gbf.service.answer.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.message.Answer;
+import com.godeltech.gbf.service.answer.Answer;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class WrongInputAnswer implements Answer {
     }
 
     @Override
-    public String getBotMessage(UserData userData, List<UserData>... users) {
-        return localMessageSource.getLocaleMessage(WRONG_INPUT_CODE);
+    public String getAnswer(UserData userData, List<UserData>... users) {
+        return localMessageSource.getLocaleMessage(WRONG_INPUT_CODE, userData.getUsername());
     }
 }

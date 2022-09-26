@@ -2,11 +2,11 @@ package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.model.Country;
+import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
-import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
 import com.godeltech.gbf.service.keyboard.util.KeyboardUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -15,21 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CityKeyboard extends LocaleKeyboard {
+@AllArgsConstructor
+public class CityKeyboard implements Keyboard {
 
-    private Keyboard controlKeyboard;
-
-    @Autowired
-    public void setControlKeyboard(ControlKeyboard controlKeyboard) {
-        this.controlKeyboard = controlKeyboard;
-    }
-
-    public CityKeyboard(LocalMessageSource localMessageSource) {
-        super(localMessageSource);
-    }
+    private ControlKeyboard controlKeyboard;
+    private LocalMessageSource localMessageSource;
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
+    public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
+        String callback = userData.getCallback();
         Country country = Country.valueOf(callback.toUpperCase());
         List<String> cities = country.getCities();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
@@ -46,6 +40,6 @@ public class CityKeyboard extends LocaleKeyboard {
             keyboard.add(buttonRow);
         }
         InlineKeyboardMarkup countryKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(countryKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(null)).result();
+        return new KeyboardMarkupAppender(countryKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
     }
 }

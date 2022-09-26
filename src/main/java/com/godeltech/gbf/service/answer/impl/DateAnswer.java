@@ -1,9 +1,9 @@
-package com.godeltech.gbf.service.message.impl;
+package com.godeltech.gbf.service.answer.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.message.Answer;
+import com.godeltech.gbf.service.answer.Answer;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +28,7 @@ public class DateAnswer implements Answer {
     }
 
     @Override
-    public String getBotMessage(UserData userData, List<UserData>... users) {
+    public String getAnswer(UserData userData, List<UserData>... users) {
         String nowDate = LocalDate.now().format(dateFormatter);
         State state = userData.getCurrentState();
         String neededCode;

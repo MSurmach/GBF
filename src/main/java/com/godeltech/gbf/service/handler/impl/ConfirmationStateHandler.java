@@ -6,18 +6,14 @@ import com.godeltech.gbf.management.StateFlow;
 import com.godeltech.gbf.model.User;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.repository.UserRepository;
-import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
+import com.godeltech.gbf.service.handler.StateHandler;
 import com.godeltech.gbf.service.keyboard.impl.ConfirmKeyboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ConfirmStateHandler extends LocaleBotStateHandler {
+public class ConfirmationStateHandler implements StateHandler {
     private UserRepository userRepository;
-
-    public ConfirmStateHandler(LocalMessageSource localMessageSource, ConfirmKeyboard keyboard, LocalAnswer localBotMessage) {
-        super(localMessageSource, keyboard, localBotMessage);
-    }
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -25,7 +21,7 @@ public class ConfirmStateHandler extends LocaleBotStateHandler {
     }
 
     @Override
-    public String handle(Long userId, String callback, UserData userData) {
+    public void handle(Long userId, UserData userData) {
         StateFlow stateFlow = userData.getStateFlow();
         if (stateFlow == StateFlow.COURIER) {
             User user = new User(userData);
@@ -34,6 +30,5 @@ public class ConfirmStateHandler extends LocaleBotStateHandler {
         State currentState = userData.getCurrentState();
         userData.setPreviousState(currentState);
         userData.setCurrentState(stateFlow.getNextState(currentState));
-        return callback;
     }
 }

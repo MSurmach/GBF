@@ -6,12 +6,11 @@ import com.godeltech.gbf.service.handler.StateHandler;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WrongInputStateHandler implements StateHandler {
-
+public class CommentStateHandler implements StateHandler {
     @Override
     public void handle(Long userId, UserData userData) {
-        State currentState = userData.getCurrentState();
-        userData.setPreviousState(currentState);
-        userData.setCurrentState(State.WRONG_INPUT);
+        String comment = userData.getCallback();
+        userData.setComment(comment);
+        userData.setCurrentState(State.COMMENT_CONFIRM);
     }
 }

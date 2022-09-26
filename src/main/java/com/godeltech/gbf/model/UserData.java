@@ -24,4 +24,6 @@ public class UserData {
     private boolean documents;
     private String packageSize;
     private int companionCount;
+    private String callback;
+    private String comment;
 }

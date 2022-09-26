@@ -1,15 +1,15 @@
-package com.godeltech.gbf.service.message.impl;
+package com.godeltech.gbf.service.answer.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.management.StateFlow;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.message.Answer;
+import com.godeltech.gbf.service.answer.Answer;
 import org.springframework.stereotype.Component;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static com.godeltech.gbf.service.message.impl.DateAnswer.DATE_PATTERN;
+import static com.godeltech.gbf.service.answer.impl.DateAnswer.DATE_PATTERN;
 
 @Component
 public class ConfirmationAnswer implements Answer {
@@ -26,7 +26,7 @@ public class ConfirmationAnswer implements Answer {
     }
 
     @Override
-    public String getBotMessage(UserData userData, List<UserData>... users) {
+    public String getAnswer(UserData userData, List<UserData>... users) {
         String lineSeparator = System.lineSeparator();
         String answer = mainText(userData) +
                 lineSeparator + lineSeparator +

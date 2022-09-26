@@ -63,7 +63,7 @@ public class ApplicationConfig {
         ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();
         resourceBundleMessageSource.setDefaultLocale(Locale.UK);
         resourceBundleMessageSource.setDefaultEncoding("UTF-8");
-        resourceBundleMessageSource.setBasenames("message", "buttons", "model");
+        resourceBundleMessageSource.setBasenames("answer", "button", "country_city");
         return resourceBundleMessageSource;
     }
 }
