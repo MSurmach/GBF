@@ -23,15 +23,15 @@ public class MenuKeyboard extends LocaleKeyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
-        String courierLabel = COURIER.getLocalLabel(localMessageSource);
+        String courierLabel = COURIER.getLocalMessage(localMessageSource);
         String courierCallback = COURIER.name();
         var courierButton = KeyboardUtils.createButton(courierLabel, courierCallback);
 
-        String customerLabel = CUSTOMER.getLocalLabel(localMessageSource);
+        String customerLabel = CUSTOMER.getLocalMessage(localMessageSource);
         String customerCallback = CUSTOMER.name();
         var customerButton = KeyboardUtils.createButton(customerLabel, customerCallback);
 
-        String registrationsCourierLabel = REGISTRATIONS.getLocalLabel(localMessageSource);
+        String registrationsCourierLabel = REGISTRATIONS.getLocalMessage(localMessageSource);
         String registrationsCourierCallback = REGISTRATIONS.name();
         var registrationsButton = KeyboardUtils.createButton(registrationsCourierLabel, registrationsCourierCallback);
 

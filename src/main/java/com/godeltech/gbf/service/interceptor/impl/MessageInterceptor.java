@@ -5,7 +5,7 @@ import com.godeltech.gbf.management.button.BotButton;
 import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.factory.StateHandlerFactory;
-import com.godeltech.gbf.service.handler.BotStateHandler;
+import com.godeltech.gbf.service.handler.StateHandler;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -34,7 +34,7 @@ public class MessageInterceptor implements Interceptor {
             BotButton.Text text = BotButton.Text.valueOf(parsedAsCommand);
             return switch (text) {
                 case START -> {
-                    BotStateHandler handler = stateHandlerFactory.getHandler(MENU);
+                    StateHandler handler = stateHandlerFactory.getHandler(MENU);
                     handler.handle(userId, username, null);
                     yield handler.getView(chatId, userId, null);
                 }
@@ -42,7 +42,7 @@ public class MessageInterceptor implements Interceptor {
                 case HELP -> null;
             };
         } catch (IllegalArgumentException exception) {
-            BotStateHandler handler;
+            StateHandler handler;
             UserData cached = UserDataCache.get(userId);
             State currentState = cached.getCurrentState();
             try {

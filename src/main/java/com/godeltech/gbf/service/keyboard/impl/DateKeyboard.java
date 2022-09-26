@@ -61,10 +61,10 @@ public class DateKeyboard extends LocaleKeyboard {
 
     private void addMonthYear(LocalDate date, List<List<InlineKeyboardButton>> keyboard) {
         var prevMonthButton = KeyboardUtils.createButton(
-                PREVIOUS.getLocalLabel(localMessageSource),
+                PREVIOUS.getLocalMessage(localMessageSource),
                 PREVIOUS + ":" + date.minusMonths(1));
         var nextMonthButton = KeyboardUtils.createButton(
-                NEXT.getLocalLabel(localMessageSource),
+                NEXT.getLocalMessage(localMessageSource),
                 NEXT + ":" + date.plusMonths(1));
         String monthYearPattern = "LLLL yyyy";
         DateTimeFormatter monthYearFormatter = DateTimeFormatter.ofPattern(monthYearPattern).withLocale(localMessageSource.getLocale());

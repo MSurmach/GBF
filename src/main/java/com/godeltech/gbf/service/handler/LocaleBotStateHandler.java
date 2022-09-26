@@ -3,21 +3,20 @@ package com.godeltech.gbf.service.handler;
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.answer.LocalAnswerService;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
-public abstract class LocaleBotStateHandler implements BotStateHandler {
+public abstract class LocaleBotStateHandler implements StateHandler {
     protected LocalMessageSource localMessageSource;
 
     protected Keyboard keyboard;
-    protected LocalAnswerService localAnswerService;
+    protected LocalAnswer localBotMessage;
 
-    public LocaleBotStateHandler(LocalMessageSource localMessageSource, Keyboard keyboard, LocalAnswerService localAnswerService) {
+    public LocaleBotStateHandler(LocalMessageSource localMessageSource, Keyboard keyboard, LocalAnswer localBotMessage) {
         this.localMessageSource = localMessageSource;
         this.keyboard = keyboard;
-        this.localAnswerService = localAnswerService;
+        this.localBotMessage = localBotMessage;
     }
 
     protected SendMessage createMessage(Long chatId, String text, InlineKeyboardMarkup keyboardMarkup) {
@@ -40,7 +39,7 @@ public abstract class LocaleBotStateHandler implements BotStateHandler {
         return SendMessage.builder().
                 parseMode("html").
                 chatId(chatId).
-                text(localAnswerService.getTextAnswer(cachedUserData)).
+                text(localBotMessage.getTextAnswer(cachedUserData)).
                 replyMarkup(keyboard.getKeyboardMarkup(callback)).
                 build();
     }

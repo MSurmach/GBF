@@ -5,7 +5,6 @@ import com.godeltech.gbf.management.button.BotButton;
 import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.management.StateFlow;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.answer.LocalAnswerService;
 import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
 import com.godeltech.gbf.service.keyboard.impl.CargoKeyboard;
 import org.springframework.stereotype.Service;
@@ -15,8 +14,8 @@ import static com.godeltech.gbf.management.button.BotButton.IGNORE;
 @Service
 public class CargoStateHandler extends LocaleBotStateHandler {
 
-    public CargoStateHandler(LocalMessageSource localMessageSource, CargoKeyboard keyboard, LocalAnswerService localAnswerService) {
-        super(localMessageSource, keyboard, localAnswerService);
+    public CargoStateHandler(LocalMessageSource localMessageSource, CargoKeyboard keyboard, LocalAnswer localBotMessage) {
+        super(localMessageSource, keyboard, localBotMessage);
     }
 
     @Override

@@ -22,11 +22,11 @@ public class ControlKeyboard extends LocaleKeyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(String callback) {
-        String backLabel = GLOBAL_BACK.getLocalLabel(localMessageSource);
+        String backLabel = GLOBAL_BACK.getLocalMessage(localMessageSource);
         String backCallback = GLOBAL_BACK.name();
         var backButton = KeyboardUtils.createButton(backLabel, backCallback);
 
-        String menuLabel = MENU_BACK.getLocalLabel(localMessageSource);
+        String menuLabel = MENU_BACK.getLocalMessage(localMessageSource);
         String menuCallback = MENU_BACK.name();
         var menuButton = KeyboardUtils.createButton(menuLabel, menuCallback);
 

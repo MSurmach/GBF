@@ -5,7 +5,6 @@ import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.model.User;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.repository.UserRepository;
-import com.godeltech.gbf.service.answer.LocalAnswerService;
 import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
 import com.godeltech.gbf.service.keyboard.impl.ControlKeyboard;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +22,14 @@ public class UsersListStateHandler extends LocaleBotStateHandler {
         this.userRepository = userRepository;
     }
 
-    public UsersListStateHandler(LocalMessageSource localMessageSource, ControlKeyboard keyboard, LocalAnswerService localAnswerService) {
-        super(localMessageSource, keyboard, localAnswerService);
+    public UsersListStateHandler(LocalMessageSource localMessageSource, ControlKeyboard keyboard, LocalAnswer localBotMessage) {
+        super(localMessageSource, keyboard, localBotMessage);
     }
 
     @Override
     public SendMessage getView(Long chatId, Long userId, String callback) {
         UserData cachedUserData = UserDataCache.get(userId);
         List<User> users = userRepository.findUsersByCityFromAndCityTo(cachedUserData.getCityFrom(), cachedUserData.getCityTo());
-        return createMessage(chatId, localAnswerService.getTextAnswer(cachedUserData), keyboard.getKeyboardMarkup(callback));
+        return createMessage(chatId, localBotMessage.getTextAnswer(cachedUserData), keyboard.getKeyboardMarkup(callback));
     }
 }

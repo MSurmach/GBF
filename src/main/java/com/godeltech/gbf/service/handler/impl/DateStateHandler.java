@@ -4,7 +4,6 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.management.button.BotButton;
 import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.answer.LocalAnswerService;
 import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
 import com.godeltech.gbf.service.keyboard.impl.DateKeyboard;
 import org.springframework.stereotype.Service;
@@ -17,8 +16,8 @@ import static com.godeltech.gbf.management.State.*;
 @Service
 public class DateStateHandler extends LocaleBotStateHandler {
 
-    public DateStateHandler(LocalMessageSource localMessageSource, DateKeyboard keyboard, LocalAnswerService localAnswerService) {
-        super(localMessageSource, keyboard, localAnswerService);
+    public DateStateHandler(LocalMessageSource localMessageSource, DateKeyboard keyboard, LocalAnswer localBotMessage) {
+        super(localMessageSource, keyboard, localBotMessage);
     }
 
     @Override

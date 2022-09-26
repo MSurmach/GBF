@@ -4,7 +4,6 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.management.StateFlow;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.answer.LocalAnswerService;
 import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
 import com.godeltech.gbf.service.keyboard.impl.CityKeyboard;
 import org.springframework.stereotype.Service;
@@ -17,8 +16,8 @@ import static com.godeltech.gbf.management.State.CITY_TO;
 @Service
 public class CityStateHandler extends LocaleBotStateHandler {
 
-    public CityStateHandler(LocalMessageSource localMessageSource, CityKeyboard keyboard, LocalAnswerService localAnswerService) {
-        super(localMessageSource, keyboard, localAnswerService);
+    public CityStateHandler(LocalMessageSource localMessageSource, CityKeyboard keyboard, LocalAnswer localBotMessage) {
+        super(localMessageSource, keyboard, localBotMessage);
     }
 
     @Override

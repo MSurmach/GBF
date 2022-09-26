@@ -4,7 +4,6 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.management.button.BotButton;
 import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.answer.LocalAnswerService;
 import com.godeltech.gbf.service.handler.LocaleBotStateHandler;
 import com.godeltech.gbf.service.keyboard.impl.MonthKeyboard;
 import org.springframework.stereotype.Service;
@@ -12,8 +11,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class MonthStateHandler extends LocaleBotStateHandler {
 
-    public MonthStateHandler(LocalMessageSource localMessageSource, MonthKeyboard keyboard, LocalAnswerService localAnswerService) {
-        super(localMessageSource, keyboard, localAnswerService);
+    public MonthStateHandler(LocalMessageSource localMessageSource, MonthKeyboard keyboard, LocalAnswer localBotMessage) {
+        super(localMessageSource, keyboard, localBotMessage);
     }
 
     @Override

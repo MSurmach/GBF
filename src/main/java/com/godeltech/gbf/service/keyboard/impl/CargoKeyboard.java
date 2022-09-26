@@ -91,7 +91,7 @@ public class CargoKeyboard extends LocaleKeyboard {
     }
 
     private InlineKeyboardButton buildCommandButton(BotButton.Cargo command) {
-        String label = command.getLocalLabel(localMessageSource);
+        String label = command.getLocalMessage(localMessageSource);
         String callback = command.name();
         return KeyboardUtils.createButton(label, callback);
     }
