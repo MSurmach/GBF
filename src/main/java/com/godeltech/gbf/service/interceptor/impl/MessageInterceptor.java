@@ -9,7 +9,6 @@ import com.godeltech.gbf.service.factory.StateViewFactory;
 import com.godeltech.gbf.service.handler.StateHandler;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.view.StateView;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -54,7 +53,7 @@ public class MessageInterceptor implements Interceptor {
                     created.setUsername(username);
                     handler.handle(userId, created);
                     StateView<? extends SendMessage> stateView = stateViewFactory.get(created.getCurrentState());
-                    yield stateView.displayView(chatId, created);
+                    yield stateView.buildView(chatId, created);
                 }
                 case STOP -> null;
                 case HELP -> null;
@@ -75,7 +74,7 @@ public class MessageInterceptor implements Interceptor {
                 }
             }
             StateView<? extends SendMessage> stateView = stateViewFactory.get(cached.getCurrentState());
-            return stateView.displayView(chatId, cached);
+            return stateView.buildView(chatId, cached);
         }
     }
 }

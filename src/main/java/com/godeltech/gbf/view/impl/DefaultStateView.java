@@ -20,7 +20,7 @@ public class DefaultStateView implements StateView<SendMessage> {
     private StateKeyboardFactory stateKeyboardFactory;
 
     @Override
-    public List<SendMessage> displayView(Long chatId, UserData userData) {
+    public List<SendMessage> buildView(Long chatId, UserData userData) {
         State state = userData.getCurrentState();
         Answer answer = stateAnswerFactory.get(state);
         Keyboard keyboard = stateKeyboardFactory.get(state);

@@ -15,7 +15,7 @@ import static com.godeltech.gbf.management.button.BotButton.MENU_BACK;
 
 @Service
 @AllArgsConstructor
-public class SuccessKeyboard implements Keyboard {
+public class BackMenuKeyboard implements Keyboard {
     private LocalMessageSource localMessageSource;
 
     @Override

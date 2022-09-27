@@ -44,4 +44,13 @@ public enum BotButton implements LocalBotButton {
             return localMessageSource.getLocaleMessage(this.name());
         }
     }
+
+    public enum Registration implements LocalBotButton {
+        REGISTRATION_EDIT, REGISTRATION_DELETE;
+
+        @Override
+        public String getLocalMessage(LocalMessageSource localMessageSource) {
+            return localMessageSource.getLocaleMessage(this.name());
+        }
+    }
 }

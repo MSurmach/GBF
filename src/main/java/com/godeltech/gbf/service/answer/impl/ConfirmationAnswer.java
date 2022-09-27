@@ -37,7 +37,7 @@ public class ConfirmationAnswer implements Answer {
         return localMessageSource.getLocaleMessage(CONFIRMATION_NOTIFICATION_CODE, userData.getUsername());
     }
 
-    private String confirmationDataText(UserData userData) {
+    String confirmationDataText(UserData userData) {
         String startCityCountry = localMessageSource.getLocaleMessage(
                 COUNTRY_CITY_START_CODE.getCode(),
                 localMessageSource.getLocaleMessage(userData.getCountryFrom()),

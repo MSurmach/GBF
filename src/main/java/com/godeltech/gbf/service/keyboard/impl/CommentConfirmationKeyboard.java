@@ -35,7 +35,7 @@ public class CommentConfirmationKeyboard implements Keyboard {
         List<InlineKeyboardButton> row = List.of(confirmButton, editButton);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(row);
-        InlineKeyboardMarkup countryKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(countryKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
+        InlineKeyboardMarkup commentKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
+        return new KeyboardMarkupAppender(commentKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
     }
 }

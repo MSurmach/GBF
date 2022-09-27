@@ -16,6 +16,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
+import static com.godeltech.gbf.management.State.MENU;
+import static com.godeltech.gbf.management.State.REGISTRATIONS_MAIN;
+
 @Service
 public class CallbackInterceptor implements Interceptor {
     private StateHandlerFactory stateHandlerFactory;
@@ -49,10 +52,8 @@ public class CallbackInterceptor implements Interceptor {
                     State previousState = cached.getPreviousState();
                     cached.setCurrentState(previousState);
                 }
-                case "MENU_BACK" -> {
-                    State state = State.MENU;
-                    cached.setCurrentState(state);
-                }
+                case "MENU_BACK" -> cached.setCurrentState(MENU);
+                case "REGISTRATIONS" -> cached.setCurrentState(REGISTRATIONS_MAIN);
                 default -> {
                     State currentState = cached.getCurrentState();
                     stateHandlerFactory.get(currentState).handle(userId, cached);
@@ -61,6 +62,6 @@ public class CallbackInterceptor implements Interceptor {
         }
         State currentState = cached.getCurrentState();
         StateView<? extends SendMessage> stateView = stateViewFactory.get(currentState);
-        return stateView.displayView(chatId, cached);
+        return stateView.buildView(chatId, cached);
     }
 }
