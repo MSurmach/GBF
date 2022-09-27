@@ -38,7 +38,7 @@ public class CallbackInterceptor implements Interceptor {
                     State previousState = cached.getPreviousState();
                     cached.setCurrentState(previousState);
                 }
-                case "MENU" -> {
+                case "MENU_BACK" -> {
                     cached.setCurrentState(State.MENU);
                 }
                 default -> {

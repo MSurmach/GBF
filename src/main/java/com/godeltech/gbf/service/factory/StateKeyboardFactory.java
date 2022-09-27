@@ -26,6 +26,8 @@ public class StateKeyboardFactory implements Factory<Keyboard> {
                     case CARGO_PACKAGE -> CargoPackageKeyboard.class;
                     case COMMENT_QUIZ -> CommentKeyboard.class;
                     case COMMENT_CONFIRM -> CommentConfirmationKeyboard.class;
+                    case CONFIRMATION -> ConfirmKeyboard.class;
+                    case SUCCESS -> SuccessKeyboard.class;
                     default -> EmptyKeyboard.class;
                 };
         return beanFactory.getBean(keyboard);

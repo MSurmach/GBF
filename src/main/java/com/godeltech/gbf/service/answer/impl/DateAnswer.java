@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static com.godeltech.gbf.service.answer.CommonAnswerCode.*;
+
 @Component
 public class DateAnswer implements Answer {
 
@@ -30,19 +32,26 @@ public class DateAnswer implements Answer {
     @Override
     public String getAnswer(UserData userData, List<UserData>... users) {
         String nowDate = LocalDate.now().format(dateFormatter);
+        String nowDateCode = DATE_TODAY_CODE.getCode();
         State state = userData.getCurrentState();
-        String neededCode;
+        String countryCityInfoCode;
+        String dateCode;
         String country;
         String city;
         if (state == State.DATE_TO) {
             country = localMessageSource.getLocaleMessage(userData.getCountryTo());
             city = localMessageSource.getLocaleMessage(userData.getCityTo());
-            neededCode = DATE_TO_CODE;
+            dateCode = DATE_TO_CODE;
+            countryCityInfoCode = COUNTRY_CITY_FINISH_CODE.getCode();
         } else {
             country = localMessageSource.getLocaleMessage(userData.getCountryFrom());
             city = localMessageSource.getLocaleMessage(userData.getCityFrom());
-            neededCode = DATE_FROM_CODE;
+            dateCode = DATE_FROM_CODE;
+            countryCityInfoCode = COUNTRY_CITY_START_CODE.getCode();
         }
-        return localMessageSource.getLocaleMessage(neededCode, country, city, nowDate);
+        return localMessageSource.getLocaleMessage(nowDateCode, nowDate) +
+                localMessageSource.getLocaleMessage(countryCityInfoCode, country, city) +
+                System.lineSeparator() +
+                localMessageSource.getLocaleMessage(dateCode);
     }
 }

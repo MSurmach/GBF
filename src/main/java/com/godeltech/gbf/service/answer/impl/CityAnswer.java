@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static com.godeltech.gbf.service.answer.CommonAnswerCode.COUNTRY_FINISH_CODE;
+import static com.godeltech.gbf.service.answer.CommonAnswerCode.COUNTRY_START_CODE;
+
 @Component
 public class CityAnswer implements Answer {
     public final static String CITY_FROM_CODE = "city_from";
@@ -22,14 +25,17 @@ public class CityAnswer implements Answer {
     public String getAnswer(UserData userData, List<UserData>... users) {
         State state = userData.getCurrentState();
         String country;
-        String neededCode;
+        String cityCode;
+        String countryCode;
         if (state == State.CITY_TO) {
             country = localMessageSource.getLocaleMessage(userData.getCountryTo());
-            neededCode = CITY_TO_CODE;
+            cityCode = CITY_TO_CODE;
+            countryCode = COUNTRY_FINISH_CODE.getCode();
         } else {
             country = localMessageSource.getLocaleMessage(userData.getCountryFrom());
-            neededCode = CITY_FROM_CODE;
+            cityCode = CITY_FROM_CODE;
+            countryCode = COUNTRY_START_CODE.getCode();
         }
-        return localMessageSource.getLocaleMessage(neededCode, country);
+        return localMessageSource.getLocaleMessage(countryCode, country) + System.lineSeparator() + localMessageSource.getLocaleMessage(cityCode);
     }
 }

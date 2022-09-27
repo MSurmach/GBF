@@ -33,7 +33,7 @@ public class CargoMenuAnswer implements Answer {
                 selectedAnswer + System.lineSeparator() + localMessageSource.getLocaleMessage(CARGO_MENU_CUSTOMER_CODE);
     }
 
-    private String buildSelectedContent(UserData userData) {
+    public String buildSelectedContent(UserData userData) {
         return documentsRecord(userData) + packageRecord(userData) + companionRecord(userData);
     }
 

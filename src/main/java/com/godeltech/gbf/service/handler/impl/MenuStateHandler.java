@@ -11,7 +11,7 @@ public class MenuStateHandler implements StateHandler {
 
     @Override
     public void handle(Long userId, UserData userData) {
-        userData.setId(userId);
+        userData.setTelegramId(userId);
         userData.setCurrentState(State.MENU);
         userData.setPreviousState(State.MENU);
         UserDataCache.add(userId, userData);

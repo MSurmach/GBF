@@ -18,7 +18,7 @@ public class StateHandlerFactory implements Factory<StateHandler> {
         Class<? extends StateHandler> handler =
                 switch (state) {
                     case MENU -> MenuStateHandler.class;
-                    case REGISTRATIONS -> RegistrationsStateHandler.class;
+                    case REGISTRATIONS_MAIN -> RegistrationsStateHandler.class;
                     case DATE_FROM, DATE_TO -> DateStateHandler.class;
                     case YEAR_FROM, YEAR_TO -> YearStateHandler.class;
                     case MONTH_FROM, MONTH_TO -> MonthStateHandler.class;
@@ -32,8 +32,8 @@ public class StateHandlerFactory implements Factory<StateHandler> {
                     case CARGO_PEOPLE -> CargoPeopleStateHandler.class;
                     case WRONG_INPUT -> WrongInputStateHandler.class;
                     case CONFIRMATION -> ConfirmationStateHandler.class;
-                    case SUCCESS -> SuccessStateHandler.class;
                     case USERS_LIST -> UsersListStateHandler.class;
+                    default -> throw new IllegalArgumentException("Handler not found");
                 };
         return beanFactory.getBean(handler);
     }
