@@ -11,22 +11,24 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
-public class StateViewImpl implements StateView<SendMessage> {
+public class DefaultStateView implements StateView<SendMessage> {
     private StateAnswerFactory stateAnswerFactory;
     private StateKeyboardFactory stateKeyboardFactory;
 
     @Override
-    public SendMessage displayView(Long chatId, UserData userData) {
+    public List<SendMessage> displayView(Long chatId, UserData userData) {
         State state = userData.getCurrentState();
         Answer answer = stateAnswerFactory.get(state);
         Keyboard keyboard = stateKeyboardFactory.get(state);
-        return SendMessage.
+        SendMessage sendMessage = SendMessage.
                 builder().
-                chatId(chatId).
-                parseMode("html").
+                chatId(chatId).parseMode("html").
                 text(answer.getAnswer(userData)).
                 replyMarkup(keyboard.getKeyboardMarkup(userData)).build();
+        return List.of(sendMessage);
     }
 }

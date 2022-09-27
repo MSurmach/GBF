@@ -5,31 +5,44 @@ import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.management.command.TextCommand;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.factory.StateHandlerFactory;
+import com.godeltech.gbf.service.factory.StateViewFactory;
 import com.godeltech.gbf.service.handler.StateHandler;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.view.StateView;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.List;
+
 import static com.godeltech.gbf.management.State.MENU;
 import static com.godeltech.gbf.management.State.WRONG_INPUT;
 
 @Service
-@AllArgsConstructor
 public class MessageInterceptor implements Interceptor {
     private final StateHandlerFactory stateHandlerFactory;
-    private final StateView<SendMessage> stateView;
+    private final StateViewFactory stateViewFactory;
+
+    public MessageInterceptor(StateHandlerFactory stateHandlerFactory, StateViewFactory stateViewFactory) {
+        this.stateHandlerFactory = stateHandlerFactory;
+        this.stateViewFactory = stateViewFactory;
+    }
+
+    @Getter
+    private Long userId;
+    @Getter
+    private Long chatId;
 
     @Override
-    public BotApiMethod<?> intercept(Update update) {
+    public List<? extends BotApiMethod<?>> intercept(Update update) {
         Message message = update.getMessage();
         String input = message.getText();
-        Long chatId = message.getChatId();
-        Long userId = message.getFrom().getId();
+        chatId = message.getChatId();
+        userId = message.getFrom().getId();
         String username = message.getFrom().getUserName();
         try {
             String parsedAsCommand = input.toUpperCase().replace("/", "");
@@ -40,6 +53,7 @@ public class MessageInterceptor implements Interceptor {
                     UserData created = new UserData();
                     created.setUsername(username);
                     handler.handle(userId, created);
+                    StateView<? extends SendMessage> stateView = stateViewFactory.get(created.getCurrentState());
                     yield stateView.displayView(chatId, created);
                 }
                 case STOP -> null;
@@ -60,6 +74,7 @@ public class MessageInterceptor implements Interceptor {
                     handler.handle(userId, cached);
                 }
             }
+            StateView<? extends SendMessage> stateView = stateViewFactory.get(cached.getCurrentState());
             return stateView.displayView(chatId, cached);
         }
     }

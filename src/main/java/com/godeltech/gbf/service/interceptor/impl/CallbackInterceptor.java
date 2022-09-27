@@ -5,32 +5,43 @@ import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.management.StateFlow;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.factory.StateHandlerFactory;
+import com.godeltech.gbf.service.factory.StateViewFactory;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.view.StateView;
-import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.List;
+
 @Service
-@AllArgsConstructor
 public class CallbackInterceptor implements Interceptor {
     private StateHandlerFactory stateHandlerFactory;
-    private StateView<SendMessage> stateView;
+    private StateViewFactory stateViewFactory;
+
+    public CallbackInterceptor(StateHandlerFactory stateHandlerFactory, StateViewFactory stateViewFactory) {
+        this.stateHandlerFactory = stateHandlerFactory;
+        this.stateViewFactory = stateViewFactory;
+    }
+
+    @Getter
+    private Long userId;
+    @Getter
+    private Long chatId;
 
     @Override
-    public BotApiMethod<?> intercept(Update update) {
-        Long userId = update.getCallbackQuery().getFrom().getId();
-        Long chat_id = update.getCallbackQuery().getMessage().getChatId();
+    public List<? extends BotApiMethod<?>> intercept(Update update) {
+        userId = update.getCallbackQuery().getFrom().getId();
+        chatId = update.getCallbackQuery().getMessage().getChatId();
         UserData cached = UserDataCache.get(userId);
         String callback = update.getCallbackQuery().getData();
-        State nextState;
         try {
             StateFlow stateFlow = StateFlow.valueOf(callback);
-            nextState = stateFlow.getFirstState();
+            State firstState = stateFlow.getFirstState();
             cached.setStateFlow(stateFlow);
-            cached.setCurrentState(nextState);
+            cached.setCurrentState(firstState);
         } catch (IllegalArgumentException illegalArgumentException) {
             cached.setCallback(callback);
             switch (callback) {
@@ -39,15 +50,17 @@ public class CallbackInterceptor implements Interceptor {
                     cached.setCurrentState(previousState);
                 }
                 case "MENU_BACK" -> {
-                    cached.setCurrentState(State.MENU);
+                    State state = State.MENU;
+                    cached.setCurrentState(state);
                 }
                 default -> {
                     State currentState = cached.getCurrentState();
                     stateHandlerFactory.get(currentState).handle(userId, cached);
                 }
             }
-            nextState = cached.getCurrentState();
         }
-        return stateView.displayView(chat_id, cached);
+        State currentState = cached.getCurrentState();
+        StateView<? extends SendMessage> stateView = stateViewFactory.get(currentState);
+        return stateView.displayView(chatId, cached);
     }
 }
