@@ -32,7 +32,8 @@ public class StateHandlerFactory implements Factory<StateHandler> {
                     case WRONG_INPUT -> WrongInputStateHandler.class;
                     case CONFIRMATION -> ConfirmationStateHandler.class;
                     case USERS_LIST -> UsersListStateHandler.class;
-                    case REGISTRATIONS_MAIN -> RegistrationsStateHandler.class;
+                    case REGISTRATIONS -> RegistrationsStateHandler.class;
+                    case REGISTRATION_EDITOR -> RegistrationEditorStateHandler.class;
                     default -> throw new IllegalArgumentException("Handler not found");
                 };
         return beanFactory.getBean(handler);

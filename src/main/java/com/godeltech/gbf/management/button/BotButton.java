@@ -4,7 +4,7 @@ import com.godeltech.gbf.LocalMessageSource;
 
 public enum BotButton implements LocalBotButton {
     COURIER, CUSTOMER, REGISTRATIONS, IGNORE,
-    GLOBAL_BACK, LOCAL_BACK, CONFIRMATION, MENU_BACK;
+    GLOBAL_BACK, LOCAL_BACK, CONFIRMATION, MENU;
 
     @Override
     public String getLocalMessage(LocalMessageSource localMessageSource) {
@@ -47,6 +47,17 @@ public enum BotButton implements LocalBotButton {
 
     public enum Registration implements LocalBotButton {
         REGISTRATION_EDIT, REGISTRATION_DELETE;
+
+        @Override
+        public String getLocalMessage(LocalMessageSource localMessageSource) {
+            return localMessageSource.getLocaleMessage(this.name());
+        }
+    }
+
+    public enum RegistrationEditor implements LocalBotButton {
+        EDIT_COUNTRY_CITY_FROM, EDIT_COUNTRY_CITY_TO,
+        EDIT_DATE_FROM, EDIT_DATE_TO,
+        EDIT_COMMENT, EDIT_CARGO, EDIT_CONFIRM;
 
         @Override
         public String getLocalMessage(LocalMessageSource localMessageSource) {

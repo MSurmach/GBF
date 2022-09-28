@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class YearStateHandler implements StateHandler {
 
     @Override
-    public void handle(Long userId, UserData userData) {
+    public void handle(UserData userData) {
         State currentState = userData.getCurrentState();
         userData.setPreviousState(currentState);
         if (currentState == State.YEAR_TO) userData.setCurrentState(State.MONTH_TO);

@@ -5,8 +5,6 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.Answer;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 public class MonthAnswer implements Answer {
     private final static String MONTH_CODE = "month";
@@ -17,7 +15,7 @@ public class MonthAnswer implements Answer {
     }
 
     @Override
-    public String getAnswer(UserData userData, List<UserData>... users) {
+    public String getAnswer(UserData userData) {
         return localMessageSource.getLocaleMessage(MONTH_CODE);
     }
 }

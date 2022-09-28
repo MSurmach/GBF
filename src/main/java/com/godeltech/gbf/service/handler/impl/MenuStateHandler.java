@@ -10,10 +10,9 @@ import org.springframework.stereotype.Service;
 public class MenuStateHandler implements StateHandler {
 
     @Override
-    public void handle(Long userId, UserData userData) {
-        userData.setTelegramId(userId);
-        userData.setCurrentState(State.MENU);
-        userData.setPreviousState(State.MENU);
-        UserDataCache.add(userId, userData);
+    public void handle(UserData userData) {
+        long telegramUserId = userData.getTelegramUserId();
+        UserData cleared = UserDataCache.clearUserData(telegramUserId);
+        cleared.setCurrentState(State.MENU);
     }
 }

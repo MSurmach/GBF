@@ -50,7 +50,7 @@ public class GbfBot extends SpringWebhookBot {
     public BotApiMethod<?> onWebhookUpdateReceived(@RequestBody Update update) {
         Interceptor interceptor = interceptorFactory.getInterceptor(update);
         List<? extends BotApiMethod<?>> methods = interceptor.intercept(update);
-        Long telegramUserId = interceptor.getUserId();
+        Long telegramUserId = interceptor.getTelegramUserId();
         List<Message> executedMessages = executeMethods(methods);
         deletePreviousMessage(telegramUserId, interceptor.getChatId());
         cacheExecutedMessages(executedMessages, telegramUserId);

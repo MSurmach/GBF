@@ -25,18 +25,18 @@ public class RegistrationRecordKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        var editButton = buildButton(REGISTRATION_EDIT);
-        var deleteButton = buildButton(REGISTRATION_DELETE);
-        List<InlineKeyboardButton> row = List.of(editButton, deleteButton);
+        Long recordId = userData.getId();
+        var editButton = buildButton(REGISTRATION_EDIT, recordId);
+        var deleteButton = buildButton(REGISTRATION_DELETE, recordId);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        keyboard.add(row);
+        keyboard.add(List.of(editButton, deleteButton));
         InlineKeyboardMarkup countryKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
         return new KeyboardMarkupAppender(countryKeyboardMarkup).append(backMenuKeyboard.getKeyboardMarkup(userData)).result();
     }
 
-    private InlineKeyboardButton buildButton(BotButton.Registration button) {
+    private InlineKeyboardButton buildButton(BotButton.Registration button, Long recordId) {
         String label = button.getLocalMessage(localMessageSource);
-        String callback = button.name();
+        String callback = button.name() + ":" + recordId;
         return KeyboardUtils.createButton(label, callback);
     }
 }

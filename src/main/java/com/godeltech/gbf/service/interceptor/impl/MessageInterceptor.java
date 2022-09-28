@@ -32,7 +32,7 @@ public class MessageInterceptor implements Interceptor {
     }
 
     @Getter
-    private Long userId;
+    private Long telegramUserId;
     @Getter
     private Long chatId;
 
@@ -41,18 +41,16 @@ public class MessageInterceptor implements Interceptor {
         Message message = update.getMessage();
         String input = message.getText();
         chatId = message.getChatId();
-        userId = message.getFrom().getId();
+        telegramUserId = message.getFrom().getId();
         String username = message.getFrom().getUserName();
         try {
             String parsedAsCommand = input.toUpperCase().replace("/", "");
             TextCommand text = TextCommand.valueOf(parsedAsCommand);
             return switch (text) {
                 case START -> {
-                    StateHandler handler = stateHandlerFactory.get(MENU);
-                    UserData created = new UserData();
-                    created.setUsername(username);
-                    handler.handle(userId, created);
-                    StateView<? extends SendMessage> stateView = stateViewFactory.get(created.getCurrentState());
+                    UserData created = UserDataCache.initializeByIdAndUsername(telegramUserId, username);
+                    created.setCurrentState(MENU);
+                    StateView<? extends SendMessage> stateView = stateViewFactory.get(MENU);
                     yield stateView.buildView(chatId, created);
                 }
                 case STOP -> null;
@@ -60,17 +58,17 @@ public class MessageInterceptor implements Interceptor {
             };
         } catch (IllegalArgumentException exception) {
             StateHandler handler;
-            UserData cached = UserDataCache.get(userId);
+            UserData cached = UserDataCache.get(telegramUserId);
             State currentState = cached.getCurrentState();
             cached.setCallback(input);
             switch (currentState) {
                 case CARGO_PEOPLE, COMMENT -> {
                     handler = stateHandlerFactory.get(currentState);
-                    handler.handle(userId, cached);
+                    handler.handle(cached);
                 }
                 default -> {
                     handler = stateHandlerFactory.get(WRONG_INPUT);
-                    handler.handle(userId, cached);
+                    handler.handle(cached);
                 }
             }
             StateView<? extends SendMessage> stateView = stateViewFactory.get(cached.getCurrentState());

@@ -1,6 +1,7 @@
 package com.godeltech.gbf.service.answer.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.Answer;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ public class CommentQuizAnswer implements Answer {
     private LocalMessageSource localMessageSource;
 
     @Override
-    public String getAnswer(UserData userData, List<UserData>... users) {
+    public String getAnswer(UserData userData) {
         return localMessageSource.getLocaleMessage(COMMENT_QUESTION_CODE);
     }
 }

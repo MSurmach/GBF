@@ -16,7 +16,7 @@ public class StateKeyboardFactory implements Factory<Keyboard> {
     public Keyboard get(State state) {
         Class<? extends Keyboard> keyboard =
                 switch (state) {
-                    case MENU -> MenuKeyboard.class;
+                    case MENU -> MainMenuKeyboard.class;
                     case COUNTRY_FROM, COUNTRY_TO -> CountryKeyboard.class;
                     case CITY_FROM, CITY_TO -> CityKeyboard.class;
                     case YEAR_FROM, YEAR_TO -> YearKeyboard.class;
@@ -28,6 +28,7 @@ public class StateKeyboardFactory implements Factory<Keyboard> {
                     case COMMENT_CONFIRM -> CommentConfirmationKeyboard.class;
                     case CONFIRMATION -> ConfirmKeyboard.class;
                     case SUCCESS -> BackMenuKeyboard.class;
+                    case REGISTRATION_EDITOR -> RegistrationEditorKeyboard.class;
                     default -> EmptyKeyboard.class;
                 };
         return beanFactory.getBean(keyboard);

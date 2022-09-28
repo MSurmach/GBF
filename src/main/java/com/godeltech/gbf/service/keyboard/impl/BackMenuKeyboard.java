@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.List;
 
-import static com.godeltech.gbf.management.button.BotButton.MENU_BACK;
+import static com.godeltech.gbf.management.button.BotButton.MENU;
 
 @Service
 @AllArgsConstructor
@@ -20,11 +20,9 @@ public class BackMenuKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-
-        String menuLabel = MENU_BACK.getLocalMessage(localMessageSource);
-        String menuCallback = MENU_BACK.name();
+        String menuLabel = MENU.getLocalMessage(localMessageSource);
+        String menuCallback = MENU.name();
         var menuButton = KeyboardUtils.createButton(menuLabel, menuCallback);
-
         List<InlineKeyboardButton> buttons = List.of(menuButton);
         return new InlineKeyboardMarkup(List.of(buttons));
     }

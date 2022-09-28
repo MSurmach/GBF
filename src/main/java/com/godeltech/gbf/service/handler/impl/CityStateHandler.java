@@ -1,5 +1,6 @@
 package com.godeltech.gbf.service.handler.impl;
 
+import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.management.StateFlow;
 import com.godeltech.gbf.model.UserData;
@@ -15,7 +16,7 @@ import static com.godeltech.gbf.management.button.BotButton.Calendar.INIT;
 public class CityStateHandler implements StateHandler {
 
     @Override
-    public void handle(Long userId, UserData userData) {
+    public void handle(UserData userData) {
         String callback = userData.getCallback();
         State currentState = userData.getCurrentState();
         if (currentState == CITY_TO) userData.setCityTo(callback);

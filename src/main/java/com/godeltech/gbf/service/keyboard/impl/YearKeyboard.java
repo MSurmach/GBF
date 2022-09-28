@@ -5,9 +5,7 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.service.keyboard.util.KeyboardUtils;
-import com.godeltech.gbf.service.keyboard.LocaleKeyboard;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -18,7 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.godeltech.gbf.management.button.BotButton.Calendar.CHANGE_YEAR;
-import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
 @AllArgsConstructor

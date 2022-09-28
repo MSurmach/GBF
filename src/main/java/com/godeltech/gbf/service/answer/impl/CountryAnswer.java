@@ -1,6 +1,7 @@
 package com.godeltech.gbf.service.answer.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.Answer;
@@ -19,7 +20,7 @@ public class CountryAnswer implements Answer {
     }
 
     @Override
-    public String getAnswer(UserData userData, List<UserData>... users) {
+    public String getAnswer(UserData userData) {
         State state = userData.getCurrentState();
         String neededCode = state == State.COUNTRY_FROM ? COUNTRY_FROM_CODE : COUNTRY_TO_CODE;
         return localMessageSource.getLocaleMessage(neededCode);

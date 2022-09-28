@@ -16,11 +16,11 @@ import java.util.List;
 public class UserData {
     @Id
     @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "telegram_id")
-    private long telegramId;
+    @Column(name = "telegramUserId")
+    private long telegramUserId;
 
     @Column(name = "username")
     private String username;
@@ -69,4 +69,9 @@ public class UserData {
 
     @Transient
     private List<UserData> registrations;
+
+    public UserData(Long telegramUserId, String username) {
+        this.telegramUserId = telegramUserId;
+        this.username = username;
+    }
 }

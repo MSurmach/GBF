@@ -17,7 +17,7 @@ public class RegistrationsMainAnswer implements Answer {
     public final static String REGISTRATIONS_MAIN_NOT_EXIST_CODE = "registrations.main.not_exist";
 
     @Override
-    public String getAnswer(UserData userData, List<UserData>... users) {
+    public String getAnswer(UserData userData) {
         List<UserData> registrations = userData.getRegistrations();
         if (registrations != null && !registrations.isEmpty()) {
             return localMessageSource.getLocaleMessage(REGISTRATIONS_MAIN_EXIST_CODE, userData.getUsername());

@@ -18,7 +18,7 @@ public class StateViewFactory implements Factory<StateView<? extends SendMessage
     public StateView<? extends SendMessage> get(State state) {
         Class<? extends StateView<SendMessage>> stateView =
                 switch (state) {
-                    case REGISTRATIONS_MAIN -> RegistrationsMainStateView.class;
+                    case REGISTRATIONS -> RegistrationsMainStateView.class;
                     default -> DefaultStateView.class;
                 };
         return beanFactory.getBean(stateView);

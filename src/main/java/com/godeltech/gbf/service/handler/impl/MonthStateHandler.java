@@ -1,6 +1,7 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.management.button.BotButton;
 import com.godeltech.gbf.model.UserData;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class MonthStateHandler implements StateHandler {
 
     @Override
-    public void handle(Long userId, UserData userData) {
+    public void handle(UserData userData) {
         String callback = userData.getCallback();
         String[] split = callback.split(":");
         var command = BotButton.Calendar.valueOf(split[0]);

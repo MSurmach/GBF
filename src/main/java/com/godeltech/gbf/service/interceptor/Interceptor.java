@@ -8,7 +8,7 @@ import java.util.List;
 public interface Interceptor {
     List<? extends BotApiMethod<?>> intercept(Update update);
 
-    Long getUserId();
+    Long getTelegramUserId();
 
     Long getChatId();
 }

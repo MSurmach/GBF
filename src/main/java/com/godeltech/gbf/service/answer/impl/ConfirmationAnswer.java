@@ -1,6 +1,7 @@
 package com.godeltech.gbf.service.answer.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.Answer;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class ConfirmationAnswer implements Answer {
     }
 
     @Override
-    public String getAnswer(UserData userData, List<UserData>... users) {
+    public String getAnswer(UserData userData) {
         String lineSeparator = System.lineSeparator();
         return notificationText(userData) +
                 lineSeparator + lineSeparator +

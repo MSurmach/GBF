@@ -15,7 +15,7 @@ import static com.godeltech.gbf.management.button.BotButton.*;
 
 @Service
 @AllArgsConstructor
-public class MenuKeyboard implements Keyboard {
+public class MainMenuKeyboard implements Keyboard {
     private ControlKeyboard controlKeyboard;
     private LocalMessageSource localMessageSource;
 

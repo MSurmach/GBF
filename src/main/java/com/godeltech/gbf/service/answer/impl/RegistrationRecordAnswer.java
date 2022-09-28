@@ -5,8 +5,6 @@ import com.godeltech.gbf.service.answer.Answer;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @AllArgsConstructor
 public class RegistrationRecordAnswer implements Answer {
@@ -14,7 +12,7 @@ public class RegistrationRecordAnswer implements Answer {
     private ConfirmationAnswer confirmationAnswer;
 
     @Override
-    public String getAnswer(UserData userData, List<UserData>... users) {
+    public String getAnswer(UserData userData) {
         return confirmationAnswer.confirmationDataText(userData);
     }
 }

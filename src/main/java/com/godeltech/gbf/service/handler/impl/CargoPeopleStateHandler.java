@@ -1,5 +1,6 @@
 package com.godeltech.gbf.service.handler.impl;
 
+import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.StateHandler;
@@ -11,7 +12,7 @@ import static com.godeltech.gbf.management.State.CARGO_MENU;
 public class CargoPeopleStateHandler implements StateHandler {
 
     @Override
-    public void handle(Long userId, UserData userData) {
+    public void handle(UserData userData) {
         String callback = userData.getCallback();
         userData.setCompanionCount(Integer.parseInt(callback));
         State currentState = userData.getCurrentState();
