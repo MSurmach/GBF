@@ -3,6 +3,7 @@ package com.godeltech.gbf.view.impl;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.impl.RegistrationRecordAnswer;
 import com.godeltech.gbf.service.answer.impl.RegistrationsMainAnswer;
+import com.godeltech.gbf.service.keyboard.impl.BackMenuKeyboard;
 import com.godeltech.gbf.service.keyboard.impl.RegistrationRecordKeyboard;
 import com.godeltech.gbf.view.StateView;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ public class RegistrationsMainStateView implements StateView<SendMessage> {
     private RegistrationsMainAnswer registrationsMainAnswer;
     private RegistrationRecordAnswer registrationRecordAnswer;
     private RegistrationRecordKeyboard registrationRecordKeyboard;
+    private BackMenuKeyboard backMenuKeyboard;
 
     @Override
     public List<SendMessage> buildView(Long chatId, UserData userData) {
@@ -26,6 +28,7 @@ public class RegistrationsMainStateView implements StateView<SendMessage> {
                 chatId(chatId).
                 parseMode("html").
                 text(registrationsMainAnswer.getAnswer(userData)).
+                replyMarkup(backMenuKeyboard.getKeyboardMarkup(userData)).
                 build());
         List<UserData> registrations = userData.getRegistrations();
         if (registrations != null && !registrations.isEmpty()) {

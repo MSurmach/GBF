@@ -21,18 +21,16 @@ import static com.godeltech.gbf.management.State.REGISTRATIONS_MAIN;
 
 @Service
 public class CallbackInterceptor implements Interceptor {
-    private StateHandlerFactory stateHandlerFactory;
-    private StateViewFactory stateViewFactory;
-
-    public CallbackInterceptor(StateHandlerFactory stateHandlerFactory, StateViewFactory stateViewFactory) {
-        this.stateHandlerFactory = stateHandlerFactory;
-        this.stateViewFactory = stateViewFactory;
-    }
-
+    private final StateHandlerFactory stateHandlerFactory;
+    private final StateViewFactory stateViewFactory;
     @Getter
     private Long userId;
     @Getter
     private Long chatId;
+    public CallbackInterceptor(StateHandlerFactory stateHandlerFactory, StateViewFactory stateViewFactory) {
+        this.stateHandlerFactory = stateHandlerFactory;
+        this.stateViewFactory = stateViewFactory;
+    }
 
     @Override
     public List<? extends BotApiMethod<?>> intercept(Update update) {
@@ -53,7 +51,11 @@ public class CallbackInterceptor implements Interceptor {
                     cached.setCurrentState(previousState);
                 }
                 case "MENU_BACK" -> cached.setCurrentState(MENU);
-                case "REGISTRATIONS" -> cached.setCurrentState(REGISTRATIONS_MAIN);
+                case "REGISTRATIONS" -> {
+                    State state = REGISTRATIONS_MAIN;
+                    cached.setCurrentState(state);
+                    stateHandlerFactory.get(state).handle(userId, cached);
+                }
                 default -> {
                     State currentState = cached.getCurrentState();
                     stateHandlerFactory.get(currentState).handle(userId, cached);
