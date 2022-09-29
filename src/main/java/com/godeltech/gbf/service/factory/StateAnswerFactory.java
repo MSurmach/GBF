@@ -1,6 +1,6 @@
 package com.godeltech.gbf.service.factory;
 
-import com.godeltech.gbf.management.State;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.service.answer.Answer;
 import com.godeltech.gbf.service.answer.impl.*;
 import lombok.AllArgsConstructor;

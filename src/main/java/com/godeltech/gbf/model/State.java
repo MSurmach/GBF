@@ -1,4 +1,4 @@
-package com.godeltech.gbf.management;
+package com.godeltech.gbf.model;
 
 import lombok.Getter;
 
@@ -13,5 +13,7 @@ public enum State {
     DATE_FROM, DATE_TO,
     CARGO_MENU, CARGO_PACKAGE, CARGO_PEOPLE,
     USERS_LIST,
-    REGISTRATIONS, REGISTRATION_EDITOR;
+    REGISTRATIONS, REGISTRATION_EDITOR,
+
+    ALERT
 }

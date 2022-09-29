@@ -1,9 +1,7 @@
 package com.godeltech.gbf.service.handler.impl;
 
-import com.godeltech.gbf.cache.UserDataCache;
-import com.godeltech.gbf.management.State;
-import com.godeltech.gbf.management.StateFlow;
 import com.godeltech.gbf.management.button.BotButton;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.StateHandler;
 import org.springframework.stereotype.Service;
@@ -21,10 +19,7 @@ public class CommentQuizStateHandler implements StateHandler {
                 userData.setCurrentState(State.COMMENT);
             }
             case COMMENT_NO -> {
-                StateFlow flow = userData.getStateFlow();
-                State currentState = userData.getCurrentState();
-                State nextState = flow.getNextState(currentState);
-                userData.setCurrentState(nextState);
+                userData.setCurrentState(State.CONFIRMATION);
             }
         }
     }

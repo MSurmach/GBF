@@ -1,7 +1,5 @@
 package com.godeltech.gbf.model;
 
-import com.godeltech.gbf.management.State;
-import com.godeltech.gbf.management.StateFlow;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -62,13 +60,16 @@ public class UserData {
     private State previousState;
 
     @Transient
-    private StateFlow stateFlow;
-
-    @Transient
     private String callback;
 
     @Transient
     private List<UserData> registrations;
+
+    @Transient
+    private Role role;
+
+    @Transient
+    private String callbackQueryId;
 
     public UserData(Long telegramUserId, String username) {
         this.telegramUserId = telegramUserId;

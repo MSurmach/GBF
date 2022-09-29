@@ -3,7 +3,7 @@ package com.godeltech.gbf.management.button;
 import com.godeltech.gbf.LocalMessageSource;
 
 public enum BotButton implements LocalBotButton {
-    COURIER, CUSTOMER, REGISTRATIONS, IGNORE,
+    COURIER, CUSTOMER, REGISTRATIONS_VIEWER,
     GLOBAL_BACK, LOCAL_BACK, CONFIRMATION, MENU;
 
     @Override
@@ -12,7 +12,7 @@ public enum BotButton implements LocalBotButton {
     }
 
     public enum Calendar implements LocalBotButton {
-        INIT, PREVIOUS, NEXT,
+        INIT, PREVIOUS, NEXT, ALERT,
         CHANGE_YEAR, SELECT_YEAR,
         CHANGE_MONTH, SELECT_MONTH,
         SELECT_DAY;

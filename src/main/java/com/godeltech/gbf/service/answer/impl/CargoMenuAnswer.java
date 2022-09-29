@@ -1,12 +1,13 @@
 package com.godeltech.gbf.service.answer.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.cache.UserDataCache;
-import com.godeltech.gbf.management.StateFlow;
+import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.Answer;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import static com.godeltech.gbf.model.Role.COURIER;
 
 @Service
 @AllArgsConstructor
@@ -26,8 +27,8 @@ public class CargoMenuAnswer implements Answer {
         String selectedContent = buildSelectedContent(userData);
         String selectedCode = selectedCode(userData);
         String selectedAnswer = localMessageSource.getLocaleMessage(selectedCode, selectedContent);
-        StateFlow stateFlow = userData.getStateFlow();
-        return stateFlow == StateFlow.COURIER ?
+        Role role = userData.getRole();
+        return role == COURIER ?
                 selectedAnswer + System.lineSeparator() + localMessageSource.getLocaleMessage(CARGO_MENU_COURIER_CODE) :
                 selectedAnswer + System.lineSeparator() + localMessageSource.getLocaleMessage(CARGO_MENU_CUSTOMER_CODE);
     }

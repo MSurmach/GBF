@@ -1,7 +1,7 @@
 package com.godeltech.gbf.view.impl;
 
-import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.repository.UserDataRepository;
 import com.godeltech.gbf.service.answer.impl.RegistrationRecordAnswer;
 import com.godeltech.gbf.service.answer.impl.RegistrationsMainAnswer;
 import com.godeltech.gbf.service.keyboard.impl.BackMenuKeyboard;
@@ -14,9 +14,12 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.godeltech.gbf.model.Role.REGISTRATIONS_VIEWER;
+
 @Service
 @AllArgsConstructor
 public class RegistrationsMainStateView implements StateView<SendMessage> {
+    private UserDataRepository userDataRepository;
     private RegistrationsMainAnswer registrationsMainAnswer;
     private RegistrationRecordAnswer registrationRecordAnswer;
     private RegistrationRecordKeyboard registrationRecordKeyboard;
@@ -24,6 +27,9 @@ public class RegistrationsMainStateView implements StateView<SendMessage> {
 
     @Override
     public List<SendMessage> buildView(Long chatId, UserData userData) {
+        long telegramUserId = userData.getTelegramUserId();
+        List<UserData> registrations = userDataRepository.findUserDataByTelegramUserId(telegramUserId);
+        userData.setRegistrations(registrations);
         List<SendMessage> views = new ArrayList<>();
         views.add(SendMessage.builder().
                 chatId(chatId).
@@ -31,15 +37,16 @@ public class RegistrationsMainStateView implements StateView<SendMessage> {
                 text(registrationsMainAnswer.getAnswer(userData)).
                 replyMarkup(backMenuKeyboard.getKeyboardMarkup(userData)).
                 build());
-        List<UserData> registrations = userData.getRegistrations();
         if (registrations != null && !registrations.isEmpty()) {
-            registrations.forEach(registration ->
-                    views.add(SendMessage.builder().
-                            chatId(chatId).
-                            parseMode("html").
-                            text(registrationRecordAnswer.getAnswer(registration)).
-                            replyMarkup(registrationRecordKeyboard.getKeyboardMarkup(registration)).
-                            build()));
+            for (UserData registration : registrations) {
+                SendMessage sendMessage = SendMessage.builder().
+                        chatId(chatId).
+                        parseMode("html").
+                        text(registrationRecordAnswer.getAnswer(registration)).
+                        replyMarkup(registrationRecordKeyboard.getKeyboardMarkup(registration)).
+                        build();
+                views.add(sendMessage);
+            }
         }
         return views;
     }

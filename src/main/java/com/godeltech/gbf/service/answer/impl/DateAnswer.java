@@ -1,8 +1,7 @@
 package com.godeltech.gbf.service.answer.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.cache.UserDataCache;
-import com.godeltech.gbf.management.State;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.Answer;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import static com.godeltech.gbf.service.answer.CommonAnswerCode.*;
 

@@ -1,16 +1,15 @@
 package com.godeltech.gbf.service.handler.impl;
 
-import com.godeltech.gbf.cache.UserDataCache;
-import com.godeltech.gbf.management.State;
-import com.godeltech.gbf.management.StateFlow;
+import com.godeltech.gbf.model.Role;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.StateHandler;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-import static com.godeltech.gbf.management.State.CITY_TO;
 import static com.godeltech.gbf.management.button.BotButton.Calendar.INIT;
+import static com.godeltech.gbf.model.State.*;
 
 @Service
 public class CityStateHandler implements StateHandler {
@@ -18,12 +17,24 @@ public class CityStateHandler implements StateHandler {
     @Override
     public void handle(UserData userData) {
         String callback = userData.getCallback();
-        State currentState = userData.getCurrentState();
-        if (currentState == CITY_TO) userData.setCityTo(callback);
-        else userData.setCityFrom(callback);
-        StateFlow stateFlow = userData.getStateFlow();
-        userData.setPreviousState(currentState);
-        userData.setCurrentState(stateFlow.getNextState(currentState));
+        catchCity(userData, callback);
+        State nextState = switchState(userData);
+        userData.setCurrentState(nextState);
         userData.setCallback(INIT + ":" + LocalDate.now());
+    }
+
+    private void catchCity(UserData userData, String city) {
+        State currentState = userData.getCurrentState();
+        if (currentState == CITY_FROM) userData.setCityFrom(city);
+        else userData.setCityTo(city);
+    }
+
+    private State switchState(UserData userData) {
+        Role role = userData.getRole();
+        State currentState = userData.getCurrentState();
+        return switch (role) {
+            case CUSTOMER, COURIER -> currentState == CITY_FROM ? DATE_FROM : DATE_TO;
+            case REGISTRATIONS_VIEWER -> REGISTRATION_EDITOR;
+        };
     }
 }

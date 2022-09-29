@@ -1,8 +1,8 @@
 package com.godeltech.gbf.service.interceptor.impl;
 
 import com.godeltech.gbf.cache.UserDataCache;
-import com.godeltech.gbf.management.State;
 import com.godeltech.gbf.management.command.TextCommand;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.factory.StateHandlerFactory;
 import com.godeltech.gbf.service.factory.StateViewFactory;
@@ -18,8 +18,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
-import static com.godeltech.gbf.management.State.MENU;
-import static com.godeltech.gbf.management.State.WRONG_INPUT;
+import static com.godeltech.gbf.model.State.MENU;
+import static com.godeltech.gbf.model.State.WRONG_INPUT;
 
 @Service
 public class MessageInterceptor implements Interceptor {
@@ -50,7 +50,7 @@ public class MessageInterceptor implements Interceptor {
                 case START -> {
                     UserData created = UserDataCache.initializeByIdAndUsername(telegramUserId, username);
                     created.setCurrentState(MENU);
-                    StateView<? extends SendMessage> stateView = stateViewFactory.get(MENU);
+                    StateView<? extends BotApiMethod<?>> stateView = stateViewFactory.get(MENU);
                     yield stateView.buildView(chatId, created);
                 }
                 case STOP -> null;
@@ -71,7 +71,7 @@ public class MessageInterceptor implements Interceptor {
                     handler.handle(cached);
                 }
             }
-            StateView<? extends SendMessage> stateView = stateViewFactory.get(cached.getCurrentState());
+            StateView<? extends BotApiMethod<?>> stateView = stateViewFactory.get(cached.getCurrentState());
             return stateView.buildView(chatId, cached);
         }
     }

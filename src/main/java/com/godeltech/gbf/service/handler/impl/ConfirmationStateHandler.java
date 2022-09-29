@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.handler.impl;
 
-import com.godeltech.gbf.management.State;
-import com.godeltech.gbf.management.StateFlow;
+import com.godeltech.gbf.model.Role;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.repository.UserDataRepository;
 import com.godeltech.gbf.service.handler.StateHandler;
@@ -21,9 +21,10 @@ public class ConfirmationStateHandler implements StateHandler {
     public void handle(UserData userData) {
         try {
             userDataRepository.save(userData);
-            State state = userData.getCurrentState();
-            StateFlow stateFlow = userData.getStateFlow();
-            userData.setCurrentState(stateFlow.getNextState(state));
+            Role role = userData.getRole();
+            switch (role) {
+                case COURIER -> userData.setCurrentState(State.SUCCESS);
+            }
         } catch (Exception exception) {
 
         }

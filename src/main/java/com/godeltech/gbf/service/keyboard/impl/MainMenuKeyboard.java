@@ -29,8 +29,8 @@ public class MainMenuKeyboard implements Keyboard {
         String customerCallback = CUSTOMER.name();
         var customerButton = KeyboardUtils.createButton(customerLabel, customerCallback);
 
-        String registrationsCourierLabel = REGISTRATIONS.getLocalMessage(localMessageSource);
-        String registrationsCourierCallback = REGISTRATIONS.name();
+        String registrationsCourierLabel = REGISTRATIONS_VIEWER.getLocalMessage(localMessageSource);
+        String registrationsCourierCallback = REGISTRATIONS_VIEWER.name();
         var registrationsButton = KeyboardUtils.createButton(registrationsCourierLabel, registrationsCourierCallback);
 
         List<InlineKeyboardButton> buttons = List.of(courierButton, customerButton, registrationsButton);

@@ -1,7 +1,6 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.management.button.BotButton;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.keyboard.Keyboard;
@@ -19,7 +18,7 @@ import static com.godeltech.gbf.management.button.BotButton.Cargo.*;
 
 @Service
 @AllArgsConstructor
-public class CargoMenuKeyboard implements Keyboard {
+public class CargoMainKeyboard implements Keyboard {
 
     private ControlKeyboard controlKeyboard;
     private LocalMessageSource localMessageSource;

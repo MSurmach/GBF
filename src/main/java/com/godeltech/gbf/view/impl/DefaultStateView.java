@@ -1,6 +1,6 @@
 package com.godeltech.gbf.view.impl;
 
-import com.godeltech.gbf.management.State;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.Answer;
 import com.godeltech.gbf.service.factory.StateAnswerFactory;

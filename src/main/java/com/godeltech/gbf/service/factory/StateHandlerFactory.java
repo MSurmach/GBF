@@ -1,6 +1,6 @@
 package com.godeltech.gbf.service.factory;
 
-import com.godeltech.gbf.management.State;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.service.handler.StateHandler;
 import com.godeltech.gbf.service.handler.impl.*;
 import lombok.AllArgsConstructor;
@@ -34,7 +34,8 @@ public class StateHandlerFactory implements Factory<StateHandler> {
                     case USERS_LIST -> UsersListStateHandler.class;
                     case REGISTRATIONS -> RegistrationsStateHandler.class;
                     case REGISTRATION_EDITOR -> RegistrationEditorStateHandler.class;
-                    default -> throw new IllegalArgumentException("Handler not found");
+                    case ALERT -> AlertStateHandler.class;
+                    default -> throw new IllegalArgumentException("Handler not found for this state");
                 };
         return beanFactory.getBean(handler);
     }

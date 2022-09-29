@@ -1,6 +1,6 @@
 package com.godeltech.gbf.service.factory;
 
-import com.godeltech.gbf.management.State;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.impl.*;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ public class StateKeyboardFactory implements Factory<Keyboard> {
                     case YEAR_FROM, YEAR_TO -> YearKeyboard.class;
                     case MONTH_FROM, MONTH_TO -> MonthKeyboard.class;
                     case DATE_FROM, DATE_TO -> DateKeyboard.class;
-                    case CARGO_MENU -> CargoMenuKeyboard.class;
+                    case CARGO_MENU -> CargoMainKeyboard.class;
                     case CARGO_PACKAGE -> CargoPackageKeyboard.class;
                     case COMMENT_QUIZ -> CommentKeyboard.class;
                     case COMMENT_CONFIRM -> CommentConfirmationKeyboard.class;

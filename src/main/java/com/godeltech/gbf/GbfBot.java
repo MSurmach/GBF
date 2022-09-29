@@ -1,4 +1,4 @@
-package com.godeltech.gbf.controller;
+package com.godeltech.gbf;
 
 import com.godeltech.gbf.cache.UserMessageCache;
 import com.godeltech.gbf.config.TelegramBotConfig;
@@ -16,8 +16,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
+import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class GbfBot extends SpringWebhookBot {
@@ -50,26 +50,30 @@ public class GbfBot extends SpringWebhookBot {
     public BotApiMethod<?> onWebhookUpdateReceived(@RequestBody Update update) {
         Interceptor interceptor = interceptorFactory.getInterceptor(update);
         List<? extends BotApiMethod<?>> methods = interceptor.intercept(update);
-        Long telegramUserId = interceptor.getTelegramUserId();
-        List<Message> executedMessages = executeMethods(methods);
-        deletePreviousMessage(telegramUserId, interceptor.getChatId());
-        cacheExecutedMessages(executedMessages, telegramUserId);
+        executeMethod(methods, interceptor.getTelegramUserId(), interceptor.getChatId());
         return null;
     }
 
-    private List<Message> executeMethods(List<? extends BotApiMethod<?>> methods) {
-        return methods.stream().map(botApiMethod -> {
+    private void executeMethod(List<? extends BotApiMethod<?>> methods, Long telegramUserId, Long chatId) {
+        int stage = 0;
+        for (BotApiMethod<?> method : methods) {
             try {
-                return (Message) execute(botApiMethod);
+                Serializable executed = execute(method);
+                if (executed instanceof Message message) {
+                    if (stage == 0) {
+                        stage++;
+                        deletePreviousMessage(telegramUserId, chatId);
+                    }
+                    cacheExecutedMessage(telegramUserId, message);
+                }
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }
-        }).collect(Collectors.toList());
+        }
     }
 
-    private void cacheExecutedMessages(List<Message> messages, Long telegramUserId) {
-        messages.forEach(message ->
-                UserMessageCache.cacheUserIdAndMessageId(telegramUserId, message.getMessageId()));
+    private void cacheExecutedMessage(Long telegramUserId, Message message) {
+        UserMessageCache.cacheUserIdAndMessageId(telegramUserId, message.getMessageId());
     }
 
     private void deletePreviousMessage(Long telegramUserId, Long chatId) {
