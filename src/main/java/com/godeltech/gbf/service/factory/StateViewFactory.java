@@ -2,7 +2,6 @@ package com.godeltech.gbf.service.factory;
 
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.view.StateView;
-import com.godeltech.gbf.view.impl.AlertStateView;
 import com.godeltech.gbf.view.impl.DefaultStateView;
 import com.godeltech.gbf.view.impl.RegistrationsMainStateView;
 import lombok.AllArgsConstructor;
@@ -20,7 +19,6 @@ public class StateViewFactory implements Factory<StateView<? extends BotApiMetho
         Class<? extends StateView<? extends BotApiMethod<?>>> stateView =
                 switch (state) {
                     case REGISTRATIONS -> RegistrationsMainStateView.class;
-                    case ALERT -> AlertStateView.class;
                     default -> DefaultStateView.class;
                 };
         return beanFactory.getBean(stateView);

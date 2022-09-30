@@ -1,5 +1,8 @@
 package com.godeltech.gbf.service.handler.impl;
 
+import com.godeltech.gbf.exception.DateAfterDateException;
+import com.godeltech.gbf.exception.DateInPastException;
+import com.godeltech.gbf.exception.EmptyButtonCalendarException;
 import com.godeltech.gbf.management.button.BotButton;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
@@ -33,14 +36,19 @@ public class DateStateHandler implements StateHandler {
                 State nextState = selectNextState(userData);
                 userData.setCurrentState(nextState);
             }
-            case ALERT -> userData.setCurrentState(ALERT);
+            case IGNORE -> throw new EmptyButtonCalendarException(split[1], userData.getCallbackQueryId());
         }
     }
 
     private void catchDate(UserData userData, LocalDate date) {
+        String callbackQueryId = userData.getCallbackQueryId();
+        checkPastInDate(date, callbackQueryId);
         State currentState = userData.getCurrentState();
         if (currentState == DATE_FROM) userData.setDateFrom(date);
-        else userData.setDateTo(date);
+        else {
+            checkDateToAfterDateFrom(userData.getDateFrom(), date, callbackQueryId);
+            userData.setDateTo(date);
+        }
     }
 
     private State selectNextState(UserData userData) {
@@ -50,5 +58,15 @@ public class DateStateHandler implements StateHandler {
             case CUSTOMER, COURIER -> currentState == DATE_FROM ? COUNTRY_TO : CARGO_MENU;
             case REGISTRATIONS_VIEWER -> REGISTRATION_EDITOR;
         };
+    }
+
+    private void checkPastInDate(LocalDate date, String callbackQueryId) {
+        LocalDate nowDate = LocalDate.now();
+        if (date.isBefore(nowDate)) throw new DateInPastException(date, nowDate, callbackQueryId);
+    }
+
+    private void checkDateToAfterDateFrom(LocalDate dateFrom, LocalDate dateTo, String callbackQueryId) {
+        if (dateFrom != null && dateTo.isBefore(dateFrom))
+            throw new DateAfterDateException(dateFrom, dateTo, callbackQueryId);
     }
 }

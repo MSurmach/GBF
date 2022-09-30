@@ -1,18 +1,22 @@
 package com.godeltech.gbf.service.answer.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.Answer;
 import org.springframework.stereotype.Component;
 
-import static com.godeltech.gbf.service.answer.CommonAnswerCode.COUNTRY_FINISH_CODE;
-import static com.godeltech.gbf.service.answer.CommonAnswerCode.COUNTRY_START_CODE;
+import static com.godeltech.gbf.model.State.CITY_TO;
+import static com.godeltech.gbf.service.answer.CommonAnswerCode.COUNTRY_SELECTED_CODE;
 
 @Component
 public class CityAnswer implements Answer {
-    public final static String CITY_FROM_CODE = "city_from";
-    public final static String CITY_TO_CODE = "city_to";
+    public final static String COURIER_CITY_FROM_CODE = "courier.city_from";
+    public final static String COURIER_CITY_TO_CODE = "courier.city_to";
+
+    public final static String CUSTOMER_CITY_FROM_CODE = "customer.city_from";
+    public final static String CUSTOMER_CITY_TO_CODE = "customer.city_to";
     private final LocalMessageSource localMessageSource;
 
     public CityAnswer(LocalMessageSource localMessageSource) {
@@ -21,19 +25,19 @@ public class CityAnswer implements Answer {
 
     @Override
     public String getAnswer(UserData userData) {
+        Role role = userData.getRole();
         State state = userData.getCurrentState();
-        String country;
-        String cityCode;
-        String countryCode;
-        if (state == State.CITY_TO) {
-            country = localMessageSource.getLocaleMessage(userData.getCountryTo());
-            cityCode = CITY_TO_CODE;
-            countryCode = COUNTRY_FINISH_CODE.getCode();
-        } else {
-            country = localMessageSource.getLocaleMessage(userData.getCountryFrom());
-            cityCode = CITY_FROM_CODE;
-            countryCode = COUNTRY_START_CODE.getCode();
-        }
-        return localMessageSource.getLocaleMessage(countryCode, country) + System.lineSeparator() + localMessageSource.getLocaleMessage(cityCode);
+        String selectedCountryInfoCode = COUNTRY_SELECTED_CODE.getCode();
+        String country = state == CITY_TO ?
+                localMessageSource.getLocaleMessage(userData.getCountryTo()) :
+                localMessageSource.getLocaleMessage(userData.getCountryFrom());
+        String questionCode = switch (role) {
+            case COURIER -> state == State.CITY_FROM ? COURIER_CITY_FROM_CODE : COURIER_CITY_TO_CODE;
+            case CUSTOMER -> state == State.CITY_FROM ? CUSTOMER_CITY_FROM_CODE : CUSTOMER_CITY_TO_CODE;
+            default -> null;
+        };
+        return localMessageSource.getLocaleMessage(selectedCountryInfoCode, country) +
+                System.lineSeparator() +
+                localMessageSource.getLocaleMessage(questionCode);
     }
 }

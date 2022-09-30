@@ -13,28 +13,29 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.godeltech.gbf.management.button.BotButton.Comment.COMMENT_NO;
-import static com.godeltech.gbf.management.button.BotButton.Comment.COMMENT_YES;
+import static com.godeltech.gbf.management.button.BotButton.DateQuiz.SELECT_DATE;
+import static com.godeltech.gbf.management.button.BotButton.DateQuiz.SKIP_DATE;
 
 @Service
 @AllArgsConstructor
-public class CommentKeyboard implements Keyboard {
+public class DateQuizKeyboard implements Keyboard {
+
     private ControlKeyboard controlKeyboard;
     private LocalMessageSource localMessageSource;
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        String yesLabel = COMMENT_YES.getLocalMessage(localMessageSource);
-        String yesCallback = COMMENT_YES.name();
-        var yesButton = KeyboardUtils.createButton(yesLabel, yesCallback);
+        String selectDateLabel = SELECT_DATE.getLocalMessage(localMessageSource);
+        String selectDateCallback = SELECT_DATE.name();
+        var selectDateButton = KeyboardUtils.createButton(selectDateLabel, selectDateCallback);
 
-        String noLabel = COMMENT_NO.getLocalMessage(localMessageSource);
-        String noCallback = COMMENT_NO.name();
-        var noButton = KeyboardUtils.createButton(noLabel, noCallback);
+        String skipDateLabel = SKIP_DATE.getLocalMessage(localMessageSource);
+        String skipDateCallback = SKIP_DATE.name();
+        var skipDateButton = KeyboardUtils.createButton(skipDateLabel, skipDateCallback);
 
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        keyboard.add(List.of(yesButton));
-        keyboard.add(List.of(noButton));
+        keyboard.add(List.of(selectDateButton));
+        keyboard.add(List.of(skipDateButton));
         InlineKeyboardMarkup countryKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
         return new KeyboardMarkupAppender(countryKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
     }

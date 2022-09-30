@@ -1,8 +1,7 @@
 package com.godeltech.gbf.service.answer;
 
 public enum CommonAnswerCode {
-    COUNTRY_START_CODE("country.start"),
-    COUNTRY_FINISH_CODE("country.finish"),
+    COUNTRY_SELECTED_CODE("country.selected"),
     COUNTRY_CITY_START_CODE("country_city.start"),
     COUNTRY_CITY_FINISH_CODE("country_city.finish"),
     DATE_START_CODE("date.start"),

@@ -1,22 +1,28 @@
 package com.godeltech.gbf.service.answer.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.answer.Answer;
 import lombok.Getter;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import static com.godeltech.gbf.model.State.DATE_FROM;
+import static com.godeltech.gbf.model.State.DATE_TO;
 import static com.godeltech.gbf.service.answer.CommonAnswerCode.*;
 
-@Component
+@Service
 public class DateAnswer implements Answer {
 
-    public final static String DATE_FROM_CODE = "date_from";
-    public final static String DATE_TO_CODE = "date_to";
+    public final static String COURIER_DATE_FROM_CODE = "courier.date_from";
+    public final static String COURIER_DATE_TO_CODE = "courier.date_to";
+
+    public final static String CUSTOMER_DATE_FROM_CODE = "customer.date_from";
+    public final static String CUSTOMER_DATE_TO_CODE = "customer.date_to";
     public final static String DATE_PATTERN = "dd MMMM yyyy";
 
     private final LocalMessageSource localMessageSource;
@@ -31,26 +37,26 @@ public class DateAnswer implements Answer {
     @Override
     public String getAnswer(UserData userData) {
         String nowDate = LocalDate.now().format(dateFormatter);
-        String nowDateCode = DATE_TODAY_CODE.getCode();
+        String nowDateInfoCode = DATE_TODAY_CODE.getCode();
         State state = userData.getCurrentState();
-        String countryCityInfoCode;
-        String dateCode;
-        String country;
-        String city;
-        if (state == State.DATE_TO) {
-            country = localMessageSource.getLocaleMessage(userData.getCountryTo());
-            city = localMessageSource.getLocaleMessage(userData.getCityTo());
-            dateCode = DATE_TO_CODE;
-            countryCityInfoCode = COUNTRY_CITY_FINISH_CODE.getCode();
-        } else {
-            country = localMessageSource.getLocaleMessage(userData.getCountryFrom());
-            city = localMessageSource.getLocaleMessage(userData.getCityFrom());
-            dateCode = DATE_FROM_CODE;
-            countryCityInfoCode = COUNTRY_CITY_START_CODE.getCode();
-        }
-        return localMessageSource.getLocaleMessage(nowDateCode, nowDate) +
+        Role role = userData.getRole();
+        String countryCityInfoCode = state == DATE_FROM ?
+                COUNTRY_CITY_START_CODE.getCode() :
+                COUNTRY_CITY_FINISH_CODE.getCode();
+        String country = state == DATE_TO ?
+                localMessageSource.getLocaleMessage(userData.getCountryTo()) :
+                localMessageSource.getLocaleMessage(userData.getCountryFrom());
+        String city = state == DATE_TO ?
+                localMessageSource.getLocaleMessage(userData.getCityTo()) :
+                localMessageSource.getLocaleMessage(userData.getCityFrom());
+        String questionCode = switch (role) {
+            case COURIER -> state == DATE_FROM ? COURIER_DATE_FROM_CODE : COURIER_DATE_TO_CODE;
+            case CUSTOMER -> state == DATE_FROM ? CUSTOMER_DATE_FROM_CODE : CUSTOMER_DATE_TO_CODE;
+            default -> null;
+        };
+        return localMessageSource.getLocaleMessage(nowDateInfoCode, nowDate) +
                 localMessageSource.getLocaleMessage(countryCityInfoCode, country, city) +
                 System.lineSeparator() +
-                localMessageSource.getLocaleMessage(dateCode);
+                localMessageSource.getLocaleMessage(questionCode);
     }
 }

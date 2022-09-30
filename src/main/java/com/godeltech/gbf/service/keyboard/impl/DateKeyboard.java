@@ -69,26 +69,30 @@ public class DateKeyboard implements Keyboard {
     }
 
     private void addWeekDayRow(List<List<InlineKeyboardButton>> keyboard) {
+        final String dayOfWeekCallback = "dayOfWeek";
         List<InlineKeyboardButton> weekDayRow = new ArrayList<>();
         Arrays.stream(DayOfWeek.values()).
                 map(day -> day.getDisplayName(TextStyle.SHORT, localMessageSource.getLocale())).
-                forEach(day -> weekDayRow.add(KeyboardUtils.createButton(day)));
+                forEach(day -> weekDayRow.add(KeyboardUtils.createButton(day, IGNORE + ":" + dayOfWeekCallback)));
         keyboard.add(weekDayRow);
     }
 
     private List<InlineKeyboardButton> buildDayRow(LocalDate date, int shift, int columnCount) {
+        final String emptyLabel = " ";
+        final String emptyDayCallback = "emptyDay";
         List<InlineKeyboardButton> row = new ArrayList<>();
         int day = date.getDayOfMonth();
         LocalDate callbackDate = date;
+        InlineKeyboardButton serviceButton = KeyboardUtils.createButton(emptyLabel, IGNORE + ":" + emptyDayCallback);
         for (int index = 0; index < shift; index++) {
-            row.add(KeyboardUtils.createButton());
+            row.add(serviceButton);
         }
         for (int index = shift; index < columnCount; index++) {
             if (day <= date.lengthOfMonth()) {
                 row.add(KeyboardUtils.createButton(Integer.toString(day++), SELECT_DAY + ":" + callbackDate));
                 callbackDate = callbackDate.plusDays(1);
             } else {
-                row.add(KeyboardUtils.createButton());
+                row.add(serviceButton);
             }
         }
         return row;

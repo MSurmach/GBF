@@ -22,6 +22,7 @@ public class StateKeyboardFactory implements Factory<Keyboard> {
                     case YEAR_FROM, YEAR_TO -> YearKeyboard.class;
                     case MONTH_FROM, MONTH_TO -> MonthKeyboard.class;
                     case DATE_FROM, DATE_TO -> DateKeyboard.class;
+                    case DATE_FROM_QUIZ, DATE_TO_QUIZ -> DateQuizKeyboard.class;
                     case CARGO_MENU -> CargoMainKeyboard.class;
                     case CARGO_PACKAGE -> CargoPackageKeyboard.class;
                     case COMMENT_QUIZ -> CommentKeyboard.class;

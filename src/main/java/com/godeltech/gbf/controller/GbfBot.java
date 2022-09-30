@@ -1,4 +1,4 @@
-package com.godeltech.gbf;
+package com.godeltech.gbf.controller;
 
 import com.godeltech.gbf.cache.UserMessageCache;
 import com.godeltech.gbf.config.TelegramBotConfig;

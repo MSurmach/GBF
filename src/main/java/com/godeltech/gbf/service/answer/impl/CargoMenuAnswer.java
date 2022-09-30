@@ -12,8 +12,8 @@ import static com.godeltech.gbf.model.Role.COURIER;
 @Service
 @AllArgsConstructor
 public class CargoMenuAnswer implements Answer {
-    public final static String CARGO_MENU_COURIER_CODE = "cargo.menu.courier";
-    public final static String CARGO_MENU_CUSTOMER_CODE = "cargo.menu.customer";
+    public final static String CARGO_MENU_COURIER_CODE = "courier.cargo.menu";
+    public final static String CARGO_MENU_CUSTOMER_CODE = "customer.cargo.menu";
     public final static String CARGO_MENU_SELECTED_CODE = "cargo.selected";
     public final static String CARGO_MENU_NOT_SELECTED_CODE = "cargo.notSelected";
     public final static String CARGO_DOCUMENTS_SELECTED = "cargo.documents.selected";

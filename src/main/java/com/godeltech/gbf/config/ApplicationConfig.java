@@ -1,7 +1,7 @@
 package com.godeltech.gbf.config;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.GbfBot;
+import com.godeltech.gbf.controller.GbfBot;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;

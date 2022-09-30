@@ -34,7 +34,7 @@ public class StateHandlerFactory implements Factory<StateHandler> {
                     case USERS_LIST -> UsersListStateHandler.class;
                     case REGISTRATIONS -> RegistrationsStateHandler.class;
                     case REGISTRATION_EDITOR -> RegistrationEditorStateHandler.class;
-                    case ALERT -> AlertStateHandler.class;
+                    case DATE_TO_QUIZ, DATE_FROM_QUIZ -> DateQuizStateHandler.class;
                     default -> throw new IllegalArgumentException("Handler not found for this state");
                 };
         return beanFactory.getBean(handler);

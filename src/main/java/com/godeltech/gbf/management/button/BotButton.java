@@ -12,7 +12,7 @@ public enum BotButton implements LocalBotButton {
     }
 
     public enum Calendar implements LocalBotButton {
-        INIT, PREVIOUS, NEXT, ALERT,
+        INIT, PREVIOUS, NEXT, IGNORE,
         CHANGE_YEAR, SELECT_YEAR,
         CHANGE_MONTH, SELECT_MONTH,
         SELECT_DAY;
@@ -58,6 +58,15 @@ public enum BotButton implements LocalBotButton {
         EDIT_COUNTRY_CITY_FROM, EDIT_COUNTRY_CITY_TO,
         EDIT_DATE_FROM, EDIT_DATE_TO,
         EDIT_COMMENT, EDIT_CARGO, EDIT_CONFIRM;
+
+        @Override
+        public String getLocalMessage(LocalMessageSource localMessageSource) {
+            return localMessageSource.getLocaleMessage(this.name());
+        }
+    }
+
+    public enum DateQuiz implements LocalBotButton {
+        SELECT_DATE, SKIP_DATE;
 
         @Override
         public String getLocalMessage(LocalMessageSource localMessageSource) {

@@ -33,7 +33,8 @@ public class CityStateHandler implements StateHandler {
         Role role = userData.getRole();
         State currentState = userData.getCurrentState();
         return switch (role) {
-            case CUSTOMER, COURIER -> currentState == CITY_FROM ? DATE_FROM : DATE_TO;
+            case COURIER -> currentState == CITY_FROM ? DATE_FROM : DATE_TO;
+            case CUSTOMER -> currentState == CITY_FROM ? DATE_FROM_QUIZ : DATE_TO_QUIZ;
             case REGISTRATIONS_VIEWER -> REGISTRATION_EDITOR;
         };
     }

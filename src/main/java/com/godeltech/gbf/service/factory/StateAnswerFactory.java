@@ -28,6 +28,7 @@ public class StateAnswerFactory implements Factory<Answer> {
                     case YEAR_FROM, YEAR_TO -> YearAnswer.class;
                     case MONTH_FROM, MONTH_TO -> MonthAnswer.class;
                     case DATE_FROM, DATE_TO -> DateAnswer.class;
+                    case DATE_FROM_QUIZ, DATE_TO_QUIZ -> DateQuizAnswer.class;
                     case CARGO_MENU -> CargoMenuAnswer.class;
                     case CARGO_PACKAGE -> CargoPackageAnswer.class;
                     case CARGO_PEOPLE -> CargoPeopleAnswer.class;
