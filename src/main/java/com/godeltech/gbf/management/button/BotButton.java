@@ -73,4 +73,13 @@ public enum BotButton implements LocalBotButton {
             return localMessageSource.getLocaleMessage(this.name());
         }
     }
+
+    public enum FindCourier implements LocalBotButton {
+        LOOK_AT_COURIERS;
+
+        @Override
+        public String getLocalMessage(LocalMessageSource localMessageSource) {
+            return localMessageSource.getLocaleMessage(this.name());
+        }
+    }
 }

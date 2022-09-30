@@ -30,6 +30,7 @@ public class StateKeyboardFactory implements Factory<Keyboard> {
                     case CONFIRMATION -> ConfirmKeyboard.class;
                     case SUCCESS -> BackMenuKeyboard.class;
                     case REGISTRATION_EDITOR -> RegistrationEditorKeyboard.class;
+                    case FIND_COURIER -> FindCourierKeyboard.class;
                     default -> EmptyKeyboard.class;
                 };
         return beanFactory.getBean(keyboard);

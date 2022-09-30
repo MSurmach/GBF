@@ -66,6 +66,9 @@ public class UserData {
     private List<UserData> registrations;
 
     @Transient
+    private List<UserData> foundUsers;
+
+    @Transient
     private Role role;
 
     @Transient

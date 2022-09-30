@@ -33,6 +33,7 @@ public class StateAnswerFactory implements Factory<Answer> {
                     case CARGO_PACKAGE -> CargoPackageAnswer.class;
                     case CARGO_PEOPLE -> CargoPeopleAnswer.class;
                     case REGISTRATION_EDITOR -> RegistrationEditorAnswer.class;
+                    case FIND_COURIER -> FindCourierAnswer.class;
                     default -> throw new IllegalArgumentException("Answer not found");
                 };
         return beanFactory.getBean(answer);
