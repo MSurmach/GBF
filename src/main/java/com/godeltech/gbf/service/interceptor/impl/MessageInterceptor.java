@@ -1,8 +1,9 @@
 package com.godeltech.gbf.service.interceptor.impl;
 
 import com.godeltech.gbf.cache.UserDataCache;
-import com.godeltech.gbf.exception.TextCommandNotFoundException;
 import com.godeltech.gbf.exception.InsufficientInputException;
+import com.godeltech.gbf.exception.TextCommandNotFoundException;
+import com.godeltech.gbf.exception.WrongInputException;
 import com.godeltech.gbf.management.command.TextCommand;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
@@ -47,11 +48,14 @@ public class MessageInterceptor implements Interceptor {
             try {
                 state = interceptSufficientInput(update);
             } catch (InsufficientInputException e) {
-                state = WRONG_INPUT;
+                throw new WrongInputException();
             }
         }
+        UserData cached = UserDataCache.get(telegramUserId);
+        cached.getStateHistory().push(state);
+        cached.getCallbackHistory().push(update.getMessage().getText());
         StateView<? extends BotApiMethod<?>> stateView = stateViewFactory.get(state);
-        return stateView.buildView(chatId, UserDataCache.get(telegramUserId));
+        return stateView.buildView(chatId, cached);
     }
 
     private State interceptTextCommand(Update update) throws TextCommandNotFoundException {
@@ -72,15 +76,14 @@ public class MessageInterceptor implements Interceptor {
         }
     }
 
-    private State interceptSufficientInput (Update update) throws InsufficientInputException {
+    private State interceptSufficientInput(Update update) throws InsufficientInputException {
         UserData cached = UserDataCache.get(telegramUserId);
-        State currentState = cached.getCurrentState();
-        if (currentState==CARGO_PEOPLE || currentState== COMMENT) {
+        State currentState = cached.getStateHistory().peek();
+        if (currentState == CARGO_PEOPLE || currentState == COMMENT) {
             String text = update.getMessage().getText();
-            cached.getCallbackHistory().add(text);
+            cached.getCallbackHistory().push(text);
             StateHandler stateHandler = stateHandlerFactory.get(currentState);
             return stateHandler.handle(cached);
-        }
-        else throw new InsufficientInputException();
+        } else throw new InsufficientInputException();
     }
 }

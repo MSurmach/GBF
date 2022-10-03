@@ -33,8 +33,7 @@ public class CommentKeyboard implements Keyboard {
         var noButton = KeyboardUtils.createButton(noLabel, noCallback);
 
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        keyboard.add(List.of(yesButton));
-        keyboard.add(List.of(noButton));
+        keyboard.add(List.of(yesButton, noButton));
         InlineKeyboardMarkup countryKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
         return new KeyboardMarkupAppender(countryKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
     }

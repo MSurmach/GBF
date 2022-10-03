@@ -13,6 +13,6 @@ public class YearStateHandler implements StateHandler {
 
     @Override
     public State handle(UserData userData) {
-        return userData.getCurrentState() == State.YEAR_TO ? MONTH_TO : MONTH_FROM;
+        return userData.getStateHistory().peek() == State.YEAR_TO ? MONTH_TO : MONTH_FROM;
     }
 }

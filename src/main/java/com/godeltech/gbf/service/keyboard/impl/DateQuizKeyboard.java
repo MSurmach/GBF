@@ -34,8 +34,7 @@ public class DateQuizKeyboard implements Keyboard {
         var skipDateButton = KeyboardUtils.createButton(skipDateLabel, skipDateCallback);
 
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        keyboard.add(List.of(selectDateButton));
-        keyboard.add(List.of(skipDateButton));
+        keyboard.add(List.of(selectDateButton, skipDateButton));
         InlineKeyboardMarkup countryKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
         return new KeyboardMarkupAppender(countryKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
     }

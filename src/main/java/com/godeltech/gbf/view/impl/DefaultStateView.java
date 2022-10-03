@@ -21,7 +21,7 @@ public class DefaultStateView implements StateView<SendMessage> {
 
     @Override
     public List<SendMessage> buildView(Long chatId, UserData userData) {
-        State state = userData.getCurrentState();
+        State state = userData.getStateHistory().peek();
         Answer answer = stateAnswerFactory.get(state);
         Keyboard keyboard = stateKeyboardFactory.get(state);
         SendMessage sendMessage = SendMessage.

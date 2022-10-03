@@ -7,7 +7,6 @@ import com.godeltech.gbf.service.keyboard.util.KeyboardUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.List;
 
@@ -28,9 +27,7 @@ public class ControlKeyboard implements Keyboard {
         String menuLabel = MENU.localLabel(localMessageSource);
         String menuCallback = MENU.name();
         var menuButton = KeyboardUtils.createButton(menuLabel, menuCallback);
-
-        List<InlineKeyboardButton> buttons = List.of(backButton, menuButton);
-        return new InlineKeyboardMarkup(List.of(buttons));
+        return new InlineKeyboardMarkup(List.of(List.of(backButton), List.of(menuButton)));
     }
 }
 

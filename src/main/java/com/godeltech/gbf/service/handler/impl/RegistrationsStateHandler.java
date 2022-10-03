@@ -21,7 +21,7 @@ public class RegistrationsStateHandler implements StateHandler {
 
     @Override
     public State handle(UserData userData) {
-        String callback = userData.getCallback();
+        String callback = userData.getCallbackHistory().peek();
         long telegramUserId = userData.getTelegramUserId();
         String[] splittedCallback = callback.split(":");
         var clickedButton = RegistrationBotButton.valueOf(splittedCallback[0]);
@@ -29,7 +29,7 @@ public class RegistrationsStateHandler implements StateHandler {
         switch (clickedButton) {
             case REGISTRATION_EDIT -> {
                 UserData persisted = userDataRepository.findUserDataByTelegramUserIdAndId(telegramUserId, recordId);
-                persisted.setCurrentState(REGISTRATION_EDITOR);
+                persisted.getStateHistory().push(REGISTRATION_EDITOR);
                 UserDataCache.add(telegramUserId, persisted);
             }
             case REGISTRATION_DELETE -> {
@@ -38,7 +38,7 @@ public class RegistrationsStateHandler implements StateHandler {
                 userDataRepository.deleteById(recordId);
             }
         }
-        return userData.getCurrentState();
+        return userData.getStateHistory().peek();
     }
 
 }

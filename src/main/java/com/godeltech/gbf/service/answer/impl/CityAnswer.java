@@ -26,7 +26,7 @@ public class CityAnswer implements Answer {
     @Override
     public String getAnswer(UserData userData) {
         Role role = userData.getRole();
-        State state = userData.getCurrentState();
+        State state = userData.getStateHistory().peek();
         String selectedCountryInfoCode = COUNTRY_SELECTED_CODE.getCode();
         String country = state == CITY_TO ?
                 localMessageSource.getLocaleMessage(userData.getCountryTo()) :
@@ -36,8 +36,8 @@ public class CityAnswer implements Answer {
             case CUSTOMER -> state == State.CITY_FROM ? CUSTOMER_CITY_FROM_CODE : CUSTOMER_CITY_TO_CODE;
             default -> null;
         };
-        return localMessageSource.getLocaleMessage(selectedCountryInfoCode, country) +
-                System.lineSeparator() +
-                localMessageSource.getLocaleMessage(questionCode);
+        return localMessageSource.getLocaleMessage(questionCode) +
+                localMessageSource.getLocaleMessage(selectedCountryInfoCode, country);
+
     }
 }

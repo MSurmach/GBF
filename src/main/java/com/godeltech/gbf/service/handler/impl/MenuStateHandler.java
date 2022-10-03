@@ -13,8 +13,8 @@ public class MenuStateHandler implements StateHandler {
 
     @Override
     public State handle(UserData userData) {
-        long telegramUserId = userData.getTelegramUserId();
-        UserDataCache.clearUserData(telegramUserId);
+        userData.reset();
+        UserDataCache.initializeByIdAndUsername(userData.getTelegramUserId(), userData.getUsername());
         return MENU;
     }
 }

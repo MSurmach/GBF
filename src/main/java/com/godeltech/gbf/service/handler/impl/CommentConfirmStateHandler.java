@@ -14,7 +14,7 @@ import static com.godeltech.gbf.model.State.*;
 public class CommentConfirmStateHandler implements StateHandler {
     @Override
     public State handle(UserData userData) {
-        String callback = userData.getCallback();
+        String callback = userData.getCallbackHistory().peek();
         var clickedButton = CommentBotButton.valueOf(callback);
         return switch (clickedButton) {
             case COMMENT_CONFIRM -> {
@@ -22,7 +22,7 @@ public class CommentConfirmStateHandler implements StateHandler {
                 yield role== REGISTRATIONS_VIEWER? REGISTRATION_EDITOR: CONFIRMATION;
             }
             case COMMENT_EDIT -> COMMENT;
-            default -> userData.getCurrentState();
+            default -> userData.getStateHistory().peek();
         };
     }
 }

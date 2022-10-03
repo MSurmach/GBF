@@ -19,11 +19,6 @@ public class UserDataCache {
         return created;
     }
 
-    public static UserData clearUserData(Long telegramUserId) {
-        String username = USERDATA_CACHE.get(telegramUserId).getUsername();
-        return initializeByIdAndUsername(telegramUserId, username);
-    }
-
     public static void add(long userId, UserData userData) {
         USERDATA_CACHE.put(userId, userData);
     }

@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Data
@@ -55,13 +55,9 @@ public class UserData {
     private String comment;
 
     @Transient
-    private State currentState;
-
+    private LinkedList<State> stateHistory = new LinkedList<>();
     @Transient
-    private State previousState;
-
-    @Transient
-    private List<String> callbackHistory;
+    private LinkedList<String> callbackHistory = new LinkedList<>();
 
     @Transient
     private List<UserData> registrations;
@@ -76,8 +72,25 @@ public class UserData {
     private String callbackQueryId;
 
     public UserData(Long telegramUserId, String username) {
-        callbackHistory = new ArrayList<>();
         this.telegramUserId = telegramUserId;
         this.username = username;
+    }
+
+    public void reset() {
+        countryFrom = null;
+        countryTo = null;
+        cityFrom = null;
+        cityTo = null;
+        dateFrom = null;
+        dateTo = null;
+        documents = false;
+        companionCount = 0;
+        comment = null;
+        stateHistory.clear();
+        callbackHistory.clear();
+        registrations = null;
+        foundUsers = null;
+        role = null;
+        callbackQueryId = null;
     }
 }

@@ -20,7 +20,7 @@ public class DateQuizAnswer implements Answer {
 
     @Override
     public String getAnswer(UserData userData) {
-        State currentState = userData.getCurrentState();
+        State currentState = userData.getStateHistory().peek();
         String countryCityInfoCode;
         String country;
         String city;

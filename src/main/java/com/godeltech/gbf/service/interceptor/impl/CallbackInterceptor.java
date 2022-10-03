@@ -16,7 +16,6 @@ import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
@@ -45,28 +44,30 @@ public class CallbackInterceptor implements Interceptor {
         UserData cached = UserDataCache.get(telegramUserId);
         State state;
         try {
-            Role role = interceptRole(update);
-            cached.setRole(role);
-            state = role.getFirstState();
+            state = interceptRole(update, cached);
+            cached.getStateHistory().push(state);
         } catch (RoleNotFoundException illegalArgumentException) {
             try {
                 state = interceptNavigationButton(update);
             } catch (ButtonNotFoundException exception) {
                 collectCallbackFromUpdate(update, cached);
-                state = cached.getCurrentState();
+                state = cached.getStateHistory().peek();
+                StateHandler stateHandler = stateHandlerFactory.get(state);
+                state = stateHandler.handle(cached);
+                cached.getStateHistory().push(state);
             }
-            StateHandler stateHandler = stateHandlerFactory.get(state);
-            state = stateHandler.handle(cached);
         }
-        cached.setCurrentState(state);
         StateView<? extends BotApiMethod<?>> stateView = stateViewFactory.get(state);
         return stateView.buildView(chatId, cached);
     }
 
-    private Role interceptRole(Update update) throws RoleNotFoundException {
+    private State interceptRole(Update update, UserData userData) throws RoleNotFoundException {
         try {
             String callback = update.getCallbackQuery().getData();
-            return Role.valueOf(callback);
+            Role role = Role.valueOf(callback);
+            userData.setRole(role);
+            userData.getCallbackHistory().push(callback);
+            return role.getFirstState();
         } catch (IllegalArgumentException exception) {
             throw new RoleNotFoundException();
         }
@@ -76,7 +77,7 @@ public class CallbackInterceptor implements Interceptor {
         CallbackQuery callbackQuery = update.getCallbackQuery();
         String callbackQueryId = callbackQuery.getId();
         String callback = callbackQuery.getData();
-        userData.getCallbackHistory().add(callback);
+        userData.getCallbackHistory().push(callback);
         userData.setCallbackQueryId(callbackQueryId);
     }
 
@@ -84,10 +85,18 @@ public class CallbackInterceptor implements Interceptor {
         String callback = update.getCallbackQuery().getData();
         try {
             NavigationBotButton botButton = NavigationBotButton.valueOf(callback);
+            UserData userData = UserDataCache.get(telegramUserId);
             return switch (botButton) {
-                case GLOBAL_BACK -> null;
+                case GLOBAL_BACK -> {
+                    userData.getCallbackHistory().removeFirst();
+                    userData.getStateHistory().removeFirst();
+                    yield userData.getStateHistory().peek();
+                }
                 case LOCAL_BACK -> null;
-                case MENU -> MENU;
+                case MENU -> {
+                    StateHandler stateHandler = stateHandlerFactory.get(MENU);
+                    yield stateHandler.handle(userData);
+                }
             };
         } catch (IllegalArgumentException illegalArgumentException) {
             throw new ButtonNotFoundException();

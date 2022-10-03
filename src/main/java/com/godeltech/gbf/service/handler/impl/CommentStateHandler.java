@@ -11,7 +11,7 @@ import static com.godeltech.gbf.model.State.COMMENT_CONFIRM;
 public class CommentStateHandler implements StateHandler {
     @Override
     public State handle(UserData userData) {
-        String comment = userData.getCallback();
+        String comment = userData.getCallbackHistory().peek();
         userData.setComment(comment);
         return COMMENT_CONFIRM;
     }

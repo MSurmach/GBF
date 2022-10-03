@@ -1,4 +1,4 @@
 package com.godeltech.gbf.exception;
 
-public class InsufficientInputException extends Exception {
+public class InsufficientInputException extends RuntimeException {
 }

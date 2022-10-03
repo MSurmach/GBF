@@ -8,6 +8,8 @@ import com.godeltech.gbf.service.handler.StateHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
+
 import static com.godeltech.gbf.management.button.CalendarBotButton.INIT;
 import static com.godeltech.gbf.model.Role.REGISTRATIONS_VIEWER;
 import static com.godeltech.gbf.model.State.*;
@@ -20,22 +22,23 @@ public class RegistrationEditorStateHandler implements StateHandler {
 
     @Override
     public State handle(UserData userData) {
-        String callback = userData.getCallback();
+        LinkedList<String> callbackHistory = userData.getCallbackHistory();
+        String callback = callbackHistory.peek();
         userData.setRole(REGISTRATIONS_VIEWER);
         var clickedButton = RegistrationEditorBotButton.valueOf(callback);
         return switch (clickedButton) {
             case EDIT_COUNTRY_CITY_FROM -> COUNTRY_FROM;
             case EDIT_COUNTRY_CITY_TO -> COUNTRY_TO;
             case EDIT_DATE_FROM -> {
-                userData.setCallback(INIT + ":" + userData.getDateFrom());
+                callbackHistory.push(INIT + ":" + userData.getDateFrom());
                 yield DATE_FROM;
             }
             case EDIT_DATE_TO -> {
-                userData.setCallback(INIT + ":" + userData.getDateTo());
+                callbackHistory.push(INIT + ":" + userData.getDateTo());
                 yield DATE_TO;
             }
             case EDIT_COMMENT -> {
-                userData.setCallback(userData.getComment());
+                callbackHistory.push(userData.getComment());
                 yield COMMENT_CONFIRM;
             }
             case EDIT_CARGO -> CARGO_MENU;

@@ -4,6 +4,7 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.exception.DateAfterDateException;
 import com.godeltech.gbf.exception.DateInPastException;
 import com.godeltech.gbf.exception.EmptyButtonCalendarException;
+import com.godeltech.gbf.exception.WrongInputException;
 import com.godeltech.gbf.service.answer.impl.DateAnswer;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -77,6 +78,11 @@ public class BotExceptionHandler {
                 cacheTime(60).
                 build();
         showAlert(answerCallbackQuery);
+    }
+
+    @ExceptionHandler(WrongInputException.class)
+    public void handleWrongInput(WrongInputException exception) {
+
     }
 
     private void showAlert(BotApiMethod<?> method) {

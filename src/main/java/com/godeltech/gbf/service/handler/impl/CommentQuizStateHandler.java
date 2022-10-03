@@ -14,12 +14,12 @@ public class CommentQuizStateHandler implements StateHandler {
 
     @Override
     public State handle(UserData userData) {
-        String callback = userData.getCallback();
+        String callback = userData.getCallbackHistory().peek();
         var clicked = CommentBotButton.valueOf(callback);
         return switch (clicked) {
             case COMMENT_YES -> COMMENT;
             case COMMENT_NO -> CONFIRMATION;
-            default -> userData.getCurrentState();
+            default -> userData.getStateHistory().peek();
         };
     }
 }

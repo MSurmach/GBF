@@ -24,7 +24,7 @@ public class CityKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        String callback = userData.getCallback();
+        String callback = userData.getCallbackHistory().peek();
         Country country = Country.valueOf(callback.toUpperCase());
         List<String> cities = country.getCities();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();

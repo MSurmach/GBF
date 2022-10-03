@@ -16,22 +16,20 @@ public class CityStateHandler implements StateHandler {
 
     @Override
     public State handle(UserData userData) {
-        String callback = userData.getCallback();
-        catchCity(userData, callback);
-        State nextState = switchState(userData);
-        userData.setCallback(INIT + ":" + LocalDate.now());
-        return nextState;
+        catchCity(userData);
+        return switchState(userData);
     }
 
-    private void catchCity(UserData userData, String city) {
-        State currentState = userData.getCurrentState();
-        if (currentState == CITY_FROM) userData.setCityFrom(city);
-        else userData.setCityTo(city);
+    private void catchCity(UserData userData) {
+        String callback = userData.getCallbackHistory().peek();
+        State currentState = userData.getStateHistory().peek();
+        if (currentState == CITY_FROM) userData.setCityFrom(callback);
+        else userData.setCityTo(callback);
     }
 
     private State switchState(UserData userData) {
         Role role = userData.getRole();
-        State currentState = userData.getCurrentState();
+        State currentState = userData.getStateHistory().peek();
         return switch (role) {
             case COURIER -> currentState == CITY_FROM ? DATE_FROM : DATE_TO;
             case CUSTOMER -> currentState == CITY_FROM ? DATE_FROM_QUIZ : DATE_TO_QUIZ;

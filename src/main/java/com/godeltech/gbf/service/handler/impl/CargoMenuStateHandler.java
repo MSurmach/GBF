@@ -14,8 +14,8 @@ public class CargoMenuStateHandler implements StateHandler {
 
     @Override
     public State handle(UserData userData) {
-        String callback = userData.getCallback();
-        State currentState = userData.getCurrentState();
+        String callback = userData.getCallbackHistory().peek();
+        State currentState = userData.getStateHistory().peek();
         var clickedButton = CargoBotButton.valueOf(callback);
         return switch (clickedButton) {
             case CONFIRM_CARGO -> {

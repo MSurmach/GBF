@@ -28,9 +28,14 @@ public class DateKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        String callback = userData.getCallback();
-        String givenDate = callback.split(":")[1];
-        LocalDate date = LocalDate.parse(givenDate);
+        String callback = userData.getCallbackHistory().peek();
+        LocalDate date;
+        try {
+            String callbackDate = callback.split(":")[1];
+            date = LocalDate.parse(callbackDate);
+        } catch (IndexOutOfBoundsException exception) {
+            date = LocalDate.now();
+        }
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         addMonthYear(date, keyboard);
         addWeekDayRow(keyboard);

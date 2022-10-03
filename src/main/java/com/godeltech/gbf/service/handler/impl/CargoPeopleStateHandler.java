@@ -12,7 +12,7 @@ public class CargoPeopleStateHandler implements StateHandler {
 
     @Override
     public State handle(UserData userData) {
-        String callback = userData.getCallback();
+        String callback = userData.getCallbackHistory().peek();
         userData.setCompanionCount(Integer.parseInt(callback));
         return CARGO_MENU;
     }

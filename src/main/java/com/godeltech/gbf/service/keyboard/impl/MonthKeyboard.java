@@ -28,7 +28,7 @@ public class MonthKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        String callback = userData.getCallback();
+        String callback = userData.getCallbackHistory().peek();
         String date = callback.split(":")[1];
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         LocalDate callBackDate = LocalDate.parse(date);

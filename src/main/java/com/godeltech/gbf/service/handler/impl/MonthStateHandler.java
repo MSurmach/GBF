@@ -13,10 +13,10 @@ public class MonthStateHandler implements StateHandler {
 
     @Override
     public State handle(UserData userData) {
-        String callback = userData.getCallback();
+        String callback = userData.getCallbackHistory().peek();
         String[] split = callback.split(":");
         var clickedButton = CalendarBotButton.valueOf(split[0]);
-        State currentState = userData.getCurrentState();
+        State currentState = userData.getStateHistory().peek();
         return switch (clickedButton) {
             case SELECT_MONTH -> currentState == MONTH_TO ? DATE_TO : DATE_FROM;
             case CHANGE_YEAR -> currentState == MONTH_TO ? YEAR_TO : YEAR_FROM;

@@ -22,7 +22,7 @@ public class CountryAnswer implements Answer {
     @Override
     public String getAnswer(UserData userData) {
         Role role = userData.getRole();
-        State state = userData.getCurrentState();
+        State state = userData.getStateHistory().peek();
         String neededCode = switch (role) {
             case COURIER -> state == State.COUNTRY_FROM ? COURIER_COUNTRY_FROM_CODE : COURIER_COUNTRY_TO_CODE;
             case CUSTOMER -> state == State.COUNTRY_FROM ? CUSTOMER_COUNTRY_FROM_CODE : CUSTOMER_COUNTRY_TO_CODE;

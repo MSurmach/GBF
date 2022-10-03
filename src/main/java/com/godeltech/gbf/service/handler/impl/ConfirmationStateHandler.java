@@ -25,6 +25,6 @@ public class ConfirmationStateHandler implements StateHandler {
         Role role = userData.getRole();
         if (role == Role.COURIER)
             return SUCCESS;
-        return userData.getCurrentState();
+        return userData.getStateHistory().peek();
     }
 }

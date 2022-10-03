@@ -38,7 +38,7 @@ public class DateAnswer implements Answer {
     public String getAnswer(UserData userData) {
         String nowDate = LocalDate.now().format(dateFormatter);
         String nowDateInfoCode = DATE_TODAY_CODE.getCode();
-        State state = userData.getCurrentState();
+        State state = userData.getStateHistory().peek();
         Role role = userData.getRole();
         String countryCityInfoCode = state == DATE_FROM ?
                 COUNTRY_CITY_START_CODE.getCode() :
