@@ -17,7 +17,7 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.godeltech.gbf.management.button.BotButton.Calendar.*;
+import static com.godeltech.gbf.management.button.CalendarBotButton.*;
 
 @Service
 @AllArgsConstructor
@@ -40,7 +40,7 @@ public class MonthKeyboard implements Keyboard {
             while (columnCount > 0 && index != months.length) {
                 String monthName = months[index].getDisplayName(TextStyle.FULL_STANDALONE, localMessageSource.getLocale());
                 String monthLabel = monthName.substring(0, 1).toUpperCase() + monthName.substring(1);
-                String monthCallback = CHANGE_MONTH + ":" + LocalDate.of(callBackDate.getYear(), months[index], callBackDate.getDayOfMonth());
+                String monthCallback = SELECT_MONTH + ":" + LocalDate.of(callBackDate.getYear(), months[index], callBackDate.getDayOfMonth());
                 buttonRow.add(KeyboardUtils.createButton(monthLabel, monthCallback));
                 columnCount--;
                 index++;
@@ -53,17 +53,17 @@ public class MonthKeyboard implements Keyboard {
 
     private void addYearHeader(LocalDate date, List<List<InlineKeyboardButton>> keyboard) {
         var prevYearButton = KeyboardUtils.createButton(
-                PREVIOUS.getLocalMessage(localMessageSource),
+                PREVIOUS.localLabel(localMessageSource),
                 PREVIOUS + ":" + date.minusYears(1));
         var nextYearButton = KeyboardUtils.createButton(
-                NEXT.getLocalMessage(localMessageSource),
+                NEXT.localLabel(localMessageSource),
                 NEXT + ":" + date.plusYears(1));
         String yearPattern = "yyyy";
         DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern(yearPattern);
         String header = date.format(yearFormatter);
         var yearHeader = KeyboardUtils.createButton(
                 header,
-                SELECT_YEAR + ":" + date);
+                CHANGE_YEAR + ":" + date);
         keyboard.add(List.of(prevYearButton, yearHeader, nextYearButton));
     }
 }

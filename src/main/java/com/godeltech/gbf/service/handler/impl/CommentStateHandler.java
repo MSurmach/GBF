@@ -5,12 +5,14 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.StateHandler;
 import org.springframework.stereotype.Service;
 
+import static com.godeltech.gbf.model.State.COMMENT_CONFIRM;
+
 @Service
 public class CommentStateHandler implements StateHandler {
     @Override
-    public void handle(UserData userData) {
+    public State handle(UserData userData) {
         String comment = userData.getCallback();
         userData.setComment(comment);
-        userData.setCurrentState(State.COMMENT_CONFIRM);
+        return COMMENT_CONFIRM;
     }
 }

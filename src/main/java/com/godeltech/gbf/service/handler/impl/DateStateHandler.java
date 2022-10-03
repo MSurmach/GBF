@@ -3,7 +3,7 @@ package com.godeltech.gbf.service.handler.impl;
 import com.godeltech.gbf.exception.DateAfterDateException;
 import com.godeltech.gbf.exception.DateInPastException;
 import com.godeltech.gbf.exception.EmptyButtonCalendarException;
-import com.godeltech.gbf.management.button.BotButton;
+import com.godeltech.gbf.management.button.CalendarBotButton;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
@@ -18,26 +18,23 @@ import static com.godeltech.gbf.model.State.*;
 public class DateStateHandler implements StateHandler {
 
     @Override
-    public void handle(UserData userData) {
+    public State handle(UserData userData) {
         String callback = userData.getCallback();
         String[] split = callback.split(":");
-        var command = BotButton.Calendar.valueOf(split[0]);
+        var clickedButton = CalendarBotButton.valueOf(split[0]);
         State currentState = userData.getCurrentState();
         userData.setPreviousState(currentState);
-        switch (command) {
-            case CHANGE_MONTH -> {
-                if (currentState == DATE_FROM)
-                    userData.setCurrentState(MONTH_FROM);
-                else userData.setCurrentState(MONTH_TO);
-            }
+        return switch (clickedButton) {
+            case CHANGE_MONTH -> currentState == DATE_FROM ? MONTH_FROM : MONTH_TO;
+            case CHANGE_YEAR -> currentState == DATE_FROM ? YEAR_FROM : YEAR_TO;
             case SELECT_DAY -> {
                 LocalDate parsedDate = LocalDate.parse(split[1]);
                 catchDate(userData, parsedDate);
-                State nextState = selectNextState(userData);
-                userData.setCurrentState(nextState);
+                yield selectNextState(userData);
             }
             case IGNORE -> throw new EmptyButtonCalendarException(split[1], userData.getCallbackQueryId());
-        }
+            default -> currentState;
+        };
     }
 
     private void catchDate(UserData userData, LocalDate date) {

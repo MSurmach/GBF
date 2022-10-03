@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.List;
 
-import static com.godeltech.gbf.management.button.BotButton.*;
+import static com.godeltech.gbf.management.button.MainMenuButton.*;
 
 @Service
 @AllArgsConstructor
@@ -21,15 +21,15 @@ public class MainMenuKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        String courierLabel = COURIER.getLocalMessage(localMessageSource);
+        String courierLabel = COURIER.localLabel(localMessageSource);
         String courierCallback = COURIER.name();
         var courierButton = KeyboardUtils.createButton(courierLabel, courierCallback);
 
-        String customerLabel = CUSTOMER.getLocalMessage(localMessageSource);
+        String customerLabel = CUSTOMER.localLabel(localMessageSource);
         String customerCallback = CUSTOMER.name();
         var customerButton = KeyboardUtils.createButton(customerLabel, customerCallback);
 
-        String registrationsCourierLabel = REGISTRATIONS_VIEWER.getLocalMessage(localMessageSource);
+        String registrationsCourierLabel = REGISTRATIONS_VIEWER.localLabel(localMessageSource);
         String registrationsCourierCallback = REGISTRATIONS_VIEWER.name();
         var registrationsButton = KeyboardUtils.createButton(registrationsCourierLabel, registrationsCourierCallback);
 

@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.godeltech.gbf.management.button.BotButton.FindCourier.LOOK_AT_COURIERS;
+import static com.godeltech.gbf.management.button.FindCourierBotButton.LOOK_AT_COURIERS;
 
 @Service
 @AllArgsConstructor
@@ -27,7 +27,7 @@ public class FindCourierKeyboard implements Keyboard {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         var lookButton = InlineKeyboardButton.
                 builder().
-                text(LOOK_AT_COURIERS.getLocalMessage(localMessageSource)).
+                text(LOOK_AT_COURIERS.localLabel(localMessageSource)).
                 callbackData("").
                 build();
         keyboard.add(List.of(lookButton));

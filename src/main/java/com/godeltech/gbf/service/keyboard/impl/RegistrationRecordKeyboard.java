@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.management.button.BotButton;
+import com.godeltech.gbf.management.button.RegistrationBotButton;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
@@ -14,8 +14,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.godeltech.gbf.management.button.BotButton.Registration.REGISTRATION_DELETE;
-import static com.godeltech.gbf.management.button.BotButton.Registration.REGISTRATION_EDIT;
+import static com.godeltech.gbf.management.button.RegistrationBotButton.REGISTRATION_DELETE;
+import static com.godeltech.gbf.management.button.RegistrationBotButton.REGISTRATION_EDIT;
 
 @Service
 @AllArgsConstructor
@@ -34,8 +34,8 @@ public class RegistrationRecordKeyboard implements Keyboard {
         return new KeyboardMarkupAppender(countryKeyboardMarkup).append(backMenuKeyboard.getKeyboardMarkup(userData)).result();
     }
 
-    private InlineKeyboardButton buildButton(BotButton.Registration button, Long recordId) {
-        String label = button.getLocalMessage(localMessageSource);
+    private InlineKeyboardButton buildButton(RegistrationBotButton button, Long recordId) {
+        String label = button.localLabel(localMessageSource);
         String callback = button.name() + ":" + recordId;
         return KeyboardUtils.createButton(label, callback);
     }

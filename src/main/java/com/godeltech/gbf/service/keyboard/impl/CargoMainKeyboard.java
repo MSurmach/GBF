@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.management.button.BotButton;
+import com.godeltech.gbf.management.button.CargoBotButton;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.godeltech.gbf.management.button.BotButton.Cargo.*;
+import static com.godeltech.gbf.management.button.CargoBotButton.*;
 
 @Service
 @AllArgsConstructor
@@ -79,8 +79,8 @@ public class CargoMainKeyboard implements Keyboard {
         return row;
     }
 
-    private InlineKeyboardButton buildCommandButton(BotButton.Cargo command) {
-        String label = command.getLocalMessage(localMessageSource);
+    private InlineKeyboardButton buildCommandButton(CargoBotButton command) {
+        String label = command.localLabel(localMessageSource);
         String callback = command.name();
         return KeyboardUtils.createButton(label, callback);
     }

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.godeltech.gbf.management.button.BotButton.Calendar.CHANGE_YEAR;
+import static com.godeltech.gbf.management.button.CalendarBotButton.SELECT_YEAR;
 
 @Service
 @AllArgsConstructor
@@ -29,7 +29,7 @@ public class YearKeyboard implements Keyboard {
         LocalDate[] years = getYearsArray(4);
         List<InlineKeyboardButton> yearButtons = Arrays.stream(years)
                 .map(date -> {
-                    String buttonCallback = CHANGE_YEAR + ":" + date;
+                    String buttonCallback = SELECT_YEAR + ":" + date;
                     return KeyboardUtils.createButton(Integer.toString(date.getYear()), buttonCallback);
                 }).toList();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();

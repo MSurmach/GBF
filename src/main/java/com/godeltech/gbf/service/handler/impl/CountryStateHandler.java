@@ -11,15 +11,15 @@ import static com.godeltech.gbf.model.State.*;
 public class CountryStateHandler implements StateHandler {
 
     @Override
-    public void handle(UserData userData) {
+    public State handle(UserData userData) {
         String callback = userData.getCallback();
         State currentState = userData.getCurrentState();
         if (currentState == COUNTRY_FROM) {
             userData.setCountryFrom(callback);
-            userData.setCurrentState(CITY_FROM);
+            return CITY_FROM;
         } else {
             userData.setCountryTo(callback);
-            userData.setCurrentState(CITY_TO);
+            return CITY_TO;
         }
     }
 }

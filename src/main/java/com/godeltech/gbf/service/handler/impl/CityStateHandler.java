@@ -8,19 +8,19 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-import static com.godeltech.gbf.management.button.BotButton.Calendar.INIT;
+import static com.godeltech.gbf.management.button.CalendarBotButton.INIT;
 import static com.godeltech.gbf.model.State.*;
 
 @Service
 public class CityStateHandler implements StateHandler {
 
     @Override
-    public void handle(UserData userData) {
+    public State handle(UserData userData) {
         String callback = userData.getCallback();
         catchCity(userData, callback);
         State nextState = switchState(userData);
-        userData.setCurrentState(nextState);
         userData.setCallback(INIT + ":" + LocalDate.now());
+        return nextState;
     }
 
     private void catchCity(UserData userData, String city) {

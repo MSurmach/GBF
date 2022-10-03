@@ -1,7 +1,7 @@
 POST https://api.telegram.org/bot5706618703:AAFl63KXySJX1BxC7vJsYPLMOgvaLYNPNJU/getWebhookInfo
 
 ###
-POST https://api.telegram.org/bot5706618703:AAFl63KXySJX1BxC7vJsYPLMOgvaLYNPNJU/getChat?chat_id=@godel_back_and_forth_bot
+POST https://api.telegram.org/bot5706618703:AAFl63KXySJX1BxC7vJsYPLMOgvaLYNPNJU/getChat?chat_id=-890065890
 
 ###
 POST https://api.telegram.org/bot5706618703:AAFl63KXySJX1BxC7vJsYPLMOgvaLYNPNJU/setWebhook?url=https://7043-178-124-214-152.eu.ngrok.io

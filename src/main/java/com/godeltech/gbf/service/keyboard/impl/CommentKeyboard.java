@@ -13,8 +13,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.godeltech.gbf.management.button.BotButton.Comment.COMMENT_NO;
-import static com.godeltech.gbf.management.button.BotButton.Comment.COMMENT_YES;
+import static com.godeltech.gbf.management.button.CommentBotButton.COMMENT_NO;
+import static com.godeltech.gbf.management.button.CommentBotButton.COMMENT_YES;
 
 @Service
 @AllArgsConstructor
@@ -24,11 +24,11 @@ public class CommentKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        String yesLabel = COMMENT_YES.getLocalMessage(localMessageSource);
+        String yesLabel = COMMENT_YES.localLabel(localMessageSource);
         String yesCallback = COMMENT_YES.name();
         var yesButton = KeyboardUtils.createButton(yesLabel, yesCallback);
 
-        String noLabel = COMMENT_NO.getLocalMessage(localMessageSource);
+        String noLabel = COMMENT_NO.localLabel(localMessageSource);
         String noCallback = COMMENT_NO.name();
         var noButton = KeyboardUtils.createButton(noLabel, noCallback);
 

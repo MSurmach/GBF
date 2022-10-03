@@ -26,7 +26,8 @@ public class DefaultStateView implements StateView<SendMessage> {
         Keyboard keyboard = stateKeyboardFactory.get(state);
         SendMessage sendMessage = SendMessage.
                 builder().
-                chatId(chatId).parseMode("html").
+                chatId(chatId).
+                parseMode("html").
                 text(answer.getAnswer(userData)).
                 replyMarkup(keyboard.getKeyboardMarkup(userData)).build();
         return List.of(sendMessage);

@@ -4,7 +4,6 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
-import com.godeltech.gbf.service.keyboard.util.KeyboardUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -18,7 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.godeltech.gbf.management.button.BotButton.Calendar.*;
+import static com.godeltech.gbf.management.button.CalendarBotButton.*;
+import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
 @AllArgsConstructor
@@ -53,19 +53,24 @@ public class DateKeyboard implements Keyboard {
     }
 
     private void addMonthYear(LocalDate date, List<List<InlineKeyboardButton>> keyboard) {
-        var prevMonthButton = KeyboardUtils.createButton(
-                PREVIOUS.getLocalMessage(localMessageSource),
+        String yearPattern = "yyyy";
+        String monthPattern = "LLLL";
+        var yearButton = createButton(
+                DateTimeFormatter.ofPattern(yearPattern).format(date),
+                CHANGE_YEAR + ":" + date);
+        var prevMonthButton = createButton(
+                PREVIOUS.localLabel(localMessageSource),
                 PREVIOUS + ":" + date.minusMonths(1));
-        var nextMonthButton = KeyboardUtils.createButton(
-                NEXT.getLocalMessage(localMessageSource),
+        var nextMonthButton = createButton(
+                NEXT.localLabel(localMessageSource),
                 NEXT + ":" + date.plusMonths(1));
-        String monthYearPattern = "LLLL yyyy";
-        DateTimeFormatter monthYearFormatter = DateTimeFormatter.ofPattern(monthYearPattern).withLocale(localMessageSource.getLocale());
-        String header = date.format(monthYearFormatter).substring(0, 1).toUpperCase() + date.format(monthYearFormatter).substring(1);
-        var monthYearHeader = KeyboardUtils.createButton(
-                header,
-                SELECT_MONTH + ":" + date);
-        keyboard.add(List.of(prevMonthButton, monthYearHeader, nextMonthButton));
+        DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern(monthPattern).withLocale(localMessageSource.getLocale());
+        String month = date.format(monthFormatter).substring(0, 1).toUpperCase() + date.format(monthFormatter).substring(1);
+        var monthButton = createButton(
+                month,
+                CHANGE_MONTH + ":" + date);
+        keyboard.add(List.of(yearButton));
+        keyboard.add(List.of(prevMonthButton, monthButton, nextMonthButton));
     }
 
     private void addWeekDayRow(List<List<InlineKeyboardButton>> keyboard) {
@@ -73,7 +78,7 @@ public class DateKeyboard implements Keyboard {
         List<InlineKeyboardButton> weekDayRow = new ArrayList<>();
         Arrays.stream(DayOfWeek.values()).
                 map(day -> day.getDisplayName(TextStyle.SHORT, localMessageSource.getLocale())).
-                forEach(day -> weekDayRow.add(KeyboardUtils.createButton(day, IGNORE + ":" + dayOfWeekCallback)));
+                forEach(day -> weekDayRow.add(createButton(day, IGNORE + ":" + dayOfWeekCallback)));
         keyboard.add(weekDayRow);
     }
 
@@ -83,13 +88,13 @@ public class DateKeyboard implements Keyboard {
         List<InlineKeyboardButton> row = new ArrayList<>();
         int day = date.getDayOfMonth();
         LocalDate callbackDate = date;
-        InlineKeyboardButton serviceButton = KeyboardUtils.createButton(emptyLabel, IGNORE + ":" + emptyDayCallback);
+        InlineKeyboardButton serviceButton = createButton(emptyLabel, IGNORE + ":" + emptyDayCallback);
         for (int index = 0; index < shift; index++) {
             row.add(serviceButton);
         }
         for (int index = shift; index < columnCount; index++) {
             if (day <= date.lengthOfMonth()) {
-                row.add(KeyboardUtils.createButton(Integer.toString(day++), SELECT_DAY + ":" + callbackDate));
+                row.add(createButton(Integer.toString(day++), SELECT_DAY + ":" + callbackDate));
                 callbackDate = callbackDate.plusDays(1);
             } else {
                 row.add(serviceButton);

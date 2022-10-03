@@ -5,14 +5,15 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.StateHandler;
 import org.springframework.stereotype.Service;
 
+import static com.godeltech.gbf.model.State.CARGO_MENU;
+
 @Service
 public class CargoPackageStateHandler implements StateHandler {
 
     @Override
-    public void handle(UserData userData) {
+    public State handle(UserData userData) {
         String callback = userData.getCallback();
         userData.setPackageSize(callback);
-        State currentState = userData.getCurrentState();
-        userData.setCurrentState(State.CARGO_MENU);
+        return CARGO_MENU;
     }
 }

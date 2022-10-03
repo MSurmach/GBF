@@ -1,7 +1,6 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
@@ -13,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.godeltech.gbf.management.button.BotButton.CONFIRMATION;
+import static com.godeltech.gbf.management.button.MainMenuButton.CONFIRMATION;
 import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
 
 @Service
@@ -24,7 +23,7 @@ public class ConfirmKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        String confirmLabel = CONFIRMATION.getLocalMessage(localMessageSource);
+        String confirmLabel = CONFIRMATION.localLabel(localMessageSource);
         String confirmCallback = CONFIRMATION.name();
         var confirmButton = createButton(confirmLabel, confirmCallback);
         List<InlineKeyboardButton> row = List.of(confirmButton);

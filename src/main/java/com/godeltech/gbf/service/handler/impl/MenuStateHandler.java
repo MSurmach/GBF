@@ -6,13 +6,15 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.StateHandler;
 import org.springframework.stereotype.Service;
 
+import static com.godeltech.gbf.model.State.MENU;
+
 @Service
 public class MenuStateHandler implements StateHandler {
 
     @Override
-    public void handle(UserData userData) {
+    public State handle(UserData userData) {
         long telegramUserId = userData.getTelegramUserId();
-        UserData cleared = UserDataCache.clearUserData(telegramUserId);
-        cleared.setCurrentState(State.MENU);
+        UserDataCache.clearUserData(telegramUserId);
+        return MENU;
     }
 }

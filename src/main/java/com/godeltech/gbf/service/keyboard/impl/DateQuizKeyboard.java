@@ -13,8 +13,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.godeltech.gbf.management.button.BotButton.DateQuiz.SELECT_DATE;
-import static com.godeltech.gbf.management.button.BotButton.DateQuiz.SKIP_DATE;
+import static com.godeltech.gbf.management.button.DateQuizBotButton.SELECT_DATE;
+import static com.godeltech.gbf.management.button.DateQuizBotButton.SKIP_DATE;
 
 @Service
 @AllArgsConstructor
@@ -25,11 +25,11 @@ public class DateQuizKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        String selectDateLabel = SELECT_DATE.getLocalMessage(localMessageSource);
+        String selectDateLabel = SELECT_DATE.localLabel(localMessageSource);
         String selectDateCallback = SELECT_DATE.name();
         var selectDateButton = KeyboardUtils.createButton(selectDateLabel, selectDateCallback);
 
-        String skipDateLabel = SKIP_DATE.getLocalMessage(localMessageSource);
+        String skipDateLabel = SKIP_DATE.localLabel(localMessageSource);
         String skipDateCallback = SKIP_DATE.name();
         var skipDateButton = KeyboardUtils.createButton(skipDateLabel, skipDateCallback);
 

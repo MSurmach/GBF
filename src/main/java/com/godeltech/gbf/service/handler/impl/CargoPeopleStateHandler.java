@@ -11,10 +11,9 @@ import static com.godeltech.gbf.model.State.CARGO_MENU;
 public class CargoPeopleStateHandler implements StateHandler {
 
     @Override
-    public void handle(UserData userData) {
+    public State handle(UserData userData) {
         String callback = userData.getCallback();
         userData.setCompanionCount(Integer.parseInt(callback));
-        State currentState = userData.getCurrentState();
-        userData.setCurrentState(CARGO_MENU);
+        return CARGO_MENU;
     }
 }

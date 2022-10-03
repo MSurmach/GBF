@@ -1,7 +1,8 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.cache.UserDataCache;
-import com.godeltech.gbf.management.button.BotButton;
+import com.godeltech.gbf.management.button.RegistrationBotButton;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.repository.UserDataRepository;
 import com.godeltech.gbf.service.handler.StateHandler;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.godeltech.gbf.model.State.REGISTRATION_EDITOR;
 
@@ -18,11 +20,11 @@ public class RegistrationsStateHandler implements StateHandler {
     private UserDataRepository userDataRepository;
 
     @Override
-    public void handle(UserData userData) {
+    public State handle(UserData userData) {
         String callback = userData.getCallback();
-        Long telegramUserId = userData.getTelegramUserId();
+        long telegramUserId = userData.getTelegramUserId();
         String[] splittedCallback = callback.split(":");
-        BotButton.Registration clickedButton = BotButton.Registration.valueOf(splittedCallback[0]);
+        var clickedButton = RegistrationBotButton.valueOf(splittedCallback[0]);
         Long recordId = Long.parseLong(splittedCallback[1]);
         switch (clickedButton) {
             case REGISTRATION_EDIT -> {
@@ -32,10 +34,11 @@ public class RegistrationsStateHandler implements StateHandler {
             }
             case REGISTRATION_DELETE -> {
                 List<UserData> registrations = userData.getRegistrations();
-                registrations.removeIf(registration -> registration.getId() == recordId);
+                registrations.removeIf(registration -> Objects.equals(registration.getId(), recordId));
                 userDataRepository.deleteById(recordId);
             }
         }
+        return userData.getCurrentState();
     }
 
 }

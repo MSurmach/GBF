@@ -1,5 +1,6 @@
 package com.godeltech.gbf.service.handler.impl;
 
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.repository.UserDataRepository;
 import com.godeltech.gbf.service.handler.StateHandler;
@@ -12,7 +13,7 @@ public class UsersListStateHandler implements StateHandler {
     private UserDataRepository userDataRepository;
 
     @Override
-    public void handle(UserData userData) {
-
+    public State handle(UserData userData) {
+        return null;
     }
 }

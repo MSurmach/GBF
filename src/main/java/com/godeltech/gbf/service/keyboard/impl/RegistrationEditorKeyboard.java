@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.management.button.BotButton;
+import com.godeltech.gbf.management.button.RegistrationEditorBotButton;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.util.KeyboardUtils;
@@ -20,15 +20,15 @@ public class RegistrationEditorKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        BotButton.RegistrationEditor[] botButtons = BotButton.RegistrationEditor.values();
+        RegistrationEditorBotButton[] botButtons = RegistrationEditorBotButton.values();
         List<List<InlineKeyboardButton>> keyboard = Arrays.stream(botButtons).
                 map(botButton -> List.of(buildButton(botButton))).
                 toList();
         return new InlineKeyboardMarkup(keyboard);
     }
 
-    private InlineKeyboardButton buildButton(BotButton.RegistrationEditor button) {
-        String label = button.getLocalMessage(localMessageSource);
+    private InlineKeyboardButton buildButton(RegistrationEditorBotButton button) {
+        String label = button.localLabel(localMessageSource);
         String callback = button.name();
         return KeyboardUtils.createButton(label, callback);
     }
