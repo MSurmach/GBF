@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.interceptor.impl;
 
 import com.godeltech.gbf.cache.UserDataCache;
-import com.godeltech.gbf.exception.ButtonNotFoundException;
+import com.godeltech.gbf.exception.NotNavigationButtonException;
 import com.godeltech.gbf.exception.RoleNotFoundException;
 import com.godeltech.gbf.management.button.NavigationBotButton;
 import com.godeltech.gbf.model.Role;
@@ -42,46 +42,42 @@ public class CallbackInterceptor implements Interceptor {
         telegramUserId = callbackQuery.getFrom().getId();
         chatId = callbackQuery.getMessage().getChatId();
         UserData cached = UserDataCache.get(telegramUserId);
-        State state;
-        try {
-            state = interceptRole(update, cached);
-            cached.getStateHistory().push(state);
-        } catch (RoleNotFoundException illegalArgumentException) {
-            try {
-                state = interceptNavigationButton(update);
-            } catch (ButtonNotFoundException exception) {
-                collectCallbackFromUpdate(update, cached);
-                state = cached.getStateHistory().peek();
-                StateHandler stateHandler = stateHandlerFactory.get(state);
-                state = stateHandler.handle(cached);
-                cached.getStateHistory().push(state);
-            }
-        }
-        StateView<? extends BotApiMethod<?>> stateView = stateViewFactory.get(state);
+        cached.setCallbackQueryId(callbackQuery.getId());
+        cached.getCallbackHistory().push(callbackQuery.getData());
+        State nextState = handleUpdate(update);
+        cached.getStateHistory().push(nextState);
+        StateView<? extends BotApiMethod<?>> stateView = stateViewFactory.get(nextState);
         return stateView.buildView(chatId, cached);
     }
 
-    private State interceptRole(Update update, UserData userData) throws RoleNotFoundException {
+    private State handleUpdate(Update update) {
+        try {
+            return interceptRole(update);
+        } catch (RoleNotFoundException illegalArgumentException) {
+            try {
+                return interceptNavigationButton(update);
+            } catch (NotNavigationButtonException exception) {
+                UserData cached = UserDataCache.get(telegramUserId);
+                State currentState = cached.getStateHistory().peek();
+                StateHandler stateHandler = stateHandlerFactory.get(currentState);
+                return stateHandler.handle(cached);
+            }
+        }
+    }
+
+    private State interceptRole(Update update) throws RoleNotFoundException {
         try {
             String callback = update.getCallbackQuery().getData();
             Role role = Role.valueOf(callback);
-            userData.setRole(role);
-            userData.getCallbackHistory().push(callback);
+            UserData cached = UserDataCache.get(telegramUserId);
+            cached.setRole(role);
             return role.getFirstState();
         } catch (IllegalArgumentException exception) {
             throw new RoleNotFoundException();
         }
     }
 
-    private void collectCallbackFromUpdate(Update update, UserData userData) {
-        CallbackQuery callbackQuery = update.getCallbackQuery();
-        String callbackQueryId = callbackQuery.getId();
-        String callback = callbackQuery.getData();
-        userData.getCallbackHistory().push(callback);
-        userData.setCallbackQueryId(callbackQueryId);
-    }
-
-    private State interceptNavigationButton(Update update) throws ButtonNotFoundException {
+    private State interceptNavigationButton(Update update) throws NotNavigationButtonException {
         String callback = update.getCallbackQuery().getData();
         try {
             NavigationBotButton botButton = NavigationBotButton.valueOf(callback);
@@ -89,8 +85,9 @@ public class CallbackInterceptor implements Interceptor {
             return switch (botButton) {
                 case GLOBAL_BACK -> {
                     userData.getCallbackHistory().removeFirst();
+                    userData.getCallbackHistory().removeFirst();
                     userData.getStateHistory().removeFirst();
-                    yield userData.getStateHistory().peek();
+                    yield userData.getStateHistory().pop();
                 }
                 case LOCAL_BACK -> null;
                 case MENU -> {
@@ -99,7 +96,7 @@ public class CallbackInterceptor implements Interceptor {
                 }
             };
         } catch (IllegalArgumentException illegalArgumentException) {
-            throw new ButtonNotFoundException();
+            throw new NotNavigationButtonException();
         }
     }
 }

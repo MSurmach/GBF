@@ -18,28 +18,28 @@ public class UserData {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "telegramUserId")
+    @Column(name = "telegramUserId", nullable = false)
     private long telegramUserId;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "country_from")
+    @Column(name = "country_from", nullable = false)
     private String countryFrom;
 
-    @Column(name = "country_to")
+    @Column(name = "country_to", nullable = false)
     private String countryTo;
 
-    @Column(name = "city_from")
+    @Column(name = "city_from", nullable = false)
     private String cityFrom;
 
-    @Column(name = "city_to")
+    @Column(name = "city_to", nullable = false)
     private String cityTo;
 
-    @Column(name = "date_to")
+    @Column(name = "date_to", nullable = false)
     private LocalDate dateTo;
 
-    @Column(name = "date_from")
+    @Column(name = "date_from", nullable = false)
     private LocalDate dateFrom;
 
     @Column(name = "documents")

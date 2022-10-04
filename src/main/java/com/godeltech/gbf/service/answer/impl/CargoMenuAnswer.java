@@ -29,8 +29,8 @@ public class CargoMenuAnswer implements Answer {
         String selectedAnswer = localMessageSource.getLocaleMessage(selectedCode, selectedContent);
         Role role = userData.getRole();
         return role == COURIER ?
-                selectedAnswer + System.lineSeparator() + localMessageSource.getLocaleMessage(CARGO_MENU_COURIER_CODE) :
-                selectedAnswer + System.lineSeparator() + localMessageSource.getLocaleMessage(CARGO_MENU_CUSTOMER_CODE);
+                localMessageSource.getLocaleMessage(CARGO_MENU_COURIER_CODE) + selectedAnswer :
+                localMessageSource.getLocaleMessage(CARGO_MENU_CUSTOMER_CODE) + selectedAnswer;
     }
 
     public String buildSelectedContent(UserData userData) {

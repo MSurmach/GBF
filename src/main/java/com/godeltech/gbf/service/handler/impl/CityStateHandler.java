@@ -6,9 +6,6 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.StateHandler;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-
-import static com.godeltech.gbf.management.button.CalendarBotButton.INIT;
 import static com.godeltech.gbf.model.State.*;
 
 @Service

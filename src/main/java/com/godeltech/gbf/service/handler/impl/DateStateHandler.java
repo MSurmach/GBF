@@ -31,6 +31,10 @@ public class DateStateHandler implements StateHandler {
                 catchDate(userData, parsedDate);
                 yield selectNextState(userData);
             }
+            case NEXT, PREVIOUS -> {
+                userData.getCallbackHistory().remove(1);
+                yield userData.getStateHistory().pop();
+            }
             case IGNORE -> throw new EmptyButtonCalendarException(split[1], userData.getCallbackQueryId());
             default -> currentState;
         };

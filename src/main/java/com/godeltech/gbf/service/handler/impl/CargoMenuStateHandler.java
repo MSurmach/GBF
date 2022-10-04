@@ -1,5 +1,6 @@
 package com.godeltech.gbf.service.handler.impl;
 
+import com.godeltech.gbf.exception.ConfirmationException;
 import com.godeltech.gbf.management.button.CargoBotButton;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
@@ -19,6 +20,7 @@ public class CargoMenuStateHandler implements StateHandler {
         var clickedButton = CargoBotButton.valueOf(callback);
         return switch (clickedButton) {
             case CONFIRM_CARGO -> {
+                checkSelection(userData);
                 Role role = userData.getRole();
                 yield switch (role) {
                     case REGISTRATIONS_VIEWER -> REGISTRATION_EDITOR;
@@ -45,5 +47,13 @@ public class CargoMenuStateHandler implements StateHandler {
                 yield currentState;
             }
         };
+    }
+
+    private void checkSelection(UserData userData) {
+        State currentState = userData.getStateHistory().peek();
+        String callbackQueryId = userData.getCallbackQueryId();
+        if (!userData.isDocuments() &&
+                userData.getPackageSize() == null &&
+                userData.getCompanionCount() == 0) throw new ConfirmationException(currentState, callbackQueryId);
     }
 }

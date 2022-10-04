@@ -20,7 +20,12 @@ public class MonthStateHandler implements StateHandler {
         return switch (clickedButton) {
             case SELECT_MONTH -> currentState == MONTH_TO ? DATE_TO : DATE_FROM;
             case CHANGE_YEAR -> currentState == MONTH_TO ? YEAR_TO : YEAR_FROM;
-            default -> currentState;
+            default -> rollbackCallbackAndStateHistory(userData);
         };
+    }
+
+    private State rollbackCallbackAndStateHistory(UserData userData) {
+        userData.getCallbackHistory().remove(1);
+        return userData.getStateHistory().pop();
     }
 }

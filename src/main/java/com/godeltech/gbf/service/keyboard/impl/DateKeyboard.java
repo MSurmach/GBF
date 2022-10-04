@@ -88,7 +88,7 @@ public class DateKeyboard implements Keyboard {
     }
 
     private List<InlineKeyboardButton> buildDayRow(LocalDate date, int shift, int columnCount) {
-        final String emptyLabel = " ";
+        final String emptyLabel = "  ";
         final String emptyDayCallback = "emptyDay";
         List<InlineKeyboardButton> row = new ArrayList<>();
         int day = date.getDayOfMonth();

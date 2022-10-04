@@ -1,10 +1,8 @@
 package com.godeltech.gbf.controller;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.exception.DateAfterDateException;
-import com.godeltech.gbf.exception.DateInPastException;
-import com.godeltech.gbf.exception.EmptyButtonCalendarException;
-import com.godeltech.gbf.exception.WrongInputException;
+import com.godeltech.gbf.exception.*;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.service.answer.impl.DateAnswer;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,6 +21,7 @@ public class BotExceptionHandler {
     public final static String ALERT_CALENDAR_DAY_MONTH_CODE = "alert.calendar.dayOfMonth";
     public final static String ALERT_CALENDAR_DATE_IN_PAST_CODE = "alert.calendar.dateInPast";
     public final static String ALERT_CALENDAR_DATE_AFTER_DATE_CODE = "alert.calendar.dateAfterDate";
+    public final static String ALERT_CARGO_MENU_NOTHING_SELECTED = "alert.cargoMenu.nothingSelected";
     private GbfBot gbfBot;
     private LocalMessageSource localMessageSource;
 
@@ -75,6 +74,17 @@ public class BotExceptionHandler {
                         ALERT_CALENDAR_DATE_AFTER_DATE_CODE,
                         dateFrom.format(dateFormatter),
                         dateTo.format(dateFormatter))).
+                cacheTime(60).
+                build();
+        showAlert(answerCallbackQuery);
+    }
+
+    @ExceptionHandler(ConfirmationException.class)
+    public void handleConfirmationException(ConfirmationException exception) {
+        AnswerCallbackQuery answerCallbackQuery = AnswerCallbackQuery.builder().
+                callbackQueryId(exception.getCallbackQueryId()).
+                showAlert(true).
+                text(localMessageSource.getLocaleMessage(ALERT_CARGO_MENU_NOTHING_SELECTED)).
                 cacheTime(60).
                 build();
         showAlert(answerCallbackQuery);

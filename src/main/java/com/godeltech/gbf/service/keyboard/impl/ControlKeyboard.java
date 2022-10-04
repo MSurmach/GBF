@@ -27,7 +27,7 @@ public class ControlKeyboard implements Keyboard {
         String menuLabel = MENU.localLabel(localMessageSource);
         String menuCallback = MENU.name();
         var menuButton = KeyboardUtils.createButton(menuLabel, menuCallback);
-        return new InlineKeyboardMarkup(List.of(List.of(backButton), List.of(menuButton)));
+        return new InlineKeyboardMarkup(List.of(List.of(backButton, menuButton)));
     }
 }
 
