@@ -6,6 +6,7 @@ import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.repository.UserDataRepository;
 import com.godeltech.gbf.service.handler.StateHandler;
+import com.godeltech.gbf.service.user.UserDataService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ import static com.godeltech.gbf.model.State.REGISTRATION_EDITOR;
 @Service
 @AllArgsConstructor
 public class RegistrationsStateHandler implements StateHandler {
-    private UserDataRepository userDataRepository;
+    private UserDataService userDataService;
 
     @Override
     public State handle(UserData userData) {
@@ -28,14 +29,14 @@ public class RegistrationsStateHandler implements StateHandler {
         Long recordId = Long.parseLong(splittedCallback[1]);
         switch (clickedButton) {
             case REGISTRATION_EDIT -> {
-                UserData persisted = userDataRepository.findUserDataByTelegramUserIdAndId(telegramUserId, recordId);
+                UserData persisted = userDataService.findUserDataByTelegramUserIdAndId(telegramUserId, recordId);
                 persisted.getStateHistory().push(REGISTRATION_EDITOR);
                 UserDataCache.add(telegramUserId, persisted);
             }
             case REGISTRATION_DELETE -> {
                 List<UserData> registrations = userData.getRegistrations();
                 registrations.removeIf(registration -> Objects.equals(registration.getId(), recordId));
-                userDataRepository.deleteById(recordId);
+                userDataService.deleteById(recordId);
             }
         }
         return userData.getStateHistory().peek();

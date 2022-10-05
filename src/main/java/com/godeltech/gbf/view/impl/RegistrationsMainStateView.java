@@ -6,6 +6,7 @@ import com.godeltech.gbf.service.answer.impl.RegistrationRecordAnswer;
 import com.godeltech.gbf.service.answer.impl.RegistrationsMainAnswer;
 import com.godeltech.gbf.service.keyboard.impl.BackMenuKeyboard;
 import com.godeltech.gbf.service.keyboard.impl.RegistrationRecordKeyboard;
+import com.godeltech.gbf.service.user.UserDataService;
 import com.godeltech.gbf.view.StateView;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,16 +20,17 @@ import static com.godeltech.gbf.model.Role.REGISTRATIONS_VIEWER;
 @Service
 @AllArgsConstructor
 public class RegistrationsMainStateView implements StateView<SendMessage> {
-    private UserDataRepository userDataRepository;
     private RegistrationsMainAnswer registrationsMainAnswer;
     private RegistrationRecordAnswer registrationRecordAnswer;
     private RegistrationRecordKeyboard registrationRecordKeyboard;
     private BackMenuKeyboard backMenuKeyboard;
 
+    private UserDataService userDataService;
+
     @Override
     public List<SendMessage> buildView(Long chatId, UserData userData) {
         long telegramUserId = userData.getTelegramUserId();
-        List<UserData> registrations = userDataRepository.findUserDataByTelegramUserId(telegramUserId);
+        List<UserData> registrations = userDataService.findUserDataByTelegramUserId(telegramUserId);
         userData.setRegistrations(registrations);
         List<SendMessage> views = new ArrayList<>();
         views.add(SendMessage.builder().
