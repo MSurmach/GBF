@@ -7,7 +7,7 @@ import com.godeltech.gbf.service.handler.StateHandler;
 import org.springframework.stereotype.Service;
 
 import static com.godeltech.gbf.model.State.COMMENT;
-import static com.godeltech.gbf.model.State.CONFIRMATION;
+import static com.godeltech.gbf.model.State.SUMMARY_DATA_TO_CONFIRM;
 
 @Service
 public class CommentQuizStateHandler implements StateHandler {
@@ -18,7 +18,7 @@ public class CommentQuizStateHandler implements StateHandler {
         var clicked = CommentBotButton.valueOf(callback);
         return switch (clicked) {
             case COMMENT_YES -> COMMENT;
-            case COMMENT_NO -> CONFIRMATION;
+            case COMMENT_NO -> SUMMARY_DATA_TO_CONFIRM;
             default -> userData.getStateHistory().peek();
         };
     }

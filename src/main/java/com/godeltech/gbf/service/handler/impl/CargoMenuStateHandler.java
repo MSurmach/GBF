@@ -24,7 +24,7 @@ public class CargoMenuStateHandler implements StateHandler {
                 Role role = userData.getRole();
                 yield switch (role) {
                     case REGISTRATIONS_VIEWER -> REGISTRATION_EDITOR;
-                    case CUSTOMER -> FIND_COURIER;
+                    case CUSTOMER -> SUMMARY_DATA_TO_CONFIRM;
                     case COURIER -> COMMENT_QUIZ;
                 };
             }

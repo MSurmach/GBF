@@ -19,7 +19,7 @@ public class CommentConfirmStateHandler implements StateHandler {
         return switch (clickedButton) {
             case COMMENT_CONFIRM -> {
                 Role role = userData.getRole();
-                yield role== REGISTRATIONS_VIEWER? REGISTRATION_EDITOR: CONFIRMATION;
+                yield role == REGISTRATIONS_VIEWER ? REGISTRATION_EDITOR : SUMMARY_DATA_TO_CONFIRM;
             }
             case COMMENT_EDIT -> COMMENT;
             default -> userData.getStateHistory().peek();

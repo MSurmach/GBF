@@ -1,7 +1,5 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
@@ -14,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
+import static com.godeltech.gbf.utils.KeyboardUtils.createButton;
 
 @Service
 @AllArgsConstructor

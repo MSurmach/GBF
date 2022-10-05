@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.godeltech.gbf.management.button.CalendarBotButton.*;
-import static com.godeltech.gbf.service.keyboard.util.KeyboardUtils.createButton;
+import static com.godeltech.gbf.utils.KeyboardUtils.createButton;
 
 @Service
 @AllArgsConstructor

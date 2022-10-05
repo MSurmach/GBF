@@ -54,4 +54,9 @@ public class UserDataServiceImpl implements UserDataService {
     public void deleteById(Long id) {
         userDataRepository.deleteById(id);
     }
+
+    @Override
+    public void save(UserData userData) {
+        userDataRepository.save(userData);
+    }
 }

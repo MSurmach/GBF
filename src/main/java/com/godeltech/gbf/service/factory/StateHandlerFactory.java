@@ -30,11 +30,12 @@ public class StateHandlerFactory implements Factory<StateHandler> {
                     case CARGO_PACKAGE -> CargoPackageStateHandler.class;
                     case CARGO_PEOPLE -> CargoPeopleStateHandler.class;
                     case WRONG_INPUT -> WrongInputStateHandler.class;
-                    case CONFIRMATION -> ConfirmationStateHandler.class;
                     case REGISTRATIONS -> RegistrationsStateHandler.class;
                     case REGISTRATION_EDITOR -> RegistrationEditorStateHandler.class;
                     case DATE_TO_QUIZ, DATE_FROM_QUIZ -> DateQuizStateHandler.class;
-                    case FIND_COURIER -> FindCourierStateHandler.class;
+                    case FOUND_COURIERS_INFO -> FoundCouriersInfoStateHandler.class;
+                    case SUMMARY_DATA_TO_CONFIRM -> SummaryStateHandler.class;
+                    case COURIERS_LIST -> CouriersListStateHandler.class;
                     default -> throw new IllegalArgumentException("Handler not found for this state");
                 };
         return beanFactory.getBean(handler);

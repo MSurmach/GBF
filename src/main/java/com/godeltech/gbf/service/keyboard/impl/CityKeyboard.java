@@ -1,12 +1,11 @@
 package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.model.Country;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
-import com.godeltech.gbf.service.keyboard.util.KeyboardUtils;
+import com.godeltech.gbf.utils.KeyboardUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;

@@ -2,8 +2,8 @@ package com.godeltech.gbf.view.impl;
 
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.answer.Answer;
-import com.godeltech.gbf.service.factory.StateAnswerFactory;
+import com.godeltech.gbf.service.text.Text;
+import com.godeltech.gbf.service.factory.StateTextFactory;
 import com.godeltech.gbf.service.factory.StateKeyboardFactory;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.view.StateView;
@@ -16,19 +16,19 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class DefaultStateView implements StateView<SendMessage> {
-    private StateAnswerFactory stateAnswerFactory;
+    private StateTextFactory stateTextFactory;
     private StateKeyboardFactory stateKeyboardFactory;
 
     @Override
     public List<SendMessage> buildView(Long chatId, UserData userData) {
         State state = userData.getStateHistory().peek();
-        Answer answer = stateAnswerFactory.get(state);
+        Text text = stateTextFactory.get(state);
         Keyboard keyboard = stateKeyboardFactory.get(state);
         SendMessage sendMessage = SendMessage.
                 builder().
                 chatId(chatId).
                 parseMode("html").
-                text(answer.getAnswer(userData)).
+                text(text.getText(userData)).
                 replyMarkup(keyboard.getKeyboardMarkup(userData)).build();
         return List.of(sendMessage);
     }

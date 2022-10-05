@@ -2,8 +2,7 @@ package com.godeltech.gbf.controller;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.exception.*;
-import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.service.answer.impl.DateAnswer;
+import com.godeltech.gbf.service.text.impl.DateText;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,7 +24,7 @@ public class BotExceptionHandler {
     private GbfBot gbfBot;
     private LocalMessageSource localMessageSource;
 
-    private DateAnswer dateAnswer;
+    private DateText dateAnswer;
 
     @ExceptionHandler(EmptyButtonCalendarException.class)
     public void handleEmptyButton(EmptyButtonCalendarException emptyButtonCalendarException) {

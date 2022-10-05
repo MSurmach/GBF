@@ -15,4 +15,6 @@ public interface UserDataService {
     void removeUserDataByDateToBefore(LocalDate date);
 
     void deleteById(Long id);
+
+    void save(UserData userData);
 }

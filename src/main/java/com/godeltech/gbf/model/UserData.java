@@ -63,7 +63,7 @@ public class UserData {
     private List<UserData> registrations;
 
     @Transient
-    private List<UserData> foundUsers;
+    private List<UserData> foundCouriers;
 
     @Transient
     private Role role;
@@ -89,7 +89,7 @@ public class UserData {
         stateHistory.clear();
         callbackHistory.clear();
         registrations = null;
-        foundUsers = null;
+        foundCouriers = null;
         role = null;
         callbackQueryId = null;
     }
