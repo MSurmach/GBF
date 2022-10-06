@@ -7,9 +7,8 @@ import com.godeltech.gbf.model.UserRecord;
 import com.godeltech.gbf.service.handler.StateHandler;
 import com.godeltech.gbf.service.user.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 import static com.godeltech.gbf.model.Role.COURIER;
 import static com.godeltech.gbf.model.State.FOUND_COURIERS_INFO;
@@ -31,7 +30,8 @@ public class SummaryStateHandler implements StateHandler {
             }
             case CLIENT -> {
                 userService.save(userData);
-                List<UserRecord> records = userService.findByUserDataAndRole(userData, COURIER);
+                Page<UserRecord> recordsPage = userService.findByUserDataAndRole(userData, COURIER, userData.getPageNumber());
+                userData.setRecordsPage(recordsPage);
                 yield FOUND_COURIERS_INFO;
             }
             default -> userData.getStateHistory().peek();

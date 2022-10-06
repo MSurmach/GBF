@@ -26,7 +26,7 @@ public class CargoMenuStateHandler implements StateHandler {
                     case REGISTRATIONS_VIEWER -> REGISTRATION_EDITOR;
                     case CLIENT -> SUMMARY_DATA_TO_CONFIRM;
                     case COURIER -> COMMENT_QUIZ;
-                    case REQUESTS_VIEWER -> REQUESTS_EDITOR;
+                    case REQUESTS_VIEWER -> REQUEST_EDITOR;
                 };
             }
             case SELECT_DOCUMENTS -> {

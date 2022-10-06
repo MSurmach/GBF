@@ -33,11 +33,14 @@ public class RequestsStateView implements StateView<SendMessage> {
                 userData.getPageNumber());
         userData.setRecordsPage(records);
         List<SendMessage> messages = new ArrayList<>();
+        var keyboardMarkup = (records != null && !records.isEmpty()) ?
+                paginationKeyboard.getKeyboardMarkup(userData) :
+                null;
         messages.add(SendMessage.builder().
                 chatId(chatId).
                 parseMode("html").
                 text(requestsText.initialMessage(userData)).
-                replyMarkup(null).
+                replyMarkup(keyboardMarkup).
                 build());
         if (records != null && !records.isEmpty()) {
             for (UserRecord record : records) {
@@ -49,12 +52,6 @@ public class RequestsStateView implements StateView<SendMessage> {
                         replyMarkup(requestKeyboard.getKeyboardMarkup(dataFromRecord)).
                         build());
             }
-            messages.add(SendMessage.builder().
-                    chatId(chatId).
-                    parseMode("html").
-                    text(requestsText.paginationInfoMessage(userData)).
-                    replyMarkup(paginationKeyboard.getKeyboardMarkup(userData)).
-                    build());
         }
         return messages;
     }

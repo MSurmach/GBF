@@ -13,7 +13,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static com.godeltech.gbf.repository.specification.UserRecordSpecs.*;
 
@@ -24,7 +23,9 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public List<UserRecord> findByUserDataAndRole(UserData userData, Role role) {
+    public Page<UserRecord> findByUserDataAndRole(UserData userData, Role role, int pageNumber) {
+        int pageSize = 1;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Specification<UserRecord> searchSpecification = byCityTo(userData.getCityTo()).
                 and(byCityFrom(userData.getCityFrom())).
                 and(byRole(role));
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
         if (packageSize != null) searchSpecification = searchSpecification.and(byPackageSize(packageSize));
         int companionCount = userData.getCompanionCount();
         if (companionCount != 0) searchSpecification = searchSpecification.and(byCompanionCount(companionCount));
-        return userRepository.findAll(searchSpecification);
+        return userRepository.findAll(searchSpecification, pageable);
     }
 
     @Override

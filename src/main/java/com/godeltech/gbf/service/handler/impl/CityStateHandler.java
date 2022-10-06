@@ -31,7 +31,7 @@ public class CityStateHandler implements StateHandler {
             case COURIER -> currentState == CITY_FROM ? DATE_FROM : DATE_TO;
             case CLIENT -> currentState == CITY_FROM ? DATE_FROM_QUIZ : DATE_TO_QUIZ;
             case REGISTRATIONS_VIEWER -> REGISTRATION_EDITOR;
-            case REQUESTS_VIEWER -> REQUESTS_EDITOR;
+            case REQUESTS_VIEWER -> REQUEST_EDITOR;
         };
     }
 }

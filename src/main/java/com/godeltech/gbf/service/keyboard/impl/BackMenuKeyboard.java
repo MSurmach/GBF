@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.godeltech.gbf.management.button.NavigationBotButton.MENU;
@@ -23,7 +24,8 @@ public class BackMenuKeyboard implements Keyboard {
         String menuLabel = MENU.localLabel(localMessageSource);
         String menuCallback = MENU.name();
         var menuButton = KeyboardUtils.createButton(menuLabel, menuCallback);
-        List<InlineKeyboardButton> buttons = List.of(menuButton);
-        return new InlineKeyboardMarkup(List.of(buttons));
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+        keyboard.add(List.of(menuButton));
+        return new InlineKeyboardMarkup(keyboard);
     }
 }

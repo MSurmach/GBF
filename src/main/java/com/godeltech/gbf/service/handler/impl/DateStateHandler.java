@@ -57,7 +57,7 @@ public class DateStateHandler implements StateHandler {
         return switch (role) {
             case CLIENT, COURIER -> currentState == DATE_FROM ? COUNTRY_TO : CARGO_MENU;
             case REGISTRATIONS_VIEWER -> REGISTRATION_EDITOR;
-            case REQUESTS_VIEWER -> REQUESTS_EDITOR;
+            case REQUESTS_VIEWER -> REQUEST_EDITOR;
         };
     }
 

@@ -30,8 +30,9 @@ public class PaginationKeyboard implements Keyboard {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(List.of(startButton, prevButton, pageButton, nextButton, endButton));
         var paginationKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(paginationKeyboardMarkup).
+        return new KeyboardMarkupAppender().
                 append(backMenuKeyboard.getKeyboardMarkup(userData)).
+                append(paginationKeyboardMarkup).
                 result();
     }
 }

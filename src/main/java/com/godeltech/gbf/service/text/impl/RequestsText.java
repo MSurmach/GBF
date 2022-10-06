@@ -29,11 +29,12 @@ public class RequestsText implements Text {
         Page<UserRecord> records = userData.getRecordsPage();
         String username = userData.getUsername();
         return (records != null && !records.isEmpty()) ?
-                localMessageSource.getLocaleMessage(REQUESTS_EXIST_INITIAL, username) :
+                localMessageSource.getLocaleMessage(REQUESTS_EXIST_INITIAL, username) +
+                        paginationInfoMessage(userData) :
                 localMessageSource.getLocaleMessage(REQUESTS_NOT_EXIST_INITIAL, username);
     }
 
-    public String paginationInfoMessage(UserData userData) {
+    private String paginationInfoMessage(UserData userData) {
         return localMessageSource.getLocaleMessage(REQUESTS_LIST_PAGINATION_INFO,
                 String.valueOf(userData.getRecordsPage().getTotalElements()));
     }

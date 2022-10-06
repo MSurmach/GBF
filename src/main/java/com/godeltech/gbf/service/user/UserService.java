@@ -6,10 +6,9 @@ import com.godeltech.gbf.model.UserRecord;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public interface UserService {
-    List<UserRecord> findByUserDataAndRole(UserData userData, Role role);
+    Page<UserRecord> findByUserDataAndRole(UserData userData, Role role, int pageNumber);
 
     Page<UserRecord> findByTelegramUserIdAndRole(Long telegramUserId, Role role, int pageNumber);
 
