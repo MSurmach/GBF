@@ -3,8 +3,8 @@ package com.godeltech.gbf.service.handler.impl;
 import com.godeltech.gbf.management.button.RegistrationEditorBotButton;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.repository.UserDataRepository;
 import com.godeltech.gbf.service.handler.StateHandler;
+import com.godeltech.gbf.service.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ import static com.godeltech.gbf.model.State.*;
 @AllArgsConstructor
 public class RegistrationEditorStateHandler implements StateHandler {
 
-    private UserDataRepository userDataRepository;
+    private UserService userService;
 
     @Override
     public State handle(UserData userData) {
@@ -43,7 +43,7 @@ public class RegistrationEditorStateHandler implements StateHandler {
             }
             case EDIT_CARGO -> CARGO_MENU;
             case EDIT_CONFIRM -> {
-                userDataRepository.save(userData);
+                userService.save(userData);
                 yield REGISTRATIONS;
             }
         };

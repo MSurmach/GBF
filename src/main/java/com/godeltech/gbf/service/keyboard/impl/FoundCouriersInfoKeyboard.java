@@ -2,6 +2,7 @@ package com.godeltech.gbf.service.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.UserRecord;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
 import lombok.AllArgsConstructor;
@@ -23,8 +24,8 @@ public class FoundCouriersInfoKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        List<UserData> foundUsers = userData.getFoundCouriers();
-        if (foundUsers.isEmpty()) return controlKeyboard.getKeyboardMarkup(userData);
+        List<UserRecord> records = userData.getRecords();
+        if (records.isEmpty()) return controlKeyboard.getKeyboardMarkup(userData);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         String lookAtCouriersLabel = LOOK_AT_COURIERS.localLabel(localMessageSource);
         var lookButton = createButton(lookAtCouriersLabel);

@@ -25,7 +25,7 @@ public class RegistrationRecordKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        Long recordId = userData.getId();
+        Long recordId = userData.getRecordId();
         var editButton = buildButton(REGISTRATION_EDIT, recordId);
         var deleteButton = buildButton(REGISTRATION_DELETE, recordId);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();

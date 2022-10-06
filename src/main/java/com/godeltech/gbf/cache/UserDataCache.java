@@ -22,4 +22,8 @@ public class UserDataCache {
     public static void add(long userId, UserData userData) {
         USERDATA_CACHE.put(userId, userData);
     }
+
+    public static void deleteByTelegramUserId(long telegramUserId){
+
+    }
 }

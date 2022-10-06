@@ -2,6 +2,7 @@ package com.godeltech.gbf.service.text.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.UserRecord;
 import com.godeltech.gbf.service.text.Text;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,8 @@ public class FoundCouriersInfoText implements Text {
 
     @Override
     public String getText(UserData userData) {
-        List<UserData> foundUsers = userData.getFoundCouriers();
-        int count = foundUsers.size();
+        List<UserRecord> records = userData.getRecords();
+        int count = records.size();
         String messageCode = count == 0 ? COURIERS_NOT_FOUND_CODE : COURIERS_FOUND_CODE;
 
         return localMessageSource.getLocaleMessage(COURIERS_COUNT_CODE, String.valueOf(count)) +

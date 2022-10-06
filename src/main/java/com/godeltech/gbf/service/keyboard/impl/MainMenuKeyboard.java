@@ -25,16 +25,22 @@ public class MainMenuKeyboard implements Keyboard {
         String courierCallback = COURIER.name();
         var courierButton = KeyboardUtils.createButton(courierLabel, courierCallback);
 
-        String customerLabel = CUSTOMER.localLabel(localMessageSource);
-        String customerCallback = CUSTOMER.name();
-        var customerButton = KeyboardUtils.createButton(customerLabel, customerCallback);
+        String clientLabel = CLIENT.localLabel(localMessageSource);
+        String clientCallback = CLIENT.name();
+        var clientButton = KeyboardUtils.createButton(clientLabel, clientCallback);
 
-        String registrationsCourierLabel = REGISTRATIONS_VIEWER.localLabel(localMessageSource);
-        String registrationsCourierCallback = REGISTRATIONS_VIEWER.name();
-        var registrationsButton = KeyboardUtils.createButton(registrationsCourierLabel, registrationsCourierCallback);
+        String registrationsLabel = REGISTRATIONS_VIEWER.localLabel(localMessageSource);
+        String registrationsCallback = REGISTRATIONS_VIEWER.name();
+        var registrationsButton = KeyboardUtils.createButton(registrationsLabel, registrationsCallback);
 
-        List<InlineKeyboardButton> buttons = List.of(courierButton, customerButton, registrationsButton);
-        List<List<InlineKeyboardButton>> keyboard = buttons.stream().map(List::of).toList();
+        String requestsLabel = REQUESTS_VIEWER.localLabel(localMessageSource);
+        String requestsCallback = REQUESTS_VIEWER.name();
+        var requestsButton = KeyboardUtils.createButton(requestsLabel, requestsCallback);
+
+        List<List<InlineKeyboardButton>> keyboard = List.of(
+                List.of(courierButton),
+                List.of(clientButton),
+                List.of(registrationsButton, requestsButton));
         return new InlineKeyboardMarkup(keyboard);
     }
 }

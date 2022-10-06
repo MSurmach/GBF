@@ -3,7 +3,7 @@ package com.godeltech.gbf.management.button;
 import com.godeltech.gbf.LocalMessageSource;
 
 public enum MainMenuButton implements BotButton {
-    COURIER, CUSTOMER, REGISTRATIONS_VIEWER;
+    COURIER, CLIENT, REGISTRATIONS_VIEWER, REQUESTS_VIEWER;
 
     @Override
     public String localLabel(LocalMessageSource localMessageSource) {
