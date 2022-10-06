@@ -6,6 +6,9 @@ import com.godeltech.gbf.model.UserRecord;
 import com.godeltech.gbf.repository.UserRepository;
 import com.godeltech.gbf.service.user.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -39,8 +42,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserRecord> findByTelegramUserId(Long telegramUserId) {
-        return userRepository.findByTelegramUserId(telegramUserId);
+    public Page<UserRecord> findByTelegramUserIdAndRole(Long telegramUserId, Role role, int pageNumber) {
+        int pageSize = 1;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return userRepository.findByTelegramUserIdAndRole(telegramUserId, role, pageable);
     }
 
     @Override

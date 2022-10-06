@@ -34,7 +34,7 @@ public class StateTextFactory implements Factory<Text> {
                     case REGISTRATION_EDITOR -> RegistrationEditorText.class;
                     case FOUND_COURIERS_INFO -> FoundCouriersInfoText.class;
                     case SUMMARY_DATA_TO_CONFIRM -> SummaryConfirmationText.class;
-                    default -> throw new IllegalArgumentException("Answer not found");
+                    default -> throw new IllegalArgumentException("Text not found");
                 };
         return beanFactory.getBean(answer);
     }

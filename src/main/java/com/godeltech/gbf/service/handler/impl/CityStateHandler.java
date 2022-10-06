@@ -29,8 +29,9 @@ public class CityStateHandler implements StateHandler {
         State currentState = userData.getStateHistory().peek();
         return switch (role) {
             case COURIER -> currentState == CITY_FROM ? DATE_FROM : DATE_TO;
-            case CUSTOMER -> currentState == CITY_FROM ? DATE_FROM_QUIZ : DATE_TO_QUIZ;
+            case CLIENT -> currentState == CITY_FROM ? DATE_FROM_QUIZ : DATE_TO_QUIZ;
             case REGISTRATIONS_VIEWER -> REGISTRATION_EDITOR;
+            case REQUESTS_VIEWER -> REQUESTS_EDITOR;
         };
     }
 }

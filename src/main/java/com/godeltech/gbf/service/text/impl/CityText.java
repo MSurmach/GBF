@@ -33,7 +33,7 @@ public class CityText implements Text {
                 localMessageSource.getLocaleMessage(userData.getCountryFrom());
         String questionCode = switch (role) {
             case COURIER -> state == State.CITY_FROM ? COURIER_CITY_FROM_CODE : COURIER_CITY_TO_CODE;
-            case CUSTOMER -> state == State.CITY_FROM ? CUSTOMER_CITY_FROM_CODE : CUSTOMER_CITY_TO_CODE;
+            case CLIENT -> state == State.CITY_FROM ? CUSTOMER_CITY_FROM_CODE : CUSTOMER_CITY_TO_CODE;
             default -> null;
         };
         return localMessageSource.getLocaleMessage(questionCode) +

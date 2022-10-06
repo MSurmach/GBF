@@ -2,10 +2,10 @@ package com.godeltech.gbf.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -25,7 +25,8 @@ public class UserData {
     private String comment;
     private LinkedList<State> stateHistory = new LinkedList<>();
     private LinkedList<String> callbackHistory = new LinkedList<>();
-    private List<UserRecord> records;
+    private Page<UserRecord> recordsPage;
+    private int pageNumber;
     private Role role;
     private String callbackQueryId;
 
@@ -33,8 +34,10 @@ public class UserData {
         this.telegramUserId = telegramUserId;
         this.username = username;
     }
+
     public UserData(UserRecord record) {
         telegramUserId = record.getTelegramUserId();
+        recordId = record.getRecordId();
         username = record.getUsername();
         countryFrom = record.getCountryFrom();
         countryTo = record.getCountryTo();
@@ -61,8 +64,9 @@ public class UserData {
         comment = null;
         stateHistory.clear();
         callbackHistory.clear();
-        records = null;
+        recordsPage = null;
         role = null;
         callbackQueryId = null;
+        pageNumber = 0;
     }
 }

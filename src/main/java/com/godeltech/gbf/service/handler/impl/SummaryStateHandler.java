@@ -29,10 +29,9 @@ public class SummaryStateHandler implements StateHandler {
                 userService.save(userData);
                 yield SUCCESS;
             }
-            case CUSTOMER -> {
+            case CLIENT -> {
                 userService.save(userData);
                 List<UserRecord> records = userService.findByUserDataAndRole(userData, COURIER);
-                userData.setRecords(records);
                 yield FOUND_COURIERS_INFO;
             }
             default -> userData.getStateHistory().peek();

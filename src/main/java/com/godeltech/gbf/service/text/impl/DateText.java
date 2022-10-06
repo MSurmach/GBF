@@ -51,7 +51,7 @@ public class DateText implements Text {
                 localMessageSource.getLocaleMessage(userData.getCityFrom());
         String questionCode = switch (role) {
             case COURIER -> state == DATE_FROM ? COURIER_DATE_FROM_CODE : COURIER_DATE_TO_CODE;
-            case CUSTOMER -> state == DATE_FROM ? CUSTOMER_DATE_FROM_CODE : CUSTOMER_DATE_TO_CODE;
+            case CLIENT -> state == DATE_FROM ? CUSTOMER_DATE_FROM_CODE : CUSTOMER_DATE_TO_CODE;
             default -> null;
         };
         return localMessageSource.getLocaleMessage(nowDateInfoCode, nowDate) +

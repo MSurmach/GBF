@@ -5,6 +5,7 @@ import com.godeltech.gbf.view.StateView;
 import com.godeltech.gbf.view.impl.CouriersListStateView;
 import com.godeltech.gbf.view.impl.DefaultStateView;
 import com.godeltech.gbf.view.impl.RegistrationsStateView;
+import com.godeltech.gbf.view.impl.RequestsStateView;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class StateViewFactory implements Factory<StateView<? extends BotApiMetho
                 switch (state) {
                     case REGISTRATIONS -> RegistrationsStateView.class;
                     case COURIERS_LIST -> CouriersListStateView.class;
+                    case REQUESTS -> RequestsStateView.class;
                     default -> DefaultStateView.class;
                 };
         return beanFactory.getBean(stateView);

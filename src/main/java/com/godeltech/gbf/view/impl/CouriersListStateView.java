@@ -6,6 +6,7 @@ import com.godeltech.gbf.service.keyboard.impl.ControlKeyboard;
 import com.godeltech.gbf.service.text.impl.CouriersListText;
 import com.godeltech.gbf.view.StateView;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
@@ -21,7 +22,7 @@ public class CouriersListStateView implements StateView<SendMessage> {
 
     @Override
     public List<SendMessage> buildView(Long chatId, UserData userData) {
-        List<UserRecord> records = userData.getRecords();
+        Page<UserRecord> records = userData.getRecordsPage();
         List<SendMessage> views = new ArrayList<>();
         views.add(SendMessage.builder().
                 chatId(chatId).

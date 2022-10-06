@@ -55,8 +55,9 @@ public class DateStateHandler implements StateHandler {
         Role role = userData.getRole();
         State currentState = userData.getStateHistory().peek();
         return switch (role) {
-            case CUSTOMER, COURIER -> currentState == DATE_FROM ? COUNTRY_TO : CARGO_MENU;
+            case CLIENT, COURIER -> currentState == DATE_FROM ? COUNTRY_TO : CARGO_MENU;
             case REGISTRATIONS_VIEWER -> REGISTRATION_EDITOR;
+            case REQUESTS_VIEWER -> REQUESTS_EDITOR;
         };
     }
 

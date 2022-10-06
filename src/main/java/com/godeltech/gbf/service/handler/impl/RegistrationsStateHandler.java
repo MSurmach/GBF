@@ -8,9 +8,9 @@ import com.godeltech.gbf.model.UserRecord;
 import com.godeltech.gbf.service.handler.StateHandler;
 import com.godeltech.gbf.service.user.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 
 import static com.godeltech.gbf.model.State.REGISTRATION_EDITOR;
@@ -35,8 +35,6 @@ public class RegistrationsStateHandler implements StateHandler {
                 yield REGISTRATION_EDITOR;
             }
             case REGISTRATION_DELETE -> {
-                List<UserRecord> records = userData.getRecords();
-                records.removeIf(record -> Objects.equals(record.getRecordId(), recordId));
                 userService.deleteById(recordId);
                 yield userData.getStateHistory().peek();
             }

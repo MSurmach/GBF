@@ -6,6 +6,7 @@ import com.godeltech.gbf.model.UserRecord;
 import com.godeltech.gbf.service.keyboard.Keyboard;
 import com.godeltech.gbf.service.keyboard.KeyboardMarkupAppender;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -24,7 +25,7 @@ public class FoundCouriersInfoKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        List<UserRecord> records = userData.getRecords();
+        Page<UserRecord> records = userData.getRecordsPage();
         if (records.isEmpty()) return controlKeyboard.getKeyboardMarkup(userData);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         String lookAtCouriersLabel = LOOK_AT_COURIERS.localLabel(localMessageSource);

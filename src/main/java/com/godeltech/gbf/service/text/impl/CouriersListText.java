@@ -27,6 +27,6 @@ public class CouriersListText implements Text {
 
     public String paginationInfoMessage(UserData userData) {
         return localMessageSource.getLocaleMessage(COURIERS_LIST_PAGINATION_INFO,
-                String.valueOf(userData.getRecords().size()), String.valueOf(1), String.valueOf(1));
+                String.valueOf(userData.getRecordsPage().getTotalElements()));
     }
 }
