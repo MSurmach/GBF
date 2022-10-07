@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class RegistrationEditorText implements Text {
+public class EditorText implements Text {
     private LocalMessageSource localMessageSource;
     private SummaryDataText summaryDataText;
 

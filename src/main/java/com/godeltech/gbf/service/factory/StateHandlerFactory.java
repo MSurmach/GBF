@@ -31,7 +31,7 @@ public class StateHandlerFactory implements Factory<StateHandler> {
                     case CARGO_PEOPLE -> CargoPeopleStateHandler.class;
                     case WRONG_INPUT -> WrongInputStateHandler.class;
                     case REGISTRATIONS -> RegistrationsStateHandler.class;
-                    case REGISTRATION_EDITOR -> RegistrationEditorStateHandler.class;
+                    case REGISTRATION_EDITOR -> EditorStateHandler.class;
                     case DATE_TO_QUIZ, DATE_FROM_QUIZ -> DateQuizStateHandler.class;
                     case FOUND_COURIERS_INFO -> FoundCouriersInfoStateHandler.class;
                     case SUMMARY_DATA_TO_CONFIRM -> SummaryStateHandler.class;

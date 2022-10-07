@@ -31,7 +31,7 @@ public class StateTextFactory implements Factory<Text> {
                     case CARGO_MENU -> CargoMenuText.class;
                     case CARGO_PACKAGE -> CargoPackageText.class;
                     case CARGO_PEOPLE -> CargoPeopleText.class;
-                    case REGISTRATION_EDITOR -> RegistrationEditorText.class;
+                    case REGISTRATION_EDITOR, REQUEST_EDITOR -> EditorText.class;
                     case FOUND_COURIERS_INFO -> FoundCouriersInfoText.class;
                     case SUMMARY_DATA_TO_CONFIRM -> SummaryConfirmationText.class;
                     case REGISTRATIONS -> RegistrationsText.class;
