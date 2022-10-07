@@ -12,16 +12,31 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class RegistrationsMainText implements Text {
     private LocalMessageSource localMessageSource;
+    private SummaryDataText summaryDataText;
 
-    public final static String REGISTRATIONS_MAIN_EXIST_CODE = "registrations.main.exist";
-    public final static String REGISTRATIONS_MAIN_NOT_EXIST_CODE = "registrations.main.not_exist";
+    public final static String REGISTRATIONS_EXIST_CODE = "registrations.exist";
+    public final static String REGISTRATIONS_NOT_EXIST_CODE = "registrations.notExist";
+    public final static String REGISTRATIONS_PAGINATION_INFO_CODE= "registrations.pagination.info";
+    public final static String REGISTRATION_DATA_RECORD_ID = "registration.data.record_id";
 
 
     @Override
     public String getText(UserData userData) {
+        String recordIdHeader = localMessageSource.getLocaleMessage(REGISTRATION_DATA_RECORD_ID, String.valueOf(userData.getRecordId()));
+        return recordIdHeader + summaryDataText.getText(userData);
+    }
+
+    public String initialMessage(UserData userData) {
         Page<UserRecord> records = userData.getRecordsPage();
-        if (records != null && !records.isEmpty()) {
-            return localMessageSource.getLocaleMessage(REGISTRATIONS_MAIN_EXIST_CODE, userData.getUsername());
-        } else return localMessageSource.getLocaleMessage(REGISTRATIONS_MAIN_NOT_EXIST_CODE, userData.getUsername());
+        String username = userData.getUsername();
+        return (records != null && !records.isEmpty()) ?
+                localMessageSource.getLocaleMessage(REGISTRATIONS_EXIST_CODE, username) +
+                        paginationInfoMessage(userData) :
+                localMessageSource.getLocaleMessage(REGISTRATIONS_NOT_EXIST_CODE, username);
+    }
+
+    private String paginationInfoMessage(UserData userData) {
+        return localMessageSource.getLocaleMessage(REGISTRATIONS_PAGINATION_INFO_CODE,
+                String.valueOf(userData.getRecordsPage().getTotalElements()));
     }
 }

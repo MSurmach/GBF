@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class CouriersListText implements Text {
-    public final static String COURIERS_LIST_INITIAL_MESSAGE = "couriers.list.initialMessage";
+    public final static String COURIERS_LIST_INITIAL = "couriers.list.initial";
     public final static String COURIERS_LIST_HEADER = "couriers.list.header";
     public final static String COURIERS_LIST_PAGINATION_INFO = "couriers.list.pagination.info";
     private LocalMessageSource localMessageSource;
@@ -21,8 +21,8 @@ public class CouriersListText implements Text {
                 summaryDataText.getText(userData);
     }
 
-    public String initialMessage() {
-        return localMessageSource.getLocaleMessage(COURIERS_LIST_INITIAL_MESSAGE);
+    public String initialMessage(UserData userData) {
+        return localMessageSource.getLocaleMessage(COURIERS_LIST_INITIAL, userData.getUsername()) + paginationInfoMessage(userData);
     }
 
     public String paginationInfoMessage(UserData userData) {

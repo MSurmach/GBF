@@ -3,6 +3,7 @@ package com.godeltech.gbf.view.impl;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.UserRecord;
 import com.godeltech.gbf.service.keyboard.impl.BackMenuKeyboard;
+import com.godeltech.gbf.service.keyboard.impl.PaginationKeyboard;
 import com.godeltech.gbf.service.keyboard.impl.RegistrationRecordKeyboard;
 import com.godeltech.gbf.service.text.impl.RegistrationRecordText;
 import com.godeltech.gbf.service.text.impl.RegistrationsMainText;
@@ -22,22 +23,28 @@ import static com.godeltech.gbf.model.Role.COURIER;
 @AllArgsConstructor
 public class RegistrationsStateView implements StateView<SendMessage> {
     private RegistrationsMainText registrationsMainText;
-    private RegistrationRecordText registrationRecordText;
     private RegistrationRecordKeyboard registrationRecordKeyboard;
+    private PaginationKeyboard paginationKeyboard;
     private BackMenuKeyboard backMenuKeyboard;
     private UserService userService;
 
     @Override
     public List<SendMessage> buildView(Long chatId, UserData userData) {
         long telegramUserId = userData.getTelegramUserId();
-        Page<UserRecord> records = userService.findByTelegramUserIdAndRole(telegramUserId, COURIER, userData.getPageNumber());
+        Page<UserRecord> records = userService.findByTelegramUserIdAndRole(
+                telegramUserId,
+                COURIER,
+                userData.getPageNumber());
         userData.setRecordsPage(records);
-        List<SendMessage> views = new ArrayList<>();
-        views.add(SendMessage.builder().
+        List<SendMessage> messages = new ArrayList<>();
+        var keyboardMarkup = (records != null && !records.isEmpty()) ?
+                paginationKeyboard.getKeyboardMarkup(userData) :
+                backMenuKeyboard.getKeyboardMarkup(userData);
+        messages.add(SendMessage.builder().
                 chatId(chatId).
                 parseMode("html").
-                text(registrationsMainText.getText(userData)).
-                replyMarkup(backMenuKeyboard.getKeyboardMarkup(userData)).
+                text(registrationsMainText.initialMessage(userData)).
+                replyMarkup(keyboardMarkup).
                 build());
         if (records != null && !records.isEmpty()) {
             for (UserRecord record : records) {
@@ -45,12 +52,12 @@ public class RegistrationsStateView implements StateView<SendMessage> {
                 SendMessage sendMessage = SendMessage.builder().
                         chatId(chatId).
                         parseMode("html").
-                        text(registrationRecordText.getText(dataFromRecord)).
+                        text(registrationsMainText.getText(dataFromRecord)).
                         replyMarkup(registrationRecordKeyboard.getKeyboardMarkup(dataFromRecord)).
                         build();
-                views.add(sendMessage);
+                messages.add(sendMessage);
             }
         }
-        return views;
+        return messages;
     }
 }

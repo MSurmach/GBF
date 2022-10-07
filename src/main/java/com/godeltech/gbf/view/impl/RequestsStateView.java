@@ -2,6 +2,7 @@ package com.godeltech.gbf.view.impl;
 
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.UserRecord;
+import com.godeltech.gbf.service.keyboard.impl.BackMenuKeyboard;
 import com.godeltech.gbf.service.keyboard.impl.PaginationKeyboard;
 import com.godeltech.gbf.service.keyboard.impl.RequestKeyboard;
 import com.godeltech.gbf.service.text.impl.RequestsText;
@@ -25,6 +26,8 @@ public class RequestsStateView implements StateView<SendMessage> {
     private RequestKeyboard requestKeyboard;
     private PaginationKeyboard paginationKeyboard;
 
+    private BackMenuKeyboard backMenuKeyboard;
+
     @Override
     public List<SendMessage> buildView(Long chatId, UserData userData) {
         Page<UserRecord> records = userService.findByTelegramUserIdAndRole(
@@ -35,7 +38,7 @@ public class RequestsStateView implements StateView<SendMessage> {
         List<SendMessage> messages = new ArrayList<>();
         var keyboardMarkup = (records != null && !records.isEmpty()) ?
                 paginationKeyboard.getKeyboardMarkup(userData) :
-                null;
+                backMenuKeyboard.getKeyboardMarkup(userData);
         messages.add(SendMessage.builder().
                 chatId(chatId).
                 parseMode("html").
