@@ -59,6 +59,7 @@ public class UserRecord {
     private Role role;
 
     public UserRecord(UserData userData) {
+        recordId = userData.getRecordId();
         telegramUserId = userData.getTelegramUserId();
         username = userData.getUsername();
         countryFrom = userData.getCountryFrom();

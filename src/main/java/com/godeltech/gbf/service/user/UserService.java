@@ -8,8 +8,9 @@ import org.springframework.data.domain.Page;
 import java.time.LocalDate;
 
 public interface UserService {
-    Page<UserRecord> findByUserDataAndRole(UserData userData, Role role, int pageNumber);
+    Page<UserRecord> findCourierByUserDataAndRole(UserData userData, Role role, int pageNumber);
 
+    Page<UserRecord> findClientByUserDataAndRole(UserData userData, Role role, int pageNumber);
     Page<UserRecord> findByTelegramUserIdAndRole(Long telegramUserId, Role role, int pageNumber);
 
     UserRecord findByTelegramUserIdAndRecordId(Long telegramUserId, Long recordId);

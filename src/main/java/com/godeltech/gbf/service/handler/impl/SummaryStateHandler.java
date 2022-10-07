@@ -30,7 +30,7 @@ public class SummaryStateHandler implements StateHandler {
             }
             case CLIENT -> {
                 userService.save(userData);
-                Page<UserRecord> recordsPage = userService.findByUserDataAndRole(userData, COURIER, userData.getPageNumber());
+                Page<UserRecord> recordsPage = userService.findCourierByUserDataAndRole(userData, COURIER, userData.getPageNumber());
                 userData.setRecordsPage(recordsPage);
                 yield FOUND_COURIERS_INFO;
             }

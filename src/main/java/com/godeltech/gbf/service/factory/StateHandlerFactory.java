@@ -35,7 +35,6 @@ public class StateHandlerFactory implements Factory<StateHandler> {
                     case DATE_TO_QUIZ, DATE_FROM_QUIZ -> DateQuizStateHandler.class;
                     case FOUND_COURIERS_INFO -> FoundCouriersInfoStateHandler.class;
                     case SUMMARY_DATA_TO_CONFIRM -> SummaryStateHandler.class;
-                    case COURIERS_LIST -> CouriersListStateHandler.class;
                     case REQUESTS -> RequestsStateHandler.class;
                     default -> throw new IllegalArgumentException("Handler not found for this state");
                 };

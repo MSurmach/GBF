@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 
 import static com.godeltech.gbf.management.button.CalendarBotButton.INIT;
+import static com.godeltech.gbf.model.Role.COURIER;
 import static com.godeltech.gbf.model.Role.REGISTRATIONS_VIEWER;
 import static com.godeltech.gbf.model.State.*;
 
@@ -43,7 +44,9 @@ public class RegistrationEditorStateHandler implements StateHandler {
             }
             case EDIT_CARGO -> CARGO_MENU;
             case EDIT_CONFIRM -> {
+                userData.setRole(COURIER);
                 userService.save(userData);
+                userData.setRole(REGISTRATIONS_VIEWER);
                 yield REGISTRATIONS;
             }
         };

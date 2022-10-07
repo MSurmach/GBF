@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class RegistrationsMainText implements Text {
+public class RegistrationsText implements Text {
     private LocalMessageSource localMessageSource;
     private SummaryDataText summaryDataText;
 

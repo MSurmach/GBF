@@ -35,7 +35,11 @@ public class UserData {
         this.username = username;
     }
 
-    public UserData(UserRecord record) {
+    public UserData(UserRecord userRecord) {
+        this.copyDataRecord(userRecord);
+    }
+
+    public void copyDataRecord(UserRecord record) {
         telegramUserId = record.getTelegramUserId();
         recordId = record.getRecordId();
         username = record.getUsername();

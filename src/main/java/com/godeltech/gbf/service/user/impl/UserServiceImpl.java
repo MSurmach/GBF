@@ -23,24 +23,41 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public Page<UserRecord> findByUserDataAndRole(UserData userData, Role role, int pageNumber) {
+    public Page<UserRecord> findCourierByUserDataAndRole(UserData userData, Role role, int pageNumber) {
         int pageSize = 1;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Specification<UserRecord> searchSpecification = byCityTo(userData.getCityTo()).
-                and(byCityFrom(userData.getCityFrom())).
-                and(byRole(role));
+        Specification<UserRecord> searchSpecification = byCityToEquals(userData.getCityTo()).
+                and(byCityFromEquals(userData.getCityFrom())).
+                and(byRoleEquals(role));
         LocalDate dateFrom = userData.getDateFrom();
-        if (dateFrom != null) searchSpecification = searchSpecification.and(byDateFrom(dateFrom));
+        if (dateFrom != null) searchSpecification = searchSpecification.and(byDateFromEquals(dateFrom));
         LocalDate dateTo = userData.getDateTo();
-        if (dateTo != null) searchSpecification = searchSpecification.and(byDateTo(dateTo));
+        if (dateTo != null) searchSpecification = searchSpecification.and(byDateToEquals(dateTo));
         boolean documents = userData.isDocuments();
         if (documents) searchSpecification = searchSpecification.and(byDocumentsExist(documents));
         String packageSize = userData.getPackageSize();
-        if (packageSize != null) searchSpecification = searchSpecification.and(byPackageSize(packageSize));
+        if (packageSize != null) searchSpecification = searchSpecification.and(byPackageSizeEquals(packageSize));
         int companionCount = userData.getCompanionCount();
-        if (companionCount != 0) searchSpecification = searchSpecification.and(byCompanionCount(companionCount));
+        if (companionCount != 0) searchSpecification = searchSpecification.and(byCompanionCountEquals(companionCount));
         return userRepository.findAll(searchSpecification, pageable);
     }
+
+    @Override
+    public Page<UserRecord> findClientByUserDataAndRole(UserData userData, Role role, int pageNumber) {
+        int pageSize = 1;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Specification<UserRecord> searchSpecification =
+                byCityToEquals(userData.getCityTo()).
+                        and(byCityFromEquals(userData.getCityFrom())).
+                        and(byRoleEquals(role)).
+                        and(byDateToEquals(userData.getDateTo()).or(byDateToIsNull())).
+                        and(byDateFromEquals(userData.getDateFrom()).or(byDateFromIsNull())).
+                        and(byDocumentsExist(userData.isDocuments())).
+                        and(byPackageSizeEquals(userData.getPackageSize()).or(byPackageSizeIsNull())).
+                        and(byCompanionCountEquals(userData.getCompanionCount()).or(byCompanionCountIsZero()));
+        return userRepository.findAll(searchSpecification, pageable);
+    }
+
 
     @Override
     public Page<UserRecord> findByTelegramUserIdAndRole(Long telegramUserId, Role role, int pageNumber) {

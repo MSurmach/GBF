@@ -2,10 +2,10 @@ package com.godeltech.gbf.view.impl;
 
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.text.Text;
-import com.godeltech.gbf.service.factory.StateTextFactory;
 import com.godeltech.gbf.service.factory.StateKeyboardFactory;
+import com.godeltech.gbf.service.factory.StateTextFactory;
 import com.godeltech.gbf.service.keyboard.Keyboard;
+import com.godeltech.gbf.service.text.Text;
 import com.godeltech.gbf.view.StateView;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

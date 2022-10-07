@@ -17,7 +17,7 @@ import static com.godeltech.gbf.management.button.RegistrationBotButton.*;
 
 @Service
 @AllArgsConstructor
-public class RegistrationRecordKeyboard implements Keyboard {
+public class RegistrationKeyboard implements Keyboard {
     private LocalMessageSource localMessageSource;
 
     @Override

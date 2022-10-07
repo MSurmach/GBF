@@ -50,9 +50,8 @@ public class DateText implements Text {
                 localMessageSource.getLocaleMessage(userData.getCityTo()) :
                 localMessageSource.getLocaleMessage(userData.getCityFrom());
         String questionCode = switch (role) {
-            case COURIER -> state == DATE_FROM ? COURIER_DATE_FROM_CODE : COURIER_DATE_TO_CODE;
-            case CLIENT -> state == DATE_FROM ? CUSTOMER_DATE_FROM_CODE : CUSTOMER_DATE_TO_CODE;
-            default -> null;
+            case COURIER, REGISTRATIONS_VIEWER -> state == DATE_FROM ? COURIER_DATE_FROM_CODE : COURIER_DATE_TO_CODE;
+            case CLIENT, REQUESTS_VIEWER -> state == DATE_FROM ? CUSTOMER_DATE_FROM_CODE : CUSTOMER_DATE_TO_CODE;
         };
         return localMessageSource.getLocaleMessage(nowDateInfoCode, nowDate) +
                 localMessageSource.getLocaleMessage(countryCityInfoCode, country, city) +
