@@ -52,8 +52,8 @@ public class UserServiceImpl implements UserService {
                         and(byDateToEquals(userData.getDateTo()).or(byDateToIsNull())).
                         and(byDateFromEquals(userData.getDateFrom()).or(byDateFromIsNull())).
                         and(byDocumentsIsLessThanOrEquals(userData.isDocuments()).
-                        or(byPackageSizeEquals(userData.getPackageSize()).or(byPackageSizeIsNull())).
-                        or(byCompanionCountIsLessThanOrEqualTo(userData.getCompanionCount())));
+                                or(byPackageSizeEquals(userData.getPackageSize()).or(byPackageSizeIsNull())).
+                                or(byCompanionCountIsLessThanOrEqualTo(userData.getCompanionCount())));
         return userRepository.findAll(searchSpecification, pageable);
     }
 

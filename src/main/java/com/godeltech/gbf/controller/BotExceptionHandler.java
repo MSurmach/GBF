@@ -2,7 +2,7 @@ package com.godeltech.gbf.controller;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.exception.*;
-import com.godeltech.gbf.service.text.impl.DateText;
+import com.godeltech.gbf.gui.text.impl.DateText;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

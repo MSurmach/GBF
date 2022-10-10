@@ -4,18 +4,18 @@ import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.exception.NotNavigationButtonException;
 import com.godeltech.gbf.exception.NotPaginationButtonException;
 import com.godeltech.gbf.exception.RoleNotFoundException;
-import com.godeltech.gbf.management.button.NavigationBotButton;
-import com.godeltech.gbf.management.button.PaginationButton;
+import com.godeltech.gbf.gui.button.NavigationBotButton;
+import com.godeltech.gbf.gui.button.PaginationButton;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.UserRecord;
-import com.godeltech.gbf.service.factory.StateHandlerFactory;
-import com.godeltech.gbf.service.factory.StateViewFactory;
-import com.godeltech.gbf.service.handler.StateHandler;
+import com.godeltech.gbf.factory.impl.HandlerFactory;
+import com.godeltech.gbf.factory.impl.ViewFactory;
+import com.godeltech.gbf.service.handler.Handler;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.user.UserService;
-import com.godeltech.gbf.view.StateView;
+import com.godeltech.gbf.service.view.StateView;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -29,17 +29,17 @@ import static com.godeltech.gbf.model.State.MENU;
 
 @Service
 public class CallbackInterceptor implements Interceptor {
-    private final StateHandlerFactory stateHandlerFactory;
-    private final StateViewFactory stateViewFactory;
+    private final HandlerFactory handlerFactory;
+    private final ViewFactory viewFactory;
     private final UserService userService;
     @Getter
     private Long telegramUserId;
     @Getter
     private Long chatId;
 
-    public CallbackInterceptor(StateHandlerFactory stateHandlerFactory, StateViewFactory stateViewFactory, UserService userService) {
-        this.stateHandlerFactory = stateHandlerFactory;
-        this.stateViewFactory = stateViewFactory;
+    public CallbackInterceptor(HandlerFactory handlerFactory, ViewFactory viewFactory, UserService userService) {
+        this.handlerFactory = handlerFactory;
+        this.viewFactory = viewFactory;
         this.userService = userService;
     }
 
@@ -53,7 +53,7 @@ public class CallbackInterceptor implements Interceptor {
         cached.getCallbackHistory().push(callbackQuery.getData());
         State nextState = handleUpdate(update);
         cached.getStateHistory().push(nextState);
-        StateView<? extends BotApiMethod<?>> stateView = stateViewFactory.get(nextState);
+        StateView<? extends BotApiMethod<?>> stateView = viewFactory.get(nextState);
         return stateView.buildView(chatId, cached);
     }
 
@@ -69,8 +69,8 @@ public class CallbackInterceptor implements Interceptor {
                 } catch (NotPaginationButtonException notPaginationButtonException) {
                     UserData cached = UserDataCache.get(telegramUserId);
                     State currentState = cached.getStateHistory().peek();
-                    StateHandler stateHandler = stateHandlerFactory.get(currentState);
-                    return stateHandler.handle(cached);
+                    Handler handler = handlerFactory.get(currentState);
+                    return handler.handle(cached);
                 }
             }
         }
@@ -101,8 +101,8 @@ public class CallbackInterceptor implements Interceptor {
                     yield userData.getStateHistory().pop();
                 }
                 case MENU -> {
-                    StateHandler stateHandler = stateHandlerFactory.get(MENU);
-                    yield stateHandler.handle(userData);
+                    Handler handler = handlerFactory.get(MENU);
+                    yield handler.handle(userData);
                 }
             };
         } catch (IllegalArgumentException illegalArgumentException) {

@@ -4,14 +4,14 @@ import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.exception.InsufficientInputException;
 import com.godeltech.gbf.exception.TextCommandNotFoundException;
 import com.godeltech.gbf.exception.WrongInputException;
-import com.godeltech.gbf.management.command.TextCommand;
+import com.godeltech.gbf.gui.command.TextCommand;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.factory.StateHandlerFactory;
-import com.godeltech.gbf.service.factory.StateViewFactory;
-import com.godeltech.gbf.service.handler.StateHandler;
+import com.godeltech.gbf.factory.impl.HandlerFactory;
+import com.godeltech.gbf.factory.impl.ViewFactory;
+import com.godeltech.gbf.service.handler.Handler;
 import com.godeltech.gbf.service.interceptor.Interceptor;
-import com.godeltech.gbf.view.StateView;
+import com.godeltech.gbf.service.view.StateView;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -24,16 +24,16 @@ import static com.godeltech.gbf.model.State.*;
 
 @Service
 public class MessageInterceptor implements Interceptor {
-    private final StateHandlerFactory stateHandlerFactory;
-    private final StateViewFactory stateViewFactory;
+    private final HandlerFactory handlerFactory;
+    private final ViewFactory viewFactory;
     @Getter
     private Long telegramUserId;
     @Getter
     private Long chatId;
 
-    public MessageInterceptor(StateHandlerFactory stateHandlerFactory, StateViewFactory stateViewFactory) {
-        this.stateHandlerFactory = stateHandlerFactory;
-        this.stateViewFactory = stateViewFactory;
+    public MessageInterceptor(HandlerFactory handlerFactory, ViewFactory viewFactory) {
+        this.handlerFactory = handlerFactory;
+        this.viewFactory = viewFactory;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class MessageInterceptor implements Interceptor {
         UserData cached = UserDataCache.get(telegramUserId);
         cached.getStateHistory().push(state);
         cached.getCallbackHistory().push(update.getMessage().getText());
-        StateView<? extends BotApiMethod<?>> stateView = stateViewFactory.get(state);
+        StateView<? extends BotApiMethod<?>> stateView = viewFactory.get(state);
         return stateView.buildView(chatId, cached);
     }
 
@@ -82,8 +82,8 @@ public class MessageInterceptor implements Interceptor {
         if (currentState == CARGO_PEOPLE || currentState == COMMENT) {
             String text = update.getMessage().getText();
             cached.getCallbackHistory().push(text);
-            StateHandler stateHandler = stateHandlerFactory.get(currentState);
-            return stateHandler.handle(cached);
+            Handler handler = handlerFactory.get(currentState);
+            return handler.handle(cached);
         } else throw new InsufficientInputException();
     }
 }
