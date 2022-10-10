@@ -37,8 +37,7 @@ public class UserServiceImpl implements UserService {
         if (documents) searchSpecification = searchSpecification.and(byDocumentsExist(documents));
         String packageSize = userData.getPackageSize();
         if (packageSize != null) searchSpecification = searchSpecification.and(byPackageSizeEquals(packageSize));
-        int companionCount = userData.getCompanionCount();
-        if (companionCount != 0) searchSpecification = searchSpecification.and(byCompanionCountEquals(companionCount));
+        searchSpecification = searchSpecification.and(byCompanionCountIsGreaterThanOrEqualTo(userData.getCompanionCount()));
         return userRepository.findAll(searchSpecification, pageable);
     }
 
@@ -54,7 +53,7 @@ public class UserServiceImpl implements UserService {
                         and(byDateFromEquals(userData.getDateFrom()).or(byDateFromIsNull())).
                         and(byDocumentsExist(userData.isDocuments())).
                         and(byPackageSizeEquals(userData.getPackageSize()).or(byPackageSizeIsNull())).
-                        and(byCompanionCountEquals(userData.getCompanionCount()).or(byCompanionCountIsZero()));
+                        and(byCompanionCountIsLessThanOrEqualTo(userData.getCompanionCount()));
         return userRepository.findAll(searchSpecification, pageable);
     }
 

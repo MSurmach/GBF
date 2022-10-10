@@ -46,12 +46,12 @@ public class UserRecordSpecs {
         return (root, query, criteriaBuilder) -> criteriaBuilder.or(root.get(UserRecord_.packageSize).isNull());
     }
 
-    public static Specification<UserRecord> byCompanionCountEquals(int companionCount) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(UserRecord_.companionCount), companionCount);
+    public static Specification<UserRecord> byCompanionCountIsLessThanOrEqualTo(int companionCount) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get(UserRecord_.companionCount), companionCount);
     }
 
-    public static Specification<UserRecord> byCompanionCountIsZero() {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(UserRecord_.companionCount), 0);
+    public static Specification<UserRecord> byCompanionCountIsGreaterThanOrEqualTo(int companionCount) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get(UserRecord_.companionCount), companionCount);
     }
 
     public static Specification<UserRecord> byDocumentsExist(boolean documents) {
