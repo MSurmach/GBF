@@ -27,7 +27,7 @@ public class EditorStateHandler implements StateHandler {
         String callback = callbackHistory.peek();
         if (userData.getRole() == COURIER)
             userData.setRole(REGISTRATIONS_VIEWER);
-        else
+        if (userData.getRole() == CLIENT)
             userData.setRole(REQUESTS_VIEWER);
         var clickedButton = EditorBotButton.valueOf(callback);
         return switch (clickedButton) {
