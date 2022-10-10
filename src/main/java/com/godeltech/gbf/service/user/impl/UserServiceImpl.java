@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
         LocalDate dateTo = userData.getDateTo();
         if (dateTo != null) searchSpecification = searchSpecification.and(byDateToEquals(dateTo));
         boolean documents = userData.isDocuments();
-        if (documents) searchSpecification = searchSpecification.and(byDocumentsExist(documents));
+        if (documents) searchSpecification = searchSpecification.and(byDocumentsIsGreaterThanOrEquals(documents));
         String packageSize = userData.getPackageSize();
         if (packageSize != null) searchSpecification = searchSpecification.and(byPackageSizeEquals(packageSize));
         searchSpecification = searchSpecification.and(byCompanionCountIsGreaterThanOrEqualTo(userData.getCompanionCount()));
@@ -51,9 +51,9 @@ public class UserServiceImpl implements UserService {
                         and(byRoleEquals(role)).
                         and(byDateToEquals(userData.getDateTo()).or(byDateToIsNull())).
                         and(byDateFromEquals(userData.getDateFrom()).or(byDateFromIsNull())).
-                        and(byDocumentsExist(userData.isDocuments())).
-                        and(byPackageSizeEquals(userData.getPackageSize()).or(byPackageSizeIsNull())).
-                        and(byCompanionCountIsLessThanOrEqualTo(userData.getCompanionCount()));
+                        and(byDocumentsIsLessThanOrEquals(userData.isDocuments()).
+                        or(byPackageSizeEquals(userData.getPackageSize()).or(byPackageSizeIsNull())).
+                        or(byCompanionCountIsLessThanOrEqualTo(userData.getCompanionCount())));
         return userRepository.findAll(searchSpecification, pageable);
     }
 

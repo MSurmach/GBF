@@ -54,7 +54,11 @@ public class UserRecordSpecs {
         return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get(UserRecord_.companionCount), companionCount);
     }
 
-    public static Specification<UserRecord> byDocumentsExist(boolean documents) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(UserRecord_.documents), documents);
+    public static Specification<UserRecord> byDocumentsIsGreaterThanOrEquals(boolean documents) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get(UserRecord_.documents), documents);
+    }
+
+    public static Specification<UserRecord> byDocumentsIsLessThanOrEquals(boolean documents) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get(UserRecord_.documents), documents);
     }
 }
