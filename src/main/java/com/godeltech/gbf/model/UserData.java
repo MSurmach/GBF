@@ -29,6 +29,7 @@ public class UserData {
     private int pageNumber;
     private Role role;
     private String callbackQueryId;
+    private UserData tempForSearch;
 
     public UserData(Long telegramUserId, String username) {
         this.telegramUserId = telegramUserId;
@@ -72,5 +73,6 @@ public class UserData {
         role = null;
         callbackQueryId = null;
         pageNumber = 0;
+        tempForSearch = null;
     }
 }

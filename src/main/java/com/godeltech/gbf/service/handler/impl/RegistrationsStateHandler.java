@@ -7,10 +7,8 @@ import com.godeltech.gbf.model.UserRecord;
 import com.godeltech.gbf.service.handler.StateHandler;
 import com.godeltech.gbf.service.user.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import static com.godeltech.gbf.model.Role.CLIENT;
 import static com.godeltech.gbf.model.State.CLIENTS_LIST;
 import static com.godeltech.gbf.model.State.REGISTRATION_EDITOR;
 
@@ -38,8 +36,7 @@ public class RegistrationsStateHandler implements StateHandler {
             }
             case REGISTRATION_FIND_CLIENTS -> {
                 UserRecord record = getRecordFromPage(userData, recordId);
-                Page<UserRecord> recordsPage = userService.findClientByUserDataAndRole(new UserData(record), CLIENT, userData.getPageNumber());
-                userData.setRecordsPage(recordsPage);
+                userData.setTempForSearch(new UserData(record));
                 yield CLIENTS_LIST;
             }
         };

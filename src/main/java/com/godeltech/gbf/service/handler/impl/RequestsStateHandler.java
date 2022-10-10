@@ -7,10 +7,8 @@ import com.godeltech.gbf.model.UserRecord;
 import com.godeltech.gbf.service.handler.StateHandler;
 import com.godeltech.gbf.service.user.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import static com.godeltech.gbf.model.Role.COURIER;
 import static com.godeltech.gbf.model.State.COURIERS_LIST;
 import static com.godeltech.gbf.model.State.REQUEST_EDITOR;
 
@@ -39,8 +37,7 @@ public class RequestsStateHandler implements StateHandler {
             }
             case REQUEST_FIND_COURIERS -> {
                 UserRecord record = getRecordFromPage(userData, recordId);
-                Page<UserRecord> recordsPage = userService.findCourierByUserDataAndRole(new UserData(record), COURIER, userData.getPageNumber());
-                userData.setRecordsPage(recordsPage);
+                userData.setTempForSearch(new UserData(record));
                 yield COURIERS_LIST;
             }
         };

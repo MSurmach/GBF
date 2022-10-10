@@ -25,7 +25,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
-import static com.godeltech.gbf.model.Role.CLIENT;
 import static com.godeltech.gbf.model.State.MENU;
 
 @Service
@@ -118,27 +117,17 @@ public class CallbackInterceptor implements Interceptor {
             PaginationButton clickedPagination = PaginationButton.valueOf(callback);
             Page<UserRecord> recordsPage = userData.getRecordsPage();
             switch (clickedPagination) {
-                case START -> {
-                    userData.setPageNumber(0);
-                }
+                case START -> userData.setPageNumber(0);
                 case PREVIOUS -> {
                     if (recordsPage.hasPrevious()) {
-                        userData.setPageNumber(userData.getPageNumber() - 1);
-                        Page<UserRecord> previousPage = userService.findByTelegramUserIdAndRole(
-                                userData.getTelegramUserId(),
-                                CLIENT,
-                                userData.getPageNumber());
-                        userData.setRecordsPage(previousPage);
+                        int previousPageNumber = userData.getPageNumber() - 1;
+                        userData.setPageNumber(previousPageNumber);
                     }
                 }
                 case NEXT -> {
                     if (recordsPage.hasNext()) {
-                        userData.setPageNumber(userData.getPageNumber() + 1);
-                        Page<UserRecord> nextPage = userService.findByTelegramUserIdAndRole(
-                                userData.getTelegramUserId(),
-                                CLIENT,
-                                userData.getPageNumber());
-                        userData.setRecordsPage(nextPage);
+                        int nextPageNumber = userData.getPageNumber() + 1;
+                        userData.setPageNumber(nextPageNumber);
                     }
                 }
                 case END -> {

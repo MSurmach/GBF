@@ -1,5 +1,6 @@
 package com.godeltech.gbf.view.impl;
 
+import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.UserRecord;
@@ -42,7 +43,11 @@ public class PaginatedStateView implements StateView<SendMessage> {
                             telegramUserId,
                             COURIER,
                             userData.getPageNumber());
-                else yield userData.getRecordsPage();
+                else yield userService.findClientByUserDataAndRole(
+                        userData.getTempForSearch(),
+                        CLIENT,
+                        userData.getPageNumber()
+                );
             }
             case REQUESTS_VIEWER -> {
                 if (currentState == REQUESTS)
@@ -50,7 +55,10 @@ public class PaginatedStateView implements StateView<SendMessage> {
                             telegramUserId,
                             CLIENT,
                             userData.getPageNumber());
-                else yield userData.getRecordsPage();
+                else yield userService.findCourierByUserDataAndRole(
+                        userData.getTempForSearch(),
+                        COURIER,
+                        userData.getPageNumber());
             }
             case CLIENT -> userService.findCourierByUserDataAndRole(
                     userData,
