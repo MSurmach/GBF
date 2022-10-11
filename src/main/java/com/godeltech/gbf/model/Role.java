@@ -5,7 +5,7 @@ import lombok.Getter;
 import static com.godeltech.gbf.model.State.*;
 
 public enum Role {
-    COURIER(COUNTRY_FROM), CLIENT(COUNTRY_FROM),
+    COURIER(FORM), CLIENT(FORM),
     REGISTRATIONS_VIEWER(REGISTRATIONS), REQUESTS_VIEWER(REQUESTS);
     @Getter
     private final State firstState;

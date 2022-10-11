@@ -21,15 +21,15 @@ public class DateHandler implements Handler {
     public State handle(UserData userData) {
         String callback = userData.getCallbackHistory().peek();
         String[] split = callback.split(":");
-        var clickedButton = CalendarBotButton.valueOf(split[0]);
+        CalendarBotButton clickedButton = CalendarBotButton.valueOf(split[0]);
         State currentState = userData.getStateHistory().peek();
         return switch (clickedButton) {
-            case CHANGE_MONTH -> currentState == DATE_FROM ? MONTH_FROM : MONTH_TO;
-            case CHANGE_YEAR -> currentState == DATE_FROM ? YEAR_FROM : YEAR_TO;
+            case CHANGE_MONTH -> MONTH_FROM;
+            case CHANGE_YEAR -> YEAR_FROM;
             case SELECT_DAY -> {
                 LocalDate parsedDate = LocalDate.parse(split[1]);
                 catchDate(userData, parsedDate);
-                yield selectNextState(userData);
+                yield userData.getStateHistory().peek();
             }
             case NEXT, PREVIOUS -> {
                 userData.getCallbackHistory().remove(1);

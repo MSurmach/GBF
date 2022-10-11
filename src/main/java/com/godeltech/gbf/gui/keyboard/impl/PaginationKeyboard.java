@@ -24,13 +24,14 @@ public class PaginationKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        var startButton = createLocalButton(START, lms);
-        var prevButton = createLocalButton(PREVIOUS, lms);
+        var startButton = createLocalButton(PAGE_START, lms);
+        var prevButton = createLocalButton(PAGE_PREVIOUS, lms);
         var pageNumber = userData.getPageNumber() + 1;
-        var pageButton = createButton(lms.getLocaleMessage(
-                PAGE.name(), String.valueOf(pageNumber)), PAGE.name());
-        var nextButton = createLocalButton(NEXT, lms);
-        var endButton = createLocalButton(END, lms);
+        var pageButton = createButton(
+                lms.getLocaleMessage(PAGE_CURRENT.name(), String.valueOf(pageNumber)),
+                PAGE_CURRENT.name());
+        var nextButton = createLocalButton(PAGE_NEXT, lms);
+        var endButton = createLocalButton(PAGE_END, lms);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(List.of(startButton, prevButton, pageButton, nextButton, endButton));
         var paginationKeyboardMarkup = new InlineKeyboardMarkup(keyboard);

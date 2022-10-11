@@ -20,7 +20,8 @@ public class TelegramUser {
     @Column
     private String username;
 
-    @OneToMany(mappedBy = "telegramUser")
+    @OneToMany
+    @JoinColumn(name = "ROUTE_POINT_ID")
     private List<RoutePoint> routePoints;
 
     @Column

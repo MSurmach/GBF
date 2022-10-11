@@ -26,6 +26,7 @@ public class UserData {
     private String comment;
 
     private LinkedList<RoutePoint> routePoints = new LinkedList<>();
+    private RoutePoint tempRoutePoint;
     private LinkedList<State> stateHistory = new LinkedList<>();
     private LinkedList<String> callbackHistory = new LinkedList<>();
     private Page<UserRecord> recordsPage;
@@ -77,5 +78,6 @@ public class UserData {
         callbackQueryId = null;
         pageNumber = 0;
         tempForSearch = null;
+        tempRoutePoint = null;
     }
 }

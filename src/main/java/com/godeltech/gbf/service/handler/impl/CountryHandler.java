@@ -7,23 +7,15 @@ import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.service.handler.Handler;
 import org.springframework.stereotype.Service;
 
-import static com.godeltech.gbf.model.State.*;
-
 @Service
 public class CountryHandler implements Handler {
 
     @Override
     public State handle(UserData userData) {
         String callback = userData.getCallbackHistory().peek();
-        State currentState = userData.getStateHistory().peek();
-        RoutePoint routePoint = new RoutePoint(new Country(callback));
-        userData.getRoutePoints().addLast(routePoint);
-        if (currentState == COUNTRY_FROM) {
-            userData.setCountryFrom(callback);
-            return CITY_FROM;
-        } else {
-            userData.setCountryTo(callback);
-            return CITY_TO;
-        }
+        Country country = new Country(callback);
+        RoutePoint tempRoutePoint = userData.getTempRoutePoint();
+        tempRoutePoint.setCountry(country);
+        return userData.getStateHistory().peek();
     }
 }

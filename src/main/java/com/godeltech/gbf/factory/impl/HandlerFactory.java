@@ -36,6 +36,8 @@ public class HandlerFactory implements Factory<Handler> {
                     case DATE_TO_QUIZ, DATE_FROM_QUIZ -> DateQuizHandler.class;
                     case SUMMARY_DATA_TO_CONFIRM -> SummaryHandler.class;
                     case REQUESTS -> RequestsHandler.class;
+                    case FORM -> FormHandler.class;
+                    case ROUTE_POINT_FORM -> RoutePointFormHandler.class;
                     default -> throw new IllegalArgumentException("Handler not found for this state");
                 };
         return beanFactory.getBean(handler);

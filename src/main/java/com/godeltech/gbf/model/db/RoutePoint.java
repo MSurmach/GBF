@@ -16,6 +16,9 @@ public class RoutePoint {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long routePointId;
 
+    @Column
+    private Status status;
+
     @ManyToOne
     @JoinColumn(name = "COUNTRY_ID", nullable = false)
     private Country country;
@@ -27,7 +30,7 @@ public class RoutePoint {
     @Column
     private LocalDate visitDate;
 
-    public RoutePoint(Country country){
-        this.country = country;
+    public RoutePoint(Status status) {
+        this.status = status;
     }
 }

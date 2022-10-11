@@ -1,9 +1,9 @@
 package com.godeltech.gbf.factory.impl;
 
+import com.godeltech.gbf.factory.Factory;
 import com.godeltech.gbf.gui.keyboard.Keyboard;
 import com.godeltech.gbf.gui.keyboard.impl.*;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.factory.Factory;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.stereotype.Service;
@@ -31,9 +31,10 @@ public class KeyboardFactory implements Factory<Keyboard> {
                     case SUMMARY_DATA_TO_CONFIRM -> ConfirmKeyboard.class;
                     case SUCCESS -> BackMenuKeyboard.class;
                     case REGISTRATION_EDITOR, REQUEST_EDITOR -> EditorKeyboard.class;
-                    case FOUND_COURIERS_INFO -> FoundCouriersInfoKeyboard.class;
                     case REGISTRATIONS -> RegistrationKeyboard.class;
                     case REQUESTS -> RequestKeyboard.class;
+                    case FORM -> FormKeyboard.class;
+                    case ROUTE_POINT_FORM -> RoutePointFormKeyboard.class;
                     default -> EmptyKeyboard.class;
                 };
         return beanFactory.getBean(keyboard);

@@ -15,7 +15,7 @@ import com.godeltech.gbf.factory.impl.ViewFactory;
 import com.godeltech.gbf.service.handler.Handler;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.user.UserService;
-import com.godeltech.gbf.service.view.StateView;
+import com.godeltech.gbf.service.view.View;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -53,8 +53,8 @@ public class CallbackInterceptor implements Interceptor {
         cached.getCallbackHistory().push(callbackQuery.getData());
         State nextState = handleUpdate(update);
         cached.getStateHistory().push(nextState);
-        StateView<? extends BotApiMethod<?>> stateView = viewFactory.get(nextState);
-        return stateView.buildView(chatId, cached);
+        View<? extends BotApiMethod<?>> view = viewFactory.get(nextState);
+        return view.buildView(chatId, cached);
     }
 
     private State handleUpdate(Update update) {
@@ -117,20 +117,20 @@ public class CallbackInterceptor implements Interceptor {
             PaginationButton clickedPagination = PaginationButton.valueOf(callback);
             Page<UserRecord> recordsPage = userData.getRecordsPage();
             switch (clickedPagination) {
-                case START -> userData.setPageNumber(0);
-                case PREVIOUS -> {
+                case PAGE_START -> userData.setPageNumber(0);
+                case PAGE_PREVIOUS -> {
                     if (recordsPage.hasPrevious()) {
                         int previousPageNumber = userData.getPageNumber() - 1;
                         userData.setPageNumber(previousPageNumber);
                     }
                 }
-                case NEXT -> {
+                case PAGE_NEXT -> {
                     if (recordsPage.hasNext()) {
                         int nextPageNumber = userData.getPageNumber() + 1;
                         userData.setPageNumber(nextPageNumber);
                     }
                 }
-                case END -> {
+                case PAGE_END -> {
                     int lastPageNumber = recordsPage.getTotalPages() - 1;
                     userData.setPageNumber(lastPageNumber);
                 }

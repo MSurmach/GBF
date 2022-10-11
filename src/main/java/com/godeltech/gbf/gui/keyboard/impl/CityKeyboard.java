@@ -5,6 +5,7 @@ import com.godeltech.gbf.gui.keyboard.Keyboard;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.City;
+import com.godeltech.gbf.model.db.Country;
 import com.godeltech.gbf.service.city.CityService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -27,8 +28,8 @@ public class CityKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        String callback = userData.getCallbackHistory().peek();
-        List<City> cities = cityService.findByCountry(callback);
+        Country country = userData.getTempRoutePoint().getCountry();
+        List<City> cities = cityService.findByCountry(country);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         for (var index = 0; index < cities.size(); ) {
             var columnCount = 3;
