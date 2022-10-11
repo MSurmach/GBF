@@ -20,6 +20,20 @@ public class KeyboardUtils {
         return button;
     }
 
+    public static InlineKeyboardButton createButtonWithData(String label, BotButton botButton, String data) {
+        var button = new InlineKeyboardButton(label);
+        String callback = botButton + ":" + data;
+        button.setCallbackData(callback);
+        return button;
+    }
+
+    public static InlineKeyboardButton createLocalButtonWithData(BotButton botButton, String data, LocalMessageSource lms) {
+        var button = new InlineKeyboardButton(lms.getLocaleMessage(botButton.name()));
+        String callback = botButton + ":" + data;
+        button.setCallbackData(callback);
+        return button;
+    }
+
     public static InlineKeyboardButton createLocalButton(BotButton botButton, LocalMessageSource lms) {
         var button = new InlineKeyboardButton(lms.getLocaleMessage(botButton.name()));
         button.setCallbackData(botButton.name());

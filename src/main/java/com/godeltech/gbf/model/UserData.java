@@ -1,5 +1,6 @@
 package com.godeltech.gbf.model;
 
+import com.godeltech.gbf.model.db.RoutePoint;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,8 @@ public class UserData {
     private String packageSize;
     private int companionCount;
     private String comment;
+
+    private LinkedList<RoutePoint> routePoints = new LinkedList<>();
     private LinkedList<State> stateHistory = new LinkedList<>();
     private LinkedList<String> callbackHistory = new LinkedList<>();
     private Page<UserRecord> recordsPage;

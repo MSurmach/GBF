@@ -1,10 +1,9 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.gui.keyboard.Keyboard;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
-import com.godeltech.gbf.utils.KeyboardUtils;
+import com.godeltech.gbf.model.UserData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -19,18 +18,16 @@ import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButton;
 @Component
 @AllArgsConstructor
 public class ConfirmKeyboard implements Keyboard {
-    private LocalMessageSource localMessageSource;
+    private LocalMessageSource lms;
     private ControlKeyboard controlKeyboard;
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        String confirmLabel = CONFIRM.localLabel(localMessageSource);
-        String confirmCallback = CONFIRM.name();
-        var confirmButton = KeyboardUtils.createLocalButton(confirmLabel, confirmCallback);
-        List<InlineKeyboardButton> row = List.of(confirmButton);
+        var confirmButton = createLocalButton(CONFIRM, lms);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        keyboard.add(row);
-        InlineKeyboardMarkup confirmMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(confirmMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
+        keyboard.add(List.of(confirmButton));
+        return new KeyboardMarkupAppender(new InlineKeyboardMarkup(keyboard)).
+                append(controlKeyboard.getKeyboardMarkup(userData)).
+                result();
     }
 }

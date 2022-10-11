@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CountryKeyboard implements Keyboard {
     private ControlKeyboard controlKeyboard;
-    private LocalMessageSource localMessageSource;
+    private LocalMessageSource lms;
 
     private CountryService countryService;
 
@@ -33,7 +33,7 @@ public class CountryKeyboard implements Keyboard {
             List<InlineKeyboardButton> buttonRow = new ArrayList<>();
             while (columnCount > 0 && index != countries.size()) {
                 String countryName = countries.get(index).getName();
-                buttonRow.add(KeyboardUtils.createLocalButton(countryName, countryName, localMessageSource));
+                buttonRow.add(KeyboardUtils.createLocalButton(countryName, countryName, lms));
                 columnCount--;
                 index++;
             }

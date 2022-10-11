@@ -1,6 +1,6 @@
 package com.godeltech.gbf.gui.button;
 
-public enum PaginationButton {
+public enum PaginationButton implements BotButton{
     START("<<"), PREVIOUS("<"), PAGE("-%d-"), NEXT(">"), END(">>");
     public final String label;
 

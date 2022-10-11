@@ -16,26 +16,26 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.godeltech.gbf.gui.button.CalendarBotButton.SELECT_YEAR;
+import static java.util.stream.Collectors.toList;
 
 @Component
 @AllArgsConstructor
 public class YearKeyboard implements Keyboard {
 
     private ControlKeyboard controlKeyboard;
-    private LocalMessageSource localMessageSource;
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         LocalDate[] years = getYearsArray(4);
-        List<InlineKeyboardButton> yearButtons = Arrays.stream(years)
-                .map(date -> {
-                    String buttonCallback = SELECT_YEAR + ":" + date;
-                    return KeyboardUtils.createLocalButton(Integer.toString(date.getYear()), buttonCallback);
-                }).toList();
+        List<InlineKeyboardButton> yearButtons = Arrays.stream(years).
+                map(date -> KeyboardUtils.createButtonWithData(Integer.toString(date.getYear()), SELECT_YEAR, date.toString())).
+                toList();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(yearButtons);
-        InlineKeyboardMarkup yearKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(yearKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
+        return new KeyboardMarkupAppender().
+                append(new InlineKeyboardMarkup(keyboard)).
+                append(controlKeyboard.getKeyboardMarkup(userData)).
+                result();
     }
 
     private LocalDate[] getYearsArray(int countYear) {

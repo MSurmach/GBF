@@ -15,27 +15,24 @@ import java.util.List;
 
 import static com.godeltech.gbf.gui.button.DateQuizBotButton.SELECT_DATE;
 import static com.godeltech.gbf.gui.button.DateQuizBotButton.SKIP_DATE;
+import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButton;
 
 @Component
 @AllArgsConstructor
 public class DateQuizKeyboard implements Keyboard {
 
     private ControlKeyboard controlKeyboard;
-    private LocalMessageSource localMessageSource;
+    private LocalMessageSource lms;
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        String selectDateLabel = SELECT_DATE.localLabel(localMessageSource);
-        String selectDateCallback = SELECT_DATE.name();
-        var selectDateButton = KeyboardUtils.createLocalButton(selectDateLabel, selectDateCallback);
-
-        String skipDateLabel = SKIP_DATE.localLabel(localMessageSource);
-        String skipDateCallback = SKIP_DATE.name();
-        var skipDateButton = KeyboardUtils.createLocalButton(skipDateLabel, skipDateCallback);
-
+        var selectDateButton = createLocalButton(SELECT_DATE, lms);
+        var skipDateButton = createLocalButton(SKIP_DATE, lms);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(List.of(selectDateButton, skipDateButton));
-        InlineKeyboardMarkup countryKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(countryKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
+        return new KeyboardMarkupAppender().
+                append(new InlineKeyboardMarkup(keyboard)).
+                append(controlKeyboard.getKeyboardMarkup(userData)).
+                result();
     }
 }

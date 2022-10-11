@@ -12,19 +12,21 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.godeltech.gbf.gui.button.CalendarBotButton.*;
+import static com.godeltech.gbf.utils.DateUtils.formattedYear;
+import static com.godeltech.gbf.utils.KeyboardUtils.createButtonWithData;
+import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButtonWithData;
 
 @Component
 @AllArgsConstructor
 public class MonthKeyboard implements Keyboard {
 
     private ControlKeyboard controlKeyboard;
-    private LocalMessageSource localMessageSource;
+    private LocalMessageSource lms;
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
@@ -38,32 +40,28 @@ public class MonthKeyboard implements Keyboard {
             var columnCount = 3;
             List<InlineKeyboardButton> buttonRow = new ArrayList<>();
             while (columnCount > 0 && index != months.length) {
-                String monthName = months[index].getDisplayName(TextStyle.FULL_STANDALONE, localMessageSource.getLocale());
+                String monthName = months[index].getDisplayName(TextStyle.FULL_STANDALONE, lms.getLocale());
                 String monthLabel = monthName.substring(0, 1).toUpperCase() + monthName.substring(1);
-                String monthCallback = SELECT_MONTH + ":" + LocalDate.of(callBackDate.getYear(), months[index], callBackDate.getDayOfMonth());
-                buttonRow.add(KeyboardUtils.createLocalButton(monthLabel, monthCallback));
+                String monthCallback = LocalDate.of(callBackDate.getYear(), months[index], callBackDate.getDayOfMonth()).toString();
+                buttonRow.add(KeyboardUtils.createButtonWithData(monthLabel, SELECT_MONTH, monthCallback));
                 columnCount--;
                 index++;
             }
             keyboard.add(buttonRow);
         }
-        InlineKeyboardMarkup monthKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(monthKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
+        return new KeyboardMarkupAppender().
+                append(new InlineKeyboardMarkup(keyboard)).
+                append(controlKeyboard.getKeyboardMarkup(userData)).
+                result();
     }
 
     private void addYearHeader(LocalDate date, List<List<InlineKeyboardButton>> keyboard) {
-        var prevYearButton = KeyboardUtils.createButton(
-                PREVIOUS.localLabel(localMessageSource),
-                PREVIOUS + ":" + date.minusYears(1));
-        var nextYearButton = KeyboardUtils.createButton(
-                NEXT.localLabel(localMessageSource),
-                NEXT + ":" + date.plusYears(1));
-        String yearPattern = "yyyy";
-        DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern(yearPattern);
-        String header = date.format(yearFormatter);
-        var yearHeader = KeyboardUtils.createLocalButton(
-                header,
-                CHANGE_YEAR + ":" + date);
+        var prevYearButton = createLocalButtonWithData(
+                PREVIOUS, date.minusYears(1).toString(), lms);
+        var nextYearButton = createLocalButtonWithData(
+                NEXT, date.plusYears(1).toString(), lms);
+        var yearHeader = createButtonWithData(
+                formattedYear(date), CHANGE_YEAR, date.toString());
         keyboard.add(List.of(prevYearButton, yearHeader, nextYearButton));
     }
 }

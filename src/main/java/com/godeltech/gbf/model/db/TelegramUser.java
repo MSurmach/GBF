@@ -14,6 +14,15 @@ public class TelegramUser {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long telegramUserId;
 
+    @Column
+    private Long telegramId;
+
+    @Column
+    private String username;
+
     @OneToMany(mappedBy = "telegramUser")
     private List<RoutePoint> routePoints;
+
+    @Column
+    private String comment;
 }

@@ -1,10 +1,9 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.gui.keyboard.Keyboard;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
-import com.godeltech.gbf.utils.KeyboardUtils;
+import com.godeltech.gbf.model.UserData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -12,20 +11,22 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static com.godeltech.gbf.gui.button.CalendarBotButton.*;
-import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButton;
+import static com.godeltech.gbf.utils.DateUtils.formattedMonth;
+import static com.godeltech.gbf.utils.DateUtils.formattedYear;
+import static com.godeltech.gbf.utils.KeyboardUtils.createButtonWithData;
+import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButtonWithData;
 
 @Component
 @AllArgsConstructor
 public class DateKeyboard implements Keyboard {
     private ControlKeyboard controlKeyboard;
-    private LocalMessageSource localMessageSource;
+    private LocalMessageSource lms;
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
@@ -41,8 +42,10 @@ public class DateKeyboard implements Keyboard {
         addMonthYear(date, keyboard);
         addWeekDayRow(keyboard);
         addDayRows(date, keyboard);
-        var calendarKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(calendarKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
+        return new KeyboardMarkupAppender().
+                append(new InlineKeyboardMarkup(keyboard)).
+                append(controlKeyboard.getKeyboardMarkup(userData)).
+                result();
     }
 
     private void addDayRows(LocalDate localDate, List<List<InlineKeyboardButton>> keyboard) {
@@ -59,22 +62,12 @@ public class DateKeyboard implements Keyboard {
     }
 
     private void addMonthYear(LocalDate date, List<List<InlineKeyboardButton>> keyboard) {
-        String yearPattern = "yyyy";
-        String monthPattern = "LLLL";
-        var yearButton = KeyboardUtils.createLocalButton(
-                DateTimeFormatter.ofPattern(yearPattern).format(date),
-                CHANGE_YEAR + ":" + date);
-        var prevMonthButton = createButton(
-                PREVIOUS.localLabel(localMessageSource),
-                PREVIOUS + ":" + date.minusMonths(1));
-        var nextMonthButton = createButton(
-                NEXT.localLabel(localMessageSource),
-                NEXT + ":" + date.plusMonths(1));
-        DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern(monthPattern).withLocale(localMessageSource.getLocale());
-        String month = date.format(monthFormatter).substring(0, 1).toUpperCase() + date.format(monthFormatter).substring(1);
-        var monthButton = KeyboardUtils.createLocalButton(
-                month,
-                CHANGE_MONTH + ":" + date);
+        var yearButton = createButtonWithData(formattedYear(date), CHANGE_YEAR, date.toString());
+        var prevMonthButton = createLocalButtonWithData(PREVIOUS, date.minusMonths(1).toString(), lms);
+        var nextMonthButton = createLocalButtonWithData(NEXT, date.plusMonths(1).toString(), lms);
+        String formattedMonth = formattedMonth(date, lms.getLocale());
+        String monthLabel = formattedMonth.substring(0, 1).toUpperCase() + formattedMonth.substring(1);
+        var monthButton = createButtonWithData(monthLabel, CHANGE_MONTH, date.toString());
         keyboard.add(List.of(yearButton));
         keyboard.add(List.of(prevMonthButton, monthButton, nextMonthButton));
     }
@@ -83,8 +76,8 @@ public class DateKeyboard implements Keyboard {
         final String dayOfWeekCallback = "dayOfWeek";
         List<InlineKeyboardButton> weekDayRow = new ArrayList<>();
         Arrays.stream(DayOfWeek.values()).
-                map(day -> day.getDisplayName(TextStyle.SHORT, localMessageSource.getLocale())).
-                forEach(day -> weekDayRow.add(KeyboardUtils.createLocalButton(day, IGNORE + ":" + dayOfWeekCallback)));
+                map(day -> day.getDisplayName(TextStyle.SHORT, lms.getLocale())).
+                forEach(day -> weekDayRow.add(createButtonWithData(day, IGNORE, dayOfWeekCallback)));
         keyboard.add(weekDayRow);
     }
 
@@ -94,13 +87,13 @@ public class DateKeyboard implements Keyboard {
         List<InlineKeyboardButton> row = new ArrayList<>();
         int day = date.getDayOfMonth();
         LocalDate callbackDate = date;
-        InlineKeyboardButton serviceButton = KeyboardUtils.createLocalButton(emptyLabel, IGNORE + ":" + emptyDayCallback);
+        var serviceButton = createButtonWithData(emptyLabel, IGNORE, emptyDayCallback);
         for (int index = 0; index < shift; index++) {
             row.add(serviceButton);
         }
         for (int index = shift; index < columnCount; index++) {
             if (day <= date.lengthOfMonth()) {
-                row.add(KeyboardUtils.createLocalButton(Integer.toString(day++), SELECT_DAY + ":" + callbackDate));
+                row.add(createButtonWithData(Integer.toString(day++), SELECT_DAY, callbackDate.toString()));
                 callbackDate = callbackDate.plusDays(1);
             } else {
                 row.add(serviceButton);

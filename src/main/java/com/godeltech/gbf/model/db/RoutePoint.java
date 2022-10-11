@@ -1,11 +1,13 @@
 package com.godeltech.gbf.model.db;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "ROUTE_POINT")
 public class RoutePoint {
@@ -13,10 +15,6 @@ public class RoutePoint {
     @Column(name = "ROUTE_POINT_ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long routePointId;
-
-    @ManyToOne
-    @JoinColumn(name = "TELEGRAM_USER_ID")
-    private TelegramUser telegramUser;
 
     @ManyToOne
     @JoinColumn(name = "COUNTRY_ID", nullable = false)
@@ -28,4 +26,8 @@ public class RoutePoint {
 
     @Column
     private LocalDate visitDate;
+
+    public RoutePoint(Country country){
+        this.country = country;
+    }
 }
