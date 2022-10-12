@@ -31,11 +31,11 @@ public class EditorHandler implements Handler {
             userData.setRole(REQUESTS_VIEWER);
         var clickedButton = EditorBotButton.valueOf(callback);
         return switch (clickedButton) {
-            case EDIT_COUNTRY_CITY_FROM -> COUNTRY_FROM;
-            case EDIT_COUNTRY_CITY_TO -> COUNTRY_TO;
+            case EDIT_COUNTRY_CITY_FROM -> COUNTRY;
+            case EDIT_COUNTRY_CITY_TO -> COUNTRY;
             case EDIT_DATE_FROM, ADD_DATE_FROM -> {
                 callbackHistory.push(INIT + ":" + userData.getDateFrom());
-                yield DATE_FROM;
+                yield DATE;
             }
             case DELETE_DATE_FROM -> {
                 userData.setDateFrom(null);
@@ -43,7 +43,7 @@ public class EditorHandler implements Handler {
             }
             case EDIT_DATE_TO, ADD_DATE_TO -> {
                 callbackHistory.push(INIT + ":" + userData.getDateTo());
-                yield DATE_TO;
+                yield DATE;
             }
             case DELETE_DATE_TO -> {
                 userData.setDateTo(null);

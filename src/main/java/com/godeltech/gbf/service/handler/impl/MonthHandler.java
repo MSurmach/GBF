@@ -6,7 +6,8 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.Handler;
 import org.springframework.stereotype.Service;
 
-import static com.godeltech.gbf.model.State.*;
+import static com.godeltech.gbf.model.State.DATE;
+import static com.godeltech.gbf.model.State.YEAR;
 
 @Service
 public class MonthHandler implements Handler {
@@ -16,10 +17,9 @@ public class MonthHandler implements Handler {
         String callback = userData.getCallbackHistory().peek();
         String[] split = callback.split(":");
         var clickedButton = CalendarBotButton.valueOf(split[0]);
-        State currentState = userData.getStateHistory().peek();
         return switch (clickedButton) {
-            case SELECT_MONTH -> currentState == MONTH_TO ? DATE_TO : DATE_FROM;
-            case CHANGE_YEAR -> currentState == MONTH_TO ? YEAR_TO : YEAR_FROM;
+            case SELECT_MONTH -> DATE;
+            case CHANGE_YEAR -> YEAR;
             default -> rollbackCallbackAndStateHistory(userData);
         };
     }

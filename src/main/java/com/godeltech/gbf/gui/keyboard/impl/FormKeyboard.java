@@ -60,13 +60,13 @@ public class FormKeyboard implements Keyboard {
         final boolean present = optionalRoutePoint.isPresent();
         return switch (status) {
             case INITIAL -> present ?
-                    List.of(buttons.get(EDIT_INITIAL_ROUTE_POINT)) :
+                    List.of(buttons.get(EDIT_INITIAL_ROUTE_POINT), buttons.get(DELETE_INITIAL_ROUTE_POINT)) :
                     List.of(buttons.get(ADD_INITIAL_ROUTE_POINT));
             case FINAL -> present ?
-                    List.of(buttons.get(EDIT_FINAL_ROUTE_POINT)) :
+                    List.of(buttons.get(EDIT_FINAL_ROUTE_POINT),buttons.get(DELETE_FINAL_ROUTE_POINT)) :
                     List.of(buttons.get(ADD_FINAL_ROUTE_POINT));
             case INTERMEDIATE -> present ?
-                    List.of(buttons.get(ADD_INTERMEDIATE_ROUTE_POINT), buttons.get(EDIT_INTERMEDIATE_ROUTE_POINT)) :
+                    List.of(buttons.get(ADD_INTERMEDIATE_ROUTE_POINT), buttons.get(DELETE_INTERMEDIATE_ROUTE_POINT)) :
                     List.of(buttons.get(ADD_INTERMEDIATE_ROUTE_POINT));
         };
     }

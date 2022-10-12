@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class YearMessage implements Message {
-    private final static String YEAR_CODE = "year";
+    private final static String YEAR_CODE = "year.question";
     private LocalMessageSource localMessageSource;
 
     public YearMessage(LocalMessageSource localMessageSource) {

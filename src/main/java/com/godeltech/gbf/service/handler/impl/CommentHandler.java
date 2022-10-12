@@ -13,6 +13,7 @@ public class CommentHandler implements Handler {
     public State handle(UserData userData) {
         String comment = userData.getCallbackHistory().peek();
         userData.setComment(comment);
-        return COMMENT_CONFIRM;
+        userData.getStateHistory().pop();
+        return userData.getStateHistory().peek();
     }
 }

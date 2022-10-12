@@ -29,7 +29,7 @@ public class CityKeyboard implements Keyboard {
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         Country country = userData.getTempRoutePoint().getCountry();
-        List<City> cities = cityService.findByCountry(country);
+        List<City> cities = cityService.findCitiesByCountryId(country.getCountryId());
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         for (var index = 0; index < cities.size(); ) {
             var columnCount = 3;

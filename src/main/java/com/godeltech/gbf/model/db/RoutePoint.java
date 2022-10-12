@@ -30,7 +30,14 @@ public class RoutePoint {
     @Column
     private LocalDate visitDate;
 
+    @Transient
+    private int order;
+
     public RoutePoint(Status status) {
         this.status = status;
+    }
+
+    public boolean isEmpty() {
+        return country == null && city == null && visitDate == null;
     }
 }

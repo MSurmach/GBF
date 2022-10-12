@@ -18,12 +18,11 @@ public class KeyboardFactory implements Factory<Keyboard> {
         Class<? extends Keyboard> keyboard =
                 switch (state) {
                     case MENU -> MainMenuKeyboard.class;
-                    case COUNTRY_FROM, COUNTRY_TO -> CountryKeyboard.class;
-                    case CITY_FROM, CITY_TO -> CityKeyboard.class;
-                    case YEAR_FROM, YEAR_TO -> YearKeyboard.class;
-                    case MONTH_FROM, MONTH_TO -> MonthKeyboard.class;
-                    case DATE_FROM, DATE_TO -> DateKeyboard.class;
-                    case DATE_FROM_QUIZ, DATE_TO_QUIZ -> DateQuizKeyboard.class;
+                    case COUNTRY -> CountryKeyboard.class;
+                    case CITY -> CityKeyboard.class;
+                    case YEAR-> YearKeyboard.class;
+                    case MONTH -> MonthKeyboard.class;
+                    case DATE -> DateKeyboard.class;
                     case CARGO_MENU -> CargoMainKeyboard.class;
                     case CARGO_PACKAGE -> CargoPackageKeyboard.class;
                     case COMMENT_QUIZ -> CommentKeyboard.class;

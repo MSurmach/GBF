@@ -16,8 +16,4 @@ public class Country {
 
     @Column(nullable = false)
     private String name;
-
-    public Country(String name) {
-        this.name = name;
-    }
 }

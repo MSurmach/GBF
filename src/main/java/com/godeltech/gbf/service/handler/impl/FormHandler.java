@@ -8,8 +8,9 @@ import com.godeltech.gbf.model.db.Status;
 import com.godeltech.gbf.service.handler.Handler;
 import org.springframework.stereotype.Service;
 
-import static com.godeltech.gbf.model.State.ROUTE_POINT_FORM;
-import static com.godeltech.gbf.model.State.SUCCESS;
+import java.util.List;
+
+import static com.godeltech.gbf.model.State.*;
 import static com.godeltech.gbf.model.db.Status.*;
 
 @Service
@@ -20,35 +21,77 @@ public class FormHandler implements Handler {
         var callback = userData.getCallbackHistory().peek();
         var clicked = FormButton.valueOf(callback);
         return switch (clicked) {
-            case ADD_INITIAL_ROUTE_POINT -> handleAddRoutePoint(userData, INITIAL);
-            case ADD_FINAL_ROUTE_POINT -> handleAddRoutePoint(userData, FINAL);
-            case ADD_INTERMEDIATE_ROUTE_POINT -> handleAddRoutePoint(userData, INTERMEDIATE);
-            case EDIT_INITIAL_ROUTE_POINT -> handleEditRoutePoint(userData, INITIAL);
+            case ADD_INITIAL_ROUTE_POINT -> {
+                handleAddRoutePoint(userData, INITIAL, 0);
+                yield ROUTE_POINT_FORM;
+            }
+            case EDIT_INITIAL_ROUTE_POINT -> {
+                handleEditRoutePoint(userData, INITIAL);
+                yield ROUTE_POINT_FORM;
+            }
+            case DELETE_INITIAL_ROUTE_POINT -> {
+                deleteRoutePointByStatus(userData.getRoutePoints(), INITIAL);
+                yield FORM;
+            }
+            case ADD_FINAL_ROUTE_POINT -> {
+                handleAddRoutePoint(userData, FINAL, 0);
+                yield ROUTE_POINT_FORM;
+            }
+            case EDIT_INTERMEDIATE_ROUTE_POINT -> {
+                handleEditRoutePoint(userData, INTERMEDIATE);
+                yield ROUTE_POINT_FORM;
+            }
+            case DELETE_FINAL_ROUTE_POINT -> {
+                deleteRoutePointByStatus(userData.getRoutePoints(), FINAL);
+                yield FORM;
+            }
+            case ADD_INTERMEDIATE_ROUTE_POINT -> {
+                int order = whichIntermediateRoutePointIndex(userData.getRoutePoints());
+                handleAddRoutePoint(userData, INTERMEDIATE, order);
+                yield ROUTE_POINT_FORM;
+            }
             case EDIT_FINAL_ROUTE_POINT -> handleEditRoutePoint(userData, FINAL);
-            case EDIT_INTERMEDIATE_ROUTE_POINT -> handleEditRoutePoint(userData, INTERMEDIATE);
-            case ADD_COMMENT, EDIT_COMMENT -> State.COMMENT;
+
+            case DELETE_INTERMEDIATE_ROUTE_POINT -> null;
+            case ADD_COMMENT, EDIT_COMMENT -> COMMENT;
             case DELETE_COMMENT -> {
                 userData.setComment(null);
                 yield userData.getStateHistory().peek();
             }
-            case ADD_CARGO, EDIT_CARGO -> State.CARGO_MENU;
+            case ADD_CARGO, EDIT_CARGO -> CARGO_MENU;
             case FORM_REGISTER -> SUCCESS;
+            case FORM_SEARCH -> COURIERS_LIST;
         };
     }
 
-    private State handleAddRoutePoint(UserData userData, Status status) {
+    private void handleAddRoutePoint(UserData userData, Status status, int order) {
         var toAdd = new RoutePoint();
         toAdd.setStatus(status);
+        toAdd.setOrder(order);
         userData.setTempRoutePoint(toAdd);
-        return ROUTE_POINT_FORM;
     }
 
     private State handleEditRoutePoint(UserData userData, Status status) {
-        var toEdit = userData.getRoutePoints().stream().
+        var toEdit = getRoutePointByStatus(userData.getRoutePoints(), status);
+        userData.setTempRoutePoint(toEdit);
+        return ROUTE_POINT_FORM;
+    }
+
+    private void deleteRoutePointByStatus(List<RoutePoint> points, Status status) {
+        RoutePoint toDelete = getRoutePointByStatus(points, status);
+        points.remove(toDelete);
+    }
+
+    private RoutePoint getRoutePointByStatus(List<RoutePoint> points, Status status) {
+        return points.stream().
                 filter(routePoint -> routePoint.getStatus() == status).
                 findFirst().
                 get();
-        userData.setTempRoutePoint(toEdit);
-        return ROUTE_POINT_FORM;
+    }
+
+    private int whichIntermediateRoutePointIndex(List<RoutePoint> points) {
+        if (points.isEmpty()) return 1;
+        int intermediateRoutePointCount = (int) points.stream().filter(point -> point.getStatus() == INTERMEDIATE).count();
+        return intermediateRoutePointCount + 1;
     }
 }

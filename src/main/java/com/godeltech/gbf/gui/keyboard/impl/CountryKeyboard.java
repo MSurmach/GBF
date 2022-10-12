@@ -20,10 +20,7 @@ import java.util.List;
 public class CountryKeyboard implements Keyboard {
     private ControlKeyboard controlKeyboard;
     private LocalMessageSource lms;
-
     private CountryService countryService;
-
-
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         List<Country> countries = countryService.findAll();

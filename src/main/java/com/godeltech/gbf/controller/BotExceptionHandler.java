@@ -3,6 +3,7 @@ package com.godeltech.gbf.controller;
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.exception.*;
 import com.godeltech.gbf.gui.message.impl.DateMessage;
+import com.godeltech.gbf.utils.DateUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,7 +12,6 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @ControllerAdvice
 @AllArgsConstructor
@@ -22,7 +22,7 @@ public class BotExceptionHandler {
     public final static String ALERT_CALENDAR_DATE_AFTER_DATE_CODE = "alert.calendar.dateAfterDate";
     public final static String ALERT_CARGO_MENU_NOTHING_SELECTED = "alert.cargoMenu.nothingSelected";
     private GbfBot gbfBot;
-    private LocalMessageSource localMessageSource;
+    private LocalMessageSource lms;
 
     private DateMessage dateAnswer;
 
@@ -36,7 +36,7 @@ public class BotExceptionHandler {
         AnswerCallbackQuery answerCallbackQuery = AnswerCallbackQuery.builder().
                 callbackQueryId(callbackQueryId).
                 showAlert(true).
-                text(localMessageSource.getLocaleMessage(neededAlertCode)).
+                text(lms.getLocaleMessage(neededAlertCode)).
                 cacheTime(60).
                 build();
         showAlert(answerCallbackQuery);
@@ -46,15 +46,14 @@ public class BotExceptionHandler {
     public void handleDateInPast(DateInPastException dateInPastException) {
         LocalDate nowDate = dateInPastException.getNowDate();
         LocalDate invalidDate = dateInPastException.getInvalidDate();
-        DateTimeFormatter dateFormatter = dateAnswer.getDateFormatter();
         String callbackQueryId = dateInPastException.getCallbackQueryId();
         AnswerCallbackQuery answerCallbackQuery = AnswerCallbackQuery.builder().
                 callbackQueryId(callbackQueryId).
                 showAlert(true).
-                text(localMessageSource.getLocaleMessage(
+                text(lms.getLocaleMessage(
                         ALERT_CALENDAR_DATE_IN_PAST_CODE,
-                        nowDate.format(dateFormatter),
-                        invalidDate.format(dateFormatter))).
+                        DateUtils.formatDate(nowDate, lms.getLocale()),
+                        DateUtils.formatDate(invalidDate, lms.getLocale()))).
                 cacheTime(60).
                 build();
         showAlert(answerCallbackQuery);
@@ -65,14 +64,13 @@ public class BotExceptionHandler {
         LocalDate dateTo = exception.getDateTo();
         LocalDate dateFrom = exception.getDateFrom();
         String callbackQueryId = exception.getCallbackQueryId();
-        DateTimeFormatter dateFormatter = dateAnswer.getDateFormatter();
         AnswerCallbackQuery answerCallbackQuery = AnswerCallbackQuery.builder().
                 callbackQueryId(callbackQueryId).
                 showAlert(true).
-                text(localMessageSource.getLocaleMessage(
+                text(lms.getLocaleMessage(
                         ALERT_CALENDAR_DATE_AFTER_DATE_CODE,
-                        dateFrom.format(dateFormatter),
-                        dateTo.format(dateFormatter))).
+                        DateUtils.formatDate(dateFrom, lms.getLocale()),
+                        DateUtils.formatDate(dateTo, lms.getLocale()))).
                 cacheTime(60).
                 build();
         showAlert(answerCallbackQuery);
@@ -83,7 +81,7 @@ public class BotExceptionHandler {
         AnswerCallbackQuery answerCallbackQuery = AnswerCallbackQuery.builder().
                 callbackQueryId(exception.getCallbackQueryId()).
                 showAlert(true).
-                text(localMessageSource.getLocaleMessage(ALERT_CARGO_MENU_NOTHING_SELECTED)).
+                text(lms.getLocaleMessage(ALERT_CARGO_MENU_NOTHING_SELECTED)).
                 cacheTime(60).
                 build();
         showAlert(answerCallbackQuery);

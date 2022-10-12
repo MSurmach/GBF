@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MonthMessage implements Message {
-    private final static String MONTH_CODE = "month";
+    private final static String MONTH_CODE = "month.question";
     private final LocalMessageSource localMessageSource;
 
     public MonthMessage(LocalMessageSource localMessageSource) {

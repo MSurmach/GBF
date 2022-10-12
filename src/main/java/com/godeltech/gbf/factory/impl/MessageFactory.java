@@ -23,12 +23,11 @@ public class MessageFactory implements Factory<Message> {
                     case COMMENT_QUIZ -> CommentQuizMessage.class;
                     case COMMENT -> CommentMessage.class;
                     case COMMENT_CONFIRM -> CommentConfirmMessage.class;
-                    case COUNTRY_FROM, COUNTRY_TO -> CountryMessage.class;
-                    case CITY_FROM, CITY_TO -> CityMessage.class;
-                    case YEAR_FROM, YEAR_TO -> YearMessage.class;
-                    case MONTH_FROM, MONTH_TO -> MonthMessage.class;
-                    case DATE_FROM, DATE_TO -> DateMessage.class;
-                    case DATE_FROM_QUIZ, DATE_TO_QUIZ -> DateQuizMessage.class;
+                    case COUNTRY -> CountryMessage.class;
+                    case CITY-> CityMessage.class;
+                    case YEAR -> YearMessage.class;
+                    case MONTH -> MonthMessage.class;
+                    case DATE -> DateMessage.class;
                     case CARGO_MENU -> CargoMenuMessage.class;
                     case CARGO_PACKAGE -> CargoPackageMessage.class;
                     case CARGO_PEOPLE -> CargoPeopleMessage.class;

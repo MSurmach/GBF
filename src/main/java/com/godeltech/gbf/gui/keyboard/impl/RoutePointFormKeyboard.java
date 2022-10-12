@@ -18,12 +18,12 @@ import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButton;
 @Component
 public class RoutePointFormKeyboard implements Keyboard {
     private final LocalMessageSource lms;
-    private final BackMenuKeyboard backMenuKeyboard;
+    private final ControlKeyboard controlKeyboard;
     private final Map<RoutePointFormButton, InlineKeyboardButton> buttons = new HashMap<>();
 
-    public RoutePointFormKeyboard(LocalMessageSource lms, BackMenuKeyboard backMenuKeyboard) {
+    public RoutePointFormKeyboard(LocalMessageSource lms, ControlKeyboard controlKeyboard) {
         this.lms = lms;
-        this.backMenuKeyboard = backMenuKeyboard;
+        this.controlKeyboard = controlKeyboard;
         initializeButtons();
     }
 
@@ -40,10 +40,15 @@ public class RoutePointFormKeyboard implements Keyboard {
         keyboard.add(countryButtonRow(tempRoutePoint));
         keyboard.add(cityButtonRow(tempRoutePoint));
         keyboard.add(visitDateButtonRow(tempRoutePoint));
+        keyboard.add(confirmButtonRow());
         return new KeyboardMarkupAppender().
                 append(new InlineKeyboardMarkup(keyboard)).
-                append(backMenuKeyboard.getKeyboardMarkup(userData)).
+                append(controlKeyboard.getKeyboardMarkup(userData)).
                 result();
+    }
+
+    private List<InlineKeyboardButton> confirmButtonRow() {
+        return List.of(buttons.get(SAVE));
     }
 
     private List<InlineKeyboardButton> countryButtonRow(RoutePoint routePoint) {
