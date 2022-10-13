@@ -43,7 +43,7 @@ public class RoutePointFormHandler implements Handler {
                         points.addFirst(tempRoutePoint);
                     }
                     case INTERMEDIATE -> {
-                        int intermediateOrder = tempRoutePoint.getOrder();
+                        int intermediateOrder = tempRoutePoint.getOrderNumber();
                         if (points.isEmpty() ||
                                 (points.size() == 1 && points.getFirst().getStatus() == FINAL))
                             points.addFirst(tempRoutePoint);

@@ -29,7 +29,7 @@ public class FormMessage implements Message {
     public final static String EMPTY_CODE = "";
 
     private LocalMessageSource lms;
-    private RoutePointFormMessage routePointFormMessage;
+    private MessageUtil messageUtil;
 
     @Override
     public String initialMessage(UserData userData) {
@@ -47,7 +47,7 @@ public class FormMessage implements Message {
     @Override
     public String getMessage(UserData userData) {
         return buildHeader(userData) +
-                buildRoute(userData.getRoutePoints()) +
+                messageUtil.buildRoute(userData.getRoutePoints()) +
                 buildCargoSummary(userData) +
                 buildComment(userData);
     }
@@ -56,17 +56,6 @@ public class FormMessage implements Message {
         return userDataIsEmpty(userData) ?
                 lms.getLocaleMessage(DETAILS_HEADER_EMPTY_CODE) :
                 lms.getLocaleMessage(DETAILS_HEADER_FULL_CODE);
-    }
-
-    private String buildRoute(List<RoutePoint> route) {
-        StringBuilder routeBuilder = new StringBuilder();
-        route.forEach(
-                routePoint -> {
-                    String routePointSummary = routePointFormMessage.buildRoutePointSummary(routePoint);
-                    routeBuilder.append(routePointSummary);
-                }
-        );
-        return routeBuilder.toString();
     }
 
     private String buildCargoSummary(UserData userData) {

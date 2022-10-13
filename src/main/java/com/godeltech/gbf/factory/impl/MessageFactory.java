@@ -40,6 +40,7 @@ public class MessageFactory implements Factory<Message> {
                     case REQUESTS -> RequestsMessage.class;
                     case FORM -> FormMessage.class;
                     case ROUTE_POINT_FORM -> RoutePointFormMessage.class;
+                    case INTERMEDIATE_EDITOR -> IntermediateEditorMessage.class;
                 };
         return beanFactory.getBean(answer);
     }

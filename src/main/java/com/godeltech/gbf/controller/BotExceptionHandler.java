@@ -52,8 +52,8 @@ public class BotExceptionHandler {
                 showAlert(true).
                 text(lms.getLocaleMessage(
                         ALERT_CALENDAR_DATE_IN_PAST_CODE,
-                        DateUtils.formatDate(nowDate, lms.getLocale()),
-                        DateUtils.formatDate(invalidDate, lms.getLocale()))).
+                        DateUtils.fullFormatDate(nowDate, lms.getLocale()),
+                        DateUtils.fullFormatDate(invalidDate, lms.getLocale()))).
                 cacheTime(60).
                 build();
         showAlert(answerCallbackQuery);
@@ -69,8 +69,8 @@ public class BotExceptionHandler {
                 showAlert(true).
                 text(lms.getLocaleMessage(
                         ALERT_CALENDAR_DATE_AFTER_DATE_CODE,
-                        DateUtils.formatDate(dateFrom, lms.getLocale()),
-                        DateUtils.formatDate(dateTo, lms.getLocale()))).
+                        DateUtils.fullFormatDate(dateFrom, lms.getLocale()),
+                        DateUtils.fullFormatDate(dateTo, lms.getLocale()))).
                 cacheTime(60).
                 build();
         showAlert(answerCallbackQuery);

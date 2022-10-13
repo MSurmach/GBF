@@ -37,6 +37,7 @@ public class HandlerFactory implements Factory<Handler> {
                     case REQUESTS -> RequestsHandler.class;
                     case FORM -> FormHandler.class;
                     case ROUTE_POINT_FORM -> RoutePointFormHandler.class;
+                    case INTERMEDIATE_EDITOR -> IntermediateEditorHandler.class;
                     default -> throw new IllegalArgumentException("Handler not found for this state");
                 };
         return beanFactory.getBean(handler);

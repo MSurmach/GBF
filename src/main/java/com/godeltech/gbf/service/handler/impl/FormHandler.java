@@ -29,30 +29,17 @@ public class FormHandler implements Handler {
                 handleEditRoutePoint(userData, INITIAL);
                 yield ROUTE_POINT_FORM;
             }
-            case DELETE_INITIAL_ROUTE_POINT -> {
-                deleteRoutePointByStatus(userData.getRoutePoints(), INITIAL);
-                yield FORM;
-            }
             case ADD_FINAL_ROUTE_POINT -> {
                 handleAddRoutePoint(userData, FINAL, 0);
                 yield ROUTE_POINT_FORM;
             }
-            case EDIT_INTERMEDIATE_ROUTE_POINT -> {
-                handleEditRoutePoint(userData, INTERMEDIATE);
-                yield ROUTE_POINT_FORM;
-            }
-            case DELETE_FINAL_ROUTE_POINT -> {
-                deleteRoutePointByStatus(userData.getRoutePoints(), FINAL);
-                yield FORM;
-            }
+            case INTERMEDIATE_EDITOR -> INTERMEDIATE_EDITOR;
             case ADD_INTERMEDIATE_ROUTE_POINT -> {
                 int order = whichIntermediateRoutePointIndex(userData.getRoutePoints());
                 handleAddRoutePoint(userData, INTERMEDIATE, order);
                 yield ROUTE_POINT_FORM;
             }
             case EDIT_FINAL_ROUTE_POINT -> handleEditRoutePoint(userData, FINAL);
-
-            case DELETE_INTERMEDIATE_ROUTE_POINT -> null;
             case ADD_COMMENT, EDIT_COMMENT -> COMMENT;
             case DELETE_COMMENT -> {
                 userData.setComment(null);
@@ -67,7 +54,7 @@ public class FormHandler implements Handler {
     private void handleAddRoutePoint(UserData userData, Status status, int order) {
         var toAdd = new RoutePoint();
         toAdd.setStatus(status);
-        toAdd.setOrder(order);
+        toAdd.setOrderNumber(order);
         userData.setTempRoutePoint(toAdd);
     }
 

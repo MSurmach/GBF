@@ -57,7 +57,7 @@ public class SummaryDataMessage implements Message {
     }
 
     private String date(LocalDate date, String code) {
-        return localMessageSource.getLocaleMessage(code, DateUtils.formatDate(date, localMessageSource.getLocale()));
+        return localMessageSource.getLocaleMessage(code, DateUtils.fullFormatDate(date, localMessageSource.getLocale()));
     }
 
     private String comment(String comment) {

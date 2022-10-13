@@ -34,6 +34,7 @@ public class KeyboardFactory implements Factory<Keyboard> {
                     case REQUESTS -> RequestKeyboard.class;
                     case FORM -> FormKeyboard.class;
                     case ROUTE_POINT_FORM -> RoutePointFormKeyboard.class;
+                    case INTERMEDIATE_EDITOR -> IntermediateEditorKeyboard.class;
                     default -> EmptyKeyboard.class;
                 };
         return beanFactory.getBean(keyboard);

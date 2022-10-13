@@ -41,9 +41,22 @@ public class FormKeyboard implements Keyboard {
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        keyboard.add(routePointButton(userData, INITIAL));
-        keyboard.add(routePointButton(userData, FINAL));
-        keyboard.add(routePointButton(userData, INTERMEDIATE));
+        LinkedList<RoutePoint> points = userData.getRoutePoints();
+        var initialRoutePointRow = containsRoutePointByStatus(points, INITIAL) ?
+                List.of(buttons.get(EDIT_INITIAL_ROUTE_POINT)) :
+                List.of(buttons.get(ADD_INITIAL_ROUTE_POINT));
+        keyboard.add(initialRoutePointRow);
+        var finalRoutePointRow = containsRoutePointByStatus(points, FINAL) ?
+                List.of(buttons.get(EDIT_FINAL_ROUTE_POINT)) :
+                List.of(buttons.get(ADD_FINAL_ROUTE_POINT));
+        keyboard.add(finalRoutePointRow);
+        if (containsRoutePointByStatus(points, INITIAL) &&
+                containsRoutePointByStatus(points, FINAL)) {
+            var intermediateRoutePointRow = List.of(buttons.get(ADD_INTERMEDIATE_ROUTE_POINT));
+            keyboard.add(intermediateRoutePointRow);
+        }
+        if (containsRoutePointByStatus(points, INTERMEDIATE))
+            keyboard.add(List.of(buttons.get(INTERMEDIATE_EDITOR)));
         keyboard.add(commentButton(userData));
         keyboard.add(cargoButton(userData));
         keyboard.add(confirmButton(userData.getRole()));
@@ -53,22 +66,8 @@ public class FormKeyboard implements Keyboard {
                 result();
     }
 
-    private List<InlineKeyboardButton> routePointButton(UserData userData, Status status) {
-        Optional<RoutePoint> optionalRoutePoint = userData.getRoutePoints().stream().
-                filter(routePoint -> routePoint.getStatus() == status).
-                findFirst();
-        final boolean present = optionalRoutePoint.isPresent();
-        return switch (status) {
-            case INITIAL -> present ?
-                    List.of(buttons.get(EDIT_INITIAL_ROUTE_POINT), buttons.get(DELETE_INITIAL_ROUTE_POINT)) :
-                    List.of(buttons.get(ADD_INITIAL_ROUTE_POINT));
-            case FINAL -> present ?
-                    List.of(buttons.get(EDIT_FINAL_ROUTE_POINT),buttons.get(DELETE_FINAL_ROUTE_POINT)) :
-                    List.of(buttons.get(ADD_FINAL_ROUTE_POINT));
-            case INTERMEDIATE -> present ?
-                    List.of(buttons.get(ADD_INTERMEDIATE_ROUTE_POINT), buttons.get(DELETE_INTERMEDIATE_ROUTE_POINT)) :
-                    List.of(buttons.get(ADD_INTERMEDIATE_ROUTE_POINT));
-        };
+    private boolean containsRoutePointByStatus(List<RoutePoint> points, Status status) {
+        return points.stream().anyMatch(routePoint -> routePoint.getStatus() == status);
     }
 
     private List<InlineKeyboardButton> commentButton(UserData userData) {
@@ -86,7 +85,7 @@ public class FormKeyboard implements Keyboard {
     }
 
     private List<InlineKeyboardButton> confirmButton(Role role) {
-        return switch (role){
+        return switch (role) {
             case COURIER -> List.of(buttons.get(FORM_REGISTER));
             case CLIENT -> List.of(buttons.get(FORM_SEARCH));
             case REGISTRATIONS_VIEWER -> null;

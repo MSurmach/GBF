@@ -17,8 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.godeltech.gbf.gui.button.CalendarBotButton.*;
-import static com.godeltech.gbf.utils.DateUtils.formattedMonth;
-import static com.godeltech.gbf.utils.DateUtils.formattedYear;
+import static com.godeltech.gbf.utils.DateUtils.formatMonth;
+import static com.godeltech.gbf.utils.DateUtils.formatYear;
 import static com.godeltech.gbf.utils.KeyboardUtils.createButtonWithData;
 import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButtonWithData;
 
@@ -62,10 +62,10 @@ public class DateKeyboard implements Keyboard {
     }
 
     private void addMonthYear(LocalDate date, List<List<InlineKeyboardButton>> keyboard) {
-        var yearButton = createButtonWithData(formattedYear(date), CHANGE_YEAR, date.toString());
+        var yearButton = createButtonWithData(formatYear(date), CHANGE_YEAR, date.toString());
         var prevMonthButton = createLocalButtonWithData(PREVIOUS, date.minusMonths(1).toString(), lms);
         var nextMonthButton = createLocalButtonWithData(NEXT, date.plusMonths(1).toString(), lms);
-        String formattedMonth = formattedMonth(date, lms.getLocale());
+        String formattedMonth = formatMonth(date, lms.getLocale());
         String monthLabel = formattedMonth.substring(0, 1).toUpperCase() + formattedMonth.substring(1);
         var monthButton = createButtonWithData(monthLabel, CHANGE_MONTH, date.toString());
         keyboard.add(List.of(yearButton));

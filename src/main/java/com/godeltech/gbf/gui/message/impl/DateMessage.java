@@ -19,7 +19,7 @@ public class DateMessage implements Message {
 
     @Override
     public String getMessage(UserData userData) {
-        String nowDate = DateUtils.formatDate(LocalDate.now(), lms.getLocale());
+        String nowDate = DateUtils.fullFormatDate(LocalDate.now(), lms.getLocale());
         String nowDateInfo = lms.getLocaleMessage(DATE_TODAY_CODE, nowDate);
         return nowDateInfo + lms.getLocaleMessage(DATE_QUESTION_CODE);
     }
