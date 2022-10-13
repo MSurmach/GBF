@@ -6,6 +6,8 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.Status;
 import com.godeltech.gbf.service.handler.Handler;
+import com.godeltech.gbf.service.user.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +16,10 @@ import static com.godeltech.gbf.model.State.*;
 import static com.godeltech.gbf.model.db.Status.*;
 
 @Service
+@AllArgsConstructor
 public class FormHandler implements Handler {
+
+    private UserService userService;
 
     @Override
     public State handle(UserData userData) {
@@ -47,7 +52,7 @@ public class FormHandler implements Handler {
             }
             case ADD_CARGO, EDIT_CARGO -> CARGO_MENU;
             case FORM_REGISTER -> {
-
+                userService.save(userData);
                 yield SUCCESS;
             }
             case FORM_SEARCH -> COURIERS_LIST;
