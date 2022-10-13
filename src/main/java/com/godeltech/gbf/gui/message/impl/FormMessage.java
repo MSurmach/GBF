@@ -4,11 +4,9 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.Message;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.model.db.RoutePoint;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -64,11 +62,11 @@ public class FormMessage implements Message {
             case COURIER, REGISTRATIONS_VIEWER -> lms.getLocaleMessage(COURIER_DETAILS_CARGO_CODE);
             case CLIENT, REQUESTS_VIEWER -> lms.getLocaleMessage(CLIENT_DETAILS_CARGO_CODE);
         };
-        if (userData.isDocuments() ||
+        if (userData.isDocumentsExist() ||
                 userData.getPackageSize() != null ||
                 userData.getCompanionCount() != 0)
             cargoSummary.append(cargoHeader);
-        if (userData.isDocuments())
+        if (userData.isDocumentsExist())
             cargoSummary.append(lms.getLocaleMessage(CARGO_DOCUMENTS_SELECTED_CODE));
         if (userData.getPackageSize() != null)
             cargoSummary.append(lms.getLocaleMessage(
@@ -91,7 +89,7 @@ public class FormMessage implements Message {
         return userData.getRoutePoints().isEmpty() &&
                 Objects.isNull(userData.getComment()) &&
                 Objects.isNull(userData.getPackageSize()) &&
-                !userData.isDocuments() &&
+                !userData.isDocumentsExist() &&
                 userData.getCompanionCount() == 0;
     }
 }

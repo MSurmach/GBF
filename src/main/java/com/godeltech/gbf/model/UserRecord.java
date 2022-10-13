@@ -57,22 +57,4 @@ public class UserRecord {
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role")
     private Role role;
-
-    public UserRecord(UserData userData) {
-        recordId = userData.getRecordId();
-        telegramUserId = userData.getTelegramUserId();
-        username = userData.getUsername();
-        countryFrom = userData.getCountryFrom();
-        countryTo = userData.getCountryTo();
-        cityFrom = userData.getCityFrom();
-        cityTo = userData.getCityTo();
-        dateTo = userData.getDateTo();
-        dateFrom = userData.getDateFrom();
-        documents = userData.isDocuments();
-        packageSize = userData.getPackageSize();
-        companionCount = userData.getCompanionCount();
-        comment = userData.getComment();
-        role = userData.getRole();
-        changedAt = LocalDate.now();
-    }
 }

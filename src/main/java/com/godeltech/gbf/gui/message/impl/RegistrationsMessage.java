@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class RegistrationsMessage implements Message {
     private LocalMessageSource localMessageSource;
-    private SummaryDataMessage summaryDataText;
-
     public final static String REGISTRATIONS_EXIST_CODE = "registrations.exist";
     public final static String REGISTRATIONS_NOT_EXIST_CODE = "registrations.notExist";
     public final static String REGISTRATIONS_PAGINATION_INFO_CODE= "registrations.pagination.info";
@@ -22,8 +20,8 @@ public class RegistrationsMessage implements Message {
 
     @Override
     public String getMessage(UserData userData) {
-        String recordIdHeader = localMessageSource.getLocaleMessage(REGISTRATION_DATA_RECORD_ID, String.valueOf(userData.getRecordId()));
-        return recordIdHeader + summaryDataText.getMessage(userData);
+        String recordIdHeader = localMessageSource.getLocaleMessage(REGISTRATION_DATA_RECORD_ID, String.valueOf(userData.getUserId()));
+        return recordIdHeader /*+ summaryDataText.getMessage(userData)*/;
     }
 
     public String initialMessage(UserData userData) {

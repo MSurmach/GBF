@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class RequestsMessage implements Message {
     private LocalMessageSource localMessageSource;
-    private SummaryDataMessage summaryDataText;
 
     public final static String REQUESTS_EXIST_INITIAL = "requests.exist.initial";
     public final static String REQUESTS_NOT_EXIST_INITIAL = "requests.notExist.initial";
@@ -21,8 +20,8 @@ public class RequestsMessage implements Message {
 
     @Override
     public String getMessage(UserData userData) {
-        String recordIdHeader = localMessageSource.getLocaleMessage(REQUESTS_DATA_RECORD_ID, String.valueOf(userData.getRecordId()));
-        return recordIdHeader + summaryDataText.getMessage(userData);
+        String recordIdHeader = localMessageSource.getLocaleMessage(REQUESTS_DATA_RECORD_ID, String.valueOf(userData.getUserId()));
+        return recordIdHeader /*+ summaryDataText.getMessage(userData)*/;
     }
 
     public String initialMessage(UserData userData) {

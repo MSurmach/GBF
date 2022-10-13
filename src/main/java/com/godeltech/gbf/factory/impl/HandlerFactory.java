@@ -32,7 +32,7 @@ public class HandlerFactory implements Factory<Handler> {
                     case CARGO_PEOPLE -> CargoPeopleHandler.class;
                     case WRONG_INPUT -> WrongInputHandler.class;
                     case REGISTRATIONS -> RegistrationsHandler.class;
-                    case REGISTRATION_EDITOR -> EditorHandler.class;
+                    //case REGISTRATION_EDITOR -> EditorHandler.class;
                     case SUMMARY_DATA_TO_CONFIRM -> SummaryHandler.class;
                     case REQUESTS -> RequestsHandler.class;
                     case FORM -> FormHandler.class;

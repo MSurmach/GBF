@@ -21,7 +21,7 @@ public class RegistrationKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        String recordId = String.valueOf(userData.getRecordId());
+        String recordId = String.valueOf(userData.getUserId());
         var editButton = createLocalButtonWithData(REGISTRATION_EDIT, recordId, lms);
         var deleteButton = createLocalButtonWithData(REGISTRATION_DELETE, recordId, lms);
         var findButton = createLocalButtonWithData(REGISTRATION_FIND_CLIENTS, recordId, lms);

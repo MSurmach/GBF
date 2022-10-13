@@ -29,11 +29,11 @@ public class CargoMenuHandler implements Handler {
                 };
             }
             case SELECT_DOCUMENTS -> {
-                userData.setDocuments(true);
+                userData.setDocumentsExist(true);
                 yield currentState;
             }
             case CANCEL_DOCUMENTS -> {
-                userData.setDocuments(false);
+                userData.setDocumentsExist(false);
                 yield currentState;
             }
             case SELECT_PACKAGE, EDIT_PACKAGE -> CARGO_PACKAGE;
@@ -52,7 +52,7 @@ public class CargoMenuHandler implements Handler {
     private void checkSelection(UserData userData) {
         State currentState = userData.getStateHistory().peek();
         String callbackQueryId = userData.getCallbackQueryId();
-        if (!userData.isDocuments() &&
+        if (!userData.isDocumentsExist() &&
                 userData.getPackageSize() == null &&
                 userData.getCompanionCount() == 0) throw new ConfirmationException(currentState, callbackQueryId);
     }

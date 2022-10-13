@@ -1,6 +1,7 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.cache.UserDataCache;
+import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.Handler;
@@ -13,8 +14,8 @@ public class MenuHandler implements Handler {
 
     @Override
     public State handle(UserData userData) {
-        userData.reset();
-        UserDataCache.initializeByIdAndUsername(userData.getTelegramUserId(), userData.getUsername());
+        ModelUtils.resetUserData(userData);
+        UserDataCache.initializeByIdAndUsername(userData.getTelegramId(), userData.getUsername());
         return MENU;
     }
 }

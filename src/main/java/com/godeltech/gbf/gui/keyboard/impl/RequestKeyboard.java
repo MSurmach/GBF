@@ -21,7 +21,7 @@ public class RequestKeyboard implements Keyboard {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        String recordId = String.valueOf(userData.getRecordId());
+        String recordId = String.valueOf(userData.getUserId());
         var editButton = createLocalButtonWithData(REQUEST_EDIT, recordId, lms);
         var deleteButton = createLocalButtonWithData(REQUEST_DELETE, recordId, lms);
         var findButton = createLocalButtonWithData(REQUEST_FIND_COURIERS, recordId, lms);

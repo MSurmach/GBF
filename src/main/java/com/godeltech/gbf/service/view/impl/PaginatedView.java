@@ -33,7 +33,7 @@ public class PaginatedView implements View<SendMessage> {
 
     @Override
     public List<SendMessage> buildView(Long chatId, UserData userData) {
-        long telegramUserId = userData.getTelegramUserId();
+        long telegramUserId = userData.getTelegramId();
         State currentState = userData.getStateHistory().peek();
         Page<UserRecord> records = switch (userData.getRole()) {
             case REGISTRATIONS_VIEWER -> {
@@ -77,16 +77,16 @@ public class PaginatedView implements View<SendMessage> {
                 replyMarkup(keyboardMarkup).
                 build());
         if (records != null && !records.isEmpty()) {
-            for (UserRecord record : records) {
-                UserData dataFromRecord = new UserData(record);
-                SendMessage sendMessage = SendMessage.builder().
-                        chatId(chatId).
-                        parseMode("html").
-                        text(messageFactory.get(currentState).getMessage(dataFromRecord)).
-                        replyMarkup(keyboardFactory.get(currentState).getKeyboardMarkup(dataFromRecord)).
-                        build();
-                messages.add(sendMessage);
-            }
+//            for (UserRecord record : records) {
+//                UserData dataFromRecord = new UserData(record);
+//                SendMessage sendMessage = SendMessage.builder().
+//                        chatId(chatId).
+//                        parseMode("html").
+//                        text(messageFactory.get(currentState).getMessage(dataFromRecord)).
+//                        replyMarkup(keyboardFactory.get(currentState).getKeyboardMarkup(dataFromRecord)).
+//                        build();
+//                messages.add(sendMessage);
+//            }
         }
         return messages;
     }

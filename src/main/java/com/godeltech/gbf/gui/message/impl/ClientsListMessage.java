@@ -15,12 +15,11 @@ public class ClientsListMessage implements Message {
     public final static String CLIENTS_LIST_PAGINATION_INFO = "clients.list.pagination.info";
 
     private LocalMessageSource localMessageSource;
-    private SummaryDataMessage summaryDataText;
 
     @Override
     public String getMessage(UserData userData) {
-        return localMessageSource.getLocaleMessage(CLIENTS_LIST_HEADER, userData.getUsername()) +
-                summaryDataText.getMessage(userData);
+        return localMessageSource.getLocaleMessage(CLIENTS_LIST_HEADER, userData.getUsername())/* +
+                summaryDataText.getMessage(userData)*/;
     }
 
     public String initialMessage(UserData userData) {

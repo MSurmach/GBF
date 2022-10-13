@@ -29,7 +29,6 @@ public class KeyboardFactory implements Factory<Keyboard> {
                     case COMMENT_CONFIRM -> CommentConfirmationKeyboard.class;
                     case SUMMARY_DATA_TO_CONFIRM -> ConfirmKeyboard.class;
                     case SUCCESS -> BackMenuKeyboard.class;
-                    case REGISTRATION_EDITOR, REQUEST_EDITOR -> EditorKeyboard.class;
                     case REGISTRATIONS -> RegistrationKeyboard.class;
                     case REQUESTS -> RequestKeyboard.class;
                     case FORM -> FormKeyboard.class;

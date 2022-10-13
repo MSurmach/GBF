@@ -77,7 +77,7 @@ public class FormKeyboard implements Keyboard {
     }
 
     private List<InlineKeyboardButton> cargoButton(UserData userData) {
-        return !userData.isDocuments() &&
+        return !userData.isDocumentsExist() &&
                 userData.getPackageSize() == null &&
                 userData.getCompanionCount() == 0 ?
                 List.of(buttons.get(ADD_CARGO)) :

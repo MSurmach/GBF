@@ -42,7 +42,7 @@ public class CargoMainKeyboard implements Keyboard {
     private List<InlineKeyboardButton> documentsRow(UserData userData) {
         List<InlineKeyboardButton> row = new ArrayList<>();
         InlineKeyboardButton documentButton;
-        if (userData.isDocuments()) {
+        if (userData.isDocumentsExist()) {
             documentButton = KeyboardUtils.createLocalButton(CANCEL_DOCUMENTS, lms);
         } else {
             documentButton = KeyboardUtils.createLocalButton(SELECT_DOCUMENTS, lms);

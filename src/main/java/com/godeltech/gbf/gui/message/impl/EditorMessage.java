@@ -10,14 +10,12 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class EditorMessage implements Message {
     private LocalMessageSource localMessageSource;
-    private SummaryDataMessage summaryDataText;
-
     public final static String REGISTRATION_EDITOR_NOTE_CODE = "registration.editor.note";
 
     @Override
     public String getMessage(UserData userData) {
         String mainNote = localMessageSource.getLocaleMessage(REGISTRATION_EDITOR_NOTE_CODE);
-        String editableData = summaryDataText.getMessage(userData);
-        return mainNote + System.lineSeparator() + editableData;
+       // String editableData = summaryDataText.getMessage(userData);
+        return mainNote + System.lineSeparator() /*+ editableData*/;
     }
 }

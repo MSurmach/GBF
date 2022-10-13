@@ -28,7 +28,7 @@ public class RequestsHandler implements Handler {
         return switch (clickedButton) {
             case REQUEST_EDIT -> {
                 UserRecord record = getRecordFromPage(userData, recordId);
-                userData.copyDataRecord(record);
+               // userData.copyDataRecord(record);
                 yield REQUEST_EDITOR;
             }
             case REQUEST_DELETE -> {
@@ -37,14 +37,14 @@ public class RequestsHandler implements Handler {
             }
             case REQUEST_FIND_COURIERS -> {
                 UserRecord record = getRecordFromPage(userData, recordId);
-                userData.setTempForSearch(new UserData(record));
+               // userData.setTempForSearch(new UserData(record));
                 yield COURIERS_LIST;
             }
         };
     }
 
     private UserRecord getRecordFromPage(UserData userData, long recordId) {
-        long telegramUserId = userData.getTelegramUserId();
+        long telegramUserId = userData.getTelegramId();
         return userData.getRecordsPage().get().
                 filter(record -> record.getTelegramUserId() == telegramUserId && record.getRecordId() == recordId).
                 findFirst().

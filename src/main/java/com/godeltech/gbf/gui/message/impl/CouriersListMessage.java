@@ -14,12 +14,10 @@ public class CouriersListMessage implements Message {
     public final static String COURIERS_LIST_HEADER = "couriers.list.header";
     public final static String COURIERS_LIST_PAGINATION_INFO = "couriers.list.pagination.info";
     private LocalMessageSource localMessageSource;
-    private SummaryDataMessage summaryDataText;
-
     @Override
     public String getMessage(UserData userData) {
-        return localMessageSource.getLocaleMessage(COURIERS_LIST_HEADER, userData.getUsername()) +
-                summaryDataText.getMessage(userData);
+        return localMessageSource.getLocaleMessage(COURIERS_LIST_HEADER, userData.getUsername()) /*+
+                summaryDataText.getMessage(userData)*/;
     }
 
     public String initialMessage(UserData userData) {

@@ -1,15 +1,19 @@
 package com.godeltech.gbf.model.db;
 
 import com.godeltech.gbf.model.Role;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "TELEGRAM_USER")
+@Builder
+@AllArgsConstructor
 public class TelegramUser {
     @Id
     @Column
@@ -46,4 +50,8 @@ public class TelegramUser {
 
     @Column
     private LocalDate expiredAt;
+
+    public TelegramUser() {
+
+    }
 }

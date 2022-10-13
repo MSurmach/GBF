@@ -46,7 +46,10 @@ public class FormHandler implements Handler {
                 yield userData.getStateHistory().peek();
             }
             case ADD_CARGO, EDIT_CARGO -> CARGO_MENU;
-            case FORM_REGISTER -> SUCCESS;
+            case FORM_REGISTER -> {
+
+                yield SUCCESS;
+            }
             case FORM_SEARCH -> COURIERS_LIST;
         };
     }
