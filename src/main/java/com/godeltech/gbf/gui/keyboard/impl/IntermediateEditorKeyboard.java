@@ -18,7 +18,8 @@ import java.util.List;
 import static com.godeltech.gbf.gui.button.IntermediateEditorButton.*;
 import static com.godeltech.gbf.model.db.Status.INTERMEDIATE;
 import static com.godeltech.gbf.utils.DateUtils.shortFormatDate;
-import static com.godeltech.gbf.utils.KeyboardUtils.*;
+import static com.godeltech.gbf.utils.KeyboardUtils.createButtonWithData;
+import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButtonWithData;
 
 @Component
 @AllArgsConstructor
@@ -42,7 +43,7 @@ public class IntermediateEditorKeyboard implements Keyboard {
                     keyboard.add(buildDeleteWithOrderButtonsRow(intermediateRoutePoint));
                 }
         );
-        keyboard.add(List.of(createLocalButton(SAVE_CHANGES, lms)));
+        keyboard.add(List.of(createLocalButtonWithData(SAVE_CHANGES, "-1", lms)));
         return new KeyboardMarkupAppender().
                 append(new InlineKeyboardMarkup(keyboard)).
                 append(controlKeyboard.getKeyboardMarkup(userData)).

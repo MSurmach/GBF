@@ -23,23 +23,22 @@ public class IntermediateEditorHandler implements Handler {
         String[] splittedCallback = callback.split(":");
         var clicked = IntermediateEditorButton.valueOf(splittedCallback[0]);
         LinkedList<RoutePoint> points = userData.getRoutePoints();
+        var order = Integer.valueOf(splittedCallback[1]);
         return switch (clicked) {
             case ORDER_UP -> {
-                var order = Integer.valueOf(splittedCallback[1]);
                 moveUpRoutePoint(points, order);
                 yield INTERMEDIATE_EDITOR;
             }
             case ORDER_DOWN -> {
-                var order = Integer.valueOf(splittedCallback[1]);
                 moveDownRoutePoint(points, order);
                 yield INTERMEDIATE_EDITOR;
             }
             case DELETE_ROUTE_POINT -> {
-                //points.remove(currentIndex);
+                deleteIntermediateRoutePoint(points, order);
                 yield INTERMEDIATE_EDITOR;
             }
             case EDIT_INTERMEDIATE_ROUTE_POINT -> {
-                //userData.setTempRoutePoint(points.get(order - 1));
+                userData.setTempRoutePoint(points.get(order));
                 yield ROUTE_POINT_FORM;
             }
             case SAVE_CHANGES -> FORM;
@@ -71,6 +70,13 @@ public class IntermediateEditorHandler implements Handler {
             points.set(nextIndex, currentRoutePoint);
             currentRoutePoint.setOrderNumber(nextRoutePoint.getOrderNumber());
             nextRoutePoint.setOrderNumber(order);
+        }
+    }
+
+    private void deleteIntermediateRoutePoint(List<RoutePoint> points, int order) {
+        points.remove(order);
+        for (int index = 0; index < points.size() - 1; index++) {
+            points.get(index).setOrderNumber(index);
         }
     }
 }

@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 
 import static com.godeltech.gbf.model.State.*;
-import static com.godeltech.gbf.model.db.Status.FINAL;
-import static com.godeltech.gbf.model.db.Status.INITIAL;
+import static com.godeltech.gbf.model.db.Status.*;
 
 @Service
 @AllArgsConstructor
@@ -36,28 +35,32 @@ public class RoutePointFormHandler implements Handler {
             }
             case SAVE -> {
                 LinkedList<RoutePoint> points = userData.getRoutePoints();
-                switch (tempRoutePoint.getStatus()) {
+                yield switch (tempRoutePoint.getStatus()) {
                     case INITIAL -> {
                         if (points.stream().anyMatch(point -> point.getStatus() == INITIAL))
                             points.removeFirst();
                         points.addFirst(tempRoutePoint);
+                        yield FORM;
                     }
                     case INTERMEDIATE -> {
                         int intermediateOrder = tempRoutePoint.getOrderNumber();
                         if (points.isEmpty() ||
                                 (points.size() == 1 && points.getFirst().getStatus() == FINAL))
                             points.addFirst(tempRoutePoint);
-                        else
+                        else {
+                            if (points.get(intermediateOrder).getStatus() == INTERMEDIATE)
+                                points.remove(intermediateOrder);
                             points.add(intermediateOrder, tempRoutePoint);
+                        }
+                        yield INTERMEDIATE_EDITOR;
                     }
                     case FINAL -> {
                         if (points.stream().anyMatch(point -> point.getStatus() == FINAL))
                             points.removeLast();
                         points.addLast(tempRoutePoint);
+                        yield FORM;
                     }
-                }
-                userData.setTempRoutePoint(null);
-                yield FORM;
+                };
             }
         };
     }
