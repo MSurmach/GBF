@@ -16,17 +16,13 @@ public class RoutePoint {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long routePointId;
 
-    @ManyToOne
-    @JoinColumn(name = "USER_ID")
-    private TelegramUser telegramUser;
-
     @Column
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Transient
+    @ManyToOne
+    @JoinColumn(name = "COUNTRY_ID")
     private Country country;
-
     @ManyToOne
     @JoinColumn(name = "CITY_ID")
     private City city;

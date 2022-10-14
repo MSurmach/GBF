@@ -88,8 +88,7 @@ public class FormKeyboard implements Keyboard {
         return switch (role) {
             case COURIER -> List.of(buttons.get(FORM_REGISTER));
             case CLIENT -> List.of(buttons.get(FORM_SEARCH));
-            case REGISTRATIONS_VIEWER -> null;
-            case REQUESTS_VIEWER -> null;
+            case REGISTRATIONS_VIEWER, REQUESTS_VIEWER -> List.of(buttons.get(FORM_EDIT_CONFIRM));
         };
     }
 }

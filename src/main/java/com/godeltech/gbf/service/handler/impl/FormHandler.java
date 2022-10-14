@@ -51,11 +51,17 @@ public class FormHandler implements Handler {
                 yield userData.getStateHistory().peek();
             }
             case ADD_CARGO, EDIT_CARGO -> CARGO_MENU;
-            case FORM_REGISTER -> {
-                userService.save(userData);
-                yield SUCCESS;
-            }
-            case FORM_SEARCH -> COURIERS_LIST;
+            case FORM_REGISTER, FORM_SEARCH, FORM_EDIT_CONFIRM -> saveAndGetAppropriateState(userData);
+        };
+    }
+
+    private State saveAndGetAppropriateState(UserData userData) {
+        userService.save(userData);
+        return switch (userData.getRole()) {
+            case COURIER -> SUCCESS;
+            case CLIENT -> COURIERS_LIST_RESULT;
+            case REGISTRATIONS_VIEWER -> REGISTRATIONS;
+            case REQUESTS_VIEWER -> REQUESTS;
         };
     }
 
@@ -70,11 +76,6 @@ public class FormHandler implements Handler {
         var toEdit = getRoutePointByStatus(userData.getRoutePoints(), status);
         userData.setTempRoutePoint(toEdit);
         return ROUTE_POINT_FORM;
-    }
-
-    private void deleteRoutePointByStatus(List<RoutePoint> points, Status status) {
-        RoutePoint toDelete = getRoutePointByStatus(points, status);
-        points.remove(toDelete);
     }
 
     private RoutePoint getRoutePointByStatus(List<RoutePoint> points, Status status) {

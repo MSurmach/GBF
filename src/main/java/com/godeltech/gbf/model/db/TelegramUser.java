@@ -1,11 +1,13 @@
 package com.godeltech.gbf.model.db;
 
 import com.godeltech.gbf.model.Role;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.List;
 
 @Getter
@@ -26,7 +28,7 @@ public class TelegramUser {
     @Column
     private String username;
 
-    @OneToMany(mappedBy = "telegramUser")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<RoutePoint> routePoints;
 
     @Column

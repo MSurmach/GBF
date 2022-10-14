@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButton;
+import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButtonWithData;
 
 @Component
 @AllArgsConstructor
@@ -29,14 +29,16 @@ public class CityKeyboard implements Keyboard {
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         Country country = userData.getTempRoutePoint().getCountry();
-        List<City> cities = cityService.findCitiesByCountryId(country.getCountryId());
+        List<City> cities = cityService.findCitiesByCountry(country);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         for (var index = 0; index < cities.size(); ) {
             var columnCount = 3;
             List<InlineKeyboardButton> buttonRow = new ArrayList<>();
             while (columnCount > 0 && index != cities.size()) {
-                String cityName = cities.get(index).getName();
-                buttonRow.add(createLocalButton(cityName, cityName, lms));
+                City city = cities.get(index);
+                String cityName = city.getName();
+                String cityId = city.getCityId().toString();
+                buttonRow.add(createLocalButtonWithData(cityName, cityName, cityId, lms));
                 columnCount--;
                 index++;
             }

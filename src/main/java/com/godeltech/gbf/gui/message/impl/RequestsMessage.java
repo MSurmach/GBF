@@ -1,40 +1,35 @@
 package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.model.UserRecord;
 import com.godeltech.gbf.gui.message.Message;
+import com.godeltech.gbf.gui.message.PaginationInfo;
+import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.db.TelegramUser;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class RequestsMessage implements Message {
-    private LocalMessageSource localMessageSource;
-
+public class RequestsMessage implements Message, PaginationInfo<TelegramUser> {
+    private LocalMessageSource lms;
+    private DetailsCreator detailsCreator;
     public final static String REQUESTS_EXIST_INITIAL = "requests.exist.initial";
     public final static String REQUESTS_NOT_EXIST_INITIAL = "requests.notExist.initial";
-    public final static String REQUESTS_LIST_PAGINATION_INFO = "requests.list.pagination.info";
-    public final static String REQUESTS_DATA_RECORD_ID = "request.data.record_id";
+    public final static String REQUESTS_DATA_ID = "request.data.id";
 
     @Override
     public String getMessage(UserData userData) {
-        String recordIdHeader = localMessageSource.getLocaleMessage(REQUESTS_DATA_RECORD_ID, String.valueOf(userData.getUserId()));
-        return recordIdHeader /*+ summaryDataText.getMessage(userData)*/;
+        String recordIdHeader = lms.getLocaleMessage(REQUESTS_DATA_ID, userData.getUserId().toString());
+        return recordIdHeader + detailsCreator.createAllDetails(userData);
     }
 
     public String initialMessage(UserData userData) {
-        Page<UserRecord> records = userData.getRecordsPage();
+        Page<TelegramUser> pages = userData.getPage();
         String username = userData.getUsername();
-        return (records != null && !records.isEmpty()) ?
-                localMessageSource.getLocaleMessage(REQUESTS_EXIST_INITIAL, username) +
-                        paginationInfoMessage(userData) :
-                localMessageSource.getLocaleMessage(REQUESTS_NOT_EXIST_INITIAL, username);
-    }
-
-    private String paginationInfoMessage(UserData userData) {
-        return localMessageSource.getLocaleMessage(REQUESTS_LIST_PAGINATION_INFO,
-                String.valueOf(userData.getRecordsPage().getTotalElements()));
+        return (pages != null && !pages.isEmpty()) ?
+                lms.getLocaleMessage(REQUESTS_EXIST_INITIAL, username) +
+                        paginationInfoLocalMessage(pages, lms) :
+                lms.getLocaleMessage(REQUESTS_NOT_EXIST_INITIAL, username);
     }
 }

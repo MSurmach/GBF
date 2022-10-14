@@ -1,12 +1,13 @@
 package com.godeltech.gbf.service.view.impl;
 
-import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.model.UserRecord;
 import com.godeltech.gbf.factory.impl.KeyboardFactory;
 import com.godeltech.gbf.factory.impl.MessageFactory;
 import com.godeltech.gbf.gui.keyboard.impl.BackMenuKeyboard;
 import com.godeltech.gbf.gui.keyboard.impl.PaginationKeyboard;
+import com.godeltech.gbf.model.ModelUtils;
+import com.godeltech.gbf.model.State;
+import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.service.user.UserService;
 import com.godeltech.gbf.service.view.View;
 import lombok.AllArgsConstructor;
@@ -33,41 +34,31 @@ public class PaginatedView implements View<SendMessage> {
 
     @Override
     public List<SendMessage> buildView(Long chatId, UserData userData) {
-        long telegramUserId = userData.getTelegramId();
+        long telegramId = userData.getTelegramId();
         State currentState = userData.getStateHistory().peek();
-        Page<UserRecord> records = switch (userData.getRole()) {
+        Page<TelegramUser> pages = switch (userData.getRole()) {
             case REGISTRATIONS_VIEWER -> {
                 if (currentState == REGISTRATIONS)
-                    yield userService.findByTelegramUserIdAndRole(
-                            telegramUserId,
+                    yield userService.findTelegramUsersByTelegramIdAndRole(
+                            telegramId,
                             COURIER,
                             userData.getPageNumber());
-                else yield userService.findClientByUserDataAndRole(
-                        userData.getTempForSearch(),
-                        CLIENT,
-                        userData.getPageNumber()
-                );
+                else yield null;
             }
             case REQUESTS_VIEWER -> {
                 if (currentState == REQUESTS)
-                    yield userService.findByTelegramUserIdAndRole(
-                            telegramUserId,
+                    yield userService.findTelegramUsersByTelegramIdAndRole(
+                            telegramId,
                             CLIENT,
                             userData.getPageNumber());
-                else yield userService.findCourierByUserDataAndRole(
-                        userData.getTempForSearch(),
-                        COURIER,
-                        userData.getPageNumber());
+                else yield null;
             }
-            case CLIENT -> userService.findCourierByUserDataAndRole(
-                    userData,
-                    COURIER,
-                    userData.getPageNumber());
+            case CLIENT -> null;
             default -> null;
         };
-        userData.setRecordsPage(records);
+        userData.setPage(pages);
         List<SendMessage> messages = new ArrayList<>();
-        var keyboardMarkup = (records != null && !records.isEmpty()) ?
+        var keyboardMarkup = (pages != null && !pages.isEmpty()) ?
                 paginationKeyboard.getKeyboardMarkup(userData) :
                 backMenuKeyboard.getKeyboardMarkup(userData);
         messages.add(SendMessage.builder().
@@ -76,17 +67,17 @@ public class PaginatedView implements View<SendMessage> {
                 text(messageFactory.get(currentState).initialMessage(userData)).
                 replyMarkup(keyboardMarkup).
                 build());
-        if (records != null && !records.isEmpty()) {
-//            for (UserRecord record : records) {
-//                UserData dataFromRecord = new UserData(record);
-//                SendMessage sendMessage = SendMessage.builder().
-//                        chatId(chatId).
-//                        parseMode("html").
-//                        text(messageFactory.get(currentState).getMessage(dataFromRecord)).
-//                        replyMarkup(keyboardFactory.get(currentState).getKeyboardMarkup(dataFromRecord)).
-//                        build();
-//                messages.add(sendMessage);
-//            }
+        if (pages != null && !pages.isEmpty()) {
+            for (TelegramUser telegramUser : pages) {
+                UserData fromDb = ModelUtils.createUserDataFromTelegramUser(telegramUser);
+                SendMessage sendMessage = SendMessage.builder().
+                        chatId(chatId).
+                        parseMode("html").
+                        text(messageFactory.get(currentState).getMessage(fromDb)).
+                        replyMarkup(keyboardFactory.get(currentState).getKeyboardMarkup(fromDb)).
+                        build();
+                messages.add(sendMessage);
+            }
         }
         return messages;
     }

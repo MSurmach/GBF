@@ -28,9 +28,16 @@ public class KeyboardUtils {
     }
 
     public static InlineKeyboardButton createLocalButtonWithData(String label, BotButton botButton, String data, LocalMessageSource lms) {
-        var button = new InlineKeyboardButton(lms.getLocaleMessage(lms.getLocaleMessage(label)));
+        var button = new InlineKeyboardButton(lms.getLocaleMessage(label));
         String callback = botButton + ":" + data;
         button.setCallbackData(callback);
+        return button;
+    }
+
+    public static InlineKeyboardButton createLocalButtonWithData(String label, String callback, String data, LocalMessageSource lms) {
+        var button = new InlineKeyboardButton(lms.getLocaleMessage(label));
+        String buttonCallback = callback + ":" + data;
+        button.setCallbackData(buttonCallback);
         return button;
     }
 

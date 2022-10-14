@@ -20,7 +20,7 @@ public class ViewFactory implements Factory<View<? extends BotApiMethod<?>>> {
     public View<? extends BotApiMethod<?>> get(State state) {
         Class<? extends View<? extends BotApiMethod<?>>> stateView =
                 switch (state) {
-                    case REGISTRATIONS, COURIERS_LIST, CLIENTS_LIST, REQUESTS -> PaginatedView.class;
+                    case REGISTRATIONS, COURIERS_LIST_RESULT, CLIENTS_LIST_RESULT, REQUESTS -> PaginatedView.class;
                     case FORM -> FormView.class;
                     default -> DefaultView.class;
                 };

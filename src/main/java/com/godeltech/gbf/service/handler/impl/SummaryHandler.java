@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import static com.godeltech.gbf.model.Role.COURIER;
-import static com.godeltech.gbf.model.State.COURIERS_LIST;
+import static com.godeltech.gbf.model.State.COURIERS_LIST_RESULT;
 import static com.godeltech.gbf.model.State.SUCCESS;
 
 @Service
@@ -32,7 +32,7 @@ public class SummaryHandler implements Handler {
                 userService.save(userData);
                 Page<UserRecord> recordsPage = userService.findCourierByUserDataAndRole(userData, COURIER, userData.getPageNumber());
                 userData.setRecordsPage(recordsPage);
-                yield COURIERS_LIST;
+                yield COURIERS_LIST_RESULT;
             }
             default -> userData.getStateHistory().peek();
         };

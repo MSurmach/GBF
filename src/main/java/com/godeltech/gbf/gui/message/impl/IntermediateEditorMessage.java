@@ -16,7 +16,7 @@ import static com.godeltech.gbf.model.db.Status.INTERMEDIATE;
 public class IntermediateEditorMessage implements Message {
     public final static String INTERMEDIATE_EDITOR_DETAILS_HEADER_CODE = "intermediateEditor.details.header";
     private LocalMessageSource lms;
-    private MessageUtil messageUtil;
+    private DetailsCreator detailsCreator;
 
     @Override
     public String getMessage(UserData userData) {
@@ -24,7 +24,7 @@ public class IntermediateEditorMessage implements Message {
         List<RoutePoint> intermediateRoutePoints = userData.getRoutePoints().stream().
                 filter(routePoint -> routePoint.getStatus() == INTERMEDIATE).
                 toList();
-        String intermediatePointsRoute = messageUtil.buildRoute(intermediateRoutePoints);
+        String intermediatePointsRoute = detailsCreator.createRouteDetails(intermediateRoutePoints);
         return header + intermediatePointsRoute;
     }
 }

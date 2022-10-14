@@ -3,22 +3,17 @@ package com.godeltech.gbf.gui.message.impl;
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.Message;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.model.db.City;
-import com.godeltech.gbf.model.db.Country;
 import com.godeltech.gbf.model.db.RoutePoint;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-
-import static com.godeltech.gbf.gui.message.impl.FormMessage.EMPTY_CODE;
 import static com.godeltech.gbf.utils.DateUtils.fullFormatDate;
 
 @Component
 @AllArgsConstructor
 public class RoutePointFormMessage implements Message {
     private final LocalMessageSource lms;
-    private final MessageUtil messageUtil;
+    private final DetailsCreator detailsCreator;
     public final static String COURIER_HEADER_CODE = "routePointForm.courier.header";
     public final static String CLIENT_HEADER_CODE = "routePointForm.client.header";
 
@@ -29,6 +24,6 @@ public class RoutePointFormMessage implements Message {
             case COURIER, REGISTRATIONS_VIEWER -> lms.getLocaleMessage(COURIER_HEADER_CODE, userData.getUsername());
             case CLIENT, REQUESTS_VIEWER -> lms.getLocaleMessage(CLIENT_HEADER_CODE, userData.getUsername());
         };
-        return header + messageUtil.buildRoutePointSummary(tempRoutePoint);
+        return header + detailsCreator.createRoutePointDetails(tempRoutePoint);
     }
 }

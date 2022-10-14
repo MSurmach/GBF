@@ -7,7 +7,8 @@ import com.godeltech.gbf.model.UserData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
+import static com.godeltech.gbf.gui.message.impl.RegistrationsMessage.REGISTRATION_DATA_ID;
+import static com.godeltech.gbf.gui.message.impl.RequestsMessage.REQUESTS_DATA_ID;
 
 @Component
 @AllArgsConstructor
@@ -18,16 +19,10 @@ public class FormMessage implements Message {
     public final static String CLIENT_ESSENTIAL_INFO_CODE = "form.client.essential.info";
     public final static String DETAILS_HEADER_EMPTY_CODE = "form.details.header.empty";
     public final static String DETAILS_HEADER_FULL_CODE = "form.details.header.full";
-    public final static String CARGO_DOCUMENTS_SELECTED_CODE = "cargo.documents.selected";
-    public final static String CARGO_PACKAGE_SELECTED_CODE = "cargo.package.selected";
-    public final static String CARGO_PEOPLE_SELECTED_CODE = "cargo.people.selected";
-    public final static String DETAILS_COMMENT_CODE = "form.details.comment";
-    public final static String COURIER_DETAILS_CARGO_CODE = "form.courier.details.cargo";
-    public final static String CLIENT_DETAILS_CARGO_CODE = "form.client.details.cargo";
-    public final static String EMPTY_CODE = "";
-
+    public final static String REGISTRATIONS_VIEWER_INSTRUCTION_CODE = "form.registrationsViewer.instruction";
+    public final static String REQUESTS_VIEWER_INSTRUCTION_CODE = "form.requestsViewer.instruction";
     private LocalMessageSource lms;
-    private MessageUtil messageUtil;
+    private DetailsCreator detailsCreator;
 
     @Override
     public String initialMessage(UserData userData) {
@@ -37,59 +32,24 @@ public class FormMessage implements Message {
                     lms.getLocaleMessage(COURIER_ESSENTIAL_INFO_CODE);
             case CLIENT -> lms.getLocaleMessage(CLIENT_INSTRUCTION_CODE, userData.getUsername()) +
                     lms.getLocaleMessage(CLIENT_ESSENTIAL_INFO_CODE);
-            case REGISTRATIONS_VIEWER -> null;
-            case REQUESTS_VIEWER -> null;
+            case REGISTRATIONS_VIEWER ->
+                    lms.getLocaleMessage(REGISTRATIONS_VIEWER_INSTRUCTION_CODE, userData.getUsername());
+            case REQUESTS_VIEWER -> lms.getLocaleMessage(REQUESTS_VIEWER_INSTRUCTION_CODE, userData.getUsername());
         };
     }
 
     @Override
     public String getMessage(UserData userData) {
-        return buildHeader(userData) +
-                messageUtil.buildRoute(userData.getRoutePoints()) +
-                buildCargoSummary(userData) +
-                buildComment(userData);
+        return header(userData) +
+                detailsCreator.createAllDetails(userData);
     }
 
-    private String buildHeader(UserData userData) {
-        return userDataIsEmpty(userData) ?
-                lms.getLocaleMessage(DETAILS_HEADER_EMPTY_CODE) :
-                lms.getLocaleMessage(DETAILS_HEADER_FULL_CODE);
-    }
-
-    private String buildCargoSummary(UserData userData) {
-        StringBuilder cargoSummary = new StringBuilder();
-        String cargoHeader = switch (userData.getRole()) {
-            case COURIER, REGISTRATIONS_VIEWER -> lms.getLocaleMessage(COURIER_DETAILS_CARGO_CODE);
-            case CLIENT, REQUESTS_VIEWER -> lms.getLocaleMessage(CLIENT_DETAILS_CARGO_CODE);
+    private String header(UserData userData) {
+        if (userData.isEmpty()) return lms.getLocaleMessage(DETAILS_HEADER_EMPTY_CODE);
+        return switch (userData.getRole()) {
+            case COURIER, CLIENT -> lms.getLocaleMessage(DETAILS_HEADER_FULL_CODE);
+            case REGISTRATIONS_VIEWER -> lms.getLocaleMessage(REGISTRATION_DATA_ID, userData.getUserId().toString());
+            case REQUESTS_VIEWER -> lms.getLocaleMessage(REQUESTS_DATA_ID, userData.getUserId().toString());
         };
-        if (userData.isDocumentsExist() ||
-                userData.getPackageSize() != null ||
-                userData.getCompanionCount() != 0)
-            cargoSummary.append(cargoHeader);
-        if (userData.isDocumentsExist())
-            cargoSummary.append(lms.getLocaleMessage(CARGO_DOCUMENTS_SELECTED_CODE));
-        if (userData.getPackageSize() != null)
-            cargoSummary.append(lms.getLocaleMessage(
-                    CARGO_PACKAGE_SELECTED_CODE,
-                    userData.getPackageSize()));
-        if (userData.getCompanionCount() != 0)
-            cargoSummary.append(lms.getLocaleMessage(
-                    CARGO_PEOPLE_SELECTED_CODE,
-                    String.valueOf(userData.getCompanionCount())));
-        return cargoSummary.toString();
-    }
-
-    private String buildComment(UserData userData) {
-        return userData.getComment() != null ?
-                lms.getLocaleMessage(DETAILS_COMMENT_CODE, userData.getComment()) :
-                EMPTY_CODE;
-    }
-
-    private boolean userDataIsEmpty(UserData userData) {
-        return userData.getRoutePoints().isEmpty() &&
-                Objects.isNull(userData.getComment()) &&
-                Objects.isNull(userData.getPackageSize()) &&
-                !userData.isDocumentsExist() &&
-                userData.getCompanionCount() == 0;
     }
 }

@@ -1,11 +1,13 @@
 package com.godeltech.gbf.service.city.impl;
 
 import com.godeltech.gbf.model.db.City;
+import com.godeltech.gbf.model.db.Country;
 import com.godeltech.gbf.repository.CityRepository;
 import com.godeltech.gbf.service.city.CityService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Transient;
 import java.util.List;
 
 @Service
@@ -14,8 +16,9 @@ public class CityServiceImpl implements CityService {
     private CityRepository cityRepository;
 
     @Override
-    public List<City> findCitiesByCountryId(Integer countryId) {
-        return cityRepository.findCitiesByCountry_CountryId(countryId);
+    @Transient
+    public List<City> findCitiesByCountry(Country country) {
+        return cityRepository.findCitiesByCountry_CountryId(country.getCountryId());
     }
 
     @Override

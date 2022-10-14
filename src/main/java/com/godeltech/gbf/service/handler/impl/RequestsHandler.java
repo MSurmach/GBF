@@ -1,16 +1,18 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.gui.button.RequestButton;
+import com.godeltech.gbf.model.ModelUtils;
+import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.model.UserRecord;
+import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.service.handler.Handler;
 import com.godeltech.gbf.service.user.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import static com.godeltech.gbf.model.State.COURIERS_LIST;
-import static com.godeltech.gbf.model.State.REQUEST_EDITOR;
+import static com.godeltech.gbf.model.State.*;
 
 @Service
 @AllArgsConstructor
@@ -23,31 +25,28 @@ public class RequestsHandler implements Handler {
         String callback = userData.getCallbackHistory().peek();
         String[] splitCallback = callback.split(":");
         RequestButton clickedButton = RequestButton.valueOf(splitCallback[0]);
-        long recordId = Long.parseLong(splitCallback[1]);
+        long userId = Long.parseLong(splitCallback[1]);
         userData.setPageNumber(0);
         return switch (clickedButton) {
             case REQUEST_EDIT -> {
-                UserRecord record = getRecordFromPage(userData, recordId);
-               // userData.copyDataRecord(record);
-                yield REQUEST_EDITOR;
+                TelegramUser telegramUser = getUserFromPage(userData.getPage());
+                ModelUtils.copyData(userData, telegramUser);
+                userData.setRole(Role.REQUESTS_VIEWER);
+                yield FORM;
             }
             case REQUEST_DELETE -> {
-                userService.deleteById(recordId);
-                yield userData.getStateHistory().peek();
+                userService.deleteById(userId);
+                yield REQUESTS;
             }
             case REQUEST_FIND_COURIERS -> {
-                UserRecord record = getRecordFromPage(userData, recordId);
-               // userData.setTempForSearch(new UserData(record));
-                yield COURIERS_LIST;
+                //UserRecord record = getUserFromPage(userData, userId);
+                // userData.setTempForSearch(new UserData(record));
+                yield COURIERS_LIST_RESULT;
             }
         };
     }
 
-    private UserRecord getRecordFromPage(UserData userData, long recordId) {
-        long telegramUserId = userData.getTelegramId();
-        return userData.getRecordsPage().get().
-                filter(record -> record.getTelegramUserId() == telegramUserId && record.getRecordId() == recordId).
-                findFirst().
-                get();
+    private TelegramUser getUserFromPage(Page<TelegramUser> page) {
+        return page.getContent().get(0);
     }
 }

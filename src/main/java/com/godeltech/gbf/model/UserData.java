@@ -1,13 +1,18 @@
 package com.godeltech.gbf.model;
 
+import com.godeltech.gbf.model.db.Country;
 import com.godeltech.gbf.model.db.RoutePoint;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.godeltech.gbf.model.db.TelegramUser;
+import lombok.*;
 import org.springframework.data.domain.Page;
 
 import java.util.LinkedList;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class UserData {
     private Long userId;
@@ -23,13 +28,23 @@ public class UserData {
     private LinkedList<State> stateHistory = new LinkedList<>();
     private LinkedList<String> callbackHistory = new LinkedList<>();
     private Page<UserRecord> recordsPage;
+    private Page<TelegramUser> page;
     private int pageNumber;
     private Role role;
     private String callbackQueryId;
     private UserData tempForSearch;
+    private Country tempCountry;
 
     public UserData(Long telegramId, String username) {
         this.telegramId = telegramId;
         this.username = username;
+    }
+
+    public boolean isEmpty() {
+        return this.routePoints.isEmpty() &&
+                Objects.isNull(this.comment) &&
+                Objects.isNull(this.packageSize) &&
+                !this.documentsExist &&
+                this.companionCount == 0;
     }
 }

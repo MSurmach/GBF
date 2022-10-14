@@ -8,6 +8,10 @@ import java.util.LinkedList;
 
 public class ModelUtils {
     public static TelegramUser telegramUser(UserData userData) {
+        LinkedList<RoutePoint> routePoints = userData.getRoutePoints();
+        routePoints.getLast().setOrderNumber(routePoints.size() - 1);
+        LocalDate nowTime = LocalDate.now();
+        LocalDate expiredAtDate = userData.getRoutePoints().getLast().getVisitDate();
         return TelegramUser.builder().
                 telegramId(userData.getTelegramId()).
                 username(userData.getUsername()).
@@ -15,17 +19,15 @@ public class ModelUtils {
                 packageSize(userData.getPackageSize()).
                 companionCount(userData.getCompanionCount()).
                 comment(userData.getComment()).
-                routePoints(userData.getRoutePoints()).
+                routePoints(routePoints).
                 role(userData.getRole()).
-                changedAt(LocalDate.now()).
-                expiredAt(userData.getRoutePoints().getLast().getVisitDate()).
+                changedAt(nowTime).
+                expiredAt(expiredAtDate).
                 build();
     }
 
     public static void resetUserData(UserData userData) {
         userData.setUserId(null);
-        userData.setTelegramId(null);
-        userData.setUsername(null);
         userData.setDocumentsExist(false);
         userData.setPackageSize(null);
         userData.setCompanionCount(0);
@@ -39,17 +41,32 @@ public class ModelUtils {
         userData.setRole(null);
         userData.setCallbackQueryId(null);
         userData.setTempForSearch(null);
+        userData.setTempCountry(null);
     }
 
-    public static void copyFromDBtoUserData(TelegramUser telegramUser, UserData userData) {
-        userData.setUserId(telegramUser.getUserId());
-        userData.setTelegramId(telegramUser.getTelegramId());
-        userData.setUsername(telegramUser.getUsername());
-        userData.setDocumentsExist(telegramUser.isDocumentsExist());
-        userData.setPackageSize(telegramUser.getPackageSize());
-        userData.setCompanionCount(telegramUser.getCompanionCount());
-        userData.setComment(telegramUser.getComment());
-        userData.setRoutePoints((LinkedList<RoutePoint>) telegramUser.getRoutePoints());
-        userData.setRole(telegramUser.getRole());
+    public static UserData createUserDataFromTelegramUser(TelegramUser telegramUser) {
+        return UserData.builder().
+                userId(telegramUser.getUserId()).
+                telegramId(telegramUser.getTelegramId()).
+                username(telegramUser.getUsername()).
+                documentsExist(telegramUser.isDocumentsExist()).
+                packageSize(telegramUser.getPackageSize()).
+                companionCount(telegramUser.getCompanionCount()).
+                comment(telegramUser.getComment()).
+                routePoints(new LinkedList<>(telegramUser.getRoutePoints())).
+                role(telegramUser.getRole()).
+                build();
+    }
+
+    public static void copyData(UserData to, TelegramUser from) {
+        to.setUserId(from.getUserId());
+        to.setTelegramId(from.getTelegramId());
+        to.setUsername(from.getUsername());
+        to.setDocumentsExist(from.isDocumentsExist());
+        to.setPackageSize(from.getPackageSize());
+        to.setCompanionCount(from.getCompanionCount());
+        to.setComment(from.getComment());
+        to.setRoutePoints(new LinkedList<>(from.getRoutePoints()));
+        to.setRole(from.getRole());
     }
 }

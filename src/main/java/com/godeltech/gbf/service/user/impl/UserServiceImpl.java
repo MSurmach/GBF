@@ -63,10 +63,10 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Page<UserRecord> findByTelegramUserIdAndRole(Long telegramUserId, Role role, int pageNumber) {
+    public Page<TelegramUser> findTelegramUsersByTelegramIdAndRole(Long telegramId, Role role, int pageNumber) {
         int pageSize = 1;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return userRepository.findByTelegramUserIdAndRole(telegramUserId, role, pageable);
+        return telegramUserRepository.findTelegramUsersByTelegramIdAndRole(telegramId, role, pageable);
     }
 
     @Override
@@ -85,15 +85,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(Long record_id) {
-        userRepository.deleteById(record_id);
+    public void deleteById(Long userId) {
+        telegramUserRepository.deleteById(userId);
     }
 
     @Override
     public void save(UserData userData) {
         TelegramUser forSave = ModelUtils.telegramUser(userData);
         telegramUserRepository.save(forSave);
-//        UserRecord newRecord = new UserRecord(userData);
-//        userRepository.save(newRecord);
     }
 }
