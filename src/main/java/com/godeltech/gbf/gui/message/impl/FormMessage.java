@@ -48,8 +48,8 @@ public class FormMessage implements Message {
         if (userData.isEmpty()) return lms.getLocaleMessage(DETAILS_HEADER_EMPTY_CODE);
         return switch (userData.getRole()) {
             case COURIER, CLIENT -> lms.getLocaleMessage(DETAILS_HEADER_FULL_CODE);
-            case REGISTRATIONS_VIEWER -> lms.getLocaleMessage(REGISTRATION_DATA_ID, userData.getUserId().toString());
-            case REQUESTS_VIEWER -> lms.getLocaleMessage(REQUESTS_DATA_ID, userData.getUserId().toString());
+            case REGISTRATIONS_VIEWER -> lms.getLocaleMessage(REGISTRATION_DATA_ID, userData.getId().toString());
+            case REQUESTS_VIEWER -> lms.getLocaleMessage(REQUESTS_DATA_ID, userData.getId().toString());
         };
     }
 }

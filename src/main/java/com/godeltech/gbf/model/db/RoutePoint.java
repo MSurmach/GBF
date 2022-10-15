@@ -9,22 +9,23 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "ROUTE_POINT")
+@Table
 public class RoutePoint {
     @Id
-    @Column(name = "ROUTE_POINT_ID")
+    @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long routePointId;
+    private Long id;
 
     @Column
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @ManyToOne
-    @JoinColumn(name = "COUNTRY_ID")
+    private TelegramUser telegramUser;
+
+    @ManyToOne
     private Country country;
     @ManyToOne
-    @JoinColumn(name = "CITY_ID")
     private City city;
 
     @Column

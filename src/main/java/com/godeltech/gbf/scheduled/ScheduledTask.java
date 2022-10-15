@@ -18,7 +18,7 @@ public class ScheduledTask {
     @Transactional
     public void removeExpiredRecords() {
         LocalDate localDateNow = LocalDate.now();
-        userService.removeByDateToBefore(localDateNow);
+        userService.removeByExpiredAtBefore(localDateNow);
     }
 
     @Scheduled(cron = "@midnight")

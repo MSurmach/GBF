@@ -39,7 +39,7 @@ public class PaginatedView implements View<SendMessage> {
         Page<TelegramUser> pages = switch (userData.getRole()) {
             case REGISTRATIONS_VIEWER -> {
                 if (currentState == REGISTRATIONS)
-                    yield userService.findTelegramUsersByTelegramIdAndRole(
+                    yield userService.findUsersByTelegramIdAndRole(
                             telegramId,
                             COURIER,
                             userData.getPageNumber());
@@ -47,7 +47,7 @@ public class PaginatedView implements View<SendMessage> {
             }
             case REQUESTS_VIEWER -> {
                 if (currentState == REQUESTS)
-                    yield userService.findTelegramUsersByTelegramIdAndRole(
+                    yield userService.findUsersByTelegramIdAndRole(
                             telegramId,
                             CLIENT,
                             userData.getPageNumber());

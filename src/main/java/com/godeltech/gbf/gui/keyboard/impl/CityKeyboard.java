@@ -37,7 +37,7 @@ public class CityKeyboard implements Keyboard {
             while (columnCount > 0 && index != cities.size()) {
                 City city = cities.get(index);
                 String cityName = city.getName();
-                String cityId = city.getCityId().toString();
+                String cityId = city.getId().toString();
                 buttonRow.add(createLocalButtonWithData(cityName, cityName, cityId, lms));
                 columnCount--;
                 index++;

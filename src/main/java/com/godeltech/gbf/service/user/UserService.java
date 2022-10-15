@@ -2,21 +2,20 @@ package com.godeltech.gbf.service.user;
 
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.model.UserRecord;
 import com.godeltech.gbf.model.db.TelegramUser;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 
 public interface UserService {
-    Page<UserRecord> findCourierByUserDataAndRole(UserData userData, Role role, int pageNumber);
+    Page<TelegramUser> findCourierByUserDataAndRole(UserData userData, Role role, int pageNumber);
 
-    Page<UserRecord> findClientByUserDataAndRole(UserData userData, Role role, int pageNumber);
-    Page<TelegramUser> findTelegramUsersByTelegramIdAndRole(Long telegramUserId, Role role, int pageNumber);
+    Page<TelegramUser> findClientByUserDataAndRole(UserData userData, Role role, int pageNumber);
+    Page<com.godeltech.gbf.model.db.TelegramUser> findUsersByTelegramIdAndRole(Long telegramUserId, Role role, int pageNumber);
 
-    UserRecord findByTelegramUserIdAndRecordId(Long telegramUserId, Long recordId);
+    TelegramUser findByTelegramIdAndId(Long telegramId, Long id);
 
-    void removeByDateToBefore(LocalDate date);
+    void removeByExpiredAtBefore(LocalDate date);
 
     void removeByChangedAtAfter(LocalDate date);
 

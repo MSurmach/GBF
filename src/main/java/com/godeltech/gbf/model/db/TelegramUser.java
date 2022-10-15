@@ -1,26 +1,23 @@
 package com.godeltech.gbf.model.db;
 
 import com.godeltech.gbf.model.Role;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
-@Table(name = "TELEGRAM_USER")
+@Table
 @Builder
 @AllArgsConstructor
 public class TelegramUser {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long userId;
+    private Long id;
 
     @Column
     private Long telegramId;
@@ -28,7 +25,11 @@ public class TelegramUser {
     @Column
     private String username;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "telegramUser",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
     private List<RoutePoint> routePoints;
 
     @Column
@@ -54,6 +55,15 @@ public class TelegramUser {
     private LocalDate expiredAt;
 
     public TelegramUser() {
+    }
 
+    public void addRoutePoint(RoutePoint routePoint) {
+        routePoints.add(routePoint);
+        routePoint.setTelegramUser(this);
+    }
+
+    public void removeRoutePoint(RoutePoint routePoint) {
+        routePoints.remove(routePoint);
+        routePoint.setTelegramUser(null);
     }
 }

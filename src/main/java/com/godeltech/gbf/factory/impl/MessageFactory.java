@@ -20,9 +20,7 @@ public class MessageFactory implements Factory<Message> {
                     case MENU -> MenuMessage.class;
                     case WRONG_INPUT -> WrongInputMessage.class;
                     case SUCCESS -> SuccessMessage.class;
-                    case COMMENT_QUIZ -> CommentQuizMessage.class;
                     case COMMENT -> CommentMessage.class;
-                    case COMMENT_CONFIRM -> CommentConfirmMessage.class;
                     case COUNTRY -> CountryMessage.class;
                     case CITY-> CityMessage.class;
                     case YEAR -> YearMessage.class;
@@ -31,7 +29,6 @@ public class MessageFactory implements Factory<Message> {
                     case CARGO_MENU -> CargoMenuMessage.class;
                     case CARGO_PACKAGE -> CargoPackageMessage.class;
                     case CARGO_PEOPLE -> CargoPeopleMessage.class;
-                    case REGISTRATION_EDITOR, REQUEST_EDITOR -> EditorMessage.class;
                     case FOUND_COURIERS_INFO -> FoundCouriersInfoMessage.class;
                     case REGISTRATIONS -> RegistrationsMessage.class;
                     case COURIERS_LIST_RESULT -> CouriersListMessage.class;
@@ -40,7 +37,6 @@ public class MessageFactory implements Factory<Message> {
                     case FORM -> FormMessage.class;
                     case ROUTE_POINT_FORM -> RoutePointFormMessage.class;
                     case INTERMEDIATE_EDITOR -> IntermediateEditorMessage.class;
-                    default -> null;
                 };
         return beanFactory.getBean(answer);
     }

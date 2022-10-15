@@ -10,10 +10,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "COUNTRY")
+@Table
 public class Country {
     @Id
-    private Integer countryId;
+    private Integer id;
 
     @Column(nullable = false)
     private String name;

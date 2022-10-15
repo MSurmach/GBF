@@ -10,15 +10,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "CITY")
+@Table
 public class City {
     @Id
-    private Integer cityId;
+    private Integer id;
 
     @Column(nullable = false)
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "COUNTRY_ID")
     private Country country;
 }

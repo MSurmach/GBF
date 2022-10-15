@@ -12,22 +12,25 @@ public class ModelUtils {
         routePoints.getLast().setOrderNumber(routePoints.size() - 1);
         LocalDate nowTime = LocalDate.now();
         LocalDate expiredAtDate = userData.getRoutePoints().getLast().getVisitDate();
-        return TelegramUser.builder().
+        TelegramUser telegramUser = TelegramUser.builder().
+                id(userData.getId()).
                 telegramId(userData.getTelegramId()).
                 username(userData.getUsername()).
                 documentsExist(userData.isDocumentsExist()).
                 packageSize(userData.getPackageSize()).
                 companionCount(userData.getCompanionCount()).
                 comment(userData.getComment()).
-                routePoints(routePoints).
+                routePoints(new LinkedList<>()).
                 role(userData.getRole()).
                 changedAt(nowTime).
                 expiredAt(expiredAtDate).
                 build();
+        routePoints.forEach(telegramUser::addRoutePoint);
+        return telegramUser;
     }
 
     public static void resetUserData(UserData userData) {
-        userData.setUserId(null);
+        userData.setId(null);
         userData.setDocumentsExist(false);
         userData.setPackageSize(null);
         userData.setCompanionCount(0);
@@ -46,7 +49,7 @@ public class ModelUtils {
 
     public static UserData createUserDataFromTelegramUser(TelegramUser telegramUser) {
         return UserData.builder().
-                userId(telegramUser.getUserId()).
+                id(telegramUser.getId()).
                 telegramId(telegramUser.getTelegramId()).
                 username(telegramUser.getUsername()).
                 documentsExist(telegramUser.isDocumentsExist()).
@@ -59,7 +62,7 @@ public class ModelUtils {
     }
 
     public static void copyData(UserData to, TelegramUser from) {
-        to.setUserId(from.getUserId());
+        to.setId(from.getId());
         to.setTelegramId(from.getTelegramId());
         to.setUsername(from.getUsername());
         to.setDocumentsExist(from.isDocumentsExist());

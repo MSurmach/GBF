@@ -21,7 +21,7 @@ public class RegistrationsMessage implements Message, PaginationInfo<TelegramUse
 
     @Override
     public String getMessage(UserData userData) {
-        String registrationWithIdRow = lms.getLocaleMessage(REGISTRATION_DATA_ID, userData.getUserId().toString());
+        String registrationWithIdRow = lms.getLocaleMessage(REGISTRATION_DATA_ID, userData.getId().toString());
         return registrationWithIdRow +
                 detailsCreator.createAllDetails(userData);
     }

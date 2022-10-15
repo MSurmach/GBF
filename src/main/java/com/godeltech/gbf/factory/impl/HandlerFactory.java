@@ -22,9 +22,7 @@ public class HandlerFactory implements Factory<Handler> {
                     case DATE -> DateHandler.class;
                     case YEAR-> YearHandler.class;
                     case MONTH -> MonthHandler.class;
-                    case COMMENT_QUIZ -> CommentQuizHandler.class;
                     case COMMENT -> CommentHandler.class;
-                    case COMMENT_CONFIRM -> CommentConfirmHandler.class;
                     case COUNTRY -> CountryHandler.class;
                     case CITY -> CityHandler.class;
                     case CARGO_MENU -> CargoMenuHandler.class;
@@ -32,8 +30,6 @@ public class HandlerFactory implements Factory<Handler> {
                     case CARGO_PEOPLE -> CargoPeopleHandler.class;
                     case WRONG_INPUT -> WrongInputHandler.class;
                     case REGISTRATIONS -> RegistrationsHandler.class;
-                    //case REGISTRATION_EDITOR -> EditorHandler.class;
-                    case SUMMARY_DATA_TO_CONFIRM -> SummaryHandler.class;
                     case REQUESTS -> RequestsHandler.class;
                     case FORM -> FormHandler.class;
                     case ROUTE_POINT_FORM -> RoutePointFormHandler.class;

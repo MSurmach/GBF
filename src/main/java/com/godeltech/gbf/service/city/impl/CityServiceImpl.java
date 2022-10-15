@@ -18,7 +18,7 @@ public class CityServiceImpl implements CityService {
     @Override
     @Transient
     public List<City> findCitiesByCountry(Country country) {
-        return cityRepository.findCitiesByCountry_CountryId(country.getCountryId());
+        return cityRepository.findCitiesByCountry_Id(country.getId());
     }
 
     @Override

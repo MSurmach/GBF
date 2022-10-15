@@ -56,13 +56,14 @@ public class FormHandler implements Handler {
     }
 
     private State saveAndGetAppropriateState(UserData userData) {
-        userService.save(userData);
-        return switch (userData.getRole()) {
+        State nextState = switch (userData.getRole()) {
             case COURIER -> SUCCESS;
             case CLIENT -> COURIERS_LIST_RESULT;
             case REGISTRATIONS_VIEWER -> REGISTRATIONS;
             case REQUESTS_VIEWER -> REQUESTS;
         };
+        userService.save(userData);
+        return nextState;
     }
 
     private void handleAddRoutePoint(UserData userData, Status status, int order) {

@@ -9,7 +9,6 @@ import com.godeltech.gbf.gui.button.PaginationButton;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.model.UserRecord;
 import com.godeltech.gbf.factory.impl.HandlerFactory;
 import com.godeltech.gbf.factory.impl.ViewFactory;
 import com.godeltech.gbf.service.handler.Handler;
@@ -115,23 +114,23 @@ public class CallbackInterceptor implements Interceptor {
         UserData userData = UserDataCache.get(telegramUserId);
         try {
             PaginationButton clickedPagination = PaginationButton.valueOf(callback);
-            Page<UserRecord> recordsPage = userData.getRecordsPage();
+            Page<TelegramUser> page = userData.getPage();
             switch (clickedPagination) {
                 case PAGE_START -> userData.setPageNumber(0);
                 case PAGE_PREVIOUS -> {
-                    if (recordsPage.hasPrevious()) {
+                    if (page.hasPrevious()) {
                         int previousPageNumber = userData.getPageNumber() - 1;
                         userData.setPageNumber(previousPageNumber);
                     }
                 }
                 case PAGE_NEXT -> {
-                    if (recordsPage.hasNext()) {
+                    if (page.hasNext()) {
                         int nextPageNumber = userData.getPageNumber() + 1;
                         userData.setPageNumber(nextPageNumber);
                     }
                 }
                 case PAGE_END -> {
-                    int lastPageNumber = recordsPage.getTotalPages() - 1;
+                    int lastPageNumber = page.getTotalPages() - 1;
                     userData.setPageNumber(lastPageNumber);
                 }
             }

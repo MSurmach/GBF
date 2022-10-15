@@ -33,7 +33,7 @@ public class CountryKeyboard implements Keyboard {
             while (columnCount > 0 && index != countries.size()) {
                 Country country = countries.get(index);
                 String countryName = country.getName();
-                String countryId = country.getCountryId().toString();
+                String countryId = country.getId().toString();
                 buttonRow.add(createLocalButtonWithData(countryName, countryName, countryId, lms));
                 columnCount--;
                 index++;

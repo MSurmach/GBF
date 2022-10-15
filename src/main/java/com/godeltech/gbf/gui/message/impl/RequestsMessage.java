@@ -20,7 +20,7 @@ public class RequestsMessage implements Message, PaginationInfo<TelegramUser> {
 
     @Override
     public String getMessage(UserData userData) {
-        String recordIdHeader = lms.getLocaleMessage(REQUESTS_DATA_ID, userData.getUserId().toString());
+        String recordIdHeader = lms.getLocaleMessage(REQUESTS_DATA_ID, userData.getId().toString());
         return recordIdHeader + detailsCreator.createAllDetails(userData);
     }
 
