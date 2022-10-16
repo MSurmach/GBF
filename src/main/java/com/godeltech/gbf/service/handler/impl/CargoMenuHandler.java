@@ -22,11 +22,7 @@ public class CargoMenuHandler implements Handler {
             case CONFIRM_CARGO -> {
                 checkSelection(userData);
                 Role role = userData.getRole();
-                yield switch (role) {
-                    case REGISTRATIONS_VIEWER -> REGISTRATION_EDITOR;
-                    case CLIENT, COURIER -> FORM;
-                    case REQUESTS_VIEWER -> REQUEST_EDITOR;
-                };
+                yield FORM;
             }
             case SELECT_DOCUMENTS -> {
                 userData.setDocumentsExist(true);

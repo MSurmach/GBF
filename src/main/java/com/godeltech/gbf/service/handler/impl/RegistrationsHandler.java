@@ -11,6 +11,7 @@ import com.godeltech.gbf.service.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import static com.godeltech.gbf.model.State.*;
 
@@ -38,8 +39,8 @@ public class RegistrationsHandler implements Handler {
                 yield REGISTRATIONS;
             }
             case REGISTRATION_FIND_CLIENTS -> {
-                //UserRecord record = getRecordFromPage(userData, userId);
-                //userData.setTempForSearch(new UserData(record));
+                TelegramUser telegramUserFromPage = getUserFromPage(userData.getPage());
+                userData.setTempForSearch(telegramUserFromPage);
                 yield CLIENTS_LIST_RESULT;
             }
         };

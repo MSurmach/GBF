@@ -27,11 +27,11 @@ public class RegistrationsMessage implements Message, PaginationInfo<TelegramUse
     }
 
     public String initialMessage(UserData userData) {
-        Page<TelegramUser> pages = userData.getPage();
+        Page<TelegramUser> page = userData.getPage();
         String username = userData.getUsername();
-        return (pages != null && !pages.isEmpty()) ?
+        return (page != null && !page.isEmpty()) ?
                 lms.getLocaleMessage(REGISTRATIONS_EXIST_CODE, username) +
-                        paginationInfoLocalMessage(pages, lms) :
+                        paginationInfoLocalMessage(page, lms) :
                 lms.getLocaleMessage(REGISTRATIONS_NOT_EXIST_CODE, username);
     }
 }

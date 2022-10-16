@@ -29,7 +29,6 @@ public class MessageFactory implements Factory<Message> {
                     case CARGO_MENU -> CargoMenuMessage.class;
                     case CARGO_PACKAGE -> CargoPackageMessage.class;
                     case CARGO_PEOPLE -> CargoPeopleMessage.class;
-                    case FOUND_COURIERS_INFO -> FoundCouriersInfoMessage.class;
                     case REGISTRATIONS -> RegistrationsMessage.class;
                     case COURIERS_LIST_RESULT -> CouriersListMessage.class;
                     case CLIENTS_LIST_RESULT -> ClientsListMessage.class;

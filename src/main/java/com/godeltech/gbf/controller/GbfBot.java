@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.objects.MemberStatus;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
@@ -48,10 +51,29 @@ public class GbfBot extends SpringWebhookBot {
     @Override
     @PostMapping("/callback/${telegram.bot.endpoint}")
     public BotApiMethod<?> onWebhookUpdateReceived(@RequestBody Update update) {
+        //if (isInvalidUser(update.getMessage())) return null;
         Interceptor interceptor = interceptorFactory.getInterceptor(update);
         List<? extends BotApiMethod<?>> methods = interceptor.intercept(update);
         executeMethod(methods, interceptor.getTelegramUserId(), interceptor.getChatId());
         return null;
+    }
+
+    private boolean isInvalidUser(Message message) {
+        if (message != null) {
+            Long id = message.getFrom().getId();
+            String chatId = "-1294337377";
+            GetChatMember getChatMember = new GetChatMember(chatId, id);
+            try {
+                ChatMember chatMember = execute(getChatMember);
+                String status = chatMember.getStatus();
+                if (status.equals("kicked") ||
+                        status.equals("left") ||
+                        status.equals("restricted"))
+                    return true;
+            } catch (TelegramApiException exception) {
+            }
+        }
+        return false;
     }
 
     private void executeMethod(List<? extends BotApiMethod<?>> methods, Long telegramUserId, Long chatId) {

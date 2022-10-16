@@ -1,10 +1,12 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.gui.button.FormButton;
+import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.Status;
+import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.service.handler.Handler;
 import com.godeltech.gbf.service.user.UserService;
 import lombok.AllArgsConstructor;
@@ -58,7 +60,11 @@ public class FormHandler implements Handler {
     private State saveAndGetAppropriateState(UserData userData) {
         State nextState = switch (userData.getRole()) {
             case COURIER -> SUCCESS;
-            case CLIENT -> COURIERS_LIST_RESULT;
+            case CLIENT -> {
+                TelegramUser telegramUser = ModelUtils.telegramUser(userData);
+                userData.setTempForSearch(telegramUser);
+                yield COURIERS_LIST_RESULT;
+            }
             case REGISTRATIONS_VIEWER -> REGISTRATIONS;
             case REQUESTS_VIEWER -> REQUESTS;
         };

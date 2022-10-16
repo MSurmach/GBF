@@ -39,8 +39,8 @@ public class RequestsHandler implements Handler {
                 yield REQUESTS;
             }
             case REQUEST_FIND_COURIERS -> {
-                //UserRecord record = getUserFromPage(userData, userId);
-                // userData.setTempForSearch(new UserData(record));
+                TelegramUser telegramUserFromPage = getUserFromPage(userData.getPage());
+                userData.setTempForSearch(telegramUserFromPage);
                 yield COURIERS_LIST_RESULT;
             }
         };

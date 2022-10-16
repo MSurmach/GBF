@@ -5,10 +5,10 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table
 @Builder
@@ -44,8 +44,8 @@ public class TelegramUser {
     @Column
     private int companionCount;
 
-    @Column
     @Enumerated(EnumType.STRING)
+    @Column
     private Role role;
 
     @Column

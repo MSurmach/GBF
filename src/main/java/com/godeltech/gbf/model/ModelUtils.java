@@ -39,7 +39,7 @@ public class ModelUtils {
         userData.setTempRoutePoint(null);
         userData.setStateHistory(new LinkedList<>());
         userData.setCallbackHistory(new LinkedList<>());
-        userData.setRecordsPage(null);
+        userData.setPage(null);
         userData.setPageNumber(0);
         userData.setRole(null);
         userData.setCallbackQueryId(null);

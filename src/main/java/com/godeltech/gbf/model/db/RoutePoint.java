@@ -1,12 +1,14 @@
 package com.godeltech.gbf.model.db;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table
@@ -16,8 +18,8 @@ public class RoutePoint {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
     @Enumerated(EnumType.STRING)
+    @Column
     private Status status;
 
     @ManyToOne

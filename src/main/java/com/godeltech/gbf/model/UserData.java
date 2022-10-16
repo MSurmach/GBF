@@ -2,6 +2,7 @@ package com.godeltech.gbf.model;
 
 import com.godeltech.gbf.model.db.Country;
 import com.godeltech.gbf.model.db.RoutePoint;
+import com.godeltech.gbf.model.db.TelegramUser;
 import lombok.*;
 import org.springframework.data.domain.Page;
 
@@ -26,12 +27,11 @@ public class UserData {
     private RoutePoint tempRoutePoint;
     private LinkedList<State> stateHistory = new LinkedList<>();
     private LinkedList<String> callbackHistory = new LinkedList<>();
-    private Page<TelegramUser> recordsPage;
-    private Page<com.godeltech.gbf.model.db.TelegramUser> page;
+    private Page<TelegramUser> page;
     private int pageNumber;
     private Role role;
     private String callbackQueryId;
-    private UserData tempForSearch;
+    private TelegramUser tempForSearch;
     private Country tempCountry;
 
     public UserData(Long telegramId, String username) {

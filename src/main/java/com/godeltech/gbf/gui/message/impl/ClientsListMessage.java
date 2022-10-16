@@ -2,35 +2,33 @@ package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.Message;
+import com.godeltech.gbf.gui.message.PaginationInfo;
 import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.db.TelegramUser;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public class ClientsListMessage implements Message {
+public class ClientsListMessage implements Message, PaginationInfo<TelegramUser> {
     public final static String CLIENTS_LIST_INITIAL_EXIST = "clients.list.initial.exist";
     public final static String CLIENTS_LIST_INITIAL_NOT_EXIST = "clients.list.initial.notExist";
     public final static String CLIENTS_LIST_HEADER = "clients.list.header";
-    public final static String CLIENTS_LIST_PAGINATION_INFO = "clients.list.pagination.info";
 
-    private LocalMessageSource localMessageSource;
+    private LocalMessageSource lms;
+    private DetailsCreator detailsCreator;
 
     @Override
     public String getMessage(UserData userData) {
-        return localMessageSource.getLocaleMessage(CLIENTS_LIST_HEADER, userData.getUsername())/* +
-                summaryDataText.getMessage(userData)*/;
+        return lms.getLocaleMessage(CLIENTS_LIST_HEADER, userData.getUsername()) + detailsCreator.createAllDetails(userData);
     }
 
     public String initialMessage(UserData userData) {
-        return (userData.getRecordsPage() != null && !userData.getRecordsPage().isEmpty()) ?
-                localMessageSource.getLocaleMessage(CLIENTS_LIST_INITIAL_EXIST, userData.getUsername()) +
-                        paginationInfoMessage(userData) :
-                localMessageSource.getLocaleMessage(CLIENTS_LIST_INITIAL_NOT_EXIST, userData.getUsername());
-    }
-
-    public String paginationInfoMessage(UserData userData) {
-        return localMessageSource.getLocaleMessage(CLIENTS_LIST_PAGINATION_INFO,
-                String.valueOf(userData.getRecordsPage().getTotalElements()));
+        Page<TelegramUser> page = userData.getPage();
+        return (page != null && !page.isEmpty()) ?
+                lms.getLocaleMessage(CLIENTS_LIST_INITIAL_EXIST, userData.getUsername()) +
+                        paginationInfoLocalMessage(page, lms) :
+                lms.getLocaleMessage(CLIENTS_LIST_INITIAL_NOT_EXIST, userData.getUsername());
     }
 }
