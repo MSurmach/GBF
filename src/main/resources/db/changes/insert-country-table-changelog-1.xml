@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet id="2" author="maximsurmach@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="COUNTRY"/>
+        </preConditions>
+        <insert tableName="COUNTRY">
+            <column name="ID" value="1"/>
+            <column name="NAME" value="Belarus"/>
+        </insert>
+        <insert tableName="COUNTRY">
+            <column name="ID" value="2"/>
+            <column name="NAME" value="Poland"/>
+        </insert>
+        <insert tableName="COUNTRY">
+        <column name="ID" value="3"/>
+        <column name="NAME" value="Bulgaria"/>
+    </insert>
+        <insert tableName="COUNTRY">
+        <column name="ID" value="4"/>
+        <column name="NAME" value="Georgia"/>
+    </insert>
+        <insert tableName="COUNTRY">
+        <column name="ID" value="5"/>
+        <column name="NAME" value="UAE"/>
+    </insert>
+        <insert tableName="COUNTRY">
+        <column name="ID" value="6"/>
+        <column name="NAME" value="Ukraine"/>
+    </insert>
+        <insert tableName="COUNTRY">
+        <column name="ID" value="7"/>
+        <column name="NAME" value="UK"/>
+    </insert>
+    <insert tableName="COUNTRY">
+        <column name="ID" value="8"/>
+        <column name="NAME" value="Lithuania"/>
+    </insert>
+    </changeSet>
+</databaseChangeLog>

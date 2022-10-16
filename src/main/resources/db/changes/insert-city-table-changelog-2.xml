@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet id="2" author="maximsurmach@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="CITY"/>
+        </preConditions>
+        <insert tableName="CITY">
+            <column name="ID" value="1"/>
+            <column name="NAME" value="Brest"/>
+            <column name="COUNTRY_ID" value="1"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="2"/>
+            <column name="NAME" value="Vitebsk"/>
+            <column name="COUNTRY_ID" value="1"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="3"/>
+            <column name="NAME" value="Gomel"/>
+            <column name="COUNTRY_ID" value="1"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="4"/>
+            <column name="NAME" value="Grodno"/>
+            <column name="COUNTRY_ID" value="1"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="5"/>
+            <column name="NAME" value="Mogilev"/>
+            <column name="COUNTRY_ID" value="1"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="6"/>
+            <column name="NAME" value="Minsk"/>
+            <column name="COUNTRY_ID" value="1"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="7"/>
+            <column name="NAME" value="Bialystok"/>
+            <column name="COUNTRY_ID" value="2"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="8"/>
+            <column name="NAME" value="Gdansk"/>
+            <column name="COUNTRY_ID" value="2"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="9"/>
+            <column name="NAME" value="Krakow"/>
+            <column name="COUNTRY_ID" value="2"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="10"/>
+            <column name="NAME" value="Lodz"/>
+            <column name="COUNTRY_ID" value="2"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="11"/>
+            <column name="NAME" value="Poznan"/>
+            <column name="COUNTRY_ID" value="2"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="12"/>
+            <column name="NAME" value="Warsaw"/>
+            <column name="COUNTRY_ID" value="2"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="13"/>
+            <column name="NAME" value="Wroclaw"/>
+            <column name="COUNTRY_ID" value="2"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="14"/>
+            <column name="NAME" value="Sofia"/>
+            <column name="COUNTRY_ID" value="3"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="15"/>
+            <column name="NAME" value="Tbilisi"/>
+            <column name="COUNTRY_ID" value="4"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="16"/>
+            <column name="NAME" value="Dubai"/>
+            <column name="COUNTRY_ID" value="5"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="17"/>
+            <column name="NAME" value="Kyiv"/>
+            <column name="COUNTRY_ID" value="6"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="18"/>
+            <column name="NAME" value="London"/>
+            <column name="COUNTRY_ID" value="7"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="19"/>
+            <column name="NAME" value="Manchester"/>
+            <column name="COUNTRY_ID" value="7"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="20"/>
+            <column name="NAME" value="Vilnius"/>
+            <column name="COUNTRY_ID" value="8"/>
+        </insert>
+        <insert tableName="CITY">
+            <column name="ID" value="21"/>
+            <column name="NAME" value="Biala-Podlaska"/>
+            <column name="COUNTRY_ID" value="2"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
