@@ -25,10 +25,10 @@ public class RoutePointValidator {
         City city = routePoint.getCity();
         LocalDate visitDate = routePoint.getVisitDate();
         switch (role) {
-            case COURIER -> checkCountryIsNull(country, callbackQueryId).
+            case COURIER, REGISTRATIONS_VIEWER -> checkCountryIsNull(country, callbackQueryId).
                     checkCityIsNull(city, callbackQueryId).
                     checkVisitDateIsNull(visitDate, callbackQueryId);
-            case CLIENT -> checkCountryIsNull(country, callbackQueryId);
+            case CLIENT, REQUESTS_VIEWER -> checkCountryIsNull(country, callbackQueryId);
         }
     }
 

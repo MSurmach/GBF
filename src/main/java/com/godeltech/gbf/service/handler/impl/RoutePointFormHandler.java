@@ -17,7 +17,6 @@ import static com.godeltech.gbf.model.db.Status.*;
 @Service
 @AllArgsConstructor
 public class RoutePointFormHandler implements Handler {
-
     private RoutePointValidator routePointValidator;
 
     @Override
