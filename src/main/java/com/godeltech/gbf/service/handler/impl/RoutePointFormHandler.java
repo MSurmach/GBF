@@ -27,7 +27,11 @@ public class RoutePointFormHandler implements Handler {
         RoutePoint tempRoutePoint = userData.getTempRoutePoint();
         return switch (clicked) {
             case ADD_COUNTRY, EDIT_COUNTRY -> COUNTRY;
-            case ADD_CITY, EDIT_CITY -> CITY;
+            case ADD_CITY -> {
+                routePointValidator.checkCountryIsNull(tempRoutePoint.getCountry(), userData.getCallbackQueryId());
+                yield CITY;
+            }
+            case EDIT_CITY -> CITY;
             case ADD_VISIT_DATE, EDIT_VISIT_DATE -> DATE;
             case DELETE_CITY -> {
                 tempRoutePoint.setCity(null);

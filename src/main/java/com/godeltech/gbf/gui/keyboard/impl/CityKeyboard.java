@@ -26,12 +26,10 @@ public class CityKeyboard implements Keyboard {
     private LocalMessageSource lms;
 
     private CityService cityService;
-    private RoutePointValidator routePointValidator;
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         Country country = userData.getTempRoutePoint().getCountry();
-        routePointValidator.checkCountryIsNull(country, userData.getCallbackQueryId());
         List<City> cities = cityService.findCitiesByCountry(country);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         for (var index = 0; index < cities.size(); ) {
