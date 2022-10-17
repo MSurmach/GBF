@@ -13,8 +13,8 @@ import static com.godeltech.gbf.model.Role.COURIER;
 public class CargoMenuMessage implements Message {
     public final static String CARGO_MENU_COURIER_CODE = "courier.cargo.menu";
     public final static String CARGO_MENU_CUSTOMER_CODE = "customer.cargo.menu";
-    public final static String CARGO_MENU_SELECTED_CODE = "cargo.selected";
     public final static String CARGO_MENU_NOT_SELECTED_CODE = "cargo.notSelected";
+    public final static String EMPTY = " ";
     private final LocalMessageSource localMessageSource;
     private DetailsCreator detailsCreator;
 
@@ -33,7 +33,7 @@ public class CargoMenuMessage implements Message {
                 userData.getPackageSize() == null &&
                 userData.getCompanionCount() == 0) ?
                 localMessageSource.getLocaleMessage(CARGO_MENU_NOT_SELECTED_CODE) :
-                localMessageSource.getLocaleMessage(CARGO_MENU_SELECTED_CODE);
+                EMPTY;
 
     }
 }
