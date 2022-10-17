@@ -4,13 +4,13 @@ import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.exception.NotNavigationButtonException;
 import com.godeltech.gbf.exception.NotPaginationButtonException;
 import com.godeltech.gbf.exception.RoleNotFoundException;
+import com.godeltech.gbf.factory.impl.HandlerFactory;
+import com.godeltech.gbf.factory.impl.ViewFactory;
 import com.godeltech.gbf.gui.button.NavigationBotButton;
 import com.godeltech.gbf.gui.button.PaginationButton;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.factory.impl.HandlerFactory;
-import com.godeltech.gbf.factory.impl.ViewFactory;
 import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.service.handler.Handler;
 import com.godeltech.gbf.service.interceptor.Interceptor;
@@ -25,6 +25,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
+import static com.godeltech.gbf.model.State.BACK;
 import static com.godeltech.gbf.model.State.MENU;
 
 @Service
@@ -95,10 +96,12 @@ public class CallbackInterceptor implements Interceptor {
             UserData userData = UserDataCache.get(telegramUserId);
             return switch (botButton) {
                 case GLOBAL_BACK -> {
-                    userData.getCallbackHistory().removeFirst();
+                    Handler handler = handlerFactory.get(BACK);
+                    yield handler.handle(userData);
+                   /* userData.getCallbackHistory().removeFirst();
                     userData.getCallbackHistory().removeFirst();
                     userData.getStateHistory().removeFirst();
-                    yield userData.getStateHistory().pop();
+                    yield userData.getStateHistory().pop();*/
                 }
                 case MENU -> {
                     Handler handler = handlerFactory.get(MENU);

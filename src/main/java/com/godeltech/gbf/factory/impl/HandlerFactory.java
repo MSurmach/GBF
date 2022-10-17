@@ -20,7 +20,7 @@ public class HandlerFactory implements Factory<Handler> {
                 switch (state) {
                     case MENU -> MenuHandler.class;
                     case DATE -> DateHandler.class;
-                    case YEAR-> YearHandler.class;
+                    case YEAR -> YearHandler.class;
                     case MONTH -> MonthHandler.class;
                     case COMMENT -> CommentHandler.class;
                     case COUNTRY -> CountryHandler.class;
@@ -34,6 +34,7 @@ public class HandlerFactory implements Factory<Handler> {
                     case FORM -> FormHandler.class;
                     case ROUTE_POINT_FORM -> RoutePointFormHandler.class;
                     case INTERMEDIATE_EDITOR -> IntermediateEditorHandler.class;
+                    case BACK -> BackHandler.class;
                     default -> throw new IllegalArgumentException("Handler not found for this state");
                 };
         return beanFactory.getBean(handler);
