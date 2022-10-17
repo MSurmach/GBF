@@ -16,6 +16,7 @@ public class CargoMenuMessage implements Message {
     public final static String CARGO_MENU_SELECTED_CODE = "cargo.selected";
     public final static String CARGO_MENU_NOT_SELECTED_CODE = "cargo.notSelected";
     private final LocalMessageSource localMessageSource;
+    private DetailsCreator detailsCreator;
 
     @Override
     public String getMessage(UserData userData) {
@@ -23,8 +24,8 @@ public class CargoMenuMessage implements Message {
                 localMessageSource.getLocaleMessage(CARGO_MENU_COURIER_CODE) :
                 localMessageSource.getLocaleMessage(CARGO_MENU_CUSTOMER_CODE);
         String cargoSelectedInfo = cargoSelectedInfo(userData);
-       // String cargoSummary = summaryDataText.cargoSummary(userData);
-        return question + cargoSelectedInfo /*+ cargoSummary*/;
+        String cargoDetails = detailsCreator.createCargoDetails(userData);
+        return question + cargoSelectedInfo + cargoDetails;
     }
 
     private String cargoSelectedInfo(UserData userData) {
