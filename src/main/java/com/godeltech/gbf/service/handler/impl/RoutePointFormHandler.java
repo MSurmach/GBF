@@ -5,6 +5,7 @@ import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.service.handler.Handler;
+import com.godeltech.gbf.service.validator.RoutePointValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ import static com.godeltech.gbf.model.db.Status.*;
 @Service
 @AllArgsConstructor
 public class RoutePointFormHandler implements Handler {
+
+    private RoutePointValidator routePointValidator;
+
     @Override
     public State handle(UserData userData) {
         String callback = userData.getCallbackHistory().peek();
@@ -34,6 +38,7 @@ public class RoutePointFormHandler implements Handler {
                 yield userData.getStateHistory().peek();
             }
             case SAVE -> {
+                routePointValidator.checkAllNecessaryData(tempRoutePoint, userData.getRole(), userData.getCallbackQueryId());
                 LinkedList<RoutePoint> points = userData.getRoutePoints();
                 yield switch (tempRoutePoint.getStatus()) {
                     case INITIAL -> {

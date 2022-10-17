@@ -1,13 +1,13 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.exception.CountryNotFoundException;
 import com.godeltech.gbf.gui.keyboard.Keyboard;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.City;
 import com.godeltech.gbf.model.db.Country;
 import com.godeltech.gbf.service.city.CityService;
+import com.godeltech.gbf.service.validator.RoutePointValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -26,11 +26,12 @@ public class CityKeyboard implements Keyboard {
     private LocalMessageSource lms;
 
     private CityService cityService;
+    private RoutePointValidator routePointValidator;
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         Country country = userData.getTempRoutePoint().getCountry();
-        if (country == null) throw new CountryNotFoundException(userData.getCallbackQueryId());
+        routePointValidator.checkCountryIsNull(country, userData.getCallbackQueryId());
         List<City> cities = cityService.findCitiesByCountry(country);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         for (var index = 0; index < cities.size(); ) {

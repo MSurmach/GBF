@@ -1,4 +1,4 @@
-package com.godeltech.gbf.exception;
+package com.godeltech.gbf.service.validator.exceptions;
 
 import lombok.Getter;
 

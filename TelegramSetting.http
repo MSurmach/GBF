@@ -1,10 +1,10 @@
 POST https://api.telegram.org/bot5706618703:AAFl63KXySJX1BxC7vJsYPLMOgvaLYNPNJU/getWebhookInfo
 
 ###
-POST https://api.telegram.org/bot5706618703:AAFl63KXySJX1BxC7vJsYPLMOgvaLYNPNJU/getChat?chat_id=-847985008
+POST https://api.telegram.org/bot5706618703:AAFl63KXySJX1BxC7vJsYPLMOgvaLYNPNJU/getChat?chat_id=-1001294337377
 
 ###
-POST https://api.telegram.org/bot5706618703:AAFl63KXySJX1BxC7vJsYPLMOgvaLYNPNJU/getChatMember?chat_id=-847985008&user_id=5587079110
+POST https://api.telegram.org/bot5706618703:AAFl63KXySJX1BxC7vJsYPLMOgvaLYNPNJU/getChatMember?chat_id=-1001294337377&user_id=621620935
 
 ###
 POST https://api.telegram.org/bot5706618703:AAFl63KXySJX1BxC7vJsYPLMOgvaLYNPNJU/setWebhook?url=https://7043-178-124-214-152.eu.ngrok.io

@@ -1,17 +1,20 @@
 package com.godeltech.gbf.service.handler.impl;
 
-import com.godeltech.gbf.exception.ConfirmationException;
 import com.godeltech.gbf.gui.button.CargoBotButton;
-import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.Handler;
+import com.godeltech.gbf.service.validator.CargoValidator;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import static com.godeltech.gbf.model.State.*;
 
 @Service
+@AllArgsConstructor
 public class CargoMenuHandler implements Handler {
+
+    private CargoValidator cargoValidator;
 
     @Override
     public State handle(UserData userData) {
@@ -20,8 +23,7 @@ public class CargoMenuHandler implements Handler {
         var clickedButton = CargoBotButton.valueOf(callback);
         return switch (clickedButton) {
             case CONFIRM_CARGO -> {
-                checkSelection(userData);
-                Role role = userData.getRole();
+                cargoValidator.checkIfCargoIsEmpty(userData);
                 yield FORM;
             }
             case SELECT_DOCUMENTS -> {
@@ -43,13 +45,5 @@ public class CargoMenuHandler implements Handler {
                 yield currentState;
             }
         };
-    }
-
-    private void checkSelection(UserData userData) {
-        State currentState = userData.getStateHistory().peek();
-        String callbackQueryId = userData.getCallbackQueryId();
-        if (!userData.isDocumentsExist() &&
-                userData.getPackageSize() == null &&
-                userData.getCompanionCount() == 0) throw new ConfirmationException(currentState, callbackQueryId);
     }
 }

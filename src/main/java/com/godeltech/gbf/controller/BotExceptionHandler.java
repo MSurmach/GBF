@@ -1,39 +1,29 @@
 package com.godeltech.gbf.controller;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.exception.*;
-import com.godeltech.gbf.utils.DateUtils;
+import com.godeltech.gbf.exception.WrongInputException;
+import com.godeltech.gbf.service.alert.Alert;
+import com.godeltech.gbf.service.validator.exceptions.EmptyButtonCalendarException;
+import com.godeltech.gbf.service.validator.exceptions.GbfException;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import java.time.LocalDate;
 
 @ControllerAdvice
 @AllArgsConstructor
 public class BotExceptionHandler {
     public final static String ALERT_CALENDAR_EMPTY_DAY_CODE = "alert.calendar.emptyDay";
     public final static String ALERT_CALENDAR_DAY_MONTH_CODE = "alert.calendar.dayOfMonth";
-    public final static String ALERT_CALENDAR_DATE_IN_PAST_CODE = "alert.calendar.dateInPast";
-    public final static String ALERT_CALENDAR_DATE_AFTER_DATE_CODE = "alert.calendar.dateAfterDate";
-    public final static String ALERT_CARGO_MENU_NOTHING_SELECTED_CODE = "alert.cargoMenu.nothingSelected";
-    public final static String ALERT_COUNTRY_NOT_FOUND_CODE = "alert.country.notFound";
-    private GbfBot gbfBot;
+    private Alert alert;
     private LocalMessageSource lms;
-    @ExceptionHandler(CountryNotFoundException.class)
-    public void handleCountryNotFoundException(CountryNotFoundException countryNotFoundException){
-        String callbackQueryId = countryNotFoundException.getCallbackQueryId();
-        AnswerCallbackQuery answerCallbackQuery = AnswerCallbackQuery.builder().
-                callbackQueryId(callbackQueryId).
-                showAlert(true).
-                text(lms.getLocaleMessage(ALERT_COUNTRY_NOT_FOUND_CODE)).
-                cacheTime(60).
-                build();
-        showAlert(answerCallbackQuery);
+
+    @ExceptionHandler(GbfException.class)
+    public void handleCountryNotFoundException(GbfException exception) {
+        String callbackQueryId = exception.getCallbackQueryId();
+        String alertMessage = exception.getAlertMessage();
+        alert.showAlert(callbackQueryId, alertMessage);
     }
+
     @ExceptionHandler(EmptyButtonCalendarException.class)
     public void handleEmptyButton(EmptyButtonCalendarException emptyButtonCalendarException) {
         String callback = emptyButtonCalendarException.getButtonCallback();
@@ -41,58 +31,8 @@ public class BotExceptionHandler {
                 ALERT_CALENDAR_EMPTY_DAY_CODE :
                 ALERT_CALENDAR_DAY_MONTH_CODE;
         String callbackQueryId = emptyButtonCalendarException.getCallbackQueryId();
-        AnswerCallbackQuery answerCallbackQuery = AnswerCallbackQuery.builder().
-                callbackQueryId(callbackQueryId).
-                showAlert(true).
-                text(lms.getLocaleMessage(neededAlertCode)).
-                cacheTime(60).
-                build();
-        showAlert(answerCallbackQuery);
-    }
-
-    @ExceptionHandler(DateInPastException.class)
-    public void handleDateInPast(DateInPastException dateInPastException) {
-        LocalDate nowDate = dateInPastException.getNowDate();
-        LocalDate invalidDate = dateInPastException.getInvalidDate();
-        String callbackQueryId = dateInPastException.getCallbackQueryId();
-        AnswerCallbackQuery answerCallbackQuery = AnswerCallbackQuery.builder().
-                callbackQueryId(callbackQueryId).
-                showAlert(true).
-                text(lms.getLocaleMessage(
-                        ALERT_CALENDAR_DATE_IN_PAST_CODE,
-                        DateUtils.fullFormatDate(nowDate, lms.getLocale()),
-                        DateUtils.fullFormatDate(invalidDate, lms.getLocale()))).
-                cacheTime(60).
-                build();
-        showAlert(answerCallbackQuery);
-    }
-
-    @ExceptionHandler(DateAfterDateException.class)
-    public void handleDateAfterDate(DateAfterDateException exception) {
-        LocalDate dateTo = exception.getDateTo();
-        LocalDate dateFrom = exception.getDateFrom();
-        String callbackQueryId = exception.getCallbackQueryId();
-        AnswerCallbackQuery answerCallbackQuery = AnswerCallbackQuery.builder().
-                callbackQueryId(callbackQueryId).
-                showAlert(true).
-                text(lms.getLocaleMessage(
-                        ALERT_CALENDAR_DATE_AFTER_DATE_CODE,
-                        DateUtils.fullFormatDate(dateFrom, lms.getLocale()),
-                        DateUtils.fullFormatDate(dateTo, lms.getLocale()))).
-                cacheTime(60).
-                build();
-        showAlert(answerCallbackQuery);
-    }
-
-    @ExceptionHandler(ConfirmationException.class)
-    public void handleConfirmationException(ConfirmationException exception) {
-        AnswerCallbackQuery answerCallbackQuery = AnswerCallbackQuery.builder().
-                callbackQueryId(exception.getCallbackQueryId()).
-                showAlert(true).
-                text(lms.getLocaleMessage(ALERT_CARGO_MENU_NOTHING_SELECTED_CODE)).
-                cacheTime(60).
-                build();
-        showAlert(answerCallbackQuery);
+        String alertMessage = lms.getLocaleMessage(neededAlertCode);
+        alert.showAlert(callbackQueryId, alertMessage);
     }
 
     @ExceptionHandler(WrongInputException.class)
@@ -100,16 +40,8 @@ public class BotExceptionHandler {
 
     }
 
-    @ExceptionHandler(Exception.class)
-    public void handleAll(Exception exception) {
-
-    }
-
-    private void showAlert(BotApiMethod<?> method) {
-        try {
-            gbfBot.execute(method);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    @ExceptionHandler(Exception.class)
+//    public void handleAll(Exception exception) {
+//
+//    }
 }

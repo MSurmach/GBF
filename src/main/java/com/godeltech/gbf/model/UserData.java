@@ -42,7 +42,11 @@ public class UserData {
     public boolean isEmpty() {
         return this.routePoints.isEmpty() &&
                 Objects.isNull(this.comment) &&
-                Objects.isNull(this.packageSize) &&
+                isCargoEmpty();
+    }
+
+    public boolean isCargoEmpty() {
+        return Objects.isNull(this.packageSize) &&
                 !this.documentsExist &&
                 this.companionCount == 0;
     }

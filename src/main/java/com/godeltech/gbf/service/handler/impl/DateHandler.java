@@ -1,12 +1,12 @@
 package com.godeltech.gbf.service.handler.impl;
 
-import com.godeltech.gbf.exception.DateAfterDateException;
-import com.godeltech.gbf.exception.DateInPastException;
-import com.godeltech.gbf.exception.EmptyButtonCalendarException;
 import com.godeltech.gbf.gui.button.CalendarBotButton;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.Handler;
+import com.godeltech.gbf.service.validator.DateValidator;
+import com.godeltech.gbf.service.validator.exceptions.EmptyButtonCalendarException;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,7 +14,10 @@ import java.time.LocalDate;
 import static com.godeltech.gbf.model.State.*;
 
 @Service
+@AllArgsConstructor
 public class DateHandler implements Handler {
+
+    private DateValidator dateValidator;
 
     @Override
     public State handle(UserData userData) {
@@ -27,7 +30,7 @@ public class DateHandler implements Handler {
             case CHANGE_YEAR -> YEAR;
             case SELECT_DAY -> {
                 LocalDate parsedDate = LocalDate.parse(split[1]);
-                checkPastInDate(parsedDate, userData.getCallbackQueryId());
+                dateValidator.checkPastInDate(parsedDate, userData.getCallbackQueryId());
                 userData.getTempRoutePoint().setVisitDate(parsedDate);
                 yield ROUTE_POINT_FORM;
             }
@@ -38,10 +41,5 @@ public class DateHandler implements Handler {
             case IGNORE -> throw new EmptyButtonCalendarException(split[1], userData.getCallbackQueryId());
             default -> currentState;
         };
-    }
-
-    private void checkPastInDate(LocalDate date, String callbackQueryId) {
-        LocalDate nowDate = LocalDate.now();
-        if (date.isBefore(nowDate)) throw new DateInPastException(date, nowDate, callbackQueryId);
     }
 }
