@@ -1,6 +1,7 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.exception.CountryNotFoundException;
 import com.godeltech.gbf.gui.keyboard.Keyboard;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.model.UserData;
@@ -29,6 +30,7 @@ public class CityKeyboard implements Keyboard {
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         Country country = userData.getTempRoutePoint().getCountry();
+        if (country == null) throw new CountryNotFoundException(userData.getCallbackQueryId());
         List<City> cities = cityService.findCitiesByCountry(country);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         for (var index = 0; index < cities.size(); ) {

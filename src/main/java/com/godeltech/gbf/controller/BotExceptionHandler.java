@@ -19,10 +19,21 @@ public class BotExceptionHandler {
     public final static String ALERT_CALENDAR_DAY_MONTH_CODE = "alert.calendar.dayOfMonth";
     public final static String ALERT_CALENDAR_DATE_IN_PAST_CODE = "alert.calendar.dateInPast";
     public final static String ALERT_CALENDAR_DATE_AFTER_DATE_CODE = "alert.calendar.dateAfterDate";
-    public final static String ALERT_CARGO_MENU_NOTHING_SELECTED = "alert.cargoMenu.nothingSelected";
+    public final static String ALERT_CARGO_MENU_NOTHING_SELECTED_CODE = "alert.cargoMenu.nothingSelected";
+    public final static String ALERT_COUNTRY_NOT_FOUND_CODE = "alert.country.notFound";
     private GbfBot gbfBot;
     private LocalMessageSource lms;
-
+    @ExceptionHandler(CountryNotFoundException.class)
+    public void handleCountryNotFoundException(CountryNotFoundException countryNotFoundException){
+        String callbackQueryId = countryNotFoundException.getCallbackQueryId();
+        AnswerCallbackQuery answerCallbackQuery = AnswerCallbackQuery.builder().
+                callbackQueryId(callbackQueryId).
+                showAlert(true).
+                text(lms.getLocaleMessage(ALERT_COUNTRY_NOT_FOUND_CODE)).
+                cacheTime(60).
+                build();
+        showAlert(answerCallbackQuery);
+    }
     @ExceptionHandler(EmptyButtonCalendarException.class)
     public void handleEmptyButton(EmptyButtonCalendarException emptyButtonCalendarException) {
         String callback = emptyButtonCalendarException.getButtonCallback();
@@ -78,7 +89,7 @@ public class BotExceptionHandler {
         AnswerCallbackQuery answerCallbackQuery = AnswerCallbackQuery.builder().
                 callbackQueryId(exception.getCallbackQueryId()).
                 showAlert(true).
-                text(lms.getLocaleMessage(ALERT_CARGO_MENU_NOTHING_SELECTED)).
+                text(lms.getLocaleMessage(ALERT_CARGO_MENU_NOTHING_SELECTED_CODE)).
                 cacheTime(60).
                 build();
         showAlert(answerCallbackQuery);
