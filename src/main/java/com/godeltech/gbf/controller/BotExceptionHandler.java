@@ -2,7 +2,6 @@ package com.godeltech.gbf.controller;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.exception.*;
-import com.godeltech.gbf.gui.message.impl.DateMessage;
 import com.godeltech.gbf.utils.DateUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,8 +22,6 @@ public class BotExceptionHandler {
     public final static String ALERT_CARGO_MENU_NOTHING_SELECTED = "alert.cargoMenu.nothingSelected";
     private GbfBot gbfBot;
     private LocalMessageSource lms;
-
-    private DateMessage dateAnswer;
 
     @ExceptionHandler(EmptyButtonCalendarException.class)
     public void handleEmptyButton(EmptyButtonCalendarException emptyButtonCalendarException) {
@@ -89,6 +86,11 @@ public class BotExceptionHandler {
 
     @ExceptionHandler(WrongInputException.class)
     public void handleWrongInput(WrongInputException exception) {
+
+    }
+
+    @ExceptionHandler(Exception.class)
+    public void handleAll(Exception exception) {
 
     }
 
