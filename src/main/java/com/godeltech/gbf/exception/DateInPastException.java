@@ -6,10 +6,10 @@ import java.time.LocalDate;
 
 @Getter
 public class DateInPastException extends RuntimeException {
-    private LocalDate invalidDate;
-    private LocalDate nowDate;
+    private final LocalDate invalidDate;
+    private final LocalDate nowDate;
 
-    private String callbackQueryId;
+    private final String callbackQueryId;
 
     public DateInPastException(LocalDate invalidDate, LocalDate nowDate, String callbackQueryId) {
         this.invalidDate = invalidDate;

@@ -4,7 +4,6 @@ import com.godeltech.gbf.exception.DateAfterDateException;
 import com.godeltech.gbf.exception.DateInPastException;
 import com.godeltech.gbf.exception.EmptyButtonCalendarException;
 import com.godeltech.gbf.gui.button.CalendarBotButton;
-import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.Handler;
@@ -28,6 +27,7 @@ public class DateHandler implements Handler {
             case CHANGE_YEAR -> YEAR;
             case SELECT_DAY -> {
                 LocalDate parsedDate = LocalDate.parse(split[1]);
+                checkPastInDate(parsedDate, userData.getCallbackQueryId());
                 userData.getTempRoutePoint().setVisitDate(parsedDate);
                 yield ROUTE_POINT_FORM;
             }
@@ -43,10 +43,5 @@ public class DateHandler implements Handler {
     private void checkPastInDate(LocalDate date, String callbackQueryId) {
         LocalDate nowDate = LocalDate.now();
         if (date.isBefore(nowDate)) throw new DateInPastException(date, nowDate, callbackQueryId);
-    }
-
-    private void checkDateToAfterDateFrom(LocalDate dateFrom, LocalDate dateTo, String callbackQueryId) {
-        if (dateFrom != null && dateTo.isBefore(dateFrom))
-            throw new DateAfterDateException(dateFrom, dateTo, callbackQueryId);
     }
 }

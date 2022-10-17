@@ -34,6 +34,5 @@ public class CargoMenuMessage implements Message {
                 userData.getCompanionCount() == 0) ?
                 localMessageSource.getLocaleMessage(CARGO_MENU_NOT_SELECTED_CODE) :
                 EMPTY;
-
     }
 }
