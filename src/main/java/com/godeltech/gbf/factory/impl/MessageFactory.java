@@ -33,6 +33,7 @@ public class MessageFactory implements Factory<Message> {
                     case COURIERS_LIST_RESULT -> CouriersListMessage.class;
                     case CLIENTS_LIST_RESULT -> ClientsListMessage.class;
                     case REQUESTS -> RequestsMessage.class;
+                    case BACK -> null;
                     case FORM -> FormMessage.class;
                     case ROUTE_POINT_FORM -> RoutePointFormMessage.class;
                     case INTERMEDIATE_EDITOR -> IntermediateEditorMessage.class;
