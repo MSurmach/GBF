@@ -17,6 +17,7 @@ public class BotExceptionHandler {
     private Alert alert;
     private LocalMessageSource lms;
 
+
     @ExceptionHandler(GbfException.class)
     public void handleCountryNotFoundException(GbfException exception) {
         String callbackQueryId = exception.getCallbackQueryId();

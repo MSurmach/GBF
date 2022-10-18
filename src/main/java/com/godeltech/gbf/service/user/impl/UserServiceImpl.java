@@ -114,11 +114,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(UserData userData) {
-        switch (userData.getRole()) {
-            case REGISTRATIONS_VIEWER -> userData.setRole(Role.COURIER);
-            case REQUESTS_VIEWER -> userData.setRole(Role.CLIENT);
-        }
         TelegramUser forSave = ModelUtils.telegramUser(userData);
+        switch (userData.getRole()) {
+            case REGISTRATIONS_VIEWER -> forSave.setRole(Role.COURIER);
+            case REQUESTS_VIEWER -> forSave.setRole(Role.CLIENT);
+        }
         telegramUserRepository.save(forSave);
     }
 }

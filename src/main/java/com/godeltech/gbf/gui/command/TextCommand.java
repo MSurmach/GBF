@@ -1,7 +1,7 @@
 package com.godeltech.gbf.gui.command;
 
 public enum TextCommand {
-    START("/start"), STOP("/stop"), HELP("/help");
+    START("/start");
     private final String description;
 
     TextCommand(String description) {

@@ -9,6 +9,7 @@ import com.godeltech.gbf.factory.impl.ViewFactory;
 import com.godeltech.gbf.gui.command.TextCommand;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.handler.Handler;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.view.View;
@@ -27,14 +28,17 @@ import static com.godeltech.gbf.model.State.*;
 public class MessageInterceptor implements Interceptor {
     private final HandlerFactory handlerFactory;
     private final ViewFactory viewFactory;
+
+    private final BotMessageService botMessageService;
     @Getter
     private Long telegramUserId;
     @Getter
     private Long chatId;
 
-    public MessageInterceptor(HandlerFactory handlerFactory, ViewFactory viewFactory) {
+    public MessageInterceptor(HandlerFactory handlerFactory, ViewFactory viewFactory, BotMessageService botMessageService) {
         this.handlerFactory = handlerFactory;
         this.viewFactory = viewFactory;
+        this.botMessageService = botMessageService;
     }
 
     @Override
@@ -44,6 +48,7 @@ public class MessageInterceptor implements Interceptor {
         chatId = message.getChatId();
         telegramUserId = from.getId();
         State state;
+        botMessageService.save(telegramUserId, message);
         try {
             state = interceptTextCommand(message.getText(), from.getUserName(), telegramUserId);
         } catch (TextCommandNotFoundException exception) {
@@ -63,14 +68,9 @@ public class MessageInterceptor implements Interceptor {
     State interceptTextCommand(String command, String username, Long telegramUserId) throws TextCommandNotFoundException {
         String parsedAsCommand = command.toUpperCase().replace("/", "");
         try {
-            var textCommand = TextCommand.valueOf(parsedAsCommand);
-            return switch (textCommand) {
-                case START -> {
-                    UserDataCache.initializeByIdAndUsername(telegramUserId, username);
-                    yield MENU;
-                }
-                default -> null;
-            };
+            TextCommand.valueOf(parsedAsCommand);
+            UserDataCache.initializeByIdAndUsername(telegramUserId, username);
+            return MENU;
         } catch (IllegalArgumentException exception) {
             throw new TextCommandNotFoundException();
         }
@@ -78,6 +78,7 @@ public class MessageInterceptor implements Interceptor {
 
     private State interceptSufficientInput(Update update) throws InsufficientInputException {
         UserData cached = UserDataCache.get(telegramUserId);
+        if (cached == null) throw new InsufficientInputException();
         State currentState = cached.getStateHistory().peek();
         if (currentState == CARGO_PEOPLE || currentState == COMMENT) {
             String text = update.getMessage().getText();

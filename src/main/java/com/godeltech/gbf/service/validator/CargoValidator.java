@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class CargoValidator {
-    public final static String ALERT_CARGO_MENU_NOTHING_SELECTED_CODE = "alert.cargoMenu.nothingSelected";
+    public final static String ALERT_CARGO_EMPTY_CODE = "alert.cargo.empty";
     private LocalMessageSource lms;
 
     public void checkIfCargoIsEmpty(UserData userData) {
-        String alertMessage = lms.getLocaleMessage(ALERT_CARGO_MENU_NOTHING_SELECTED_CODE);
+        String alertMessage = lms.getLocaleMessage(ALERT_CARGO_EMPTY_CODE);
         String callbackQueryId = userData.getCallbackQueryId();
         if (userData.isEmpty()) throw new GbfException(callbackQueryId, alertMessage);
     }

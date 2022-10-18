@@ -9,6 +9,7 @@ import com.godeltech.gbf.model.db.Status;
 import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.service.handler.Handler;
 import com.godeltech.gbf.service.user.UserService;
+import com.godeltech.gbf.service.validator.FormValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import static com.godeltech.gbf.model.db.Status.*;
 public class FormHandler implements Handler {
 
     private UserService userService;
+    private FormValidator formValidator;
 
     @Override
     public State handle(UserData userData) {
@@ -53,7 +55,10 @@ public class FormHandler implements Handler {
                 yield userData.getStateHistory().peek();
             }
             case ADD_CARGO, EDIT_CARGO -> CARGO_MENU;
-            case FORM_REGISTER, FORM_SEARCH, FORM_EDIT_CONFIRM -> saveAndGetAppropriateState(userData);
+            case FORM_REGISTER, FORM_SEARCH, FORM_EDIT_CONFIRM -> {
+                formValidator.validateBeforeSave(userData);
+                yield saveAndGetAppropriateState(userData);
+            }
         };
     }
 

@@ -13,7 +13,12 @@ public class CargoPeopleHandler implements Handler {
     @Override
     public State handle(UserData userData) {
         String callback = userData.getCallbackHistory().peek();
-        userData.setCompanionCount(Integer.parseInt(callback));
-        return CARGO_MENU;
+        try {
+            int count = Integer.parseInt(callback);
+            userData.setCompanionCount(count);
+            return CARGO_MENU;
+        } catch (NumberFormatException numberFormatException) {
+            return userData.getStateHistory().peek();
+        }
     }
 }

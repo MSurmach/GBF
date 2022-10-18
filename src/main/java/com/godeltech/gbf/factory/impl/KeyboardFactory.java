@@ -20,11 +20,12 @@ public class KeyboardFactory implements Factory<Keyboard> {
                     case MENU -> MainMenuKeyboard.class;
                     case COUNTRY -> CountryKeyboard.class;
                     case CITY -> CityKeyboard.class;
-                    case YEAR-> YearKeyboard.class;
+                    case YEAR -> YearKeyboard.class;
                     case MONTH -> MonthKeyboard.class;
                     case DATE -> DateKeyboard.class;
                     case CARGO_MENU -> CargoMainKeyboard.class;
                     case CARGO_PACKAGE -> CargoPackageKeyboard.class;
+                    case CARGO_PEOPLE -> ControlKeyboard.class;
                     case SUCCESS -> BackMenuKeyboard.class;
                     case REGISTRATIONS -> RegistrationKeyboard.class;
                     case REQUESTS -> RequestKeyboard.class;

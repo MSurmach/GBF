@@ -23,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
@@ -50,6 +51,7 @@ public class CallbackInterceptor implements Interceptor {
 
     @Override
     public List<? extends BotApiMethod<?>> intercept(Update update) {
+        Message message = update.getCallbackQuery().getMessage();
         CallbackQuery callbackQuery = update.getCallbackQuery();
         User from = callbackQuery.getFrom();
         telegramUserId = from.getId();
