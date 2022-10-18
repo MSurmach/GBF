@@ -4,11 +4,11 @@ import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.exception.InsufficientInputException;
 import com.godeltech.gbf.exception.TextCommandNotFoundException;
 import com.godeltech.gbf.exception.WrongInputException;
+import com.godeltech.gbf.factory.impl.HandlerFactory;
+import com.godeltech.gbf.factory.impl.ViewFactory;
 import com.godeltech.gbf.gui.command.TextCommand;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.factory.impl.HandlerFactory;
-import com.godeltech.gbf.factory.impl.ViewFactory;
 import com.godeltech.gbf.service.handler.Handler;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.view.View;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.util.List;
 
@@ -39,11 +40,12 @@ public class MessageInterceptor implements Interceptor {
     @Override
     public List<? extends BotApiMethod<?>> intercept(Update update) {
         Message message = update.getMessage();
+        User from = message.getFrom();
         chatId = message.getChatId();
-        telegramUserId = message.getFrom().getId();
+        telegramUserId = from.getId();
         State state;
         try {
-            state = interceptTextCommand(update);
+            state = interceptTextCommand(message.getText(), from.getUserName(), telegramUserId);
         } catch (TextCommandNotFoundException exception) {
             try {
                 state = interceptSufficientInput(update);
@@ -58,12 +60,10 @@ public class MessageInterceptor implements Interceptor {
         return view.buildView(chatId, cached);
     }
 
-    private State interceptTextCommand(Update update) throws TextCommandNotFoundException {
-        String input = update.getMessage().getText();
-        String parsedAsCommand = input.toUpperCase().replace("/", "");
+    State interceptTextCommand(String command, String username, Long telegramUserId) throws TextCommandNotFoundException {
+        String parsedAsCommand = command.toUpperCase().replace("/", "");
         try {
             var textCommand = TextCommand.valueOf(parsedAsCommand);
-            String username = update.getMessage().getFrom().getUserName();
             return switch (textCommand) {
                 case START -> {
                     UserDataCache.initializeByIdAndUsername(telegramUserId, username);

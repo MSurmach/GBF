@@ -1,8 +1,9 @@
 package com.godeltech.gbf.controller;
 
-import com.godeltech.gbf.cache.UserMessageCache;
 import com.godeltech.gbf.config.TelegramBotConfig;
 import com.godeltech.gbf.factory.impl.InterceptorFactory;
+import com.godeltech.gbf.model.db.BotMessage;
+import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +13,6 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
-import org.telegram.telegrambots.meta.api.objects.MemberStatus;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
@@ -27,10 +27,17 @@ public class GbfBot extends SpringWebhookBot {
     private final InterceptorFactory interceptorFactory;
     private final TelegramBotConfig telegramBotConfig;
 
-    public GbfBot(DefaultBotOptions options, SetWebhook setWebhook, InterceptorFactory interceptorFactory, TelegramBotConfig telegramBotConfig) {
+    private final BotMessageService botMessageService;
+
+    public GbfBot(DefaultBotOptions options,
+                  SetWebhook setWebhook,
+                  InterceptorFactory interceptorFactory,
+                  TelegramBotConfig telegramBotConfig,
+                  BotMessageService botMessageService) {
         super(options, setWebhook);
         this.interceptorFactory = interceptorFactory;
         this.telegramBotConfig = telegramBotConfig;
+        this.botMessageService = botMessageService;
     }
 
     @Override
@@ -86,7 +93,7 @@ public class GbfBot extends SpringWebhookBot {
                         stage++;
                         deletePreviousMessage(telegramUserId, chatId);
                     }
-                    cacheExecutedMessage(telegramUserId, message);
+                    botMessageService.save(telegramUserId, message);
                 }
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
@@ -94,23 +101,19 @@ public class GbfBot extends SpringWebhookBot {
         }
     }
 
-    private void cacheExecutedMessage(Long telegramUserId, Message message) {
-        UserMessageCache.cacheUserIdAndMessageId(telegramUserId, message.getMessageId());
-    }
-
-    private void deletePreviousMessage(Long telegramUserId, Long chatId) {
-        List<Integer> messageIds = UserMessageCache.getMessageIds(telegramUserId);
-        if (messageIds != null) {
-            DeleteMessage deleteMessage = new DeleteMessage();
-            messageIds.forEach(messageId -> {
-                deleteMessage.setChatId(chatId);
-                deleteMessage.setMessageId(messageId);
+    public void deletePreviousMessage(Long telegramUserId, Long chatId) {
+        List<BotMessage> previousMessages = botMessageService.findAllByTelegramIdAndChatId(telegramUserId, chatId);
+        if (previousMessages != null && !previousMessages.isEmpty())
+            previousMessages.forEach(previousMessage -> {
+                botMessageService.delete(previousMessage);
+                DeleteMessage deleteMessage = new DeleteMessage();
+                deleteMessage.setChatId(previousMessage.getChatId());
+                deleteMessage.setMessageId(previousMessage.getMessageId());
                 try {
                     execute(deleteMessage);
                 } catch (TelegramApiException e) {
                     throw new RuntimeException(e);
                 }
             });
-        }
     }
 }
