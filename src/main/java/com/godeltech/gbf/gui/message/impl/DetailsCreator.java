@@ -2,6 +2,7 @@ package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.db.CargoSize;
 import com.godeltech.gbf.model.db.City;
 import com.godeltech.gbf.model.db.Country;
 import com.godeltech.gbf.model.db.RoutePoint;
@@ -86,16 +87,14 @@ public class DetailsCreator {
             case COURIER, REGISTRATIONS_VIEWER -> lms.getLocaleMessage(DETAILS_COURIER_CARGO_CODE);
             case CLIENT, REQUESTS_VIEWER -> lms.getLocaleMessage(DETAILS_CLIENT_CARGO_CODE);
         };
-        if (userData.isDocumentsExist() ||
-                userData.getPackageSize() != null ||
-                userData.getCompanionCount() != 0)
+        if (!userData.isCargoEmpty())
             cargoSummary.append(cargoHeader);
         if (userData.isDocumentsExist())
             cargoSummary.append(lms.getLocaleMessage(DETAILS_CARGO_DOCUMENTS_SELECTED_CODE));
-        if (userData.getPackageSize() != null)
+        if (userData.getPackageSize() != 0)
             cargoSummary.append(lms.getLocaleMessage(
                     DETAILS_CARGO_PACKAGE_SELECTED_CODE,
-                    userData.getPackageSize()));
+                    CargoSize.getSizeName(userData.getPackageSize())));
         if (userData.getCompanionCount() != 0)
             cargoSummary.append(lms.getLocaleMessage(
                     DETAILS_CARGO_PEOPLE_SELECTED_CODE,

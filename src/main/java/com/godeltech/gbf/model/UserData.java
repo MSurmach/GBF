@@ -19,7 +19,7 @@ public class UserData {
     private Long telegramId;
     private String username;
     private boolean documentsExist;
-    private String packageSize;
+    private int packageSize;
     private int companionCount;
     private String comment;
 
@@ -46,7 +46,7 @@ public class UserData {
     }
 
     public boolean isCargoEmpty() {
-        return Objects.isNull(this.packageSize) &&
+        return this.packageSize == 0 &&
                 !this.documentsExist &&
                 this.companionCount == 0;
     }

@@ -32,7 +32,7 @@ public class ModelUtils {
     public static void resetUserData(UserData userData) {
         userData.setId(null);
         userData.setDocumentsExist(false);
-        userData.setPackageSize(null);
+        userData.setPackageSize(0);
         userData.setCompanionCount(0);
         userData.setComment(null);
         userData.setRoutePoints(new LinkedList<>());

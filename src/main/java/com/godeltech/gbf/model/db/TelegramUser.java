@@ -39,7 +39,7 @@ public class TelegramUser {
     private boolean documentsExist;
 
     @Column
-    private String packageSize;
+    private int packageSize;
 
     @Column
     private int companionCount;

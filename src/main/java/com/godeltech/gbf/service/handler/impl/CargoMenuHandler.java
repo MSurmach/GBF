@@ -36,7 +36,7 @@ public class CargoMenuHandler implements Handler {
             }
             case SELECT_PACKAGE, EDIT_PACKAGE -> CARGO_PACKAGE;
             case CANCEL_PACKAGE -> {
-                userData.setPackageSize(null);
+                userData.setPackageSize(0);
                 yield currentState;
             }
             case SELECT_PEOPLE, EDIT_PEOPLE -> CARGO_PEOPLE;

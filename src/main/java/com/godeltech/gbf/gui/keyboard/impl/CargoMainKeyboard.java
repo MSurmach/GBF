@@ -53,7 +53,7 @@ public class CargoMainKeyboard implements Keyboard {
 
     private List<InlineKeyboardButton> packageRow(UserData userData) {
         List<InlineKeyboardButton> row = new ArrayList<>();
-        if (userData.getPackageSize() != null) {
+        if (userData.getPackageSize() != 0) {
             var cancelButton = KeyboardUtils.createLocalButton(CANCEL_PACKAGE, lms);
             var editButton = KeyboardUtils.createLocalButton(EDIT_PACKAGE, lms);
             row.add(cancelButton);

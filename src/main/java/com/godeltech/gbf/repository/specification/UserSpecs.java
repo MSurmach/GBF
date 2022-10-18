@@ -1,12 +1,8 @@
 package com.godeltech.gbf.repository.specification;
 
-import com.godeltech.gbf.model.Role;
-import com.godeltech.gbf.model.TelegramUser_;
-import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.TelegramUser;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.Join;
 import java.util.List;
 
 public class UserSpecs {
@@ -19,12 +15,12 @@ public class UserSpecs {
         };
     }
 
-    public static Specification<TelegramUser> byPackageSizeEquals(String packageSize) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("packageSize"), packageSize);
+    public static Specification<TelegramUser> byPackageSizeIsLessThanOrEqualTo(int packageSize) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get("packageSize"), packageSize);
     }
 
-    public static Specification<TelegramUser> byPackageSizeIsNull() {
-        return (root, query, criteriaBuilder) -> root.get("packageSize").isNull();
+    public static Specification<TelegramUser> byPackageSizeIsGreaterThanOrEqualTo(int packageSize) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("packageSize"), packageSize);
     }
 
     public static Specification<TelegramUser> byCompanionCountIsLessThanOrEqualTo(int companionCount) {

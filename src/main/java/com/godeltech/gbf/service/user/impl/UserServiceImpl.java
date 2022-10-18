@@ -34,25 +34,22 @@ public class UserServiceImpl implements UserService {
     private Specification<TelegramUser> buildSpecificationForCouriersSearch(TelegramUser searchData) throws Exception {
         Role role = Role.COURIER;
         List<Long> availableTelegramUserIds = findTelegramUserIdsByRoutePointsAndRole(searchData.getRoutePoints(), role);
-        Specification<TelegramUser> searchSpecification = byIdIn(availableTelegramUserIds);
+        Specification<TelegramUser> searchSpecification = byIdIn(availableTelegramUserIds).
+                and(byPackageSizeIsGreaterThanOrEqualTo(searchData.getPackageSize())).
+                and(byCompanionCountIsGreaterThanOrEqualTo(searchData.getCompanionCount()));
         boolean documents = searchData.isDocumentsExist();
         if (documents)
             searchSpecification = searchSpecification.and(byDocumentsIsGreaterThanOrEquals(documents));
-        String packageSize = searchData.getPackageSize();
-        if (packageSize != null) searchSpecification = searchSpecification.and(byPackageSizeEquals(packageSize));
-        searchSpecification = searchSpecification.and(byCompanionCountIsGreaterThanOrEqualTo(searchData.getCompanionCount()));
         return searchSpecification;
     }
 
     private Specification<TelegramUser> buildSpecificationForClientsSearch(TelegramUser searchData) throws Exception {
         Role role = Role.CLIENT;
         List<Long> availableTelegramUserIds = findTelegramUserIdsByRoutePointsAndRole(searchData.getRoutePoints(), role);
-        Specification<TelegramUser> searchSpecification =
-                byIdIn(availableTelegramUserIds).
-                        and(byDocumentsIsLessThanOrEquals(searchData.isDocumentsExist()).
-                                or(byPackageSizeEquals(searchData.getPackageSize()).or(byPackageSizeIsNull())).
-                                or(byCompanionCountIsLessThanOrEqualTo(searchData.getCompanionCount())));
-        return searchSpecification;
+        return byIdIn(availableTelegramUserIds).
+                and(byDocumentsIsLessThanOrEquals(searchData.isDocumentsExist()).
+                        or(byPackageSizeIsLessThanOrEqualTo(searchData.getPackageSize())).
+                        or(byCompanionCountIsLessThanOrEqualTo(searchData.getCompanionCount())));
     }
 
     private List<Long> findTelegramUserIdsByRoutePointsAndRole(List<RoutePoint> searchRoutePoints, Role role) throws Exception {

@@ -29,9 +29,7 @@ public class CargoMenuMessage implements Message {
     }
 
     private String cargoSelectedInfo(UserData userData) {
-        return (!userData.isDocumentsExist() &&
-                userData.getPackageSize() == null &&
-                userData.getCompanionCount() == 0) ?
+        return (userData.isCargoEmpty()) ?
                 localMessageSource.getLocaleMessage(CARGO_MENU_NOT_SELECTED_CODE) :
                 EMPTY;
     }

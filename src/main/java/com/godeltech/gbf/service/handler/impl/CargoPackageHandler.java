@@ -13,7 +13,7 @@ public class CargoPackageHandler implements Handler {
     @Override
     public State handle(UserData userData) {
         String callback = userData.getCallbackHistory().peek();
-        userData.setPackageSize(callback);
+        userData.setPackageSize(Integer.parseInt(callback));
         return CARGO_MENU;
     }
 }
