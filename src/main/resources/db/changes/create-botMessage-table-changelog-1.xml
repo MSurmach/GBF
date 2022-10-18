@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet id="1" author="maximsurmach@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="BOT_MESSAGE"/>
+            </not>
+        </preConditions>
+        <createTable tableName="BOT_MESSAGE" schemaName="public">
+            <column name="message_id" type="int" autoIncrement="false">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="chat_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="telegram_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
