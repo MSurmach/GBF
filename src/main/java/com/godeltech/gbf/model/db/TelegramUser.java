@@ -1,7 +1,10 @@
 package com.godeltech.gbf.model.db;
 
 import com.godeltech.gbf.model.Role;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -30,6 +33,7 @@ public class TelegramUser {
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
+    @OrderBy("orderNumber")
     private List<RoutePoint> routePoints;
 
     @Column
