@@ -103,8 +103,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void removeByChangedAtAfter(LocalDate date) {
-        telegramUserRepository.removeByChangedAtAfter(date);
+    public void removeByChangedAtBefore(LocalDate date) {
+        telegramUserRepository.removeByChangedAtBefore(date);
     }
 
     @Override

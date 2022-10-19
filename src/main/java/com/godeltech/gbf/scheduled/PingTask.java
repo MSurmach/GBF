@@ -19,8 +19,8 @@ public class PingTask {
             URL url = new URL(urlForPing);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.connect();
+            System.out.printf("Ping %s, OK: response code %d", url.getHost(), connection.getResponseCode());
             connection.disconnect();
-            System.out.println("Ping job run...");
         } catch (IOException e) {
             System.out.println("Ping job exited with error");
         }
