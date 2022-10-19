@@ -20,8 +20,9 @@ public class PingTask {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.connect();
             connection.disconnect();
+            System.out.println("Ping job run...");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Ping job exited with error");
         }
     }
 }
