@@ -31,28 +31,21 @@ public class UserServiceImpl implements UserService {
     private TelegramUserRepository telegramUserRepository;
     private RoutePointService routePointService;
 
-    private Specification<TelegramUser> buildSpecificationForCouriersSearch(TelegramUser searchData) throws Exception {
-        Role role = Role.COURIER;
-        List<Long> availableTelegramUserIds = findTelegramUserIdsByRoutePointsAndRole(searchData.getRoutePoints(), role);
-        Specification<TelegramUser> searchSpecification = byIdIn(availableTelegramUserIds).
-                and(byPackageSizeIsGreaterThanOrEqualTo(searchData.getPackageSize())).
-                and(byCompanionCountIsGreaterThanOrEqualTo(searchData.getCompanionCount()));
-        boolean documents = searchData.isDocumentsExist();
-        if (documents)
-            searchSpecification = searchSpecification.and(byDocumentsIsGreaterThanOrEquals(documents));
-        return searchSpecification;
+    private Specification<TelegramUser> cargoSpecificationForCouriersSearch(TelegramUser searchData) {
+        return byDocumentsIsGreaterThanOrEquals(searchData.isDocumentsExist()).
+                and(byPackageSizeIsGreaterThanOrEqualTo(searchData.getPackageSize()).
+                        or(byPackageSizeIsZero())).
+                and(byCompanionCountIsGreaterThanOrEqualTo(searchData.getCompanionCount()).
+                        or(byCompanionCountIsZero()));
     }
 
-    private Specification<TelegramUser> buildSpecificationForClientsSearch(TelegramUser searchData) throws Exception {
-        Role role = Role.CLIENT;
-        List<Long> availableTelegramUserIds = findTelegramUserIdsByRoutePointsAndRole(searchData.getRoutePoints(), role);
-        return byIdIn(availableTelegramUserIds).
-                and(byDocumentsIsLessThanOrEquals(searchData.isDocumentsExist()).
-                        or(byPackageSizeIsLessThanOrEqualTo(searchData.getPackageSize())).
-                        or(byCompanionCountIsLessThanOrEqualTo(searchData.getCompanionCount())));
+    private Specification<TelegramUser> cargoSpecificationForClientsSearch(TelegramUser searchData) {
+        return byDocumentsIsLessThanOrEquals(searchData.isDocumentsExist()).
+                or(byPackageSizeIsLessThanOrEqualTo(searchData.getPackageSize())).
+                or(byCompanionCountIsLessThanOrEqualTo(searchData.getCompanionCount()));
     }
 
-    private List<Long> findTelegramUserIdsByRoutePointsAndRole(List<RoutePoint> searchRoutePoints, Role role) throws Exception {
+    private List<Long> findTelegramUserIdsByRoutePointsAndRole(List<RoutePoint> searchRoutePoints, Role role) {
         Predicate<Map.Entry<Long, Long>> filterByRoutePointsSize = null;
         List<RoutePoint> roleRoutePoints = null;
         if (role == Role.COURIER) {
@@ -66,28 +59,22 @@ public class UserServiceImpl implements UserService {
         Function<RoutePoint, Long> routePointToUserIdFunction = routePoint -> routePoint.getTelegramUser().getId();
         Map<Long, Long> groupedByUserIdCountMap = roleRoutePoints.stream().
                 collect(Collectors.groupingBy(routePointToUserIdFunction, Collectors.counting()));
-        List<Long> availableTelegramUserIds = groupedByUserIdCountMap.entrySet().stream().
+        return groupedByUserIdCountMap.entrySet().stream().
                 filter(filterByRoutePointsSize).
                 map(Map.Entry::getKey).
                 toList();
-        if (availableTelegramUserIds.isEmpty()) throw new Exception("Nothing was found");
-        return availableTelegramUserIds;
     }
 
     @Override
     public Page<TelegramUser> findTelegramUsersBySearchDataAndRole(TelegramUser searchData, Role role, int pageNumber) {
+        List<Long> possibleUsersIds = findTelegramUserIdsByRoutePointsAndRole(searchData.getRoutePoints(), role);
+        if (possibleUsersIds.isEmpty()) return null;
+        Specification<TelegramUser> searchSpecification = byIdIn(possibleUsersIds);
+        if (role == Role.COURIER)
+            searchSpecification = searchSpecification.and(cargoSpecificationForCouriersSearch(searchData));
+        if (role == Role.CLIENT)
+            searchSpecification = searchSpecification.and(cargoSpecificationForClientsSearch(searchData));
         Pageable pageable = PageRequest.of(pageNumber, 1);
-        Specification<TelegramUser> searchSpecification = null;
-        try {
-            if (role == Role.COURIER) {
-                searchSpecification = buildSpecificationForCouriersSearch(searchData);
-            }
-            if (role == Role.CLIENT) {
-                searchSpecification = buildSpecificationForClientsSearch(searchData);
-            }
-        } catch (Exception exception) {
-            return null;
-        }
         return telegramUserRepository.findAll(searchSpecification, pageable);
     }
 

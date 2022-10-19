@@ -3,6 +3,7 @@ package com.godeltech.gbf.service.handler.impl;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.Country;
+import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.service.handler.Handler;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,9 @@ public class CountryHandler implements Handler {
         Integer countryId = Integer.valueOf(splittedCallback[1]);
         String countryName = splittedCallback[0];
         Country country = new Country(countryId, countryName);
-        userData.getTempRoutePoint().setCountry(country);
+        RoutePoint tempRoutePoint = userData.getTempRoutePoint();
+        tempRoutePoint.setCity(null);
+        tempRoutePoint.setCountry(country);
         return ROUTE_POINT_FORM;
     }
 }

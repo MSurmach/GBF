@@ -23,6 +23,10 @@ public class UserSpecs {
         return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("packageSize"), packageSize);
     }
 
+    public static Specification<TelegramUser> byPackageSizeIsZero() {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("packageSize"), 0);
+    }
+
     public static Specification<TelegramUser> byCompanionCountIsLessThanOrEqualTo(int companionCount) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get("companionCount"), companionCount);
     }
@@ -31,11 +35,19 @@ public class UserSpecs {
         return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("companionCount"), companionCount);
     }
 
-    public static Specification<TelegramUser> byDocumentsIsGreaterThanOrEquals(boolean documentsExist) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("documentsExist"), documentsExist);
+    public static Specification<TelegramUser> byCompanionCountIsZero() {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("companionCount"), 0);
+    }
+
+    public static Specification<TelegramUser> byDocuments(boolean documentsExist) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("documentsExist"), documentsExist);
     }
 
     public static Specification<TelegramUser> byDocumentsIsLessThanOrEquals(boolean documentsExist) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get("documentsExist"), documentsExist);
+    }
+
+    public static Specification<TelegramUser> byDocumentsIsGreaterThanOrEquals(boolean documentsExist) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("documentsExist"), documentsExist);
     }
 }
