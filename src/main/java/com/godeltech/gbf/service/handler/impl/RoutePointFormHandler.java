@@ -45,25 +45,20 @@ public class RoutePointFormHandler implements Handler {
                 LinkedList<RoutePoint> points = userData.getRoutePoints();
                 yield switch (tempRoutePoint.getStatus()) {
                     case INITIAL -> {
-                        if (points.stream().anyMatch(point -> point.getStatus() == INITIAL))
+                        if (!points.isEmpty() && points.getFirst().getStatus() == INITIAL)
                             points.removeFirst();
                         points.addFirst(tempRoutePoint);
                         yield FORM;
                     }
                     case INTERMEDIATE -> {
                         int intermediateOrder = tempRoutePoint.getOrderNumber();
-                        if (points.isEmpty() ||
-                                (points.size() == 1 && points.getFirst().getStatus() == FINAL))
-                            points.addFirst(tempRoutePoint);
-                        else {
-                            if (points.get(intermediateOrder).getStatus() == INTERMEDIATE)
-                                points.remove(intermediateOrder);
-                            points.add(intermediateOrder, tempRoutePoint);
-                        }
+                        if (points.get(intermediateOrder).getStatus() == INTERMEDIATE)
+                            points.remove(intermediateOrder);
+                        points.add(intermediateOrder, tempRoutePoint);
                         yield INTERMEDIATE_EDITOR;
                     }
                     case FINAL -> {
-                        if (points.stream().anyMatch(point -> point.getStatus() == FINAL))
+                        if (!points.isEmpty() && points.getLast().getStatus() == FINAL)
                             points.removeLast();
                         points.addLast(tempRoutePoint);
                         yield FORM;
