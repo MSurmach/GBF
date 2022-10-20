@@ -12,6 +12,7 @@ public class DateUtils {
     public final static String SHORT_YEAR_PATTERN = "yy";
     public final static String SPACE = " ";
     public final static String POINT = ".";
+    public final static String HYPHEN = " - ";
 
     public static String fullFormatDate(LocalDate date) {
         String datePattern = DAY_PATTERN + SPACE + FULL_MONTH_PATTERN + SPACE + FULL_YEAR_PATTERN;
@@ -41,4 +42,9 @@ public class DateUtils {
         return date.format(dateTimeFormatter);
     }
 
+    public static String dateAsRange(LocalDate start, LocalDate end) {
+        String formattedStartDate = shortFormatDate(start);
+        String formattedEndDate = shortFormatDate(end);
+        return formattedStartDate + HYPHEN + formattedEndDate;
+    }
 }

@@ -29,9 +29,14 @@ public class RoutePoint {
     private Country country;
     @ManyToOne
     private City city;
-
     @Column
     private LocalDate visitDate;
+
+    @Column
+    private LocalDate startDate;
+
+    @Column
+    private LocalDate endDate;
 
     @Column
     private int orderNumber;

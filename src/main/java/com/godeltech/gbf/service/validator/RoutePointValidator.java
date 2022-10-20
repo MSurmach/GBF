@@ -23,11 +23,11 @@ public class RoutePointValidator {
     public void checkAllNecessaryData(RoutePoint routePoint, Role role, String callbackQueryId) {
         Country country = routePoint.getCountry();
         City city = routePoint.getCity();
-        LocalDate visitDate = routePoint.getVisitDate();
+        LocalDate startDate = routePoint.getStartDate();
         switch (role) {
             case COURIER, REGISTRATIONS_VIEWER -> checkCountryIsNull(country, callbackQueryId).
                     checkCityIsNull(city, callbackQueryId).
-                    checkVisitDateIsNull(visitDate, callbackQueryId);
+                    checkDates(startDate, callbackQueryId);
             case CLIENT, REQUESTS_VIEWER -> checkCountryIsNull(country, callbackQueryId);
         }
     }
@@ -46,9 +46,9 @@ public class RoutePointValidator {
         return this;
     }
 
-    public RoutePointValidator checkVisitDateIsNull(LocalDate visitDate, String callbackQueryId) {
+    public RoutePointValidator checkDates(LocalDate startDate, String callbackQueryId) {
         String alertMessage = lms.getLocaleMessage(ALERT_DATE_NOT_FOUND_CODE);
-        if (visitDate == null)
+        if (startDate == null)
             throw new GbfException(callbackQueryId, alertMessage);
         return this;
     }

@@ -19,8 +19,7 @@ import java.util.List;
 import static com.godeltech.gbf.gui.button.CalendarBotButton.*;
 import static com.godeltech.gbf.utils.DateUtils.formatMonth;
 import static com.godeltech.gbf.utils.DateUtils.formatYear;
-import static com.godeltech.gbf.utils.KeyboardUtils.createButtonWithData;
-import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButtonWithData;
+import static com.godeltech.gbf.utils.KeyboardUtils.*;
 
 @Component
 @AllArgsConstructor
@@ -42,10 +41,18 @@ public class DateKeyboard implements Keyboard {
         addMonthYear(date, keyboard);
         addWeekDayRow(keyboard);
         addDayRows(date, keyboard);
+        if (userData.getTempRoutePoint().getStartDate() != null)
+            addDateControls(keyboard);
         return new KeyboardMarkupAppender().
                 append(new InlineKeyboardMarkup(keyboard)).
                 append(controlKeyboard.getKeyboardMarkup(userData)).
                 result();
+    }
+
+    private void addDateControls(List<List<InlineKeyboardButton>> keyboard) {
+        keyboard.add(List.of(
+                createLocalButton(CLEAR_DATE_SELECT, lms),
+                createLocalButton(CONFIRM_DATE, lms)));
     }
 
     private void addDayRows(LocalDate localDate, List<List<InlineKeyboardButton>> keyboard) {
