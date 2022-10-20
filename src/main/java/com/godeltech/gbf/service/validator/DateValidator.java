@@ -1,12 +1,14 @@
 package com.godeltech.gbf.service.validator;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.service.validator.exceptions.GbfException;
 import com.godeltech.gbf.utils.DateUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -24,6 +26,12 @@ public class DateValidator {
                     DateUtils.shortFormatDate(nowDate),
                     DateUtils.shortFormatDate(date));
             throw new GbfException(callbackQueryId, alertMessage);
+        }
+    }
+
+    public void checkDatesInRoutePoint(List<RoutePoint> routePoints) {
+        for (int index = 0; index < routePoints.size(); index++) {
+
         }
     }
 }
