@@ -31,18 +31,28 @@ public class UserServiceImpl implements UserService {
     private TelegramUserRepository telegramUserRepository;
     private RoutePointService routePointService;
 
+    private <T> Specification<T> attach(Specification<T> to, Specification<T> specification) {
+        if (to == null) to = specification;
+        return to.and(specification);
+    }
+
     private Specification<TelegramUser> cargoSpecificationForCouriersSearch(TelegramUser searchData) {
-        return byDocumentsIsGreaterThanOrEquals(searchData.isDocumentsExist()).
-                and(byPackageSizeIsGreaterThanOrEqualTo(searchData.getPackageSize()).
-                        or(byPackageSizeIsZero())).
-                and(byCompanionCountIsGreaterThanOrEqualTo(searchData.getCompanionCount()).
-                        or(byCompanionCountIsZero()));
+        Specification<TelegramUser> cargoSpecification = null;
+        boolean documentsExist = searchData.isDocumentsExist();
+        if (documentsExist) cargoSpecification = attach(cargoSpecification, documentsExist());
+        int packageSize = searchData.getPackageSize();
+        if (packageSize != 0)
+            cargoSpecification = attach(cargoSpecification, packageSizeIsGreaterThanOrEqualTo(packageSize));
+        int companionCount = searchData.getCompanionCount();
+        if (companionCount != 0)
+            cargoSpecification = attach(cargoSpecification, companionCountIsGreaterThanOrEqualTo(companionCount));
+        return cargoSpecification;
     }
 
     private Specification<TelegramUser> cargoSpecificationForClientsSearch(TelegramUser searchData) {
-        return byDocumentsIsLessThanOrEquals(searchData.isDocumentsExist()).
-                or(byPackageSizeIsLessThanOrEqualTo(searchData.getPackageSize())).
-                or(byCompanionCountIsLessThanOrEqualTo(searchData.getCompanionCount()));
+        return documentsIsLessThanOrEquals(searchData.isDocumentsExist()).
+                or(packageSizeIsLessThanOrEqualTo(searchData.getPackageSize())).
+                or(companionCountIsLessThanOrEqualTo(searchData.getCompanionCount()));
     }
 
     private List<Long> findTelegramUserIdsByRoutePointsAndRole(List<RoutePoint> searchRoutePoints, Role role) {
@@ -69,7 +79,7 @@ public class UserServiceImpl implements UserService {
     public Page<TelegramUser> findTelegramUsersBySearchDataAndRole(TelegramUser searchData, Role role, int pageNumber) {
         List<Long> possibleUsersIds = findTelegramUserIdsByRoutePointsAndRole(searchData.getRoutePoints(), role);
         if (possibleUsersIds.isEmpty()) return null;
-        Specification<TelegramUser> searchSpecification = byIdIn(possibleUsersIds);
+        Specification<TelegramUser> searchSpecification = idInRange(possibleUsersIds);
         if (role == Role.COURIER)
             searchSpecification = searchSpecification.and(cargoSpecificationForCouriersSearch(searchData));
         if (role == Role.CLIENT)
