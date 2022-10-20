@@ -23,7 +23,7 @@ public class DateMessage implements Message {
 
     @Override
     public String getMessage(UserData userData) {
-        String nowDate = DateUtils.fullFormatDate(LocalDate.now(), lms.getLocale());
+        String nowDate = DateUtils.shortFormatDate(LocalDate.now());
         String nowDateInfo = lms.getLocaleMessage(DATE_TODAY_CODE, nowDate);
         return nowDateInfo +
                 buildInfoAboutDates(userData.getTempRoutePoint()) +
@@ -35,7 +35,7 @@ public class DateMessage implements Message {
         LocalDate endDate = routePoint.getEndDate();
         if (startDate == null && endDate == null) return lms.getLocaleMessage(DATE_INFO_NOT_SELECTED_CODE);
         return startDate.equals(endDate) ?
-                lms.getLocaleMessage(DATE_INFO_SELECTED_CODE, DateUtils.fullFormatDate(startDate, lms.getLocale())) :
+                lms.getLocaleMessage(DATE_INFO_SELECTED_CODE, DateUtils.shortFormatDate(startDate)) :
                 lms.getLocaleMessage(DATE_INFO_SELECTED_CODE, DateUtils.dateAsRange(startDate, endDate));
     }
 }

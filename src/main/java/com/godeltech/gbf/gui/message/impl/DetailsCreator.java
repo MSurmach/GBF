@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static com.godeltech.gbf.utils.DateUtils.dateAsRange;
-import static com.godeltech.gbf.utils.DateUtils.fullFormatDate;
+import static com.godeltech.gbf.utils.DateUtils.shortFormatDate;
 
 @Service
 @AllArgsConstructor
@@ -81,7 +81,7 @@ public class DetailsCreator {
             if (!startDate.equals(endDate)) {
                 formattedDate = dateAsRange(startDate, endDate);
             } else {
-                formattedDate = fullFormatDate(startDate, lms.getLocale());
+                formattedDate = shortFormatDate(startDate);
             }
             routeBuilder.append(lms.getLocaleMessage(DETAILS_VISIT_DATE_CODE, formattedDate));
         }

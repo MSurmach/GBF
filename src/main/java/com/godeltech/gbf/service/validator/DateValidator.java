@@ -21,8 +21,8 @@ public class DateValidator {
         if (date.isBefore(nowDate)) {
             String alertMessage = lms.getLocaleMessage(
                     ALERT_DATE_PAST_CODE,
-                    DateUtils.fullFormatDate(nowDate, lms.getLocale()),
-                    DateUtils.fullFormatDate(date, lms.getLocale()));
+                    DateUtils.shortFormatDate(nowDate),
+                    DateUtils.shortFormatDate(date));
             throw new GbfException(callbackQueryId, alertMessage);
         }
     }
