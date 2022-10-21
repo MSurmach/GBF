@@ -84,16 +84,24 @@ public class GbfBot extends SpringWebhookBot {
 
     private boolean checkIfBotCanHandleMessage(Message message, Long userId) {
         String chatId = message.getChatId().toString();
-        if (chatId.equals(chmokiId)) return false;
+        if (chatId.equals(chmokiId)) {
+            System.out.println("Message from chmoki. False");
+            return false;
+        }
         try {
             ChatMember chatMember = execute(GetChatMember.builder()
                     .chatId(chmokiId)
                     .userId(userId)
                     .build());
-            if (chatMember instanceof ChatMemberBanned || chatMember instanceof ChatMemberLeft) return false;
+            if (chatMember instanceof ChatMemberBanned || chatMember instanceof ChatMemberLeft) {
+                System.out.println("Message from user which not in chmoki. False");
+                return false;
+            }
         } catch (TelegramApiException e) {
+            System.out.println("TelegramException. False");
             return false;
         }
+        System.out.println("All is fine. True");
         return true;
     }
 
