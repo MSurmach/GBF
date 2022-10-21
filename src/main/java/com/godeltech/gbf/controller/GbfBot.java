@@ -5,6 +5,7 @@ import com.godeltech.gbf.factory.impl.InterceptorFactory;
 import com.godeltech.gbf.model.db.BotMessage;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.interceptor.Interceptor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,8 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
+import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMemberBanned;
+import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMemberLeft;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
@@ -24,6 +27,8 @@ import java.util.List;
 
 @RestController
 public class GbfBot extends SpringWebhookBot {
+    @Value("${bot.chmokiId}")
+    private String chmokiId;
     private final InterceptorFactory interceptorFactory;
     private final TelegramBotConfig telegramBotConfig;
 
@@ -58,27 +63,36 @@ public class GbfBot extends SpringWebhookBot {
     @Override
     @PostMapping("/callback/${telegram.bot.endpoint}")
     public BotApiMethod<?> onWebhookUpdateReceived(@RequestBody Update update) {
-        //if (isInvalidUser(update.getMessage())) return null;
-        Interceptor interceptor = interceptorFactory.getInterceptor(update);
-        List<? extends BotApiMethod<?>> methods = interceptor.intercept(update);
-        executeMethod(methods, interceptor.getTelegramUserId(), interceptor.getChatId());
+        if (authorizeUpdate(update)) {
+            Interceptor interceptor = interceptorFactory.getInterceptor(update);
+            List<? extends BotApiMethod<?>> methods = interceptor.intercept(update);
+            executeMethod(methods, interceptor.getTelegramUserId(), interceptor.getChatId());
+        }
         return null;
     }
 
-    private boolean isInvalidUser(Message message) {
-        if (message != null) {
-            Long id = message.getFrom().getId();
-            String chatId = "-1294337377";
-            GetChatMember getChatMember = new GetChatMember(chatId, id);
-            try {
-                ChatMember chatMember = execute(getChatMember);
-                String status = chatMember.getStatus();
-                if (status.equals("kicked") ||
-                        status.equals("left") ||
-                        status.equals("restricted"))
-                    return true;
-            } catch (TelegramApiException exception) {
-            }
+    private boolean authorizeUpdate(Update update) {
+        Message message = null;
+        if (update.hasMessage()) {
+            message = update.getMessage();
+        }
+        if (update.hasCallbackQuery()) {
+            message = update.getCallbackQuery().getMessage();
+        }
+        return message != null && checkIfBotCanHandleMessage(message, message.getFrom().getId());
+    }
+
+    private boolean checkIfBotCanHandleMessage(Message message, Long userId) {
+        String chatId = message.getChatId().toString();
+        if (chatId.equals(chmokiId)) return false;
+        try {
+            ChatMember chatMember = execute(GetChatMember.builder()
+                    .chatId(chmokiId)
+                    .userId(userId)
+                    .build());
+            if (chatMember instanceof ChatMemberBanned || chatMember instanceof ChatMemberLeft) return true;
+        } catch (TelegramApiException e) {
+            return false;
         }
         return false;
     }
