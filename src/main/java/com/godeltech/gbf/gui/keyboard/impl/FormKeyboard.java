@@ -42,20 +42,21 @@ public class FormKeyboard implements Keyboard {
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         LinkedList<RoutePoint> points = userData.getRoutePoints();
-        var initialRoutePointRow = containsRoutePointByStatus(points, INITIAL) ?
+        var initialRoutePointRow = routePointWithStatusExists(points, INITIAL) ?
                 List.of(buttons.get(EDIT_INITIAL_ROUTE_POINT)) :
                 List.of(buttons.get(ADD_INITIAL_ROUTE_POINT));
         keyboard.add(initialRoutePointRow);
-        var finalRoutePointRow = containsRoutePointByStatus(points, FINAL) ?
+        var finalRoutePointRow = routePointWithStatusExists(points, FINAL) ?
                 List.of(buttons.get(EDIT_FINAL_ROUTE_POINT)) :
                 List.of(buttons.get(ADD_FINAL_ROUTE_POINT));
         keyboard.add(finalRoutePointRow);
-        if (containsRoutePointByStatus(points, INITIAL) &&
-                containsRoutePointByStatus(points, FINAL)) {
+        if (routePointWithStatusExists(points, INITIAL) &&
+                routePointWithStatusExists(points, FINAL) &&
+                (userData.getRole() == Role.COURIER || userData.getRole() == Role.REGISTRATIONS_VIEWER)) {
             var intermediateRoutePointRow = List.of(buttons.get(ADD_INTERMEDIATE_ROUTE_POINT));
             keyboard.add(intermediateRoutePointRow);
         }
-        if (containsRoutePointByStatus(points, INTERMEDIATE))
+        if (routePointWithStatusExists(points, INTERMEDIATE))
             keyboard.add(List.of(buttons.get(INTERMEDIATE_EDITOR)));
         keyboard.add(commentButton(userData));
         keyboard.add(cargoButton(userData));
@@ -66,7 +67,7 @@ public class FormKeyboard implements Keyboard {
                 result();
     }
 
-    private boolean containsRoutePointByStatus(List<RoutePoint> points, Status status) {
+    private boolean routePointWithStatusExists(List<RoutePoint> points, Status status) {
         return points.stream().anyMatch(routePoint -> routePoint.getStatus() == status);
     }
 

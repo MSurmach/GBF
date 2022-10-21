@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.godeltech.gbf.utils.DateUtils.fullFormatDate;
+import static com.godeltech.gbf.utils.DateUtils.dateAsRange;
+import static com.godeltech.gbf.utils.DateUtils.shortFormatDate;
 
 @Service
 @AllArgsConstructor
@@ -20,16 +21,16 @@ public class DetailsCreator {
     public final static String DETAILS_INITIAL_POINT_HEADER_CODE = "details.initialPoint.header";
     public final static String DETAILS_FINAL_POINT_HEADER_CODE = "details.finalPoint.header";
     public final static String DETAILS_INTERMEDIATE_POINT_HEADER_CODE = "details.intermediatePoint.header";
-    public final static String DETAILS_COUNTRY_CODE = "details.country";
-    public final static String DETAILS_CITY_CODE = "details.city";
-    public final static String DETAILS_VISIT_DATE_CODE = "details.visitDate";
+
+    public final static String DETAILS_GEOPOINT_CODE = "details.geopoint";
+    public final static String DETAILS_VISIT_DATE_CODE = "details.dates.visit";
     public final static String DETAILS_CARGO_DOCUMENTS_SELECTED_CODE = "details.cargo.documents.selected";
     public final static String DETAILS_CARGO_PACKAGE_SELECTED_CODE = "details.cargo.package.selected";
     public final static String DETAILS_CARGO_PEOPLE_SELECTED_CODE = "details.cargo.people.selected";
     public final static String DETAILS_COURIER_CARGO_CODE = "details.courier.cargo";
     public final static String DETAILS_CLIENT_CARGO_CODE = "details.client.cargo";
     public final static String DETAILS_COMMENT_CODE = "details.comment";
-    public final static String EMPTY_CODE = "";
+    public final static String EMPTY = "";
 
     private LocalMessageSource lms;
 
@@ -51,11 +52,12 @@ public class DetailsCreator {
     }
 
     String createRoutePointDetails(RoutePoint routePoint) {
-        if (routePoint.isEmpty()) return EMPTY_CODE;
+        if (routePoint.isEmpty()) return EMPTY;
         StringBuilder routeBuilder = new StringBuilder();
         City city = routePoint.getCity();
         Country country = routePoint.getCountry();
-        LocalDate visitDate = routePoint.getVisitDate();
+        LocalDate startDate = routePoint.getStartDate();
+        LocalDate endDate = routePoint.getEndDate();
         String routePointHeader = switch (routePoint.getStatus()) {
             case INITIAL -> lms.getLocaleMessage(DETAILS_INITIAL_POINT_HEADER_CODE);
             case INTERMEDIATE -> {
@@ -67,15 +69,22 @@ public class DetailsCreator {
         };
         routeBuilder.append(routePointHeader);
         if (country != null) {
+            String geopoint;
             String localCountry = lms.getLocaleMessage(country.getName());
-            routeBuilder.append(lms.getLocaleMessage(DETAILS_COUNTRY_CODE, localCountry));
+            if (city != null) {
+                String localCity = lms.getLocaleMessage(city.getName());
+                geopoint = lms.getLocaleMessage(DETAILS_GEOPOINT_CODE, localCountry, ", " + localCity);
+            }
+            else geopoint = lms.getLocaleMessage(DETAILS_GEOPOINT_CODE, localCountry, EMPTY);
+            routeBuilder.append(geopoint);
         }
-        if (city != null) {
-            String localCity = lms.getLocaleMessage(city.getName());
-            routeBuilder.append(lms.getLocaleMessage(DETAILS_CITY_CODE, localCity));
-        }
-        if (visitDate != null) {
-            String formattedDate = fullFormatDate(visitDate, lms.getLocale());
+        if (startDate != null) {
+            String formattedDate;
+            if (!startDate.equals(endDate)) {
+                formattedDate = dateAsRange(startDate, endDate);
+            } else {
+                formattedDate = shortFormatDate(startDate);
+            }
             routeBuilder.append(lms.getLocaleMessage(DETAILS_VISIT_DATE_CODE, formattedDate));
         }
         return routeBuilder.toString();
@@ -105,6 +114,6 @@ public class DetailsCreator {
     String createCommentDetails(String comment) {
         return comment != null ?
                 lms.getLocaleMessage(DETAILS_COMMENT_CODE, comment) :
-                EMPTY_CODE;
+                EMPTY;
     }
 }

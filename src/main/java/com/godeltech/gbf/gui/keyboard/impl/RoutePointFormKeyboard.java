@@ -64,7 +64,7 @@ public class RoutePointFormKeyboard implements Keyboard {
     }
 
     private List<InlineKeyboardButton> visitDateButtonRow(RoutePoint routePoint) {
-        return routePoint.getVisitDate() == null ?
+        return routePoint.getStartDate() == null ?
                 List.of(buttons.get(ADD_VISIT_DATE)) :
                 List.of(buttons.get(EDIT_VISIT_DATE), buttons.get(DELETE_VISIT_DATE));
     }

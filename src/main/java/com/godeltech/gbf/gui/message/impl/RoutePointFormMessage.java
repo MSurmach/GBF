@@ -7,8 +7,6 @@ import com.godeltech.gbf.model.db.RoutePoint;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static com.godeltech.gbf.utils.DateUtils.fullFormatDate;
-
 @Component
 @AllArgsConstructor
 public class RoutePointFormMessage implements Message {

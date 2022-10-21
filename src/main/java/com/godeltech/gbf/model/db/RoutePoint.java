@@ -29,9 +29,14 @@ public class RoutePoint {
     private Country country;
     @ManyToOne
     private City city;
-
     @Column
     private LocalDate visitDate;
+
+    @Column
+    private LocalDate startDate;
+
+    @Column
+    private LocalDate endDate;
 
     @Column
     private int orderNumber;
@@ -41,6 +46,9 @@ public class RoutePoint {
     }
 
     public boolean isEmpty() {
-        return country == null && city == null && visitDate == null;
+        return country == null &&
+                city == null &&
+                startDate == null &&
+                endDate == null;
     }
 }

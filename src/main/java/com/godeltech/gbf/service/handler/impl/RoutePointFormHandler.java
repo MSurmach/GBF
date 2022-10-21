@@ -37,7 +37,8 @@ public class RoutePointFormHandler implements Handler {
                 yield userData.getStateHistory().peek();
             }
             case DELETE_VISIT_DATE -> {
-                tempRoutePoint.setVisitDate(null);
+                tempRoutePoint.setStartDate(null);
+                tempRoutePoint.setEndDate(null);
                 yield userData.getStateHistory().peek();
             }
             case SAVE -> {
