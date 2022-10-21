@@ -90,7 +90,7 @@ public class GbfBot extends SpringWebhookBot {
                     .chatId(chmokiId)
                     .userId(userId)
                     .build());
-            if (chatMember instanceof ChatMemberBanned || chatMember instanceof ChatMemberLeft) return true;
+            if (chatMember instanceof ChatMemberBanned || chatMember instanceof ChatMemberLeft) return false;
         } catch (TelegramApiException e) {
             return false;
         }
