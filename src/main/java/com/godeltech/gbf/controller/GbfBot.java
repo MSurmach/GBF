@@ -14,11 +14,14 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMemberBanned;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMemberLeft;
+import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMemberRestricted;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
@@ -73,17 +76,21 @@ public class GbfBot extends SpringWebhookBot {
 
     private boolean authorizeUpdate(Update update) {
         Message message = null;
+        User from = null;
         if (update.hasMessage()) {
             message = update.getMessage();
+            from = message.getFrom();
         }
         if (update.hasCallbackQuery()) {
-            message = update.getCallbackQuery().getMessage();
+            CallbackQuery callbackQuery = update.getCallbackQuery();
+            message = callbackQuery.getMessage();
+            from = callbackQuery.getFrom();
         }
-        return message != null && checkIfBotCanHandleMessage(message, message.getFrom().getId());
+        return message != null && from != null && checkIfBotCanHandleMessage(message, from);
     }
 
-    private boolean checkIfBotCanHandleMessage(Message message, Long userId) {
-        String chatId = message.getChatId().toString();
+    private boolean checkIfBotCanHandleMessage(Message message, User user) {
+        String chatId = message.getChat().getId().toString();
         if (chatId.equals(chmokiId)) {
             System.out.println("Message from chmoki. False");
             return false;
@@ -91,10 +98,10 @@ public class GbfBot extends SpringWebhookBot {
         try {
             ChatMember chatMember = execute(GetChatMember.builder()
                     .chatId(chmokiId)
-                    .userId(userId)
+                    .userId(user.getId())
                     .build());
             System.out.println("Status of chmoki user:" + chatMember.getStatus());
-            if (chatMember instanceof ChatMemberBanned || chatMember instanceof ChatMemberLeft) {
+            if (chatMember instanceof ChatMemberBanned || chatMember instanceof ChatMemberLeft || chatMember instanceof ChatMemberRestricted) {
                 System.out.println("Message from user which not in chmoki. False");
                 return false;
             }
