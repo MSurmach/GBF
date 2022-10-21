@@ -94,7 +94,7 @@ public class GbfBot extends SpringWebhookBot {
         } catch (TelegramApiException e) {
             return false;
         }
-        return false;
+        return true;
     }
 
     private void executeMethod(List<? extends BotApiMethod<?>> methods, Long telegramUserId, Long chatId) {
