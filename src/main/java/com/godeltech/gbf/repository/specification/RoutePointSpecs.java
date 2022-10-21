@@ -23,7 +23,7 @@ public class RoutePointSpecs {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("country"), country);
     }
 
-    public static Specification<RoutePoint> cityEquals(City city) {
+    public static Specification<RoutePoint> city(City city) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("city"), city);
     }
 
@@ -35,27 +35,23 @@ public class RoutePointSpecs {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("visitDate"), visitDate);
     }
 
-    public static Specification<RoutePoint> visitDateIsNull() {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get("visitDate"));
+    public static Specification<RoutePoint> startDateIsNull() {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get("startDate"));
     }
 
-    public static Specification<RoutePoint> startDateGreaterThanOrEquals(LocalDate startDate) {
+    public static Specification<RoutePoint> startDateAfter(LocalDate startDate) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("startDate"), startDate);
     }
 
-    public static Specification<RoutePoint> startDateLessThanOrEquals(LocalDate startDate) {
+    public static Specification<RoutePoint> startDateBefore(LocalDate startDate) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get("startDate"), startDate);
     }
 
-    public static Specification<RoutePoint> endDateGreaterThanOrEquals(LocalDate endDate) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("startDate"), endDate);
+    public static Specification<RoutePoint> endDateAfter(LocalDate endDate) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("endDate"), endDate);
     }
 
-    public static Specification<RoutePoint> endDateLessThanOrEquals(LocalDate endDate) {
+    public static Specification<RoutePoint> endDateBefore(LocalDate endDate) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get("startDate"), endDate);
-    }
-
-    public static Specification<RoutePoint> startDateIsNull() {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get("startDate"));
     }
 }

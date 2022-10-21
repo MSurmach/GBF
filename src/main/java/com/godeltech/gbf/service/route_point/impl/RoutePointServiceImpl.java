@@ -29,16 +29,15 @@ public class RoutePointServiceImpl implements RoutePointService {
             Specification<RoutePoint> searchSpecification = role(role);
             searchSpecification = searchSpecification.and(country(searchRoutePoint.getCountry()));
             City city = searchRoutePoint.getCity();
-            if (city != null) searchSpecification = searchSpecification.and(cityEquals(city));
+            if (city != null) searchSpecification = searchSpecification.and(city(city));
             LocalDate startDate = searchRoutePoint.getStartDate();
             LocalDate endDate = searchRoutePoint.getEndDate();
-            if (startDate != null) {
+            if (startDate != null)
                 searchSpecification = searchSpecification.
-                        and(startDateLessThanOrEquals(startDate).
-                                and(endDateGreaterThanOrEquals(endDate)));
-            }
-//            LocalDate visitDate = searchRoutePoint.getVisitDate();
-//            if (visitDate != null) searchSpecification = searchSpecification.and(visitDate(visitDate));
+                        and(startDateAfter(startDate).
+                                or(startDateBefore(startDate))).
+                        and(endDateBefore(endDate).
+                                or(endDateAfter(endDate)));
             results.addAll(routePointRepository.findAll(searchSpecification));
         }
         return results;
@@ -47,13 +46,21 @@ public class RoutePointServiceImpl implements RoutePointService {
     @Override
     public List<RoutePoint> findClientRoutePointsByRoutePoints(List<RoutePoint> searchRoutePoints) {
         Role role = Role.CLIENT;
+
         List<RoutePoint> results = new LinkedList<>();
         for (RoutePoint searchRoutePoint : searchRoutePoints) {
+            LocalDate startDate = searchRoutePoint.getStartDate();
+            LocalDate endDate = searchRoutePoint.getEndDate();
             Specification<RoutePoint> searchSpecification =
                     role(role).
                             and(country(searchRoutePoint.getCountry())).
-                            and(cityEquals(searchRoutePoint.getCity()).or(cityIsNull())).
-                            and(visitDate(searchRoutePoint.getVisitDate()).or(visitDateIsNull()));
+                            and(city(searchRoutePoint.getCity()).
+                                    or(cityIsNull())).
+                            and(((startDateAfter(startDate).
+                                    or(startDateBefore(startDate))).
+                                    and(endDateBefore(endDate).
+                                            or(endDateAfter(endDate)))).
+                                    or(startDateIsNull()));
             results.addAll(routePointRepository.findAll(searchSpecification));
         }
         return results;
