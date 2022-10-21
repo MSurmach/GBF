@@ -93,6 +93,7 @@ public class GbfBot extends SpringWebhookBot {
                     .chatId(chmokiId)
                     .userId(userId)
                     .build());
+            System.out.println("Status of chmoki user:" + chatMember.getStatus());
             if (chatMember instanceof ChatMemberBanned || chatMember instanceof ChatMemberLeft) {
                 System.out.println("Message from user which not in chmoki. False");
                 return false;
