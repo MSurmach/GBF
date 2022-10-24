@@ -6,6 +6,7 @@ import com.godeltech.gbf.model.db.RoutePoint;
 import java.util.List;
 
 public interface RoutePointService {
-    List<RoutePoint> findCourierRoutePointsByRoutePoints(List<RoutePoint> clientRoutePoints);
-    List<RoutePoint> findClientRoutePointsByRoutePoints(List<RoutePoint> searchRoutePoints);
+    List<RoutePoint> findRoutePointsByNeededRoutePointsAndByRoleAndNotEqualToTelegramId(List<RoutePoint> neededRoute,
+                                                                                        Role role,
+                                                                                        Long telegramId);
 }

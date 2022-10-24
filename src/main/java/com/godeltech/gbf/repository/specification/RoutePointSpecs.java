@@ -8,9 +8,19 @@ import com.godeltech.gbf.model.db.TelegramUser;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
 import java.time.LocalDate;
 
 public class RoutePointSpecs {
+
+    public static Specification<RoutePoint> roleAndNotEqualToTelegramId(Role role, Long telegramId) {
+        return (root, query, criteriaBuilder) -> {
+            Join<RoutePoint, TelegramUser> join = root.join("telegramUser");
+            Predicate hasRole = criteriaBuilder.equal(join.get("role"), role);
+            Predicate hasNotTelegramId = criteriaBuilder.notEqual(join.get("telegramId"), telegramId);
+            return criteriaBuilder.and(hasRole, hasNotTelegramId);
+        };
+    }
 
     public static Specification<RoutePoint> role(Role role) {
         return (root, query, criteriaBuilder) -> {

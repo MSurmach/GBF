@@ -1,14 +1,12 @@
 package com.godeltech.gbf.model.db;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @Entity
 @Table
@@ -50,5 +48,12 @@ public class RoutePoint {
                 city == null &&
                 startDate == null &&
                 endDate == null;
+    }
+
+    public boolean isTheSameGeographical(RoutePoint given) {
+        boolean isTheSameCountry = this.country.equals(given.country);
+        if (this.city == null || given.city == null) return isTheSameCountry;
+        boolean isTheSameCity = this.city.equals(given.city);
+        return isTheSameCountry && isTheSameCity;
     }
 }

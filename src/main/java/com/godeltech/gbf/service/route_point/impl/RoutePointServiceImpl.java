@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.godeltech.gbf.model.Role.CLIENT;
+import static com.godeltech.gbf.model.Role.COURIER;
 import static com.godeltech.gbf.repository.specification.RoutePointSpecs.*;
 
 @Service
@@ -21,48 +23,47 @@ public class RoutePointServiceImpl implements RoutePointService {
 
     private RoutePointRepository routePointRepository;
 
-    @Override
-    public List<RoutePoint> findCourierRoutePointsByRoutePoints(List<RoutePoint> searchRoutePoints) {
-        Role role = Role.COURIER;
-        List<RoutePoint> results = new LinkedList<>();
-        for (RoutePoint searchRoutePoint : searchRoutePoints) {
-            Specification<RoutePoint> searchSpecification = role(role);
-            searchSpecification = searchSpecification.and(country(searchRoutePoint.getCountry()));
-            City city = searchRoutePoint.getCity();
-            if (city != null) searchSpecification = searchSpecification.and(city(city));
-            LocalDate startDate = searchRoutePoint.getStartDate();
-            LocalDate endDate = searchRoutePoint.getEndDate();
-            if (startDate != null)
-                searchSpecification = searchSpecification.
-                        and(startDateAfter(startDate).
-                                or(startDateBefore(startDate))).
-                        and(endDateBefore(endDate).
-                                or(endDateAfter(endDate)));
-            results.addAll(routePointRepository.findAll(searchSpecification));
+    public List<RoutePoint> findRoutePointsByNeededRoutePointsAndByRoleAndNotEqualToTelegramId(List<RoutePoint> neededRoute,
+                                                                                               Role role,
+                                                                                               Long telegramId) {
+        List<RoutePoint> routePoints = new LinkedList<>();
+        for (RoutePoint neededRoutePoint : neededRoute) {
+            Specification<RoutePoint> searchSpecification =
+                    role == CLIENT ?
+                            buildClientSearchSpecification(neededRoutePoint, telegramId) :
+                            buildCourierSearchSpecification(neededRoutePoint, telegramId);
+            routePoints.addAll(routePointRepository.findAll(searchSpecification));
         }
-        return results;
+        return routePoints;
     }
 
-    @Override
-    public List<RoutePoint> findClientRoutePointsByRoutePoints(List<RoutePoint> searchRoutePoints) {
-        Role role = Role.CLIENT;
+    private Specification<RoutePoint> buildCourierSearchSpecification(RoutePoint routePoint, Long telegramId) {
+        Specification<RoutePoint> specification = roleAndNotEqualToTelegramId(COURIER, telegramId);
+        specification = specification.and(country(routePoint.getCountry()));
+        City city = routePoint.getCity();
+        if (city != null) specification = specification.and(city(city));
+        LocalDate startDate = routePoint.getStartDate();
+        LocalDate endDate = routePoint.getEndDate();
+        if (startDate != null)
+            specification = specification.
+                    and(startDateAfter(startDate).
+                            or(startDateBefore(startDate))).
+                    and(endDateBefore(endDate).
+                            or(endDateAfter(endDate)));
+        return specification;
+    }
 
-        List<RoutePoint> results = new LinkedList<>();
-        for (RoutePoint searchRoutePoint : searchRoutePoints) {
-            LocalDate startDate = searchRoutePoint.getStartDate();
-            LocalDate endDate = searchRoutePoint.getEndDate();
-            Specification<RoutePoint> searchSpecification =
-                    role(role).
-                            and(country(searchRoutePoint.getCountry())).
-                            and(city(searchRoutePoint.getCity()).
-                                    or(cityIsNull())).
-                            and(((startDateAfter(startDate).
-                                    or(startDateBefore(startDate))).
-                                    and(endDateBefore(endDate).
-                                            or(endDateAfter(endDate)))).
-                                    or(startDateIsNull()));
-            results.addAll(routePointRepository.findAll(searchSpecification));
-        }
-        return results;
+    private Specification<RoutePoint> buildClientSearchSpecification(RoutePoint routePoint, Long telegramId) {
+        LocalDate startDate = routePoint.getStartDate();
+        LocalDate endDate = routePoint.getEndDate();
+        return roleAndNotEqualToTelegramId(CLIENT, telegramId).
+                and(country(routePoint.getCountry())).
+                and(city(routePoint.getCity()).
+                        or(cityIsNull())).
+                and(((startDateAfter(startDate).
+                        or(startDateBefore(startDate))).
+                        and(endDateBefore(endDate).
+                                or(endDateAfter(endDate)))).
+                        or(startDateIsNull()));
     }
 }

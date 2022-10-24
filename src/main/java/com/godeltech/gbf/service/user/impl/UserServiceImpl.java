@@ -17,9 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.godeltech.gbf.repository.specification.UserSpecs.*;
@@ -31,55 +28,24 @@ public class UserServiceImpl implements UserService {
     private TelegramUserRepository telegramUserRepository;
     private RoutePointService routePointService;
 
-    private <T> Specification<T> attach(Specification<T> to, Specification<T> specification) {
-        if (to == null) to = specification;
-        return to.and(specification);
-    }
-
-    private Specification<TelegramUser> cargoSpecificationForCouriersSearch(TelegramUser searchData) {
-        Specification<TelegramUser> cargoSpecification = null;
-        boolean documentsExist = searchData.isDocumentsExist();
-        if (documentsExist) cargoSpecification = attach(cargoSpecification, documentsExist());
-        int packageSize = searchData.getPackageSize();
-        if (packageSize != 0)
-            cargoSpecification = attach(cargoSpecification, packageSizeIsGreaterThanOrEqualTo(packageSize));
-        int companionCount = searchData.getCompanionCount();
-        if (companionCount != 0)
-            cargoSpecification = attach(cargoSpecification, companionCountIsGreaterThanOrEqualTo(companionCount));
-        return cargoSpecification;
-    }
-
-    private Specification<TelegramUser> cargoSpecificationForClientsSearch(TelegramUser searchData) {
-        return documentsIsLessThanOrEquals(searchData.isDocumentsExist()).
-                or(packageSizeIsLessThanOrEqualTo(searchData.getPackageSize())).
-                or(companionCountIsLessThanOrEqualTo(searchData.getCompanionCount()));
-    }
-
-    private List<Long> findTelegramUserIdsByRoutePointsAndRole(List<RoutePoint> searchRoutePoints, Role role) {
-        Predicate<Map.Entry<Long, Long>> filterByRoutePointsSize = null;
-        List<RoutePoint> roleRoutePoints = null;
-        if (role == Role.COURIER) {
-            filterByRoutePointsSize = entry -> entry.getValue() >= searchRoutePoints.size();
-            roleRoutePoints = routePointService.findCourierRoutePointsByRoutePoints(searchRoutePoints);
-        }
-        if (role == Role.CLIENT) {
-            filterByRoutePointsSize = entry -> entry.getValue() <= searchRoutePoints.size();
-            roleRoutePoints = routePointService.findClientRoutePointsByRoutePoints(searchRoutePoints);
-        }
-        Function<RoutePoint, Long> routePointToUserIdFunction = routePoint -> routePoint.getTelegramUser().getId();
-        Map<Long, Long> groupedByUserIdCountMap = roleRoutePoints.stream().
-                collect(Collectors.groupingBy(routePointToUserIdFunction, Collectors.counting()));
-        return groupedByUserIdCountMap.entrySet().stream().
-                filter(filterByRoutePointsSize).
-                map(Map.Entry::getKey).
-                toList();
-    }
-
     @Override
     public Page<TelegramUser> findTelegramUsersBySearchDataAndRole(TelegramUser searchData, Role role, int pageNumber) {
-        List<Long> possibleUsersIds = findTelegramUserIdsByRoutePointsAndRole(searchData.getRoutePoints(), role);
-        if (possibleUsersIds.isEmpty()) return null;
-        Specification<TelegramUser> searchSpecification = idInRange(possibleUsersIds);
+        List<RoutePoint> searchRoutePoints = searchData.getRoutePoints();
+        List<RoutePoint> availableRoutePoints =
+                routePointService.findRoutePointsByNeededRoutePointsAndByRoleAndNotEqualToTelegramId(
+                        searchRoutePoints,
+                        role,
+                        searchData.getTelegramId());
+        if (availableRoutePoints.isEmpty()) return Page.empty();
+        List<TelegramUser> foundTelegramUsers = availableRoutePoints.stream().
+                map(RoutePoint::getTelegramUser).
+                collect(Collectors.toSet()).
+                stream().
+                filter(telegramUser -> checkRoutePointsOrder(searchRoutePoints, telegramUser.getRoutePoints())).
+                toList();
+        if (foundTelegramUsers.isEmpty()) return Page.empty();
+        List<Long> neededUserIds = foundTelegramUsers.stream().map(TelegramUser::getId).toList();
+        Specification<TelegramUser> searchSpecification = idInRange(neededUserIds);
         if (role == Role.COURIER)
             searchSpecification = searchSpecification.and(cargoSpecificationForCouriersSearch(searchData));
         if (role == Role.CLIENT)
@@ -117,5 +83,47 @@ public class UserServiceImpl implements UserService {
             case REQUESTS_VIEWER -> forSave.setRole(Role.CLIENT);
         }
         telegramUserRepository.save(forSave);
+    }
+
+    private boolean checkRoutePointsOrder(List<RoutePoint> givenRoute, List<RoutePoint> targetRoute) {
+
+        var givenRouteSize = givenRoute.size();
+        var targetPlace = 0;
+        for (RoutePoint pointFromGivenRoute : givenRoute) {
+            for (var tIndex = targetPlace; tIndex < targetRoute.size(); tIndex++) {
+                var pointFromTargetRoute = targetRoute.get(tIndex);
+                if (pointFromGivenRoute.isTheSameGeographical(pointFromTargetRoute)) {
+                    targetPlace = tIndex;
+                    givenRouteSize--;
+                    break;
+                }
+            }
+        }
+        return givenRouteSize == 0;
+    }
+
+
+    private <T> Specification<T> attach(Specification<T> to, Specification<T> specification) {
+        if (to == null) to = specification;
+        return to.and(specification);
+    }
+
+    private Specification<TelegramUser> cargoSpecificationForCouriersSearch(TelegramUser searchData) {
+        Specification<TelegramUser> cargoSpecification = null;
+        boolean documentsExist = searchData.isDocumentsExist();
+        if (documentsExist) cargoSpecification = attach(cargoSpecification, documentsExist());
+        int packageSize = searchData.getPackageSize();
+        if (packageSize != 0)
+            cargoSpecification = attach(cargoSpecification, packageSizeIsGreaterThanOrEqualTo(packageSize));
+        int companionCount = searchData.getCompanionCount();
+        if (companionCount != 0)
+            cargoSpecification = attach(cargoSpecification, companionCountIsGreaterThanOrEqualTo(companionCount));
+        return cargoSpecification;
+    }
+
+    private Specification<TelegramUser> cargoSpecificationForClientsSearch(TelegramUser searchData) {
+        return documentsIsLessThanOrEquals(searchData.isDocumentsExist()).
+                or(packageSizeIsLessThanOrEqualTo(searchData.getPackageSize())).
+                or(companionCountIsLessThanOrEqualTo(searchData.getCompanionCount()));
     }
 }
