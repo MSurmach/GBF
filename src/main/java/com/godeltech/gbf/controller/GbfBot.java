@@ -66,11 +66,14 @@ public class GbfBot extends SpringWebhookBot {
     @Override
     @PostMapping("/callback/${telegram.bot.endpoint}")
     public BotApiMethod<?> onWebhookUpdateReceived(@RequestBody Update update) {
+        long startTime = System.nanoTime();
         if (authorizeUpdate(update)) {
             Interceptor interceptor = interceptorFactory.getInterceptor(update);
             List<? extends BotApiMethod<?>> methods = interceptor.intercept(update);
             executeMethod(methods, interceptor.getTelegramUserId(), interceptor.getChatId());
         }
+        long stopTime = System.nanoTime();
+        System.out.println((stopTime - startTime) / 1000000 + " ms");
         return null;
     }
 
