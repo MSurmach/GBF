@@ -132,9 +132,9 @@ public class CallbackInterceptor implements Interceptor {
         String callback = update.getCallbackQuery().getData();
         UserData userData = UserDataCache.get(telegramUserId);
         try {
-            PaginationButton clickedPagination = PaginationButton.valueOf(callback);
+            PaginationButton clickedButton = PaginationButton.valueOf(callback);
             Page<TelegramUser> page = userData.getPage();
-            switch (clickedPagination) {
+            switch (clickedButton) {
                 case PAGE_START -> userData.setPageNumber(0);
                 case PAGE_PREVIOUS -> {
                     if (page.hasPrevious()) {

@@ -13,17 +13,12 @@ public class UserDataCache {
         return USERDATA_CACHE.get(telegramUserId);
     }
 
-    public static UserData initializeByIdAndUsername(Long telegramUserId, String username) {
+    public static void initializeByIdAndUsername(Long telegramUserId, String username) {
         UserData created = new UserData(telegramUserId, username);
         USERDATA_CACHE.put(telegramUserId, created);
-        return created;
     }
 
     public static void add(long userId, UserData userData) {
         USERDATA_CACHE.put(userId, userData);
-    }
-
-    public static void deleteByTelegramUserId(long telegramUserId){
-
     }
 }

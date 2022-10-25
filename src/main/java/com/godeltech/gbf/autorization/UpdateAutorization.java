@@ -25,7 +25,6 @@ public class UpdateAutorization {
     }
 
     public boolean isValid(Update update) {
-        System.out.println("new validation");
         if (update.hasMessage()) {
             Message message = update.getMessage();
             User user = message.getFrom();

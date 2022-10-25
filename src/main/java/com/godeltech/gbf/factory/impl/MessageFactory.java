@@ -15,7 +15,7 @@ public class MessageFactory implements Factory<Message> {
 
     @Override
     public Message get(State state) {
-        Class<? extends Message> answer =
+        Class<? extends Message> message =
                 switch (state) {
                     case MENU -> MenuMessage.class;
                     case WRONG_INPUT -> WrongInputMessage.class;
@@ -38,6 +38,6 @@ public class MessageFactory implements Factory<Message> {
                     case ROUTE_POINT_FORM -> RoutePointFormMessage.class;
                     case INTERMEDIATE_EDITOR -> IntermediateEditorMessage.class;
                 };
-        return beanFactory.getBean(answer);
+        return beanFactory.getBean(message);
     }
 }

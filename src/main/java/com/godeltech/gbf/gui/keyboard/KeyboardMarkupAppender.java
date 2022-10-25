@@ -14,8 +14,11 @@ public class KeyboardMarkupAppender {
     }
 
     public KeyboardMarkupAppender append(InlineKeyboardMarkup appendix) {
-        if (keyboardMarkup == null) keyboardMarkup = appendix;
-        else keyboardMarkup = join(keyboardMarkup, appendix);
+        if (keyboardMarkup == null) {
+            keyboardMarkup = appendix;
+            return this;
+        }
+        join(keyboardMarkup, appendix);
         return this;
     }
 
@@ -23,8 +26,7 @@ public class KeyboardMarkupAppender {
         return keyboardMarkup;
     }
 
-    private InlineKeyboardMarkup join(InlineKeyboardMarkup first, InlineKeyboardMarkup second) {
-        second.getKeyboard().forEach(row -> first.getKeyboard().add(row));
-        return first;
+    private void join(InlineKeyboardMarkup target, InlineKeyboardMarkup given) {
+        given.getKeyboard().forEach(buttonRow -> target.getKeyboard().add(buttonRow));
     }
 }
