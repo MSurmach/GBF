@@ -1,6 +1,6 @@
 package com.godeltech.gbf.service.alert.impl;
 
-import com.godeltech.gbf.controller.GbfBot;
+import com.godeltech.gbf.GbfBot;
 import com.godeltech.gbf.service.alert.Alert;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

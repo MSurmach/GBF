@@ -1,7 +1,6 @@
 package com.godeltech.gbf.service.interceptor.impl;
 
 import com.godeltech.gbf.cache.UserDataCache;
-import com.godeltech.gbf.controller.GbfBot;
 import com.godeltech.gbf.exception.CachedUserDataNotFound;
 import com.godeltech.gbf.exception.NotNavigationButtonException;
 import com.godeltech.gbf.exception.NotPaginationButtonException;

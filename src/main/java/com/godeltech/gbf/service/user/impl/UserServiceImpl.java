@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<TelegramUser> findTelegramUsersBySearchDataAndRole(TelegramUser searchData, Role role, int pageNumber) {
+        long start = System.currentTimeMillis();
         List<RoutePoint> searchRoutePoints = searchData.getRoutePoints();
         List<RoutePoint> availableRoutePoints =
                 routePointService.findRoutePointsByNeededRoutePointsAndByRoleAndNotEqualToTelegramId(
@@ -51,7 +52,10 @@ public class UserServiceImpl implements UserService {
         if (role == Role.CLIENT)
             searchSpecification = searchSpecification.and(cargoSpecificationForClientsSearch(searchData));
         Pageable pageable = PageRequest.of(pageNumber, 1);
-        return telegramUserRepository.findAll(searchSpecification, pageable);
+        Page<TelegramUser> all = telegramUserRepository.findAll(searchSpecification, pageable);
+        long end = System.currentTimeMillis();
+        System.out.println("Fetching user time : " + (end - start) + " ms");
+        return all;
     }
 
     @Override
@@ -86,22 +90,28 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean checkRoutePointsOrder(List<RoutePoint> givenRoute, List<RoutePoint> targetRoute) {
-
-        var givenRouteSize = givenRoute.size();
-        var targetPlace = 0;
-        for (RoutePoint pointFromGivenRoute : givenRoute) {
-            for (var tIndex = targetPlace; tIndex < targetRoute.size(); tIndex++) {
-                var pointFromTargetRoute = targetRoute.get(tIndex);
-                if (pointFromGivenRoute.isTheSameGeographical(pointFromTargetRoute)) {
-                    targetPlace = tIndex;
-                    givenRouteSize--;
+        List<RoutePoint> minRoute, maxRoute;
+        if (givenRoute.size() < targetRoute.size()) {
+            minRoute = givenRoute;
+            maxRoute = targetRoute;
+        } else {
+            minRoute = targetRoute;
+            maxRoute = givenRoute;
+        }
+        var minRouteSize = minRoute.size();
+        var place = 0;
+        for (RoutePoint pointFromMinRoute : minRoute) {
+            for (var index = place; index < maxRoute.size(); index++) {
+                var pointFromMaxRoute = maxRoute.get(index);
+                if (pointFromMinRoute.isTheSameGeographical(pointFromMaxRoute)) {
+                    place = index;
+                    minRouteSize--;
                     break;
                 }
             }
         }
-        return givenRouteSize == 0;
+        return minRouteSize == 0;
     }
-
 
     private <T> Specification<T> attach(Specification<T> to, Specification<T> specification) {
         if (to == null) to = specification;

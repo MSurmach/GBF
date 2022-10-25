@@ -1,4 +1,4 @@
-package com.godeltech.gbf.controller;
+package com.godeltech.gbf;
 
 import com.godeltech.gbf.config.TelegramBotConfig;
 import com.godeltech.gbf.factory.impl.InterceptorFactory;
@@ -6,36 +6,26 @@ import com.godeltech.gbf.model.db.BotMessage;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
-import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
-import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMemberBanned;
-import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMemberLeft;
-import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMemberRestricted;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
 import java.io.Serializable;
 import java.util.List;
 
-@RestController
+@Component
 public class GbfBot extends SpringWebhookBot {
-    @Value("${bot.chmokiId}")
-    private String chmokiId;
     private final InterceptorFactory interceptorFactory;
     private final TelegramBotConfig telegramBotConfig;
-
     private final BotMessageService botMessageService;
+    @Value("${bot.chmokiId}")
+    private String chmokiId;
 
     public GbfBot(DefaultBotOptions options,
                   SetWebhook setWebhook,
@@ -64,48 +54,11 @@ public class GbfBot extends SpringWebhookBot {
     }
 
     @Override
-    @PostMapping("/callback/${telegram.bot.endpoint}")
-    public BotApiMethod<?> onWebhookUpdateReceived(@RequestBody Update update) {
-        long startTime = System.nanoTime();
-        if (authorizeUpdate(update)) {
-            Interceptor interceptor = interceptorFactory.getInterceptor(update);
-            List<? extends BotApiMethod<?>> methods = interceptor.intercept(update);
-            executeMethod(methods, interceptor.getTelegramUserId(), interceptor.getChatId());
-        }
-        long stopTime = System.nanoTime();
-        System.out.println((stopTime - startTime) / 1000000 + " ms");
+    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        Interceptor interceptor = interceptorFactory.getInterceptor(update);
+        List<? extends BotApiMethod<?>> methods = interceptor.intercept(update);
+        executeMethod(methods, interceptor.getTelegramUserId(), interceptor.getChatId());
         return null;
-    }
-
-    private boolean authorizeUpdate(Update update) {
-        Message message = null;
-        User from = null;
-        if (update.hasMessage()) {
-            message = update.getMessage();
-            from = message.getFrom();
-        }
-        if (update.hasCallbackQuery()) {
-            CallbackQuery callbackQuery = update.getCallbackQuery();
-            message = callbackQuery.getMessage();
-            from = callbackQuery.getFrom();
-        }
-        return message != null && from != null && checkIfBotCanHandleMessage(message, from);
-    }
-
-    private boolean checkIfBotCanHandleMessage(Message message, User user) {
-        String chatId = message.getChat().getId().toString();
-        if (chatId.equals(chmokiId)) return false;
-        try {
-            ChatMember chatMember = execute(GetChatMember.builder()
-                    .chatId(chmokiId)
-                    .userId(user.getId())
-                    .build());
-            if (chatMember instanceof ChatMemberBanned || chatMember instanceof ChatMemberLeft || chatMember instanceof ChatMemberRestricted)
-                return false;
-        } catch (TelegramApiException e) {
-            return false;
-        }
-        return true;
     }
 
     private void executeMethod(List<? extends BotApiMethod<?>> methods, Long telegramUserId, Long chatId) {
