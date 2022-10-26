@@ -3,7 +3,7 @@ package com.godeltech.gbf.service.handler.impl;
 import com.godeltech.gbf.gui.button.CargoBotButton;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.handler.Handler;
+import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.validator.CargoValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,9 +12,14 @@ import static com.godeltech.gbf.model.State.*;
 
 @Service
 @AllArgsConstructor
-public class CargoMenuHandler implements Handler {
+public class CargoMenuHandlerType implements HandlerType {
 
     private CargoValidator cargoValidator;
+
+    @Override
+    public State getState() {
+        return CARGO_MENU;
+    }
 
     @Override
     public State handle(UserData userData) {

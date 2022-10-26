@@ -7,7 +7,7 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.Status;
 import com.godeltech.gbf.model.db.TelegramUser;
-import com.godeltech.gbf.service.handler.Handler;
+import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.user.UserService;
 import com.godeltech.gbf.service.validator.FormValidator;
 import lombok.AllArgsConstructor;
@@ -20,10 +20,15 @@ import static com.godeltech.gbf.model.db.Status.*;
 
 @Service
 @AllArgsConstructor
-public class FormHandler implements Handler {
+public class FormHandlerType implements HandlerType {
 
     private UserService userService;
     private FormValidator formValidator;
+
+    @Override
+    public State getState() {
+        return FORM;
+    }
 
     @Override
     public State handle(UserData userData) {

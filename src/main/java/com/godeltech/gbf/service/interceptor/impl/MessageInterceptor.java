@@ -10,7 +10,7 @@ import com.godeltech.gbf.gui.command.TextCommand;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
-import com.godeltech.gbf.service.handler.Handler;
+import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.view.ViewType;
 import lombok.Getter;
@@ -83,8 +83,8 @@ public class MessageInterceptor implements Interceptor {
         if (currentState == CARGO_PEOPLE || currentState == COMMENT) {
             String text = update.getMessage().getText();
             cached.getCallbackHistory().push(text);
-            Handler handler = handlerFactory.get(currentState);
-            return handler.handle(cached);
+            HandlerType handlerType = handlerFactory.get(currentState);
+            return handlerType.handle(cached);
         } else throw new InsufficientInputException();
     }
 }

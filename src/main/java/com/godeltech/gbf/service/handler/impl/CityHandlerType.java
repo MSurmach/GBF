@@ -4,13 +4,18 @@ import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.City;
 import com.godeltech.gbf.model.db.RoutePoint;
-import com.godeltech.gbf.service.handler.Handler;
+import com.godeltech.gbf.service.handler.HandlerType;
 import org.springframework.stereotype.Service;
 
 import static com.godeltech.gbf.model.State.ROUTE_POINT_FORM;
 
 @Service
-public class CityHandler implements Handler {
+public class CityHandlerType implements HandlerType {
+
+    @Override
+    public State getState() {
+        return State.CITY;
+    }
 
     @Override
     public State handle(UserData userData) {

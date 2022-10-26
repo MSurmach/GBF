@@ -4,7 +4,7 @@ import com.godeltech.gbf.gui.button.RoutePointFormButton;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.RoutePoint;
-import com.godeltech.gbf.service.handler.Handler;
+import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.validator.RoutePointValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,13 @@ import static com.godeltech.gbf.model.db.Status.*;
 
 @Service
 @AllArgsConstructor
-public class RoutePointFormHandler implements Handler {
+public class RoutePointFormHandlerType implements HandlerType {
     private RoutePointValidator routePointValidator;
+
+    @Override
+    public State getState() {
+        return ROUTE_POINT_FORM;
+    }
 
     @Override
     public State handle(UserData userData) {

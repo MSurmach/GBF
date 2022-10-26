@@ -1,12 +1,12 @@
 package com.godeltech.gbf.service.handler.impl;
 
-import com.godeltech.gbf.gui.button.RequestButton;
+import com.godeltech.gbf.gui.button.RegistrationBotButton;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.TelegramUser;
-import com.godeltech.gbf.service.handler.Handler;
+import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,32 +16,36 @@ import static com.godeltech.gbf.model.State.*;
 
 @Service
 @AllArgsConstructor
-public class RequestsHandler implements Handler {
-
+public class RegistrationsHandlerType implements HandlerType {
     private UserService userService;
+
+    @Override
+    public State getState() {
+        return REGISTRATIONS;
+    }
 
     @Override
     public State handle(UserData userData) {
         String callback = userData.getCallbackHistory().peek();
-        String[] splitCallback = callback.split(":");
-        RequestButton clickedButton = RequestButton.valueOf(splitCallback[0]);
-        long userId = Long.parseLong(splitCallback[1]);
+        String[] splittedCallback = callback.split(":");
+        var clickedButton = RegistrationBotButton.valueOf(splittedCallback[0]);
+        long userId = Long.parseLong(splittedCallback[1]);
         userData.setPageNumber(0);
         return switch (clickedButton) {
-            case REQUEST_EDIT -> {
+            case REGISTRATION_EDIT -> {
                 TelegramUser telegramUser = getUserFromPage(userData.getPage());
                 ModelUtils.copyData(userData, telegramUser);
-                userData.setRole(Role.REQUESTS_VIEWER);
+                userData.setRole(Role.REGISTRATIONS_VIEWER);
                 yield FORM;
             }
-            case REQUEST_DELETE -> {
+            case REGISTRATION_DELETE -> {
                 userService.deleteById(userId);
-                yield REQUESTS;
+                yield REGISTRATIONS;
             }
-            case REQUEST_FIND_COURIERS -> {
+            case REGISTRATION_FIND_CLIENTS -> {
                 TelegramUser telegramUserFromPage = getUserFromPage(userData.getPage());
                 userData.setTempForSearch(telegramUserFromPage);
-                yield COURIERS_LIST_RESULT;
+                yield CLIENTS_LIST_RESULT;
             }
         };
     }

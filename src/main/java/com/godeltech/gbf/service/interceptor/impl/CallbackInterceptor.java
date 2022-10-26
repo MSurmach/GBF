@@ -14,7 +14,7 @@ import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.TelegramUser;
-import com.godeltech.gbf.service.handler.Handler;
+import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.view.ViewType;
 import lombok.Getter;
@@ -83,8 +83,8 @@ public class CallbackInterceptor implements Interceptor {
                 } catch (NotPaginationButtonException notPaginationButtonException) {
                     UserData cached = UserDataCache.get(telegramUserId);
                     State currentState = cached.getStateHistory().peek();
-                    Handler handler = handlerFactory.get(currentState);
-                    return handler.handle(cached);
+                    HandlerType handlerType = handlerFactory.get(currentState);
+                    return handlerType.handle(cached);
                 }
             }
         }
@@ -115,12 +115,12 @@ public class CallbackInterceptor implements Interceptor {
             UserData userData = UserDataCache.get(telegramUserId);
             return switch (botButton) {
                 case GLOBAL_BACK -> {
-                    Handler handler = handlerFactory.get(BACK);
-                    yield handler.handle(userData);
+                    HandlerType handlerType = handlerFactory.get(BACK);
+                    yield handlerType.handle(userData);
                 }
                 case MENU -> {
-                    Handler handler = handlerFactory.get(MENU);
-                    yield handler.handle(userData);
+                    HandlerType handlerType = handlerFactory.get(MENU);
+                    yield handlerType.handle(userData);
                 }
             };
         } catch (IllegalArgumentException illegalArgumentException) {

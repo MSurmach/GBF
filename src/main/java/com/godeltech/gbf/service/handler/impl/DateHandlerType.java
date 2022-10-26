@@ -4,7 +4,7 @@ import com.godeltech.gbf.gui.button.CalendarBotButton;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.RoutePoint;
-import com.godeltech.gbf.service.handler.Handler;
+import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.validator.DateValidator;
 import com.godeltech.gbf.service.validator.exceptions.EmptyButtonCalendarException;
 import lombok.AllArgsConstructor;
@@ -16,9 +16,14 @@ import static com.godeltech.gbf.model.State.*;
 
 @Service
 @AllArgsConstructor
-public class DateHandler implements Handler {
+public class DateHandlerType implements HandlerType {
 
     private DateValidator dateValidator;
+
+    @Override
+    public State getState() {
+        return DATE;
+    }
 
     @Override
     public State handle(UserData userData) {

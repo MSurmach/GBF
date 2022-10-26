@@ -5,7 +5,7 @@ import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.Status;
-import com.godeltech.gbf.service.handler.Handler;
+import com.godeltech.gbf.service.handler.HandlerType;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,12 @@ import static com.godeltech.gbf.model.State.*;
 
 @Service
 @AllArgsConstructor
-public class IntermediateEditorHandler implements Handler {
+public class IntermediateEditorHandlerType implements HandlerType {
+    @Override
+    public State getState() {
+        return INTERMEDIATE_EDITOR;
+    }
+
     @Override
     public State handle(UserData userData) {
         String callback = userData.getCallbackHistory().peek();
