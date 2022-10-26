@@ -1,9 +1,8 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.keyboard.ControlKeyboard;
-import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
+import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import lombok.AllArgsConstructor;
@@ -19,14 +18,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.godeltech.gbf.gui.button.CalendarBotButton.*;
+import static com.godeltech.gbf.utils.ButtonUtils.*;
 import static com.godeltech.gbf.utils.DateUtils.formatMonth;
 import static com.godeltech.gbf.utils.DateUtils.formatYear;
-import static com.godeltech.gbf.utils.KeyboardUtils.*;
+import static com.godeltech.gbf.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 @AllArgsConstructor
 public class DateKeyboardType implements KeyboardType {
-    private ControlKeyboard controlKeyboard;
     private LocalMessageSource lms;
 
     @Override
@@ -52,7 +51,7 @@ public class DateKeyboardType implements KeyboardType {
             addDateControls(keyboard);
         return new KeyboardMarkupAppender().
                 append(new InlineKeyboardMarkup(keyboard)).
-                append(controlKeyboard.controlMarkup()).
+                append(backAndMenuMarkup(lms)).
                 result();
     }
 

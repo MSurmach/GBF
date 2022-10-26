@@ -1,12 +1,11 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.keyboard.ControlKeyboard;
-import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
+import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.utils.KeyboardUtils;
+import com.godeltech.gbf.utils.ButtonUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -19,15 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.godeltech.gbf.gui.button.CalendarBotButton.*;
+import static com.godeltech.gbf.utils.ButtonUtils.createButtonWithData;
+import static com.godeltech.gbf.utils.ButtonUtils.createLocalButtonWithData;
 import static com.godeltech.gbf.utils.DateUtils.formatYear;
-import static com.godeltech.gbf.utils.KeyboardUtils.createButtonWithData;
-import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButtonWithData;
+import static com.godeltech.gbf.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 @AllArgsConstructor
 public class MonthKeyboardType implements KeyboardType {
-
-    private ControlKeyboard controlKeyboard;
     private LocalMessageSource lms;
 
     @Override
@@ -50,7 +48,7 @@ public class MonthKeyboardType implements KeyboardType {
                 String monthName = months[index].getDisplayName(TextStyle.FULL_STANDALONE, lms.getLocale());
                 String monthLabel = monthName.substring(0, 1).toUpperCase() + monthName.substring(1);
                 String monthCallback = LocalDate.of(callBackDate.getYear(), months[index], callBackDate.getDayOfMonth()).toString();
-                buttonRow.add(KeyboardUtils.createButtonWithData(monthLabel, SELECT_MONTH, monthCallback));
+                buttonRow.add(ButtonUtils.createButtonWithData(monthLabel, SELECT_MONTH, monthCallback));
                 columnCount--;
                 index++;
             }
@@ -58,7 +56,7 @@ public class MonthKeyboardType implements KeyboardType {
         }
         return new KeyboardMarkupAppender().
                 append(new InlineKeyboardMarkup(keyboard)).
-                append(controlKeyboard.controlMarkup()).
+                append(backAndMenuMarkup(lms)).
                 result();
     }
 

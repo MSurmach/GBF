@@ -1,11 +1,11 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
-import com.godeltech.gbf.gui.keyboard.ControlKeyboard;
+import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.utils.KeyboardUtils;
+import com.godeltech.gbf.utils.ButtonUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -17,12 +17,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.godeltech.gbf.gui.button.CalendarBotButton.SELECT_YEAR;
+import static com.godeltech.gbf.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 @AllArgsConstructor
 public class YearKeyboardType implements KeyboardType {
 
-    private ControlKeyboard controlKeyboard;
+    private LocalMessageSource lms;
 
     @Override
     public State getState() {
@@ -33,13 +34,13 @@ public class YearKeyboardType implements KeyboardType {
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         LocalDate[] years = getYearsArray(4);
         List<InlineKeyboardButton> yearButtons = Arrays.stream(years).
-                map(date -> KeyboardUtils.createButtonWithData(Integer.toString(date.getYear()), SELECT_YEAR, date.toString())).
+                map(date -> ButtonUtils.createButtonWithData(Integer.toString(date.getYear()), SELECT_YEAR, date.toString())).
                 toList();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(yearButtons);
         return new KeyboardMarkupAppender().
                 append(new InlineKeyboardMarkup(keyboard)).
-                append(controlKeyboard.controlMarkup()).
+                append(backAndMenuMarkup(lms)).
                 result();
     }
 

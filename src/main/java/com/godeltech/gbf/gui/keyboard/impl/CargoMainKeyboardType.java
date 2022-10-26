@@ -1,12 +1,11 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.keyboard.ControlKeyboard;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.utils.KeyboardUtils;
+import com.godeltech.gbf.utils.ButtonUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -16,12 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.godeltech.gbf.gui.button.CargoBotButton.*;
+import static com.godeltech.gbf.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 @AllArgsConstructor
 public class CargoMainKeyboardType implements KeyboardType {
-
-    private ControlKeyboard controlKeyboard;
     private LocalMessageSource lms;
 
     @Override
@@ -37,11 +35,13 @@ public class CargoMainKeyboardType implements KeyboardType {
         keyboard.add(companionRow(userData));
         keyboard.add(confirmCargoRow());
         InlineKeyboardMarkup loadKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(loadKeyboardMarkup).append(controlKeyboard.controlMarkup()).result();
+        return new KeyboardMarkupAppender(loadKeyboardMarkup).
+                append(backAndMenuMarkup(lms)).
+                result();
     }
 
     private List<InlineKeyboardButton> confirmCargoRow() {
-        var confirmButton = KeyboardUtils.createLocalButton(CONFIRM_CARGO, lms);
+        var confirmButton = ButtonUtils.createLocalButton(CONFIRM_CARGO, lms);
         return new ArrayList<>(List.of(confirmButton));
     }
 
@@ -49,9 +49,9 @@ public class CargoMainKeyboardType implements KeyboardType {
         List<InlineKeyboardButton> row = new ArrayList<>();
         InlineKeyboardButton documentButton;
         if (userData.isDocumentsExist()) {
-            documentButton = KeyboardUtils.createLocalButton(CANCEL_DOCUMENTS, lms);
+            documentButton = ButtonUtils.createLocalButton(CANCEL_DOCUMENTS, lms);
         } else {
-            documentButton = KeyboardUtils.createLocalButton(SELECT_DOCUMENTS, lms);
+            documentButton = ButtonUtils.createLocalButton(SELECT_DOCUMENTS, lms);
         }
         row.add(documentButton);
         return row;
@@ -60,12 +60,12 @@ public class CargoMainKeyboardType implements KeyboardType {
     private List<InlineKeyboardButton> packageRow(UserData userData) {
         List<InlineKeyboardButton> row = new ArrayList<>();
         if (userData.getPackageSize() != 0) {
-            var cancelButton = KeyboardUtils.createLocalButton(CANCEL_PACKAGE, lms);
-            var editButton = KeyboardUtils.createLocalButton(EDIT_PACKAGE, lms);
+            var cancelButton = ButtonUtils.createLocalButton(CANCEL_PACKAGE, lms);
+            var editButton = ButtonUtils.createLocalButton(EDIT_PACKAGE, lms);
             row.add(cancelButton);
             row.add(editButton);
         } else {
-            var selectPackage = KeyboardUtils.createLocalButton(SELECT_PACKAGE, lms);
+            var selectPackage = ButtonUtils.createLocalButton(SELECT_PACKAGE, lms);
             row.add(selectPackage);
         }
         return row;
@@ -74,12 +74,12 @@ public class CargoMainKeyboardType implements KeyboardType {
     private List<InlineKeyboardButton> companionRow(UserData userData) {
         List<InlineKeyboardButton> row = new ArrayList<>();
         if (userData.getCompanionCount() != 0) {
-            var cancelButton = KeyboardUtils.createLocalButton(CANCEL_PEOPLE, lms);
-            var editButton = KeyboardUtils.createLocalButton(EDIT_PEOPLE, lms);
+            var cancelButton = ButtonUtils.createLocalButton(CANCEL_PEOPLE, lms);
+            var editButton = ButtonUtils.createLocalButton(EDIT_PEOPLE, lms);
             row.add(cancelButton);
             row.add(editButton);
         } else {
-            var selectPackage = KeyboardUtils.createLocalButton(SELECT_PEOPLE, lms);
+            var selectPackage = ButtonUtils.createLocalButton(SELECT_PEOPLE, lms);
             row.add(selectPackage);
         }
         return row;

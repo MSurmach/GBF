@@ -2,7 +2,7 @@ package com.godeltech.gbf.service.view.impl;
 
 import com.godeltech.gbf.factory.impl.KeyboardFactory;
 import com.godeltech.gbf.factory.impl.MessageFactory;
-import com.godeltech.gbf.gui.keyboard.impl.BackMenuKeyboardType;
+import com.godeltech.gbf.gui.keyboard.impl.SuccessRegistrationKeyboardType;
 import com.godeltech.gbf.gui.keyboard.impl.PaginationKeyboardType;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.service.user.UserService;
@@ -17,7 +17,7 @@ import static com.godeltech.gbf.model.State.CLIENTS_LIST_RESULT;
 public class ClientListPaginatedViewType extends PaginatedView implements ViewType<SendMessage> {
 
     public ClientListPaginatedViewType(UserService userService, PaginationKeyboardType paginationKeyboard,
-                                       BackMenuKeyboardType backMenuKeyboard, MessageFactory messageFactory,
+                                       SuccessRegistrationKeyboardType backMenuKeyboard, MessageFactory messageFactory,
                                        KeyboardFactory keyboardFactory) {
         super(userService, paginationKeyboard, backMenuKeyboard, messageFactory, keyboardFactory);
     }

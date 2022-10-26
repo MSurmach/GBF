@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.List;
 
 import static com.godeltech.gbf.gui.button.MainMenuButton.*;
-import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButton;
+import static com.godeltech.gbf.utils.ButtonUtils.createLocalButton;
 
 @Component
 @AllArgsConstructor

@@ -17,17 +17,17 @@ import java.util.*;
 
 import static com.godeltech.gbf.gui.button.FormButton.*;
 import static com.godeltech.gbf.model.db.Status.*;
-import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButton;
+import static com.godeltech.gbf.utils.ButtonUtils.createLocalButton;
 
 @Component
 public class FormKeyboardType implements KeyboardType {
 
     private final LocalMessageSource lms;
 
-    private final BackMenuKeyboardType backMenuKeyboard;
+    private final SuccessRegistrationKeyboardType backMenuKeyboard;
     private final Map<FormButton, InlineKeyboardButton> buttons = new HashMap<>();
 
-    public FormKeyboardType(LocalMessageSource lms, BackMenuKeyboardType backMenuKeyboard) {
+    public FormKeyboardType(LocalMessageSource lms, SuccessRegistrationKeyboardType backMenuKeyboard) {
         this.lms = lms;
         this.backMenuKeyboard = backMenuKeyboard;
         initializeButtons();

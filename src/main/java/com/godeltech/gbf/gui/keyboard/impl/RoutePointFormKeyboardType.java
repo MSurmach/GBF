@@ -2,7 +2,7 @@ package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.button.RoutePointFormButton;
-import com.godeltech.gbf.gui.keyboard.ControlKeyboard;
+import com.godeltech.gbf.utils.KeyboardUtils;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.model.State;
@@ -15,17 +15,16 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.*;
 
 import static com.godeltech.gbf.gui.button.RoutePointFormButton.*;
-import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButton;
+import static com.godeltech.gbf.utils.ButtonUtils.createLocalButton;
+import static com.godeltech.gbf.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 public class RoutePointFormKeyboardType implements KeyboardType {
     private final LocalMessageSource lms;
-    private final ControlKeyboard controlKeyboard;
     private final Map<RoutePointFormButton, InlineKeyboardButton> buttons = new HashMap<>();
 
-    public RoutePointFormKeyboardType(LocalMessageSource lms, ControlKeyboard controlKeyboard) {
+    public RoutePointFormKeyboardType(LocalMessageSource lms) {
         this.lms = lms;
-        this.controlKeyboard = controlKeyboard;
         initializeButtons();
     }
 
@@ -50,7 +49,7 @@ public class RoutePointFormKeyboardType implements KeyboardType {
         keyboard.add(confirmButtonRow());
         return new KeyboardMarkupAppender().
                 append(new InlineKeyboardMarkup(keyboard)).
-                append(controlKeyboard.controlMarkup()).
+                append(backAndMenuMarkup(lms)).
                 result();
     }
 

@@ -2,7 +2,7 @@ package com.godeltech.gbf.service.view.impl;
 
 import com.godeltech.gbf.factory.impl.KeyboardFactory;
 import com.godeltech.gbf.factory.impl.MessageFactory;
-import com.godeltech.gbf.gui.keyboard.impl.BackMenuKeyboardType;
+import com.godeltech.gbf.gui.keyboard.impl.SuccessRegistrationKeyboardType;
 import com.godeltech.gbf.gui.keyboard.impl.PaginationKeyboardType;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.State;
@@ -26,7 +26,7 @@ import static com.godeltech.gbf.model.State.REQUESTS;
 public abstract class PaginatedView  {
     private UserService userService;
     private PaginationKeyboardType paginationKeyboard;
-    private BackMenuKeyboardType backMenuKeyboard;
+    private SuccessRegistrationKeyboardType backMenuKeyboard;
     private MessageFactory messageFactory;
     private KeyboardFactory keyboardFactory;
 
