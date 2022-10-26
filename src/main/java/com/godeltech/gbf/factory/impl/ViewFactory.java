@@ -2,28 +2,31 @@ package com.godeltech.gbf.factory.impl;
 
 import com.godeltech.gbf.factory.Factory;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.service.view.View;
-import com.godeltech.gbf.service.view.impl.DefaultView;
-import com.godeltech.gbf.service.view.impl.FormView;
-import com.godeltech.gbf.service.view.impl.PaginatedView;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.BeanFactory;
+import com.godeltech.gbf.service.view.ViewType;
+import com.godeltech.gbf.service.view.impl.DefaultViewType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 @Service
-@AllArgsConstructor
-public class ViewFactory implements Factory<View<? extends BotApiMethod<?>>> {
-    private BeanFactory beanFactory;
+public class ViewFactory implements Factory<ViewType<? extends BotApiMethod<?>>> {
+    private final Map<State, ViewType<? extends BotApiMethod<?>>> viewContext;
+
+    @Autowired
+    public ViewFactory(List<ViewType<? extends BotApiMethod<?>>> viewTypeContext) {
+        this.viewContext = viewTypeContext.stream()
+                .collect(Collectors.toMap(ViewType::getState, Function.identity()));
+    }
 
     @Override
-    public View<? extends BotApiMethod<?>> get(State state) {
-        Class<? extends View<? extends BotApiMethod<?>>> stateView =
-                switch (state) {
-                    case REGISTRATIONS, COURIERS_LIST_RESULT, CLIENTS_LIST_RESULT, REQUESTS -> PaginatedView.class;
-                    case FORM -> FormView.class;
-                    default -> DefaultView.class;
-                };
-        return beanFactory.getBean(stateView);
+    public ViewType<? extends BotApiMethod<?>> get(State state) {
+        return viewContext.getOrDefault(state,
+                (ViewType<? extends BotApiMethod<?>>) new DefaultViewType());
+
     }
 }

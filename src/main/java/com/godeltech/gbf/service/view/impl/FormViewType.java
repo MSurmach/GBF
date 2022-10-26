@@ -4,7 +4,7 @@ import com.godeltech.gbf.factory.impl.KeyboardFactory;
 import com.godeltech.gbf.factory.impl.MessageFactory;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.service.view.View;
+import com.godeltech.gbf.service.view.ViewType;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -14,9 +14,14 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class FormView implements View<SendMessage> {
+public class FormViewType implements ViewType<SendMessage> {
     private final MessageFactory messageFactory;
     private final KeyboardFactory keyboardFactory;
+
+    @Override
+    public State getState() {
+        return State.FORM;
+    }
 
     @Override
     public List<SendMessage> buildView(Long chatId, UserData userData) {

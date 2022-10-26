@@ -12,7 +12,7 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.handler.Handler;
 import com.godeltech.gbf.service.interceptor.Interceptor;
-import com.godeltech.gbf.service.view.View;
+import com.godeltech.gbf.service.view.ViewType;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -61,8 +61,8 @@ public class MessageInterceptor implements Interceptor {
         UserData cached = UserDataCache.get(telegramUserId);
         cached.getStateHistory().push(state);
         cached.getCallbackHistory().push(update.getMessage().getText());
-        View<? extends BotApiMethod<?>> view = viewFactory.get(state);
-        return view.buildView(chatId, cached);
+        ViewType<? extends BotApiMethod<?>> viewType = viewFactory.get(state);
+        return viewType.buildView(chatId, cached);
     }
 
     State interceptTextCommand(String command, String username, Long telegramUserId) throws TextCommandNotFoundException {

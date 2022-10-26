@@ -16,7 +16,7 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.service.handler.Handler;
 import com.godeltech.gbf.service.interceptor.Interceptor;
-import com.godeltech.gbf.service.view.View;
+import com.godeltech.gbf.service.view.ViewType;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -67,8 +67,8 @@ public class CallbackInterceptor implements Interceptor {
             cached = UserDataCache.get(telegramUserId);
         }
         cached.getStateHistory().push(nextState);
-        View<? extends BotApiMethod<?>> view = viewFactory.get(nextState);
-        return view.buildView(chatId, cached);
+        ViewType<? extends BotApiMethod<?>> viewType = viewFactory.get(nextState);
+        return viewType.buildView(chatId, cached);
     }
 
     private State handleUpdate(Update update) {
