@@ -22,7 +22,7 @@ public class BackMenuKeyboardType implements KeyboardType {
 
     @Override
     public State getState() {
-        return State.SUCCESS;
+        return State.SUCCESS_REGISTRATION;
     }
 
     @Override

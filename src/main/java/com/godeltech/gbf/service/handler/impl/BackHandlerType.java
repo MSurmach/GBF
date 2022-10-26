@@ -23,7 +23,7 @@ public class BackHandlerType implements HandlerType {
             case ROUTE_POINT_FORM -> FORM;
             case INTERMEDIATE_EDITOR -> FORM;
             case MENU -> null;
-            case SUCCESS -> null;
+            case SUCCESS_REGISTRATION -> null;
             case WRONG_INPUT -> MENU;
             case COMMENT -> FORM;
             case COUNTRY -> ROUTE_POINT_FORM;

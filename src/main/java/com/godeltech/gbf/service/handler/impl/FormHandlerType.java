@@ -69,7 +69,7 @@ public class FormHandlerType implements HandlerType {
 
     private State saveAndGetAppropriateState(UserData userData) {
         State nextState = switch (userData.getRole()) {
-            case COURIER -> SUCCESS;
+            case COURIER -> SUCCESS_REGISTRATION;
             case CLIENT -> {
                 TelegramUser telegramUser = ModelUtils.telegramUser(userData);
                 userData.setTempForSearch(telegramUser);

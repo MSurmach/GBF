@@ -2,7 +2,6 @@ package com.godeltech.gbf.factory.impl;
 
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.interceptor.InterceptorTypes;
-import com.godeltech.gbf.service.interceptor.impl.MessageInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;

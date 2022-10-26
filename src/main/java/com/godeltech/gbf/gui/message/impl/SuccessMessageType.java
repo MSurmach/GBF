@@ -18,7 +18,7 @@ public class SuccessMessageType implements MessageType {
 
     @Override
     public State getState() {
-        return State.SUCCESS;
+        return State.SUCCESS_REGISTRATION;
     }
 
     @Override
