@@ -4,7 +4,7 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.button.BotButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-public class KeyboardUtils {
+public class ButtonUtils {
 
     private final static String IGNORE = "IGNORE";
 
