@@ -1,6 +1,7 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.gui.keyboard.ControlKeyboard;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.model.State;
@@ -20,7 +21,7 @@ import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButton;
 @AllArgsConstructor
 public class ConfirmKeyboardType implements KeyboardType {
     private LocalMessageSource lms;
-    private ControlKeyboardType controlKeyboard;
+    private ControlKeyboard controlKeyboard;
 
     @Override
     public State getState() {
@@ -33,7 +34,7 @@ public class ConfirmKeyboardType implements KeyboardType {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(List.of(confirmButton));
         return new KeyboardMarkupAppender(new InlineKeyboardMarkup(keyboard)).
-                append(controlKeyboard.getKeyboardMarkup(userData)).
+                append(controlKeyboard.controlMarkup()).
                 result();
     }
 }

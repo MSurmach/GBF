@@ -1,8 +1,9 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.keyboard.KeyboardType;
+import com.godeltech.gbf.gui.keyboard.ControlKeyboard;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
+import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.utils.KeyboardUtils;
@@ -15,13 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.godeltech.gbf.gui.button.CargoBotButton.*;
-import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButton;
 
 @Component
 @AllArgsConstructor
 public class CargoMainKeyboardType implements KeyboardType {
 
-    private ControlKeyboardType controlKeyboard;
+    private ControlKeyboard controlKeyboard;
     private LocalMessageSource lms;
 
     @Override
@@ -37,7 +37,7 @@ public class CargoMainKeyboardType implements KeyboardType {
         keyboard.add(companionRow(userData));
         keyboard.add(confirmCargoRow());
         InlineKeyboardMarkup loadKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(loadKeyboardMarkup).append(controlKeyboard.getKeyboardMarkup(userData)).result();
+        return new KeyboardMarkupAppender(loadKeyboardMarkup).append(controlKeyboard.controlMarkup()).result();
     }
 
     private List<InlineKeyboardButton> confirmCargoRow() {

@@ -1,6 +1,7 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.gui.keyboard.ControlKeyboard;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.model.State;
@@ -26,7 +27,7 @@ import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButtonWithData;
 @AllArgsConstructor
 public class IntermediateEditorKeyboardType implements KeyboardType {
     private final LocalMessageSource lms;
-    private final ControlKeyboardType controlKeyboard;
+    private final ControlKeyboard controlKeyboard;
 
     @Override
     public State getState() {
@@ -52,7 +53,7 @@ public class IntermediateEditorKeyboardType implements KeyboardType {
         keyboard.add(List.of(createLocalButtonWithData(SAVE_CHANGES, "-1", lms)));
         return new KeyboardMarkupAppender().
                 append(new InlineKeyboardMarkup(keyboard)).
-                append(controlKeyboard.getKeyboardMarkup(userData)).
+                append(controlKeyboard.controlMarkup()).
                 result();
     }
 

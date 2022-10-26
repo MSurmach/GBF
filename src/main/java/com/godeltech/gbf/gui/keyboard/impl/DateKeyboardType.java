@@ -1,6 +1,7 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.gui.keyboard.ControlKeyboard;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.model.State;
@@ -25,7 +26,7 @@ import static com.godeltech.gbf.utils.KeyboardUtils.*;
 @Component
 @AllArgsConstructor
 public class DateKeyboardType implements KeyboardType {
-    private ControlKeyboardType controlKeyboard;
+    private ControlKeyboard controlKeyboard;
     private LocalMessageSource lms;
 
     @Override
@@ -51,7 +52,7 @@ public class DateKeyboardType implements KeyboardType {
             addDateControls(keyboard);
         return new KeyboardMarkupAppender().
                 append(new InlineKeyboardMarkup(keyboard)).
-                append(controlKeyboard.getKeyboardMarkup(userData)).
+                append(controlKeyboard.controlMarkup()).
                 result();
     }
 

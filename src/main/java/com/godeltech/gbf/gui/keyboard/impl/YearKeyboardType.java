@@ -1,7 +1,8 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
-import com.godeltech.gbf.gui.keyboard.KeyboardType;
+import com.godeltech.gbf.gui.keyboard.ControlKeyboard;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
+import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.utils.KeyboardUtils;
@@ -21,7 +22,7 @@ import static com.godeltech.gbf.gui.button.CalendarBotButton.SELECT_YEAR;
 @AllArgsConstructor
 public class YearKeyboardType implements KeyboardType {
 
-    private ControlKeyboardType controlKeyboard;
+    private ControlKeyboard controlKeyboard;
 
     @Override
     public State getState() {
@@ -38,7 +39,7 @@ public class YearKeyboardType implements KeyboardType {
         keyboard.add(yearButtons);
         return new KeyboardMarkupAppender().
                 append(new InlineKeyboardMarkup(keyboard)).
-                append(controlKeyboard.getKeyboardMarkup(userData)).
+                append(controlKeyboard.controlMarkup()).
                 result();
     }
 

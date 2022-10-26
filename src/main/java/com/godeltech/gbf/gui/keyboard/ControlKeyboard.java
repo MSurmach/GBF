@@ -1,10 +1,8 @@
-package com.godeltech.gbf.gui.keyboard.impl;
+package com.godeltech.gbf.gui.keyboard;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.UserData;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -16,14 +14,12 @@ import static com.godeltech.gbf.gui.button.NavigationBotButton.GLOBAL_BACK;
 import static com.godeltech.gbf.gui.button.NavigationBotButton.MENU;
 import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButton;
 
-
-@Data
+@Component
 @AllArgsConstructor
-public abstract class ControlKeyboardType{
+public class ControlKeyboard {
     private LocalMessageSource lms;
 
-
-    public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
+    public InlineKeyboardMarkup controlMarkup() {
         var backButton = createLocalButton(GLOBAL_BACK, lms);
         var menuButton = createLocalButton(MENU, lms);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();

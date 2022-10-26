@@ -2,6 +2,7 @@ package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.button.RoutePointFormButton;
+import com.godeltech.gbf.gui.keyboard.ControlKeyboard;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.model.State;
@@ -19,10 +20,10 @@ import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButton;
 @Component
 public class RoutePointFormKeyboardType implements KeyboardType {
     private final LocalMessageSource lms;
-    private final ControlKeyboardType controlKeyboard;
+    private final ControlKeyboard controlKeyboard;
     private final Map<RoutePointFormButton, InlineKeyboardButton> buttons = new HashMap<>();
 
-    public RoutePointFormKeyboardType(LocalMessageSource lms, ControlKeyboardType controlKeyboard) {
+    public RoutePointFormKeyboardType(LocalMessageSource lms, ControlKeyboard controlKeyboard) {
         this.lms = lms;
         this.controlKeyboard = controlKeyboard;
         initializeButtons();
@@ -49,7 +50,7 @@ public class RoutePointFormKeyboardType implements KeyboardType {
         keyboard.add(confirmButtonRow());
         return new KeyboardMarkupAppender().
                 append(new InlineKeyboardMarkup(keyboard)).
-                append(controlKeyboard.getKeyboardMarkup(userData)).
+                append(controlKeyboard.controlMarkup()).
                 result();
     }
 
