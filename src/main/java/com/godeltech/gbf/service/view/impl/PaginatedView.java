@@ -7,9 +7,7 @@ import com.godeltech.gbf.gui.keyboard.impl.PaginationKeyboard;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.TelegramUser;
-import com.godeltech.gbf.service.route_point.RoutePointService;
 import com.godeltech.gbf.service.user.UserService;
 import com.godeltech.gbf.service.view.View;
 import lombok.AllArgsConstructor;
@@ -19,9 +17,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static com.godeltech.gbf.model.Role.CLIENT;
 import static com.godeltech.gbf.model.Role.COURIER;

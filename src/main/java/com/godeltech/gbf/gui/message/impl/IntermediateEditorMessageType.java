@@ -1,7 +1,8 @@
 package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.message.Message;
+import com.godeltech.gbf.gui.message.MessageType;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.RoutePoint;
 import lombok.AllArgsConstructor;
@@ -13,10 +14,15 @@ import static com.godeltech.gbf.model.db.Status.INTERMEDIATE;
 
 @Component
 @AllArgsConstructor
-public class IntermediateEditorMessage implements Message {
+public class IntermediateEditorMessageType implements MessageType {
     public final static String INTERMEDIATE_EDITOR_DETAILS_HEADER_CODE = "intermediateEditor.details.header";
     private LocalMessageSource lms;
     private DetailsCreator detailsCreator;
+
+    @Override
+    public State getState() {
+        return State.INTERMEDIATE_EDITOR;
+    }
 
     @Override
     public String getMessage(UserData userData) {

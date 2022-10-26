@@ -6,7 +6,7 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.factory.impl.KeyboardFactory;
 import com.godeltech.gbf.factory.impl.MessageFactory;
 import com.godeltech.gbf.gui.keyboard.Keyboard;
-import com.godeltech.gbf.gui.message.Message;
+import com.godeltech.gbf.gui.message.MessageType;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -22,13 +22,13 @@ public class DefaultView implements View<SendMessage> {
     @Override
     public List<SendMessage> buildView(Long chatId, UserData userData) {
         State state = userData.getStateHistory().peek();
-        Message message = messageFactory.get(state);
+        MessageType messageType = messageFactory.get(state);
         Keyboard keyboard = keyboardFactory.get(state);
         SendMessage sendMessage = SendMessage.
                 builder().
                 chatId(chatId).
                 parseMode("html").
-                text(message.getMessage(userData)).
+                text(messageType.getMessage(userData)).
                 replyMarkup(keyboard.getKeyboardMarkup(userData)).build();
         return List.of(sendMessage);
     }
