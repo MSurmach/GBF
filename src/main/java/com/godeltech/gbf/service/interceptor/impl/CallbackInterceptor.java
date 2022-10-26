@@ -16,6 +16,7 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.interceptor.Interceptor;
+import com.godeltech.gbf.service.interceptor.InterceptorTypes;
 import com.godeltech.gbf.service.view.ViewType;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
@@ -30,6 +31,7 @@ import java.util.List;
 
 import static com.godeltech.gbf.model.State.BACK;
 import static com.godeltech.gbf.model.State.MENU;
+import static com.godeltech.gbf.service.interceptor.InterceptorTypes.CALLBACK;
 
 @Service
 public class CallbackInterceptor implements Interceptor {
@@ -46,6 +48,11 @@ public class CallbackInterceptor implements Interceptor {
         this.handlerFactory = handlerFactory;
         this.viewFactory = viewFactory;
         this.messageInterceptor = messageInterceptor;
+    }
+
+    @Override
+    public InterceptorTypes getType() {
+        return CALLBACK;
     }
 
     @Override

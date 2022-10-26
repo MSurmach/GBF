@@ -12,6 +12,7 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.interceptor.Interceptor;
+import com.godeltech.gbf.service.interceptor.InterceptorTypes;
 import com.godeltech.gbf.service.view.ViewType;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,11 @@ public class MessageInterceptor implements Interceptor {
         this.handlerFactory = handlerFactory;
         this.viewFactory = viewFactory;
         this.botMessageService = botMessageService;
+    }
+
+    @Override
+    public InterceptorTypes getType() {
+        return InterceptorTypes.MESSAGE;
     }
 
     @Override
