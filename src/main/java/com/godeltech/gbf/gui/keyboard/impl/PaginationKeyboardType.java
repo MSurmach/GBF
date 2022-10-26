@@ -1,8 +1,9 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.keyboard.Keyboard;
+import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,9 +19,14 @@ import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButton;
 
 @Component
 @AllArgsConstructor
-public class PaginationKeyboard implements Keyboard {
-    private BackMenuKeyboard backMenuKeyboard;
+public class PaginationKeyboardType implements KeyboardType {
+    private BackMenuKeyboardType backMenuKeyboard;
     private LocalMessageSource lms;
+
+    @Override
+    public State getState() {
+        return null;
+    }
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {

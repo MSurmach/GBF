@@ -1,7 +1,8 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.keyboard.Keyboard;
+import com.godeltech.gbf.gui.keyboard.KeyboardType;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,8 +17,13 @@ import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButtonWithData;
 
 @Component
 @AllArgsConstructor
-public class RequestKeyboard implements Keyboard {
+public class RequestKeyboardType implements KeyboardType {
     private LocalMessageSource lms;
+
+    @Override
+    public State getState() {
+        return State.REQUESTS;
+    }
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {

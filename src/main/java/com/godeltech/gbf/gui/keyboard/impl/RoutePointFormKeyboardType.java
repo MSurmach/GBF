@@ -2,8 +2,9 @@ package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.button.RoutePointFormButton;
-import com.godeltech.gbf.gui.keyboard.Keyboard;
+import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.RoutePoint;
 import org.springframework.stereotype.Component;
@@ -16,12 +17,12 @@ import static com.godeltech.gbf.gui.button.RoutePointFormButton.*;
 import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButton;
 
 @Component
-public class RoutePointFormKeyboard implements Keyboard {
+public class RoutePointFormKeyboardType implements KeyboardType {
     private final LocalMessageSource lms;
-    private final ControlKeyboard controlKeyboard;
+    private final ControlKeyboardType controlKeyboard;
     private final Map<RoutePointFormButton, InlineKeyboardButton> buttons = new HashMap<>();
 
-    public RoutePointFormKeyboard(LocalMessageSource lms, ControlKeyboard controlKeyboard) {
+    public RoutePointFormKeyboardType(LocalMessageSource lms, ControlKeyboardType controlKeyboard) {
         this.lms = lms;
         this.controlKeyboard = controlKeyboard;
         initializeButtons();
@@ -31,6 +32,11 @@ public class RoutePointFormKeyboard implements Keyboard {
         Arrays.stream(RoutePointFormButton.values()).
                 forEach(formButton ->
                         buttons.put(formButton, createLocalButton(formButton, lms)));
+    }
+
+    @Override
+    public State getState() {
+        return State.ROUTE_POINT_FORM;
     }
 
     @Override

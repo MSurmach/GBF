@@ -2,9 +2,10 @@ package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.button.FormButton;
-import com.godeltech.gbf.gui.keyboard.Keyboard;
+import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.model.Role;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.Status;
@@ -19,14 +20,14 @@ import static com.godeltech.gbf.model.db.Status.*;
 import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButton;
 
 @Component
-public class FormKeyboard implements Keyboard {
+public class FormKeyboardType implements KeyboardType {
 
     private final LocalMessageSource lms;
 
-    private final BackMenuKeyboard backMenuKeyboard;
+    private final BackMenuKeyboardType backMenuKeyboard;
     private final Map<FormButton, InlineKeyboardButton> buttons = new HashMap<>();
 
-    public FormKeyboard(LocalMessageSource lms, BackMenuKeyboard backMenuKeyboard) {
+    public FormKeyboardType(LocalMessageSource lms, BackMenuKeyboardType backMenuKeyboard) {
         this.lms = lms;
         this.backMenuKeyboard = backMenuKeyboard;
         initializeButtons();
@@ -36,6 +37,11 @@ public class FormKeyboard implements Keyboard {
         Arrays.stream(FormButton.values()).
                 forEach(formButton ->
                         buttons.put(formButton, createLocalButton(formButton, lms)));
+    }
+
+    @Override
+    public State getState() {
+        return State.FORM;
     }
 
     @Override

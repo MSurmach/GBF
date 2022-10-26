@@ -5,7 +5,7 @@ import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.factory.impl.KeyboardFactory;
 import com.godeltech.gbf.factory.impl.MessageFactory;
-import com.godeltech.gbf.gui.keyboard.Keyboard;
+import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.message.MessageType;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,13 +23,13 @@ public class DefaultView implements View<SendMessage> {
     public List<SendMessage> buildView(Long chatId, UserData userData) {
         State state = userData.getStateHistory().peek();
         MessageType messageType = messageFactory.get(state);
-        Keyboard keyboard = keyboardFactory.get(state);
+        KeyboardType keyboardType = keyboardFactory.get(state);
         SendMessage sendMessage = SendMessage.
                 builder().
                 chatId(chatId).
                 parseMode("html").
                 text(messageType.getMessage(userData)).
-                replyMarkup(keyboard.getKeyboardMarkup(userData)).build();
+                replyMarkup(keyboardType.getKeyboardMarkup(userData)).build();
         return List.of(sendMessage);
     }
 }

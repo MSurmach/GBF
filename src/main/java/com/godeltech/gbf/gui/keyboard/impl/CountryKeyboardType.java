@@ -1,8 +1,9 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.keyboard.Keyboard;
+import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.Country;
 import com.godeltech.gbf.service.country.CountryService;
@@ -18,10 +19,15 @@ import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButtonWithData;
 
 @Component
 @AllArgsConstructor
-public class CountryKeyboard implements Keyboard {
-    private ControlKeyboard controlKeyboard;
+public class CountryKeyboardType implements KeyboardType {
+    private ControlKeyboardType controlKeyboard;
     private LocalMessageSource lms;
     private CountryService countryService;
+
+    @Override
+    public State getState() {
+        return State.COUNTRY;
+    }
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {

@@ -1,8 +1,9 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.keyboard.Keyboard;
+import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.City;
 import com.godeltech.gbf.model.db.RoutePoint;
@@ -23,9 +24,14 @@ import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButtonWithData;
 
 @Component
 @AllArgsConstructor
-public class IntermediateEditorKeyboard implements Keyboard {
+public class IntermediateEditorKeyboardType implements KeyboardType {
     private final LocalMessageSource lms;
-    private final ControlKeyboard controlKeyboard;
+    private final ControlKeyboardType controlKeyboard;
+
+    @Override
+    public State getState() {
+        return State.INTERMEDIATE_EDITOR;
+    }
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {

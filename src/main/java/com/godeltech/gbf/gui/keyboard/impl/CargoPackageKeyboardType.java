@@ -1,7 +1,8 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
-import com.godeltech.gbf.gui.keyboard.Keyboard;
+import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.CargoSize;
 import com.godeltech.gbf.utils.KeyboardUtils;
@@ -15,9 +16,14 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
-public class CargoPackageKeyboard implements Keyboard {
+public class CargoPackageKeyboardType implements KeyboardType {
 
-    private final ControlKeyboard controlKeyboard;
+    private final ControlKeyboardType controlKeyboard;
+
+    @Override
+    public State getState() {
+        return State.CARGO_PACKAGE;
+    }
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {

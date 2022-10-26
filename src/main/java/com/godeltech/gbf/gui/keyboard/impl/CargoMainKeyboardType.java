@@ -1,8 +1,9 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.keyboard.Keyboard;
+import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.utils.KeyboardUtils;
 import lombok.AllArgsConstructor;
@@ -18,10 +19,15 @@ import static com.godeltech.gbf.utils.KeyboardUtils.createLocalButton;
 
 @Component
 @AllArgsConstructor
-public class CargoMainKeyboard implements Keyboard {
+public class CargoMainKeyboardType implements KeyboardType {
 
-    private ControlKeyboard controlKeyboard;
+    private ControlKeyboardType controlKeyboard;
     private LocalMessageSource lms;
+
+    @Override
+    public State getState() {
+        return State.CARGO_MENU;
+    }
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {

@@ -1,8 +1,8 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.keyboard.Keyboard;
+import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.utils.KeyboardUtils;
 import lombok.AllArgsConstructor;
@@ -16,13 +16,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.godeltech.gbf.gui.button.CalendarBotButton.SELECT_YEAR;
-import static java.util.stream.Collectors.toList;
 
 @Component
 @AllArgsConstructor
-public class YearKeyboard implements Keyboard {
+public class YearKeyboardType implements KeyboardType {
 
-    private ControlKeyboard controlKeyboard;
+    private ControlKeyboardType controlKeyboard;
+
+    @Override
+    public State getState() {
+        return State.YEAR;
+    }
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
