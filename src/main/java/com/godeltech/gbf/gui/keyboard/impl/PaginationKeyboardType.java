@@ -25,7 +25,7 @@ public class PaginationKeyboardType implements KeyboardType {
 
     @Override
     public State getState() {
-        return null;
+        return State.NON_USABLE;
     }
 
     @Override
