@@ -24,7 +24,7 @@ public class CityHandlerType implements HandlerType {
         String[] splittedCallback = callback.split(":");
         Integer cityId = Integer.valueOf(splittedCallback[1]);
         String cityName = splittedCallback[0];
-        City city = new City(cityId, cityName, tempRoutePoint.getCountry());
+        City city = new City(cityId, cityName);
         tempRoutePoint.setCity(city);
         return ROUTE_POINT_FORM;
     }

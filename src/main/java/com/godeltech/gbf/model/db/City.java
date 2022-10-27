@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,11 +15,10 @@ import javax.persistence.*;
 @Table
 public class City {
     @Id
+    @GeneratedValue(strategy = IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @ManyToOne
-    private Country country;
 }

@@ -16,17 +16,21 @@ import java.util.stream.Collectors;
 @Service
 public class ViewFactory implements Factory<ViewType<? extends BotApiMethod<?>>> {
     private final Map<State, ViewType<? extends BotApiMethod<?>>> viewContext;
+    private final MessageFactory messageFactory;
+    private final KeyboardFactory keyboardFactory;
 
     @Autowired
-    public ViewFactory(List<ViewType<? extends BotApiMethod<?>>> viewTypeContext) {
+    public ViewFactory(List<ViewType<? extends BotApiMethod<?>>> viewTypeContext, MessageFactory messageFactory, KeyboardFactory keyboardFactory) {
         this.viewContext = viewTypeContext.stream()
                 .collect(Collectors.toMap(ViewType::getState, Function.identity()));
+        this.messageFactory = messageFactory;
+        this.keyboardFactory = keyboardFactory;
     }
 
     @Override
     public ViewType<? extends BotApiMethod<?>> get(State state) {
         return viewContext.getOrDefault(state,
-                (ViewType<? extends BotApiMethod<?>>) new DefaultViewType());
+                (ViewType<? extends BotApiMethod<?>>) new DefaultViewType(messageFactory,keyboardFactory));
 
     }
 }

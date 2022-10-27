@@ -34,22 +34,22 @@ public class CityKeyboardType implements KeyboardType {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        Country country = userData.getTempRoutePoint().getCountry();
-        List<City> cities = cityService.findCitiesByCountry(country);
+//        Country country = userData.getTempRoutePoint().getCountry();
+//        List<City> cities = cityService.findCitiesByCountry(country);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        for (var index = 0; index < cities.size(); ) {
-            var columnCount = 3;
-            List<InlineKeyboardButton> buttonRow = new ArrayList<>();
-            while (columnCount > 0 && index != cities.size()) {
-                City city = cities.get(index);
-                String cityName = city.getName();
-                String cityId = city.getId().toString();
-                buttonRow.add(createLocalButtonWithData(cityName, cityName, cityId, lms));
-                columnCount--;
-                index++;
-            }
-            keyboard.add(buttonRow);
-        }
+//        for (var index = 0; index < cities.size(); ) {
+//            var columnCount = 3;
+//            List<InlineKeyboardButton> buttonRow = new ArrayList<>();
+//            while (columnCount > 0 && index != cities.size()) {
+//                City city = cities.get(index);
+//                String cityName = city.getName();
+//                String cityId = city.getId().toString();
+//                buttonRow.add(createLocalButtonWithData(cityName, cityName, cityId, lms));
+//                columnCount--;
+//                index++;
+//            }
+//            keyboard.add(buttonRow);
+//        }
         InlineKeyboardMarkup countryKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
         return new KeyboardMarkupAppender(countryKeyboardMarkup).
                 append(backAndMenuMarkup(lms)).

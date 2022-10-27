@@ -21,15 +21,15 @@ public class RoutePointValidator {
     public final static String ALERT_DATE_NOT_FOUND_CODE = "alert.date.notFound";
 
     public void checkAllNecessaryData(RoutePoint routePoint, Role role, String callbackQueryId) {
-        Country country = routePoint.getCountry();
+//        Country country = routePoint.getCountry();
         City city = routePoint.getCity();
-        LocalDate startDate = routePoint.getStartDate();
-        switch (role) {
-            case COURIER, REGISTRATIONS_VIEWER -> checkCountryIsNull(country, callbackQueryId).
-                    checkCityIsNull(city, callbackQueryId).
-                    checkDates(startDate, callbackQueryId);
-            case CLIENT, REQUESTS_VIEWER -> checkCountryIsNull(country, callbackQueryId);
-        }
+//        LocalDate startDate = routePoint.getStartDate();
+//        switch (role) {
+//            case COURIER, REGISTRATIONS_VIEWER -> checkCountryIsNull(country, callbackQueryId).
+//                    checkCityIsNull(city, callbackQueryId).
+//                    checkDates(startDate, callbackQueryId);
+//            case CLIENT, REQUESTS_VIEWER -> checkCountryIsNull(country, callbackQueryId);
+//        }
     }
 
     public RoutePointValidator checkCountryIsNull(Country country, String callbackQueryId) {

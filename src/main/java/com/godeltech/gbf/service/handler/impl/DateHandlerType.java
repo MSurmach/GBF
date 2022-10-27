@@ -48,8 +48,8 @@ public class DateHandlerType implements HandlerType {
             case IGNORE -> throw new EmptyButtonCalendarException(split[1], userData.getCallbackQueryId());
             case CONFIRM_DATE -> ROUTE_POINT_FORM;
             case CLEAR_DATE_SELECT -> {
-                tempRoutePoint.setStartDate(null);
-                tempRoutePoint.setEndDate(null);
+//                tempRoutePoint.setStartDate(null);
+//                tempRoutePoint.setEndDate(null);
                 yield currentState;
             }
             default -> currentState;
@@ -57,20 +57,20 @@ public class DateHandlerType implements HandlerType {
     }
 
     private void handleChosenDate(LocalDate chosenDate, RoutePoint routePoint) {
-        LocalDate startDate = routePoint.getStartDate();
-        LocalDate endDate = routePoint.getEndDate();
-        if (startDate == null && endDate == null) {
-            routePoint.setStartDate(chosenDate);
-            routePoint.setEndDate(chosenDate);
-            return;
-        }
-        if (chosenDate.isBefore(startDate)) {
-            routePoint.setStartDate(chosenDate);
-            return;
-        }
-        if (chosenDate.isAfter(endDate) || chosenDate.isAfter(startDate)) {
-            routePoint.setEndDate(chosenDate);
-            return;
-        }
+//        LocalDate startDate = routePoint.getStartDate();
+//        LocalDate endDate = routePoint.getEndDate();
+//        if (startDate == null && endDate == null) {
+//            routePoint.setStartDate(chosenDate);
+//            routePoint.setEndDate(chosenDate);
+//            return;
+//        }
+//        if (chosenDate.isBefore(startDate)) {
+//            routePoint.setStartDate(chosenDate);
+//            return;
+//        }
+//        if (chosenDate.isAfter(endDate) || chosenDate.isAfter(startDate)) {
+//            routePoint.setEndDate(chosenDate);
+//            return;
+//        }
     }
 }

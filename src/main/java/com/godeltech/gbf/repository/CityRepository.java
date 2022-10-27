@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface CityRepository extends JpaRepository<City, Integer> {
-    List<City> findCitiesByCountry_Id(Integer countryId);
+//    List<City> findCitiesByCountry_Id(Integer countryId);
 
     City findCityByName(String cityName);
 }

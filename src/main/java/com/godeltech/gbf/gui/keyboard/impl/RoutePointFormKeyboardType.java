@@ -58,9 +58,10 @@ public class RoutePointFormKeyboardType implements KeyboardType {
     }
 
     private List<InlineKeyboardButton> countryButtonRow(RoutePoint routePoint) {
-        return routePoint.getCountry() == null ?
-                List.of(buttons.get(ADD_COUNTRY)) :
-                List.of(buttons.get(EDIT_COUNTRY));
+//        return routePoint.getCountry() == null ?
+//                List.of(buttons.get(ADD_COUNTRY)) :
+//                List.of(buttons.get(EDIT_COUNTRY));
+        return null;
     }
 
     private List<InlineKeyboardButton> cityButtonRow(RoutePoint routePoint) {
@@ -70,8 +71,9 @@ public class RoutePointFormKeyboardType implements KeyboardType {
     }
 
     private List<InlineKeyboardButton> visitDateButtonRow(RoutePoint routePoint) {
-        return routePoint.getStartDate() == null ?
-                List.of(buttons.get(ADD_VISIT_DATE)) :
-                List.of(buttons.get(EDIT_VISIT_DATE), buttons.get(DELETE_VISIT_DATE));
+//        return routePoint.getStartDate() == null ?
+//                List.of(buttons.get(ADD_VISIT_DATE)) :
+//                List.of(buttons.get(EDIT_VISIT_DATE), buttons.get(DELETE_VISIT_DATE));
+        return null;
     }
 }

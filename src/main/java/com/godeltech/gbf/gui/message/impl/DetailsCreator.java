@@ -52,43 +52,45 @@ public class DetailsCreator {
     }
 
     String createRoutePointDetails(RoutePoint routePoint) {
-        if (routePoint.isEmpty()) return EMPTY;
-        StringBuilder routeBuilder = new StringBuilder();
-        City city = routePoint.getCity();
-        Country country = routePoint.getCountry();
-        LocalDate startDate = routePoint.getStartDate();
-        LocalDate endDate = routePoint.getEndDate();
-        String routePointHeader = switch (routePoint.getStatus()) {
-            case INITIAL -> lms.getLocaleMessage(DETAILS_INITIAL_POINT_HEADER_CODE);
-            case INTERMEDIATE -> {
-                String order = String.valueOf(routePoint.getOrderNumber());
-                yield lms.getLocaleMessage(DETAILS_INTERMEDIATE_POINT_HEADER_CODE,
-                        lms.getLocaleMessage(order));
-            }
-            case FINAL -> lms.getLocaleMessage(DETAILS_FINAL_POINT_HEADER_CODE);
-        };
-        routeBuilder.append(routePointHeader);
-        if (country != null) {
-            String geopoint;
-            String localCountry = lms.getLocaleMessage(country.getName());
-            if (city != null) {
-                String localCity = lms.getLocaleMessage(city.getName());
-                geopoint = lms.getLocaleMessage(DETAILS_GEOPOINT_CODE, localCountry, ", " + localCity);
-            }
-            else geopoint = lms.getLocaleMessage(DETAILS_GEOPOINT_CODE, localCountry, EMPTY);
-            routeBuilder.append(geopoint);
-        }
-        if (startDate != null) {
-            String formattedDate;
-            if (!startDate.equals(endDate)) {
-                formattedDate = dateAsRange(startDate, endDate);
-            } else {
-                formattedDate = shortFormatDate(startDate);
-            }
-            routeBuilder.append(lms.getLocaleMessage(DETAILS_VISIT_DATE_CODE, formattedDate));
-        }
-        return routeBuilder.toString();
+//        if (routePoint.isEmpty()) return EMPTY;
+//        StringBuilder routeBuilder = new StringBuilder();
+//        City city = routePoint.getCity();
+////        Country country = routePoint.getCountry();
+////        LocalDate startDate = routePoint.getStartDate();
+////        LocalDate endDate = routePoint.getEndDate();
+//        String routePointHeader = switch (routePoint.getStatus()) {
+//            case INITIAL -> lms.getLocaleMessage(DETAILS_INITIAL_POINT_HEADER_CODE);
+//            case INTERMEDIATE -> {
+//                String order = String.valueOf(routePoint.getOrderNumber());
+//                yield lms.getLocaleMessage(DETAILS_INTERMEDIATE_POINT_HEADER_CODE,
+//                        lms.getLocaleMessage(order));
+//            }
+//            case FINAL -> lms.getLocaleMessage(DETAILS_FINAL_POINT_HEADER_CODE);
+//        };
+//        routeBuilder.append(routePointHeader);
+//        if (country != null) {
+//            String geopoint;
+//            String localCountry = lms.getLocaleMessage(country.getName());
+//            if (city != null) {
+//                String localCity = lms.getLocaleMessage(city.getName());
+//                geopoint = lms.getLocaleMessage(DETAILS_GEOPOINT_CODE, localCountry, ", " + localCity);
+//            }
+//            else geopoint = lms.getLocaleMessage(DETAILS_GEOPOINT_CODE, localCountry, EMPTY);
+//            routeBuilder.append(geopoint);
+//        }
+//        if (startDate != null) {
+//            String formattedDate;
+//            if (!startDate.equals(endDate)) {
+//                formattedDate = dateAsRange(startDate, endDate);
+//            } else {
+//                formattedDate = shortFormatDate(startDate);
+//            }
+//            routeBuilder.append(lms.getLocaleMessage(DETAILS_VISIT_DATE_CODE, formattedDate));
+//        }
+//        return routeBuilder.toString();
+    return null;
     }
+
 
     String createCargoDetails(UserData userData) {
         StringBuilder cargoSummary = new StringBuilder();

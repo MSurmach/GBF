@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet id="2022-10-27-changes-filling-table-city" author="a.miachyn">
+        <!--        Belarus-->
+        <insert tableName="city">
+            <column name="name" value="Брест"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Витебск"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Гомель"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Гродно"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Могилев"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Минск"/>
+        </insert>
+        <!--        Poland-->
+        <insert tableName="city">
+            <column name="name" value="Белосток"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Гданьск"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Краков"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Лодзь"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Познань"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Варшава"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Вроцлав"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Бяла-Подляска"/>
+        </insert>
+        <!-- Bulgaria       -->
+        <insert tableName="city">
+            <column name="name" value="София"/>
+        </insert>
+        <!-- Georgia-->
+        <insert tableName="city">
+            <column name="name" value="Тбилиси"/>
+        </insert>
+        <!-- UAE       -->
+        <insert tableName="city">
+            <column name="name" value="Дубай"/>
+        </insert>
+        <!-- Ukraine      -->
+        <insert tableName="city">
+            <column name="name" value="Киев"/>
+        </insert>
+        <!-- England       -->
+        <insert tableName="city">
+            <column name="name" value="Лондон"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Манчестер"/>
+        </insert>
+        <!-- Lithuania-->
+        <insert tableName="city">
+            <column name="name" value="Вильнюс"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

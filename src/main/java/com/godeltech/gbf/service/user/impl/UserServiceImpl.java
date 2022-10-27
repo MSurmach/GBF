@@ -31,47 +31,50 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<TelegramUser> findTelegramUsersBySearchDataAndRole(TelegramUser searchData, Role role, int pageNumber) {
         long start = System.currentTimeMillis();
-        List<RoutePoint> searchRoutePoints = searchData.getRoutePoints();
+//        List<RoutePoint> searchRoutePoints = searchData.getRoutePoints();
         List<RoutePoint> availableRoutePoints =
                 routePointService.findRoutePointsByNeededRoutePointsAndByRoleAndNotEqualToTelegramId(
-                        searchRoutePoints,
+//                        searchRoutePoints,
+                        null,
                         role,
-                        searchData.getTelegramId());
+                        searchData.getId());
         if (availableRoutePoints.isEmpty()) return Page.empty();
-        List<TelegramUser> foundTelegramUsers = availableRoutePoints.stream().
-                map(RoutePoint::getTelegramUser).
-                collect(Collectors.toSet()).
-                stream().
-                filter(telegramUser -> checkRoutePointsOrder(searchRoutePoints, telegramUser.getRoutePoints())).
-                toList();
-        if (foundTelegramUsers.isEmpty()) return Page.empty();
-        List<Long> neededUserIds = foundTelegramUsers.stream().map(TelegramUser::getId).toList();
-        Specification<TelegramUser> searchSpecification = idInRange(neededUserIds);
-        if (role == Role.COURIER)
-            searchSpecification = searchSpecification.and(cargoSpecificationForCouriersSearch(searchData));
-        if (role == Role.CLIENT)
-            searchSpecification = searchSpecification.and(cargoSpecificationForClientsSearch(searchData));
-        Pageable pageable = PageRequest.of(pageNumber, 1);
-        Page<TelegramUser> all = telegramUserRepository.findAll(searchSpecification, pageable);
-        long end = System.currentTimeMillis();
-        System.out.println("Fetching user time : " + (end - start) + " ms");
-        return all;
+//        List<TelegramUser> foundTelegramUsers = availableRoutePoints.stream().
+//                map(RoutePoint::getTelegramUser).
+//                collect(Collectors.toSet()).
+//                stream().
+////                filter(telegramUser -> checkRoutePointsOrder(searchRoutePoints, telegramUser.getRoutePoints())).
+//                toList();
+//        if (foundTelegramUsers.isEmpty()) return Page.empty();
+//        List<Long> neededUserIds = foundTelegramUsers.stream().map(TelegramUser::getId).toList();
+//        Specification<TelegramUser> searchSpecification = idInRange(neededUserIds);
+//        if (role == Role.COURIER)
+//            searchSpecification = searchSpecification.and(cargoSpecificationForCouriersSearch(searchData));
+//        if (role == Role.CLIENT)
+//            searchSpecification = searchSpecification.and(cargoSpecificationForClientsSearch(searchData));
+//        Pageable pageable = PageRequest.of(pageNumber, 1);
+//        Page<TelegramUser> all = telegramUserRepository.findAll(searchSpecification, pageable);
+//        long end = System.currentTimeMillis();
+//        System.out.println("Fetching user time : " + (end - start) + " ms");
+//        return all;
+        return null;
     }
 
     @Override
     public Page<TelegramUser> findUsersByTelegramIdAndRole(Long telegramId, Role role, int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber, 1);
-        return telegramUserRepository.findUsersByTelegramIdAndRole(telegramId, role, pageable);
+//        return telegramUserRepository.findUsersByTelegramIdAndRole(telegramId, role, pageable);
+        return null;
     }
 
     @Override
     public void removeByExpiredAtBefore(LocalDate date) {
-        telegramUserRepository.removeByExpiredAtBefore(date);
+//        telegramUserRepository.removeByExpiredAtBefore(date);
     }
 
     @Override
     public void removeByChangedAtBefore(LocalDate date) {
-        telegramUserRepository.removeByChangedAtBefore(date);
+//        telegramUserRepository.removeByChangedAtBefore(date);
     }
 
     @Override
@@ -82,10 +85,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(UserData userData) {
         TelegramUser forSave = ModelUtils.telegramUser(userData);
-        switch (userData.getRole()) {
-            case REGISTRATIONS_VIEWER -> forSave.setRole(Role.COURIER);
-            case REQUESTS_VIEWER -> forSave.setRole(Role.CLIENT);
-        }
+//        switch (userData.getRole()) {
+//            case REGISTRATIONS_VIEWER -> forSave.setRole(Role.COURIER);
+//            case REQUESTS_VIEWER -> forSave.setRole(Role.CLIENT);
+//        }
         telegramUserRepository.save(forSave);
     }
 
@@ -103,11 +106,11 @@ public class UserServiceImpl implements UserService {
         for (RoutePoint pointFromMinRoute : minRoute) {
             for (var index = place; index < maxRoute.size(); index++) {
                 var pointFromMaxRoute = maxRoute.get(index);
-                if (pointFromMinRoute.isTheSameGeographical(pointFromMaxRoute)) {
-                    place = index;
-                    minRouteSize--;
-                    break;
-                }
+//                if (pointFromMinRoute.isTheSameGeographical(pointFromMaxRoute)) {
+//                    place = index;
+//                    minRouteSize--;
+//                    break;
+//                }
             }
         }
         return minRouteSize == 0;
@@ -120,20 +123,21 @@ public class UserServiceImpl implements UserService {
 
     private Specification<TelegramUser> cargoSpecificationForCouriersSearch(TelegramUser searchData) {
         Specification<TelegramUser> cargoSpecification = null;
-        boolean documentsExist = searchData.isDocumentsExist();
-        if (documentsExist) cargoSpecification = attach(cargoSpecification, documentsExist());
-        int packageSize = searchData.getPackageSize();
-        if (packageSize != 0)
-            cargoSpecification = attach(cargoSpecification, packageSizeIsGreaterThanOrEqualTo(packageSize));
-        int companionCount = searchData.getCompanionCount();
-        if (companionCount != 0)
-            cargoSpecification = attach(cargoSpecification, companionCountIsGreaterThanOrEqualTo(companionCount));
+//        boolean documentsExist = searchData.isDocumentsExist();
+//        if (documentsExist) cargoSpecification = attach(cargoSpecification, documentsExist());
+//        int packageSize = searchData.getPackageSize();
+//        if (packageSize != 0)
+//            cargoSpecification = attach(cargoSpecification, packageSizeIsGreaterThanOrEqualTo(packageSize));
+//        int companionCount = searchData.getCompanionCount();
+//        if (companionCount != 0)
+//            cargoSpecification = attach(cargoSpecification, companionCountIsGreaterThanOrEqualTo(companionCount));
         return cargoSpecification;
     }
 
     private Specification<TelegramUser> cargoSpecificationForClientsSearch(TelegramUser searchData) {
-        return documentsIsLessThanOrEquals(searchData.isDocumentsExist()).
-                or(packageSizeIsLessThanOrEqualTo(searchData.getPackageSize())).
-                or(companionCountIsLessThanOrEqualTo(searchData.getCompanionCount()));
+//        return documentsIsLessThanOrEquals(searchData.isDocumentsExist()).
+//                or(packageSizeIsLessThanOrEqualTo(searchData.getPackageSize())).
+//                or(companionCountIsLessThanOrEqualTo(searchData.getCompanionCount()));
+        return null;
     }
 }

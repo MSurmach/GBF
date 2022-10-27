@@ -37,11 +37,12 @@ public class DateMessageType implements MessageType {
     }
 
     private String buildInfoAboutDates(RoutePoint routePoint) {
-        LocalDate startDate = routePoint.getStartDate();
-        LocalDate endDate = routePoint.getEndDate();
-        if (startDate == null && endDate == null) return lms.getLocaleMessage(DATE_INFO_NOT_SELECTED_CODE);
-        return startDate.equals(endDate) ?
-                lms.getLocaleMessage(DATE_INFO_SELECTED_CODE, DateUtils.shortFormatDate(startDate)) :
-                lms.getLocaleMessage(DATE_INFO_SELECTED_CODE, DateUtils.dateAsRange(startDate, endDate));
+//        LocalDate startDate = routePoint.getStartDate();
+//        LocalDate endDate = routePoint.getEndDate();
+//        if (startDate == null && endDate == null) return lms.getLocaleMessage(DATE_INFO_NOT_SELECTED_CODE);
+//        return startDate.equals(endDate) ?
+//                lms.getLocaleMessage(DATE_INFO_SELECTED_CODE, DateUtils.shortFormatDate(startDate)) :
+//                lms.getLocaleMessage(DATE_INFO_SELECTED_CODE, DateUtils.dateAsRange(startDate, endDate));
+        return null;
     }
 }
