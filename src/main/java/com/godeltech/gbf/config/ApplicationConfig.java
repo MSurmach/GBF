@@ -1,7 +1,7 @@
 package com.godeltech.gbf.config;
 
-import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.GbfBot;
+import com.godeltech.gbf.LocalMessageSource;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -63,7 +63,7 @@ public class ApplicationConfig {
         ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();
         resourceBundleMessageSource.setDefaultLocale(Locale.UK);
         resourceBundleMessageSource.setDefaultEncoding("UTF-8");
-        resourceBundleMessageSource.setBasenames("message", "button", "country_city", "alerts");
+        resourceBundleMessageSource.setBasenames("message", "button", "country_city", "alerts", "delivery");
         return resourceBundleMessageSource;
     }
 }
