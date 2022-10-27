@@ -39,24 +39,25 @@ public class UserServiceImpl implements UserService {
                         role,
                         searchData.getId());
         if (availableRoutePoints.isEmpty()) return Page.empty();
-        List<TelegramUser> foundTelegramUsers = availableRoutePoints.stream().
-                map(RoutePoint::getTelegramUser).
-                collect(Collectors.toSet()).
-                stream().
-//                filter(telegramUser -> checkRoutePointsOrder(searchRoutePoints, telegramUser.getRoutePoints())).
-                toList();
-        if (foundTelegramUsers.isEmpty()) return Page.empty();
-        List<Long> neededUserIds = foundTelegramUsers.stream().map(TelegramUser::getId).toList();
-        Specification<TelegramUser> searchSpecification = idInRange(neededUserIds);
-        if (role == Role.COURIER)
-            searchSpecification = searchSpecification.and(cargoSpecificationForCouriersSearch(searchData));
-        if (role == Role.CLIENT)
-            searchSpecification = searchSpecification.and(cargoSpecificationForClientsSearch(searchData));
-        Pageable pageable = PageRequest.of(pageNumber, 1);
-        Page<TelegramUser> all = telegramUserRepository.findAll(searchSpecification, pageable);
-        long end = System.currentTimeMillis();
-        System.out.println("Fetching user time : " + (end - start) + " ms");
-        return all;
+//        List<TelegramUser> foundTelegramUsers = availableRoutePoints.stream().
+//                map(RoutePoint::getTelegramUser).
+//                collect(Collectors.toSet()).
+//                stream().
+////                filter(telegramUser -> checkRoutePointsOrder(searchRoutePoints, telegramUser.getRoutePoints())).
+//                toList();
+//        if (foundTelegramUsers.isEmpty()) return Page.empty();
+//        List<Long> neededUserIds = foundTelegramUsers.stream().map(TelegramUser::getId).toList();
+//        Specification<TelegramUser> searchSpecification = idInRange(neededUserIds);
+//        if (role == Role.COURIER)
+//            searchSpecification = searchSpecification.and(cargoSpecificationForCouriersSearch(searchData));
+//        if (role == Role.CLIENT)
+//            searchSpecification = searchSpecification.and(cargoSpecificationForClientsSearch(searchData));
+//        Pageable pageable = PageRequest.of(pageNumber, 1);
+//        Page<TelegramUser> all = telegramUserRepository.findAll(searchSpecification, pageable);
+//        long end = System.currentTimeMillis();
+//        System.out.println("Fetching user time : " + (end - start) + " ms");
+//        return all;
+        return null;
     }
 
     @Override
@@ -105,11 +106,11 @@ public class UserServiceImpl implements UserService {
         for (RoutePoint pointFromMinRoute : minRoute) {
             for (var index = place; index < maxRoute.size(); index++) {
                 var pointFromMaxRoute = maxRoute.get(index);
-                if (pointFromMinRoute.isTheSameGeographical(pointFromMaxRoute)) {
-                    place = index;
-                    minRouteSize--;
-                    break;
-                }
+//                if (pointFromMinRoute.isTheSameGeographical(pointFromMaxRoute)) {
+//                    place = index;
+//                    minRouteSize--;
+//                    break;
+//                }
             }
         }
         return minRouteSize == 0;

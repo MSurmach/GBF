@@ -32,14 +32,10 @@ public class Offer {
     @Column(nullable = false)
     private LocalDate endDate;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "offer_city",
-            joinColumns = @JoinColumn(name = "offer_id"),
-            inverseJoinColumns = @JoinColumn(name = "city_id")
-    )
+    @OneToMany(mappedBy = "offer", fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<City> cities;
+    private List<RoutePoint> routePoints;
+
 
     @Column
     private String comment;

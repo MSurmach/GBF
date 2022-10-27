@@ -32,7 +32,7 @@ public class RoutePointFormHandlerType implements HandlerType {
         return switch (clicked) {
             case ADD_COUNTRY, EDIT_COUNTRY -> COUNTRY;
             case ADD_CITY -> {
-                routePointValidator.checkCountryIsNull(tempRoutePoint.getCountry(), userData.getCallbackQueryId());
+//                routePointValidator.checkCountryIsNull(tempRoutePoint.getCountry(), userData.getCallbackQueryId());
                 yield CITY;
             }
             case EDIT_CITY -> CITY;
@@ -42,8 +42,8 @@ public class RoutePointFormHandlerType implements HandlerType {
                 yield userData.getStateHistory().peek();
             }
             case DELETE_VISIT_DATE -> {
-                tempRoutePoint.setStartDate(null);
-                tempRoutePoint.setEndDate(null);
+//                tempRoutePoint.setStartDate(null);
+//                tempRoutePoint.setEndDate(null);
                 yield userData.getStateHistory().peek();
             }
             case SAVE -> {

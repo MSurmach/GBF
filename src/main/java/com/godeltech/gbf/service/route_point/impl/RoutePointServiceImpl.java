@@ -39,31 +39,31 @@ public class RoutePointServiceImpl implements RoutePointService {
 
     private Specification<RoutePoint> buildCourierSearchSpecification(RoutePoint routePoint, Long telegramId) {
         Specification<RoutePoint> specification = roleAndNotEqualToTelegramId(COURIER, telegramId);
-        specification = specification.and(country(routePoint.getCountry()));
+//        specification = specification.and(country(routePoint.getCountry()));
         City city = routePoint.getCity();
         if (city != null) specification = specification.and(city(city));
-        LocalDate startDate = routePoint.getStartDate();
-        LocalDate endDate = routePoint.getEndDate();
-        if (startDate != null)
-            specification = specification.
-                    and(startDateAfter(startDate).
-                            or(startDateBefore(startDate))).
-                    and(endDateBefore(endDate).
-                            or(endDateAfter(endDate)));
+//        LocalDate startDate = routePoint.getStartDate();
+//        LocalDate endDate = routePoint.getEndDate();
+//        if (startDate != null)
+//            specification = specification.
+//                    and(startDateAfter(startDate).
+//                            or(startDateBefore(startDate))).
+//                    and(endDateBefore(endDate).
+//                            or(endDateAfter(endDate)));
         return specification;
     }
 
     private Specification<RoutePoint> buildClientSearchSpecification(RoutePoint routePoint, Long telegramId) {
-        LocalDate startDate = routePoint.getStartDate();
-        LocalDate endDate = routePoint.getEndDate();
+//        LocalDate startDate = routePoint.getStartDate();
+//        LocalDate endDate = routePoint.getEndDate();
         return roleAndNotEqualToTelegramId(CLIENT, telegramId).
-                and(country(routePoint.getCountry())).
+//                and(country(routePoint.getCountry())).
                 and(city(routePoint.getCity()).
-                        or(cityIsNull())).
-                and(((startDateAfter(startDate).
-                        or(startDateBefore(startDate))).
-                        and(endDateBefore(endDate).
-                                or(endDateAfter(endDate)))).
-                        or(startDateIsNull()));
+                        or(cityIsNull()));
+//                and(((startDateAfter(startDate).
+//                        or(startDateBefore(startDate))).
+//                        and(endDateBefore(endDate).
+//                                or(endDateAfter(endDate)))).
+//                        or(startDateIsNull()));
     }
 }

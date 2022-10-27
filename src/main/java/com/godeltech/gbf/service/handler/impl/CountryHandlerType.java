@@ -28,7 +28,7 @@ public class CountryHandlerType implements HandlerType {
         Country country = new Country(countryId, countryName);
         RoutePoint tempRoutePoint = userData.getTempRoutePoint();
         tempRoutePoint.setCity(null);
-        tempRoutePoint.setCountry(country);
+//        tempRoutePoint.setCountry(country);
         return ROUTE_POINT_FORM;
     }
 }

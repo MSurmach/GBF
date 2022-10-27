@@ -3,21 +3,25 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
       https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
-    <changeSet id="2022-10-27-changes-create-table-offer_city" author="a.miachyn">
+    <changeSet id="2022-10-27-changes-create-table-route_point" author="a.miachyn">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="offer_city"/>
+                <tableExists tableName="route_point"/>
             </not>
         </preConditions>
-        <createTable tableName="offer_city">
+        <createTable tableName="route_point">
             <column name="id" type="BIGSERIAL" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="offer_id" type="BIGSERIAL">
-                <constraints foreignKeyName="fk_offer_offer_city" references="offer(id)"/>
+            <column name="status" type="VARCHAR(30)"/>
+            <column name="city_id" type="INT">
+                <constraints foreignKeyName="fk_route_point_city" references="city(id)"/>
             </column>
-            <column name="city_id" type="SERIAL">
-                <constraints foreignKeyName="fk_route_offer_city" references="city(id)"/>
+            <column name="order_number" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="offer_id" type="BIGINT">
+                <constraints foreignKeyName="fk_route_point_offer" references="offer(id)"/>
             </column>
         </createTable>
     </changeSet>

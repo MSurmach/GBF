@@ -47,8 +47,8 @@ public class DateKeyboardType implements KeyboardType {
         addMonthYear(date, keyboard);
         addWeekDayRow(keyboard);
         addDayRows(date, keyboard);
-        if (userData.getTempRoutePoint().getStartDate() != null)
-            addDateControls(keyboard);
+//        if (userData.getTempRoutePoint().getStartDate() != null)
+//            addDateControls(keyboard);
         return new KeyboardMarkupAppender().
                 append(new InlineKeyboardMarkup(keyboard)).
                 append(backAndMenuMarkup(lms)).
