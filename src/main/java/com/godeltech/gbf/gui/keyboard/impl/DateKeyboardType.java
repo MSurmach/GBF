@@ -16,6 +16,7 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static com.godeltech.gbf.gui.button.CalendarBotButton.*;
 import static com.godeltech.gbf.utils.ButtonUtils.*;
@@ -27,6 +28,8 @@ import static com.godeltech.gbf.utils.KeyboardUtils.backAndMenuMarkup;
 @AllArgsConstructor
 public class DateKeyboardType implements KeyboardType {
     private LocalMessageSource lms;
+    public final static String START_DATE_MARK = "start.flag";
+    public final static String END_DATE_MARK = "end.flag";
 
     @Override
     public State getState() {
@@ -44,74 +47,94 @@ public class DateKeyboardType implements KeyboardType {
             date = LocalDate.now();
         }
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        addMonthYear(date, keyboard);
-        addWeekDayRow(keyboard);
-        addDayRows(date, keyboard);
-        if (userData.getTempRoutePoint().getStartDate() != null)
-            addDateControls(keyboard);
+        keyboard.add(yearRow(date));
+        keyboard.add(monthWithPaginationRow(date));
+        keyboard.add(daysOfWeekRow());
+        keyboard.addAll(calendarMarkup(date, userData));
+        if (userData.getStartDate() != null)
+            keyboard.add(confirmDateRow());
         return new KeyboardMarkupAppender().
                 append(new InlineKeyboardMarkup(keyboard)).
                 append(backAndMenuMarkup(lms)).
                 result();
     }
 
-    private void addDateControls(List<List<InlineKeyboardButton>> keyboard) {
-        keyboard.add(List.of(
-                createLocalButton(CLEAR_DATE_SELECT, lms),
-                createLocalButton(CONFIRM_DATE, lms)));
+    private List<InlineKeyboardButton> yearRow(LocalDate date) {
+        var yearButton = createButtonWithData(formatYear(date), CHANGE_YEAR, date.toString());
+        return List.of(yearButton);
     }
 
-    private void addDayRows(LocalDate localDate, List<List<InlineKeyboardButton>> keyboard) {
+
+    private List<InlineKeyboardButton> monthWithPaginationRow(LocalDate date) {
+        var prevMonthButton = createLocalButtonWithData(PREVIOUS, date.minusMonths(1).toString(), lms);
+        var nextMonthButton = createLocalButtonWithData(NEXT, date.plusMonths(1).toString(), lms);
+        String formattedMonth = formatMonth(date, lms.getLocale());
+        String monthLabel = formattedMonth.substring(0, 1).toUpperCase() + formattedMonth.substring(1);
+        var monthButton = createButtonWithData(monthLabel, CHANGE_MONTH, date.toString());
+        return List.of(prevMonthButton, monthButton, nextMonthButton);
+    }
+
+    private List<InlineKeyboardButton> daysOfWeekRow() {
+        final String dayOfWeekCallback = "dayOfWeek";
+        List<InlineKeyboardButton> daysOfWeekRow = new ArrayList<>();
+        Arrays.stream(DayOfWeek.values()).
+                map(day -> day.getDisplayName(TextStyle.SHORT, lms.getLocale())).
+                forEach(day -> daysOfWeekRow.add(createButtonWithData(day, IGNORE, dayOfWeekCallback)));
+        return daysOfWeekRow;
+    }
+
+    private List<List<InlineKeyboardButton>> calendarMarkup(LocalDate localDate, UserData userData) {
+        List<List<InlineKeyboardButton>> calendarMarkup = new ArrayList<>();
         LocalDate firstDayDate = LocalDate.of(localDate.getYear(), localDate.getMonth(), 1);
         int shift = firstDayDate.getDayOfWeek().getValue() - 1;
         int columnCount = 7;
         int lengthOfMonth = localDate.lengthOfMonth();
         int numOfRows = (int) Math.ceil(((double) shift + lengthOfMonth) / columnCount);
         for (int index = 0; index < numOfRows; index++) {
-            keyboard.add(buildDayRow(firstDayDate, shift, columnCount));
+            calendarMarkup.add(buildDaysRow(firstDayDate, shift, columnCount, userData));
             firstDayDate = firstDayDate.plusDays(columnCount - shift);
             shift = 0;
         }
+        return calendarMarkup;
+
     }
 
-    private void addMonthYear(LocalDate date, List<List<InlineKeyboardButton>> keyboard) {
-        var yearButton = createButtonWithData(formatYear(date), CHANGE_YEAR, date.toString());
-        var prevMonthButton = createLocalButtonWithData(PREVIOUS, date.minusMonths(1).toString(), lms);
-        var nextMonthButton = createLocalButtonWithData(NEXT, date.plusMonths(1).toString(), lms);
-        String formattedMonth = formatMonth(date, lms.getLocale());
-        String monthLabel = formattedMonth.substring(0, 1).toUpperCase() + formattedMonth.substring(1);
-        var monthButton = createButtonWithData(monthLabel, CHANGE_MONTH, date.toString());
-        keyboard.add(List.of(yearButton));
-        keyboard.add(List.of(prevMonthButton, monthButton, nextMonthButton));
-    }
-
-    private void addWeekDayRow(List<List<InlineKeyboardButton>> keyboard) {
-        final String dayOfWeekCallback = "dayOfWeek";
-        List<InlineKeyboardButton> weekDayRow = new ArrayList<>();
-        Arrays.stream(DayOfWeek.values()).
-                map(day -> day.getDisplayName(TextStyle.SHORT, lms.getLocale())).
-                forEach(day -> weekDayRow.add(createButtonWithData(day, IGNORE, dayOfWeekCallback)));
-        keyboard.add(weekDayRow);
-    }
-
-    private List<InlineKeyboardButton> buildDayRow(LocalDate date, int shift, int columnCount) {
+    private List<InlineKeyboardButton> buildDaysRow(LocalDate date, int shift, int columnCount, UserData userData) {
         final String emptyLabel = "  ";
         final String emptyDayCallback = "emptyDay";
         List<InlineKeyboardButton> row = new ArrayList<>();
         int day = date.getDayOfMonth();
-        LocalDate callbackDate = date;
         var serviceButton = createButtonWithData(emptyLabel, IGNORE, emptyDayCallback);
         for (int index = 0; index < shift; index++) {
             row.add(serviceButton);
         }
         for (int index = shift; index < columnCount; index++) {
             if (day <= date.lengthOfMonth()) {
-                row.add(createButtonWithData(Integer.toString(day++), SELECT_DAY, callbackDate.toString()));
-                callbackDate = callbackDate.plusDays(1);
+                var dayButton = (Objects.equals(date, userData.getStartDate()) || Objects.equals(date, userData.getEndDate())) ?
+                        markButtonAsExisted(userData, date) :
+                        createButtonWithData(Integer.toString(day++), SELECT_DAY, date.toString());
+                row.add(dayButton);
+                date = date.plusDays(1);
             } else {
                 row.add(serviceButton);
             }
         }
         return row;
+    }
+
+    private List<InlineKeyboardButton> confirmDateRow() {
+        return List.of(createLocalButton(CONFIRM_DATE, lms));
+    }
+
+    private InlineKeyboardButton markButtonAsExisted(UserData userData, LocalDate date) {
+        LocalDate startDate = userData.getStartDate();
+        LocalDate endDate = userData.getEndDate();
+        if (Objects.equals(startDate, endDate)) {
+            String label = lms.getLocaleMessage(START_DATE_MARK) + lms.getLocaleMessage(END_DATE_MARK);
+            return createButtonWithData(label, SELECT_DAY, date.toString());
+        }
+        if (Objects.equals(startDate, date))
+            return createLocalButtonWithData(START_DATE_MARK, SELECT_DAY, date.toString(), lms);
+        return createLocalButtonWithData(END_DATE_MARK, SELECT_DAY, date.toString(), lms);
     }
 }

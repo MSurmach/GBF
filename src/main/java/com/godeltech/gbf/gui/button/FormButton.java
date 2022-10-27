@@ -1,11 +1,25 @@
 package com.godeltech.gbf.gui.button;
 
-public enum FormButton implements BotButton {
-    ADD_ROUTE, EDIT_ROUTE,
+import com.godeltech.gbf.model.State;
+import lombok.Getter;
 
-    ADD_DATES, EDIT_DATES,
-    ADD_SEATS, EDIT_SEATS,
-    ADD_DELIVERY, EDIT_DELIVERY,
-    ADD_COMMENT, EDIT_COMMENT,
-    FORM_REGISTER, FORM_SEARCH, FORM_EDIT_CONFIRM
+import static com.godeltech.gbf.model.State.*;
+
+public enum FormButton implements BotButton {
+    ADD_ROUTE(CITY), EDIT_ROUTE(CITY),
+    ADD_DATES(DATE), EDIT_DATES(DATE),
+    ADD_SEATS(SEATS), EDIT_SEATS(SEATS),
+    ADD_DELIVERY(DELIVERY), EDIT_DELIVERY(DELIVERY),
+    ADD_COMMENT(COMMENT), EDIT_COMMENT(COMMENT),
+    FORM_CONFIRM_AS_COURIER(SUCCESS_REGISTRATION),
+    FORM_CONFIRM_AS_CLIENT(COURIERS_LIST_RESULT),
+    FORM_CONFIRM_AS_REGISTRATION_VIEWER(REGISTRATIONS),
+    FORM_CONFIRM_AS_REQUEST_VIEWER(REQUESTS);
+
+    @Getter
+    private final State nextState;
+
+    FormButton(State nextState) {
+        this.nextState = nextState;
+    }
 }

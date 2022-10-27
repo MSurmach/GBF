@@ -18,7 +18,7 @@ public class CargoMenuHandlerType implements HandlerType {
 
     @Override
     public State getState() {
-        return CARGO_MENU;
+        return DELIVERY;
     }
 
     @Override
@@ -41,12 +41,12 @@ public class CargoMenuHandlerType implements HandlerType {
             }
             case SELECT_PACKAGE, EDIT_PACKAGE -> CARGO_PACKAGE;
             case CANCEL_PACKAGE -> {
-                userData.setPackageSize(0);
+                userData.setDeliverySize(0);
                 yield currentState;
             }
             case SELECT_PEOPLE, EDIT_PEOPLE -> CARGO_PEOPLE;
             case CANCEL_PEOPLE -> {
-                userData.setCompanionCount(0);
+                userData.setSeats(0);
                 yield currentState;
             }
         };

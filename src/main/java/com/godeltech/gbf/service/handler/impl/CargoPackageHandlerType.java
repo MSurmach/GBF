@@ -5,7 +5,7 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.HandlerType;
 import org.springframework.stereotype.Service;
 
-import static com.godeltech.gbf.model.State.CARGO_MENU;
+import static com.godeltech.gbf.model.State.DELIVERY;
 
 @Service
 public class CargoPackageHandlerType implements HandlerType {
@@ -18,7 +18,7 @@ public class CargoPackageHandlerType implements HandlerType {
     @Override
     public State handle(UserData userData) {
         String callback = userData.getCallbackHistory().peek();
-        userData.setPackageSize(Integer.parseInt(callback));
-        return CARGO_MENU;
+        userData.setDeliverySize(Integer.parseInt(callback));
+        return DELIVERY;
     }
 }

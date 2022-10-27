@@ -88,9 +88,10 @@ public class FormKeyboardType implements KeyboardType {
 
     private List<InlineKeyboardButton> confirmButton(Role role) {
         return switch (role) {
-            case COURIER -> List.of(buttons.get(FORM_REGISTER));
-            case CLIENT -> List.of(buttons.get(FORM_SEARCH));
-            case REGISTRATIONS_VIEWER, REQUESTS_VIEWER -> List.of(buttons.get(FORM_EDIT_CONFIRM));
+            case COURIER -> List.of(buttons.get(FORM_CONFIRM_AS_COURIER));
+            case CLIENT -> List.of(buttons.get(FORM_CONFIRM_AS_CLIENT));
+            case REGISTRATIONS_VIEWER -> List.of(buttons.get(FORM_CONFIRM_AS_REGISTRATION_VIEWER));
+            case REQUESTS_VIEWER -> List.of(buttons.get(FORM_CONFIRM_AS_REQUEST_VIEWER));
         };
     }
 }

@@ -17,8 +17,8 @@ public class ModelUtils {
                 telegramId(userData.getTelegramId()).
                 username(userData.getUsername()).
                 documentsExist(userData.isDocumentsExist()).
-                packageSize(userData.getPackageSize()).
-                companionCount(userData.getCompanionCount()).
+                packageSize(userData.getDeliverySize()).
+                companionCount(userData.getSeats()).
                 comment(userData.getComment()).
                 routePoints(new LinkedList<>()).
                 role(userData.getRole()).
@@ -32,8 +32,8 @@ public class ModelUtils {
     public static void resetUserData(UserData userData) {
         userData.setId(null);
         userData.setDocumentsExist(false);
-        userData.setPackageSize(0);
-        userData.setCompanionCount(0);
+        userData.setDeliverySize(0);
+        userData.setSeats(0);
         userData.setComment(null);
         userData.setRoutePoints(new LinkedList<>());
         userData.setTempRoutePoint(null);
@@ -66,8 +66,8 @@ public class ModelUtils {
         to.setTelegramId(from.getTelegramId());
         to.setUsername(from.getUsername());
         to.setDocumentsExist(from.isDocumentsExist());
-        to.setPackageSize(from.getPackageSize());
-        to.setCompanionCount(from.getCompanionCount());
+        to.setDeliverySize(from.getPackageSize());
+        to.setSeats(from.getCompanionCount());
         to.setComment(from.getComment());
         to.setRoutePoints(new LinkedList<>(from.getRoutePoints()));
         to.setRole(from.getRole());

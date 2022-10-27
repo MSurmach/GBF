@@ -21,7 +21,7 @@ public class CargoMenuMessageType implements MessageType {
 
     @Override
     public State getState() {
-        return State.CARGO_MENU;
+        return State.DELIVERY;
     }
 
     @Override
