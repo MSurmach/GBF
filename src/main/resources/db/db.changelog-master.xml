@@ -6,4 +6,6 @@
     <include file="classpath:db/changelog/v.0.1/2022-10-27-changes-create-table-telegram_user.xml"/>
     <include file="classpath:db/changelog/v.0.2/2022-10-27-changes-create-table-city.xml"/>
     <include file="classpath:db/changelog/v.0.2/2022-10-27-changes-filling-table-city.xml"/>
+    <include file="classpath:db/changelog/v.0.3/2022-10-27-changes-create-table-offer.xml"/>
+    <include file="classpath:db/changelog/v.0.3/2022-10-27-changes-create-table-offer_city.xml"/>
 </databaseChangeLog>
