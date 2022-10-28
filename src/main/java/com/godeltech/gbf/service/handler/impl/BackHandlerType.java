@@ -32,8 +32,6 @@ public class BackHandlerType implements HandlerType {
         stateAndBackStateMap.put(CITY, FORM);
         stateAndBackStateMap.put(YEAR, DATE);
         stateAndBackStateMap.put(MONTH, DATE);
-        stateAndBackStateMap.put(CARGO_PACKAGE, DELIVERY);
-        stateAndBackStateMap.put(CARGO_PEOPLE, DELIVERY);
         stateAndBackStateMap.put(COURIERS_LIST_RESULT, REQUESTS);
         stateAndBackStateMap.put(CLIENTS_LIST_RESULT, REGISTRATIONS);
     }

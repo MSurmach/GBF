@@ -15,6 +15,6 @@ public class CargoValidator {
     public void checkIfCargoIsEmpty(UserData userData) {
         String alertMessage = lms.getLocaleMessage(ALERT_CARGO_EMPTY_CODE);
         String callbackQueryId = userData.getCallbackQueryId();
-        if (userData.isCargoEmpty()) throw new GbfException(callbackQueryId, alertMessage);
+//        if (userData.isCargoEmpty()) throw new GbfException(callbackQueryId, alertMessage);
     }
 }

@@ -86,7 +86,7 @@ public class MessageInterceptor implements Interceptor {
         UserData cached = UserDataCache.get(telegramUserId);
         if (cached == null) throw new InsufficientInputException();
         State currentState = cached.getStateHistory().peek();
-        if (currentState == CARGO_PEOPLE || currentState == COMMENT) {
+        if (currentState == SEATS || currentState == COMMENT) {
             String text = update.getMessage().getText();
             cached.getCallbackHistory().push(text);
             HandlerType handlerType = handlerFactory.get(currentState);

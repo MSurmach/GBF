@@ -98,10 +98,6 @@ public class DetailsCreator {
             case COURIER, REGISTRATIONS_VIEWER -> lms.getLocaleMessage(DETAILS_COURIER_CARGO_CODE);
             case CLIENT, REQUESTS_VIEWER -> lms.getLocaleMessage(DETAILS_CLIENT_CARGO_CODE);
         };
-        if (!userData.isCargoEmpty())
-            cargoSummary.append(cargoHeader);
-        if (userData.isDocumentsExist())
-            cargoSummary.append(lms.getLocaleMessage(DETAILS_CARGO_DOCUMENTS_SELECTED_CODE));
         if (userData.getDeliverySize() != 0)
             cargoSummary.append(lms.getLocaleMessage(
                     DETAILS_CARGO_PACKAGE_SELECTED_CODE,

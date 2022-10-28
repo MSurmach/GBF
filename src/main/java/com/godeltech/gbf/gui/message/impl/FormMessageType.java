@@ -51,7 +51,7 @@ public class FormMessageType implements MessageType {
     }
 
     private String header(UserData userData) {
-        if (userData.isEmpty()) return lms.getLocaleMessage(DETAILS_HEADER_EMPTY_CODE);
+//        if (userData.isEmpty()) return lms.getLocaleMessage(DETAILS_HEADER_EMPTY_CODE);
         return switch (userData.getRole()) {
             case COURIER, CLIENT -> lms.getLocaleMessage(DETAILS_HEADER_FULL_CODE);
             case REGISTRATIONS_VIEWER -> lms.getLocaleMessage(REGISTRATION_DATA_ID, userData.getId().toString());

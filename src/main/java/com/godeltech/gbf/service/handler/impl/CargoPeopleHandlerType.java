@@ -12,7 +12,7 @@ public class CargoPeopleHandlerType implements HandlerType {
 
     @Override
     public State getState() {
-        return State.CARGO_PEOPLE;
+        return State.SEATS;
     }
 
     @Override

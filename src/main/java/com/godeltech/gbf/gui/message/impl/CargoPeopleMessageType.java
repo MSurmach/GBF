@@ -18,7 +18,7 @@ public class CargoPeopleMessageType implements MessageType {
 
     @Override
     public State getState() {
-        return State.CARGO_PEOPLE;
+        return State.SEATS;
     }
 
     @Override

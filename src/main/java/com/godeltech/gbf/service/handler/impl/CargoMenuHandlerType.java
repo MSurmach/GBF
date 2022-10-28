@@ -26,29 +26,30 @@ public class CargoMenuHandlerType implements HandlerType {
         String callback = userData.getCallbackHistory().peek();
         State currentState = userData.getStateHistory().peek();
         var clickedButton = CargoBotButton.valueOf(callback);
-        return switch (clickedButton) {
-            case CONFIRM_CARGO -> {
-                cargoValidator.checkIfCargoIsEmpty(userData);
-                yield FORM;
-            }
-            case SELECT_DOCUMENTS -> {
-                userData.setDocumentsExist(true);
-                yield currentState;
-            }
-            case CANCEL_DOCUMENTS -> {
-                userData.setDocumentsExist(false);
-                yield currentState;
-            }
-            case SELECT_PACKAGE, EDIT_PACKAGE -> CARGO_PACKAGE;
-            case CANCEL_PACKAGE -> {
-                userData.setDeliverySize(0);
-                yield currentState;
-            }
-            case SELECT_PEOPLE, EDIT_PEOPLE -> CARGO_PEOPLE;
-            case CANCEL_PEOPLE -> {
-                userData.setSeats(0);
-                yield currentState;
-            }
-        };
+        return null;
+//        return switch (clickedButton) {
+//            case CONFIRM_CARGO -> {
+//                cargoValidator.checkIfCargoIsEmpty(userData);
+//                yield FORM;
+//            }
+//            case SELECT_DOCUMENTS -> {
+//                userData.setDocumentsExist(true);
+//                yield currentState;
+//            }
+//            case CANCEL_DOCUMENTS -> {
+//                userData.setDocumentsExist(false);
+//                yield currentState;
+//            }
+//            case SELECT_PACKAGE, EDIT_PACKAGE -> CARGO_PACKAGE;
+//            case CANCEL_PACKAGE -> {
+//                userData.setDeliverySize(0);
+//                yield currentState;
+//            }
+//            case SELECT_PEOPLE, EDIT_PEOPLE -> CARGO_PEOPLE;
+//            case CANCEL_PEOPLE -> {
+//                userData.setSeats(0);
+//                yield currentState;
+//            }
+//        };
     }
 }

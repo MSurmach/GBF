@@ -12,7 +12,7 @@ public class CargoPackageHandlerType implements HandlerType {
 
     @Override
     public State getState() {
-        return State.CARGO_PACKAGE;
+        return DELIVERY;
     }
 
     @Override

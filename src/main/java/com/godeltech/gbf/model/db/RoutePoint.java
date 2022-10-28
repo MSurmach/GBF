@@ -29,8 +29,11 @@ public class RoutePoint {
     private int orderNumber;
 
     @ManyToOne
-    @JoinColumn(name = "offer_id",nullable = false)
+    @JoinColumn(name = "offer_id", nullable = false)
     private Offer offer;
 
-
+    public RoutePoint(Status status, City city) {
+        this.status = status;
+        this.city = city;
+    }
 }

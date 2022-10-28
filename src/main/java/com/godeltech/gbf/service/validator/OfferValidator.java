@@ -19,12 +19,12 @@ public class OfferValidator {
     public final static String ALERT_DATES_EMPTY_CODE = "alert.dates.empty";
 
     public void validateOfferBeforeSave(UserData userData) {
-        LinkedList<RoutePoint> routePoints = userData.getRoutePoints();
-        String callbackQueryId = userData.getCallbackQueryId();
-        checkIfRoutePointsAreEmpty(routePoints, callbackQueryId).
-                checkIfInitialRoutePointExists(routePoints, callbackQueryId).
-                checkIfFinalRoutePointExists(routePoints, callbackQueryId).
-                checkIfCargoIsNotEmpty(userData, callbackQueryId);
+//        LinkedList<RoutePoint> routePoints = userData.getRoutePoints();
+//        String callbackQueryId = userData.getCallbackQueryId();
+//        checkIfRoutePointsAreEmpty(routePoints, callbackQueryId).
+//                checkIfInitialRoutePointExists(routePoints, callbackQueryId).
+//                checkIfFinalRoutePointExists(routePoints, callbackQueryId).
+//                checkIfCargoIsNotEmpty(userData, callbackQueryId);
     }
 
     public OfferValidator checkIfRoutePointsAreEmpty(UserData userData) {
@@ -63,9 +63,9 @@ public class OfferValidator {
 //    }
 
     public void checkIfCargoIsNotEmpty(UserData userData, String callbackQueryId) {
-        if (userData.isCargoEmpty()) {
-            String alertMessage = lms.getLocaleMessage(ALERT_CARGO_EMPTY_CODE);
-            throw new GbfException(callbackQueryId, alertMessage);
-        }
+//        if (userData.isCargoEmpty()) {
+//            String alertMessage = lms.getLocaleMessage(ALERT_CARGO_EMPTY_CODE);
+//            throw new GbfException(callbackQueryId, alertMessage);
+//        }
     }
 }

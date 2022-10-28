@@ -18,7 +18,7 @@ public class CargoPackageMessageType implements MessageType {
 
     @Override
     public State getState() {
-        return State.CARGO_PACKAGE;
+        return State.DELIVERY;
     }
 
     @Override
