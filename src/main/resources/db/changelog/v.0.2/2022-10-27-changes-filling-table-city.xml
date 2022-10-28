@@ -6,74 +6,74 @@
     <changeSet id="2022-10-27-changes-filling-table-city" author="a.miachyn">
         <!--        Belarus-->
         <insert tableName="city">
-            <column name="name" value="Брест"/>
+            <column name="name" value="Brest"/>
         </insert>
         <insert tableName="city">
-            <column name="name" value="Витебск"/>
+            <column name="name" value="Vitebsk"/>
         </insert>
         <insert tableName="city">
-            <column name="name" value="Гомель"/>
+            <column name="name" value="Gomel"/>
         </insert>
         <insert tableName="city">
-            <column name="name" value="Гродно"/>
+            <column name="name" value="Grodno"/>
         </insert>
         <insert tableName="city">
-            <column name="name" value="Могилев"/>
+            <column name="name" value="Mogilev"/>
         </insert>
         <insert tableName="city">
-            <column name="name" value="Минск"/>
+            <column name="name" value="Minsk"/>
         </insert>
         <!--        Poland-->
         <insert tableName="city">
-            <column name="name" value="Белосток"/>
+            <column name="name" value="Bialystok"/>
         </insert>
         <insert tableName="city">
-            <column name="name" value="Гданьск"/>
+            <column name="name" value="Gdansk"/>
         </insert>
         <insert tableName="city">
-            <column name="name" value="Краков"/>
+            <column name="name" value="Krakow"/>
         </insert>
         <insert tableName="city">
-            <column name="name" value="Лодзь"/>
+            <column name="name" value="Lodz"/>
         </insert>
         <insert tableName="city">
-            <column name="name" value="Познань"/>
+            <column name="name" value="Poznan"/>
         </insert>
         <insert tableName="city">
-            <column name="name" value="Варшава"/>
+            <column name="name" value="Warsaw"/>
         </insert>
         <insert tableName="city">
-            <column name="name" value="Вроцлав"/>
+            <column name="name" value="Wroclaw"/>
         </insert>
         <insert tableName="city">
-            <column name="name" value="Бяла-Подляска"/>
+            <column name="name" value="Biala-Podlaska"/>
         </insert>
         <!-- Bulgaria       -->
         <insert tableName="city">
-            <column name="name" value="София"/>
+            <column name="name" value="Sofia"/>
         </insert>
         <!-- Georgia-->
         <insert tableName="city">
-            <column name="name" value="Тбилиси"/>
+            <column name="name" value="Tbilisi"/>
         </insert>
         <!-- UAE       -->
         <insert tableName="city">
-            <column name="name" value="Дубай"/>
+            <column name="name" value="Dubai"/>
         </insert>
         <!-- Ukraine      -->
         <insert tableName="city">
-            <column name="name" value="Киев"/>
+            <column name="name" value="Kyiv"/>
         </insert>
         <!-- England       -->
         <insert tableName="city">
-            <column name="name" value="Лондон"/>
+            <column name="name" value="London"/>
         </insert>
         <insert tableName="city">
-            <column name="name" value="Манчестер"/>
+            <column name="name" value="Manchester"/>
         </insert>
         <!-- Lithuania-->
         <insert tableName="city">
-            <column name="name" value="Вильнюс"/>
+            <column name="name" value="Vilnius"/>
         </insert>
     </changeSet>
 </databaseChangeLog>
