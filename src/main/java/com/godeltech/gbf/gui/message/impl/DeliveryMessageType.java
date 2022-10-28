@@ -7,12 +7,12 @@ import com.godeltech.gbf.model.UserData;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CargoPackageMessageType implements MessageType {
+public class DeliveryMessageType implements MessageType {
 
-    public final static String CARGO_PACKAGE_CODE = "cargo.package";
+    public final static String CARGO_PACKAGE_CODE = "delivery.package";
     private final LocalMessageSource localMessageSource;
 
-    public CargoPackageMessageType(LocalMessageSource localMessageSource) {
+    public DeliveryMessageType(LocalMessageSource localMessageSource) {
         this.localMessageSource = localMessageSource;
     }
 

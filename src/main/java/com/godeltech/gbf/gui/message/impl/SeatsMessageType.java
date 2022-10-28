@@ -10,10 +10,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public class CargoPeopleMessageType implements MessageType {
+public class SeatsMessageType implements MessageType {
 
-    private final static String CARGO_PEOPLE_COURIER_CODE = "cargo.people.courier";
-    private final static String CARGO_PEOPLE_CLIENT_CODE = "cargo.people.client";
+    private final static String SEATS_COURIER_CODE = "seats.courier";
+    private final static String SEATS_CLIENT_CODE = "seats.client";
+    private final static String SEATS_INFO_CODE = "seats.info";
     private final LocalMessageSource lms;
 
     @Override
@@ -23,8 +24,10 @@ public class CargoPeopleMessageType implements MessageType {
 
     @Override
     public String getMessage(UserData userData) {
-        return userData.getRole() == Role.COURIER ?
-                lms.getLocaleMessage(CARGO_PEOPLE_COURIER_CODE) :
-                lms.getLocaleMessage(CARGO_PEOPLE_CLIENT_CODE);
+        String info = lms.getLocaleMessage(SEATS_INFO_CODE);
+        String roleQuestion = userData.getRole() == Role.COURIER ?
+                lms.getLocaleMessage(SEATS_COURIER_CODE) :
+                lms.getLocaleMessage(SEATS_CLIENT_CODE);
+        return info + roleQuestion;
     }
 }
