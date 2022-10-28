@@ -43,7 +43,7 @@ public class FormKeyboardType implements KeyboardType {
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(routeButton(userData));
-        if (Objects.isNull(userData.getStartDate()))
+        if (Objects.isNull(userData.getTempStartDate()))
             keyboard.add(datesButton(userData));
         keyboard.add(deliveryButton(userData));
         keyboard.add(seatsButton(userData));
@@ -56,14 +56,14 @@ public class FormKeyboardType implements KeyboardType {
     }
 
     private List<InlineKeyboardButton> routeButton(UserData userData) {
-        var cityIds = userData.getCityIds();
-        return cityIds.isEmpty() ?
+        var route = userData.getRoute();
+        return route.isEmpty() ?
                 List.of(buttons.get(ADD_ROUTE)) :
                 List.of(buttons.get(EDIT_ROUTE));
     }
 
     private List<InlineKeyboardButton> datesButton(UserData userData) {
-        return userData.getStartDate() == null ?
+        return userData.getTempStartDate() == null ?
                 List.of(buttons.get(ADD_DATES)) :
                 List.of(buttons.get(EDIT_DATES));
     }

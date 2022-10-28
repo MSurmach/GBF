@@ -18,27 +18,27 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.godeltech.gbf.gui.button.CityButton.SELECT_CITY;
+import static com.godeltech.gbf.gui.button.RouteButton.SELECT_CITY;
 import static com.godeltech.gbf.utils.ButtonUtils.createLocalButtonWithData;
 import static com.godeltech.gbf.utils.KeyboardUtils.backAndMenuMarkup;
 import static com.godeltech.gbf.utils.KeyboardUtils.confirmMarkup;
 
 @Component
 @AllArgsConstructor
-public class CityKeyboardType implements KeyboardType {
+public class RouteKeyboardType implements KeyboardType {
 
     private LocalMessageSource lms;
     private CityService cityService;
 
     @Override
     public State getState() {
-        return State.CITY;
+        return State.ROUTE;
     }
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         List<City> allCities = cityService.findAll();
-        LinkedList<RoutePoint> userRoutePoints = userData.getRoutePoints();
+        LinkedList<RoutePoint> userRoutePoints = userData.getTempRoute();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         for (var index = 0; index < allCities.size(); ) {
             var columnCount = 3;

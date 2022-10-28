@@ -28,7 +28,7 @@ public class OfferValidator {
     }
 
     public OfferValidator checkIfRoutePointsAreEmpty(UserData userData) {
-        LinkedList<RoutePoint> routePoints = userData.getRoutePoints();
+        LinkedList<RoutePoint> routePoints = userData.getTempRoute();
         if (routePoints.isEmpty()) {
             String alertMessage = lms.getLocaleMessage(ALERT_ROUTE_EMPTY_CODE);
             throw new GbfException(userData.getCallbackQueryId(), alertMessage);
@@ -37,7 +37,7 @@ public class OfferValidator {
     }
 
     public OfferValidator checkIfDatesAreEmpty(UserData userData) {
-        if (userData.getStartDate() == null) {
+        if (userData.getTempStartDate() == null) {
             String alertMessage = lms.getLocaleMessage(ALERT_DATES_EMPTY_CODE);
             throw new GbfException(userData.getCallbackQueryId(), alertMessage);
         }

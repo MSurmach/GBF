@@ -32,8 +32,12 @@ public class RoutePoint {
     @JoinColumn(name = "offer_id", nullable = false)
     private Offer offer;
 
-    public RoutePoint(Status status, City city) {
-        this.status = status;
+    public RoutePoint(City city) {
         this.city = city;
+    }
+
+    public RoutePoint(Status status, City city) {
+        this.city = city;
+        this.status = status;
     }
 }

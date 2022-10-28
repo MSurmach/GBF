@@ -6,7 +6,7 @@ import lombok.Getter;
 import static com.godeltech.gbf.model.State.*;
 
 public enum FormButton implements BotButton {
-    ADD_ROUTE(CITY), EDIT_ROUTE(CITY),
+    ADD_ROUTE(ROUTE), EDIT_ROUTE(ROUTE),
     ADD_DATES(DATE), EDIT_DATES(DATE),
     ADD_SEATS(SEATS), EDIT_SEATS(SEATS),
     ADD_DELIVERY(DELIVERY), EDIT_DELIVERY(DELIVERY),

@@ -1,5 +1,5 @@
 package com.godeltech.gbf.gui.button;
 
-public enum CityButton implements BotButton {
+public enum RouteButton implements BotButton {
     SELECT_CITY, CONFIRM_ROUTE
 }

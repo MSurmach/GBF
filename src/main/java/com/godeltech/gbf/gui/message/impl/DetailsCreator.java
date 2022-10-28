@@ -3,17 +3,11 @@ package com.godeltech.gbf.gui.message.impl;
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.CargoSize;
-import com.godeltech.gbf.model.db.City;
-import com.godeltech.gbf.model.db.Country;
 import com.godeltech.gbf.model.db.RoutePoint;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
-
-import static com.godeltech.gbf.utils.DateUtils.dateAsRange;
-import static com.godeltech.gbf.utils.DateUtils.shortFormatDate;
 
 @Service
 @AllArgsConstructor
@@ -35,7 +29,7 @@ public class DetailsCreator {
     private LocalMessageSource lms;
 
     String createAllDetails(UserData userData) {
-        return createRouteDetails(userData.getRoutePoints()) +
+        return createRouteDetails(userData.getTempRoute()) +
                 createCargoDetails(userData) +
                 createCommentDetails(userData.getComment());
     }

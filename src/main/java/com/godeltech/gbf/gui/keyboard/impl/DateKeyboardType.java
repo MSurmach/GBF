@@ -51,7 +51,7 @@ public class DateKeyboardType implements KeyboardType {
         keyboard.add(monthWithPaginationRow(date));
         keyboard.add(daysOfWeekRow());
         keyboard.addAll(calendarMarkup(date, userData));
-        if (userData.getStartDate() != null)
+        if (userData.getTempStartDate() != null)
             keyboard.add(confirmDateRow());
         return new KeyboardMarkupAppender().
                 append(new InlineKeyboardMarkup(keyboard)).
@@ -110,7 +110,7 @@ public class DateKeyboardType implements KeyboardType {
         }
         for (int index = shift; index < columnCount; index++) {
             if (day <= date.lengthOfMonth()) {
-                var dayButton = (Objects.equals(date, userData.getStartDate()) || Objects.equals(date, userData.getEndDate())) ?
+                var dayButton = (Objects.equals(date, userData.getTempStartDate()) || Objects.equals(date, userData.getTempEndDate())) ?
                         markButtonAsExisted(userData, date) :
                         createButtonWithData(Integer.toString(day++), SELECT_DAY, date.toString());
                 row.add(dayButton);
@@ -127,8 +127,8 @@ public class DateKeyboardType implements KeyboardType {
     }
 
     private InlineKeyboardButton markButtonAsExisted(UserData userData, LocalDate date) {
-        LocalDate startDate = userData.getStartDate();
-        LocalDate endDate = userData.getEndDate();
+        LocalDate startDate = userData.getTempStartDate();
+        LocalDate endDate = userData.getTempEndDate();
         if (Objects.equals(startDate, endDate)) {
             String label = lms.getLocaleMessage(START_DATE_MARK) + lms.getLocaleMessage(END_DATE_MARK);
             return createButtonWithData(label, SELECT_DAY, date.toString());

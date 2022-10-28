@@ -27,7 +27,7 @@ public class IntermediateEditorMessageType implements MessageType {
     @Override
     public String getMessage(UserData userData) {
         String header = lms.getLocaleMessage(INTERMEDIATE_EDITOR_DETAILS_HEADER_CODE);
-        List<RoutePoint> intermediateRoutePoints = userData.getRoutePoints().stream().
+        List<RoutePoint> intermediateRoutePoints = userData.getTempRoute().stream().
                 filter(routePoint -> routePoint.getStatus() == INTERMEDIATE).
                 toList();
         String intermediatePointsRoute = detailsCreator.createRouteDetails(intermediateRoutePoints);

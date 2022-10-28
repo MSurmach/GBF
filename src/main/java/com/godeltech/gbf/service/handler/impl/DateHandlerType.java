@@ -43,34 +43,34 @@ public class DateHandlerType implements HandlerType {
     }
 
     private boolean isDateExist(LocalDate chosenDate, UserData userData) {
-        LocalDate startDate = userData.getStartDate();
-        LocalDate endDate = userData.getEndDate();
+        LocalDate startDate = userData.getTempStartDate();
+        LocalDate endDate = userData.getTempEndDate();
         if (Objects.isNull(startDate) && Objects.isNull(endDate)) return false;
         if (Objects.equals(startDate, chosenDate)) {
-            userData.setStartDate(endDate);
+            userData.setTempStartDate(endDate);
             return true;
         }
         if (Objects.equals(endDate, chosenDate)) {
-            userData.setEndDate(startDate);
+            userData.setTempEndDate(startDate);
             return true;
         }
         return false;
     }
 
     private void handleChosenDate(LocalDate chosenDate, UserData userData) {
-        LocalDate startDate = userData.getStartDate();
-        LocalDate endDate = userData.getEndDate();
+        LocalDate startDate = userData.getTempStartDate();
+        LocalDate endDate = userData.getTempEndDate();
         if (startDate == null && endDate == null) {
-            userData.setStartDate(chosenDate);
-            userData.setEndDate(chosenDate);
+            userData.setTempStartDate(chosenDate);
+            userData.setTempEndDate(chosenDate);
             return;
         }
         if (chosenDate.isBefore(startDate)) {
-            userData.setStartDate(chosenDate);
+            userData.setTempStartDate(chosenDate);
             return;
         }
         if (chosenDate.isAfter(endDate) || chosenDate.isAfter(startDate)) {
-            userData.setEndDate(chosenDate);
+            userData.setTempEndDate(chosenDate);
         }
     }
 }

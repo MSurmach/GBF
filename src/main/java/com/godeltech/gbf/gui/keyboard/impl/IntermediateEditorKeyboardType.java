@@ -33,7 +33,7 @@ public class IntermediateEditorKeyboardType implements KeyboardType {
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        List<RoutePoint> intermediateRoutePoints = userData.getRoutePoints().stream().
+        List<RoutePoint> intermediateRoutePoints = userData.getTempRoute().stream().
                 filter(routePoint -> routePoint.getStatus() == INTERMEDIATE).
                 toList();
         if (intermediateRoutePoints.size() == 1) {

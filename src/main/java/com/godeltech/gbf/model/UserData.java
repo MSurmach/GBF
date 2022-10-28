@@ -1,6 +1,5 @@
 package com.godeltech.gbf.model;
 
-import com.godeltech.gbf.model.db.Country;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.TelegramUser;
 import lombok.*;
@@ -21,10 +20,14 @@ public class UserData {
     private int deliverySize;
     private int seats;
     private String comment;
-    private LinkedList<Integer> cityIds = new LinkedList<>(); //possibility to delete
-    private LinkedList<RoutePoint> routePoints = new LinkedList<>();
+    private LinkedList<RoutePoint> tempRoute = new LinkedList<>();
+    private LinkedList<RoutePoint> route = new LinkedList<>();
+    private LocalDate tempStartDate;
     private LocalDate startDate;
+    private LocalDate tempEndDate;
     private LocalDate endDate;
+    private Role role;
+    private String callbackQueryId;
 
     //possibility to delete
 
@@ -33,10 +36,7 @@ public class UserData {
     private LinkedList<String> callbackHistory = new LinkedList<>();
     private Page<TelegramUser> page;
     private int pageNumber;
-    private Role role;
-    private String callbackQueryId;
     private TelegramUser tempForSearch;
-    private Country tempCountry;
 
     public UserData(Long telegramId, String username) {
         this.telegramId = telegramId;
