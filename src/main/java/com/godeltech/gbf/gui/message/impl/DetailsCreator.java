@@ -102,14 +102,14 @@ public class DetailsCreator {
             cargoSummary.append(cargoHeader);
         if (userData.isDocumentsExist())
             cargoSummary.append(lms.getLocaleMessage(DETAILS_CARGO_DOCUMENTS_SELECTED_CODE));
-        if (userData.getPackageSize() != 0)
+        if (userData.getDeliverySize() != 0)
             cargoSummary.append(lms.getLocaleMessage(
                     DETAILS_CARGO_PACKAGE_SELECTED_CODE,
-                    CargoSize.getSizeName(userData.getPackageSize())));
-        if (userData.getCompanionCount() != 0)
+                    CargoSize.getSizeName(userData.getDeliverySize())));
+        if (userData.getSeats() != 0)
             cargoSummary.append(lms.getLocaleMessage(
                     DETAILS_CARGO_PEOPLE_SELECTED_CODE,
-                    String.valueOf(userData.getCompanionCount())));
+                    String.valueOf(userData.getSeats())));
         return cargoSummary.toString();
     }
 

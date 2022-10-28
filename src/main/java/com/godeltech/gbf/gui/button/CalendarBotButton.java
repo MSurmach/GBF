@@ -1,8 +1,20 @@
 package com.godeltech.gbf.gui.button;
 
+import com.godeltech.gbf.model.State;
+import lombok.Getter;
+
+import static com.godeltech.gbf.model.State.*;
+
 public enum CalendarBotButton implements BotButton {
-    INIT, PREVIOUS, NEXT, IGNORE,
-    CHANGE_YEAR, SELECT_YEAR,
-    CHANGE_MONTH, SELECT_MONTH,
-    SELECT_DAY, CONFIRM_DATE, CLEAR_DATE_SELECT
+    PREVIOUS(DATE), NEXT(DATE), IGNORE(null),
+    CHANGE_YEAR(YEAR), SELECT_YEAR(DATE),
+    CHANGE_MONTH(MONTH), SELECT_MONTH(DATE),
+    SELECT_DAY(DATE), CONFIRM_DATE(FORM);
+
+    @Getter
+    private final State nextState;
+
+    CalendarBotButton(State nextState) {
+        this.nextState = nextState;
+    }
 }

@@ -9,4 +9,6 @@ public interface CityService {
     List<City> findCitiesByCountry(Country country);
 
     City findCityByName(String name);
+
+    List<City> findAll();
 }

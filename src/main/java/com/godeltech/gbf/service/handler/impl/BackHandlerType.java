@@ -5,6 +5,9 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.HandlerType;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.godeltech.gbf.model.State.*;
 
 @Service
@@ -14,30 +17,30 @@ public class BackHandlerType implements HandlerType {
         return BACK;
     }
 
+    public final static Map<State, State> stateAndBackStateMap = new HashMap<>();
+
+    static {
+        stateAndBackStateMap.put(FORM, MENU);
+        stateAndBackStateMap.put(REQUESTS, MENU);
+        stateAndBackStateMap.put(REGISTRATIONS, MENU);
+        stateAndBackStateMap.put(WRONG_INPUT, MENU);
+        stateAndBackStateMap.put(INTERMEDIATE_EDITOR, FORM);
+        stateAndBackStateMap.put(COMMENT, FORM);
+        stateAndBackStateMap.put(SEATS, FORM);
+        stateAndBackStateMap.put(DELIVERY, FORM);
+        stateAndBackStateMap.put(DATE, FORM);
+        stateAndBackStateMap.put(CITY, FORM);
+        stateAndBackStateMap.put(YEAR, DATE);
+        stateAndBackStateMap.put(MONTH, DATE);
+        stateAndBackStateMap.put(CARGO_PACKAGE, DELIVERY);
+        stateAndBackStateMap.put(CARGO_PEOPLE, DELIVERY);
+        stateAndBackStateMap.put(COURIERS_LIST_RESULT, REQUESTS);
+        stateAndBackStateMap.put(CLIENTS_LIST_RESULT, REGISTRATIONS);
+    }
+
     @Override
     public State handle(UserData userData) {
         State currentState = userData.getStateHistory().pop();
-        return switch (currentState) {
-            case BACK -> null;
-            case FORM -> MENU;
-            case ROUTE_POINT_FORM -> FORM;
-            case INTERMEDIATE_EDITOR -> FORM;
-            case MENU -> null;
-            case SUCCESS_REGISTRATION -> null;
-            case WRONG_INPUT -> MENU;
-            case COMMENT -> FORM;
-            case COUNTRY -> ROUTE_POINT_FORM;
-            case CITY -> ROUTE_POINT_FORM;
-            case YEAR -> DATE;
-            case MONTH -> DATE;
-            case DATE -> ROUTE_POINT_FORM;
-            case CARGO_MENU -> FORM;
-            case CARGO_PACKAGE -> CARGO_MENU;
-            case CARGO_PEOPLE -> CARGO_MENU;
-            case REGISTRATIONS -> MENU;
-            case REQUESTS -> MENU;
-            case COURIERS_LIST_RESULT -> REQUESTS;
-            case CLIENTS_LIST_RESULT -> REGISTRATIONS;
-        };
+        return stateAndBackStateMap.get(currentState);
     }
 }

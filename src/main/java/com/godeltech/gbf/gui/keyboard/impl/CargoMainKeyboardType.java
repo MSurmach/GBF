@@ -24,7 +24,7 @@ public class CargoMainKeyboardType implements KeyboardType {
 
     @Override
     public State getState() {
-        return State.CARGO_MENU;
+        return State.DELIVERY;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class CargoMainKeyboardType implements KeyboardType {
 
     private List<InlineKeyboardButton> packageRow(UserData userData) {
         List<InlineKeyboardButton> row = new ArrayList<>();
-        if (userData.getPackageSize() != 0) {
+        if (userData.getDeliverySize() != 0) {
             var cancelButton = ButtonUtils.createLocalButton(CANCEL_PACKAGE, lms);
             var editButton = ButtonUtils.createLocalButton(EDIT_PACKAGE, lms);
             row.add(cancelButton);
@@ -73,7 +73,7 @@ public class CargoMainKeyboardType implements KeyboardType {
 
     private List<InlineKeyboardButton> companionRow(UserData userData) {
         List<InlineKeyboardButton> row = new ArrayList<>();
-        if (userData.getCompanionCount() != 0) {
+        if (userData.getSeats() != 0) {
             var cancelButton = ButtonUtils.createLocalButton(CANCEL_PEOPLE, lms);
             var editButton = ButtonUtils.createLocalButton(EDIT_PEOPLE, lms);
             row.add(cancelButton);

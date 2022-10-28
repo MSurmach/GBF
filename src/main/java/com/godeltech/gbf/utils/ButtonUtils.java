@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 public class ButtonUtils {
 
     private final static String IGNORE = "IGNORE";
+    private final static String SPACE = " ";
 
     public static InlineKeyboardButton createLocalButton(String label, String callBack, LocalMessageSource lms) {
         var button = new InlineKeyboardButton(lms.getLocaleMessage(label));
@@ -29,6 +30,16 @@ public class ButtonUtils {
 
     public static InlineKeyboardButton createLocalButtonWithData(String label, BotButton botButton, String data, LocalMessageSource lms) {
         var button = new InlineKeyboardButton(lms.getLocaleMessage(label));
+        String callback = botButton + ":" + data;
+        button.setCallbackData(callback);
+        return button;
+    }
+
+    public static InlineKeyboardButton createLocalButtonWithData(String preLabel, String label, BotButton botButton, String data, LocalMessageSource lms) {
+        String localLabel = lms.getLocaleMessage(label);
+        var button = preLabel == null ?
+                new InlineKeyboardButton(localLabel) :
+                new InlineKeyboardButton(preLabel + SPACE + localLabel);
         String callback = botButton + ":" + data;
         button.setCallbackData(callback);
         return button;

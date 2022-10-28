@@ -5,7 +5,7 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.HandlerType;
 import org.springframework.stereotype.Service;
 
-import static com.godeltech.gbf.model.State.CARGO_MENU;
+import static com.godeltech.gbf.model.State.DELIVERY;
 
 @Service
 public class CargoPeopleHandlerType implements HandlerType {
@@ -20,8 +20,8 @@ public class CargoPeopleHandlerType implements HandlerType {
         String callback = userData.getCallbackHistory().peek();
         try {
             int count = Integer.parseInt(callback);
-            userData.setCompanionCount(count);
-            return CARGO_MENU;
+            userData.setSeats(count);
+            return DELIVERY;
         } catch (NumberFormatException numberFormatException) {
             return userData.getStateHistory().peek();
         }
