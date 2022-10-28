@@ -12,7 +12,7 @@ import static com.godeltech.gbf.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 @AllArgsConstructor
-public class CargoPeopleKeyboardType implements KeyboardType {
+public class SeatsKeyboardType implements KeyboardType {
     private LocalMessageSource lms;
 
     @Override
