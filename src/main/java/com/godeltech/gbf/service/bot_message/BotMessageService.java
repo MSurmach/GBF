@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import java.util.List;
 
 public interface BotMessageService {
-    void save(Long telegramId, Message message);
+    void save(Long userId, Message message);
 
     void delete(BotMessage botMessage);
 

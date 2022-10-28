@@ -4,23 +4,28 @@ import com.godeltech.gbf.model.db.BotMessage;
 import com.godeltech.gbf.repository.BotMessageRepository;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class BotMessageServiceImpl implements BotMessageService {
     private final BotMessageRepository botMessageRepository;
 
     @Override
-    public void save(Long telegramId, Message message) {
-        BotMessage botMessage = new BotMessage();
-        botMessage.setTelegramId(telegramId);
-        botMessage.setChatId(message.getChatId());
-        botMessage.setMessageId(message.getMessageId());
-        botMessageRepository.save(botMessage);
+    public void save(Long userId, Message message) {
+        log.info("Save message with user id : {}", userId);
+        botMessageRepository.save(BotMessage.builder()
+                .messageId(message.getMessageId())
+                .userId(userId)
+                .chatId(message.getChatId())
+                .createdAt(LocalDate.now())
+                .build());
     }
 
     @Override
@@ -30,6 +35,6 @@ public class BotMessageServiceImpl implements BotMessageService {
 
     @Override
     public List<BotMessage> findAllByTelegramIdAndChatId(Long telegramId, Long chatId) {
-        return botMessageRepository.findAllByTelegramIdAndChatId(telegramId, chatId);
+        return botMessageRepository.findAllByUserIdAndChatId(telegramId, chatId);
     }
 }
