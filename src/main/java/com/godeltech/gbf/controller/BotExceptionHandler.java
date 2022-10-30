@@ -41,8 +41,8 @@ public class BotExceptionHandler {
 
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public void handleAll(Exception exception) {
-//
-//    }
+    @ExceptionHandler(Exception.class)
+    public void handleAll(Exception exception) {
+
+    }
 }
