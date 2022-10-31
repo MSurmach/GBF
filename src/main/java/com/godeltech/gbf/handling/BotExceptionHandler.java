@@ -1,6 +1,7 @@
 package com.godeltech.gbf.handling;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.exception.DeleteMessageException;
 import com.godeltech.gbf.exception.MembershipException;
 import com.godeltech.gbf.exception.MessageFromGroupException;
 import com.godeltech.gbf.exception.WrongInputException;
@@ -59,6 +60,11 @@ public class BotExceptionHandler {
     @ExceptionHandler(MessageFromGroupException.class)
     public void handleMessageFromGroupException(MessageFromGroupException exception){
 //        Do nothing !!
+    }
+
+    @ExceptionHandler(DeleteMessageException.class)
+    public void handleDeleteMessageException(DeleteMessageException exception){
+        log.error(exception.getMessage());
     }
 
 //    @ExceptionHandler(Exception.class)

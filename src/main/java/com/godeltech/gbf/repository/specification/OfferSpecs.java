@@ -64,5 +64,8 @@ public class OfferSpecs {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.greaterThanOrEqualTo(root.get("delivery"), delivery);
     }
-
+    public static Specification<Offer> byDateAfter(LocalDate date){
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.greaterThan(root.get("endDate"),date);
+    }
 }

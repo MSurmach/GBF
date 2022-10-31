@@ -1,11 +1,14 @@
 package com.godeltech.gbf.model.db;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 
 
 @Entity
@@ -21,5 +24,5 @@ public class BotMessage {
     @Column
     private Long chatId;
     @Column
-    private LocalDate createdAt;
+    private Timestamp createdAt;
 }

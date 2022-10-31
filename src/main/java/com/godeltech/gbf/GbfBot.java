@@ -1,16 +1,19 @@
 package com.godeltech.gbf;
 
 import com.godeltech.gbf.config.TelegramBotConfig;
+import com.godeltech.gbf.exception.DeleteMessageException;
 import com.godeltech.gbf.factory.impl.InterceptorFactory;
 import com.godeltech.gbf.model.db.BotMessage;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.interceptor.Interceptor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -20,6 +23,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Component
+@Slf4j
 public class GbfBot extends SpringWebhookBot {
     private final InterceptorFactory interceptorFactory;
     private final TelegramBotConfig telegramBotConfig;
@@ -55,6 +59,7 @@ public class GbfBot extends SpringWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        log.info("");
         Interceptor interceptor = interceptorFactory.getInterceptor(update);
         List<? extends BotApiMethod<?>> methods = interceptor.intercept(update);
         executeMethod(methods, interceptor.getTelegramUserId(), interceptor.getChatId());
@@ -80,18 +85,49 @@ public class GbfBot extends SpringWebhookBot {
     }
 
     public void deletePreviousMessage(Long telegramUserId, Long chatId) {
+        log.info("Delete message from user : {} and chat id : {}",
+                telegramUserId, chatId);
         List<BotMessage> previousMessages = botMessageService.findAllByTelegramIdAndChatId(telegramUserId, chatId);
         if (previousMessages != null && !previousMessages.isEmpty())
             previousMessages.forEach(previousMessage -> {
                 botMessageService.delete(previousMessage);
-                DeleteMessage deleteMessage = new DeleteMessage();
-                deleteMessage.setChatId(previousMessage.getChatId());
-                deleteMessage.setMessageId(previousMessage.getMessageId());
+                DeleteMessage deleteMessage = DeleteMessage.builder()
+                        .chatId(previousMessage.getChatId())
+                        .messageId(previousMessage.getMessageId())
+                        .build();
                 try {
                     execute(deleteMessage);
                 } catch (TelegramApiException e) {
-                    throw new RuntimeException(e);
+                    log.error(e.getMessage());
+                    correctLongLiveMessage(previousMessage);
                 }
             });
+    }
+
+
+    public void deleteExpiredMessage(BotMessage botMessage){
+        log.info("Delete expired message with message id : {} and chat id : {}",
+                botMessage.getMessageId(), botMessage.getChatId());
+        try {
+            execute(DeleteMessage.builder()
+                    .messageId(botMessage.getMessageId())
+                    .chatId(botMessage.getChatId())
+                    .build());
+        } catch (TelegramApiException e) {
+            log.error(e.getMessage());
+            correctLongLiveMessage(botMessage);
+        }
+    }
+    private void correctLongLiveMessage(BotMessage previousMessage) {
+        try {
+            execute(EditMessageText.builder()
+                    .messageId(previousMessage.getMessageId())
+                    .chatId(previousMessage.getChatId().toString())
+                    .text("Message deleted")
+                    .build());
+        } catch (TelegramApiException e) {
+            log.error(e.getMessage());
+            throw new DeleteMessageException(previousMessage);
+        }
     }
 }
