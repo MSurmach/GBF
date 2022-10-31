@@ -24,7 +24,6 @@ public class OfferServiceImpl implements OfferService {
     @Transactional
     public void deleteExpiredOffersByDate(LocalDate expiredDate) {
         log.info("delete expired offers by date : {}", expiredDate);
-
         List<Offer> expiredOffers = offerRepository.findAll(OfferSpecs.byDateAfter(expiredDate));
         offerRepository.deleteAll(expiredOffers);
     }

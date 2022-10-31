@@ -59,7 +59,6 @@ public class GbfBot extends SpringWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        log.info("");
         Interceptor interceptor = interceptorFactory.getInterceptor(update);
         List<? extends BotApiMethod<?>> methods = interceptor.intercept(update);
         executeMethod(methods, interceptor.getTelegramUserId(), interceptor.getChatId());
@@ -67,6 +66,7 @@ public class GbfBot extends SpringWebhookBot {
     }
 
     private void executeMethod(List<? extends BotApiMethod<?>> methods, Long telegramUserId, Long chatId) {
+        log.info("Execute methods for user with id : {} and chat id : {}",telegramUserId,chatId);
         int stage = 0;
         for (BotApiMethod<?> method : methods) {
             try {
@@ -119,6 +119,7 @@ public class GbfBot extends SpringWebhookBot {
         }
     }
     private void correctLongLiveMessage(BotMessage previousMessage) {
+        log.info("Correct long live message with id : {} and chat id : {}",previousMessage.getMessageId(),previousMessage.getChatId());
         try {
             execute(EditMessageText.builder()
                     .messageId(previousMessage.getMessageId())

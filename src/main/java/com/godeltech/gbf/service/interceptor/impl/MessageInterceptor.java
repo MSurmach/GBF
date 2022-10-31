@@ -15,6 +15,7 @@ import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.interceptor.InterceptorTypes;
 import com.godeltech.gbf.service.view.ViewType;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -26,6 +27,7 @@ import java.util.List;
 import static com.godeltech.gbf.model.State.*;
 
 @Service
+@Slf4j
 public class MessageInterceptor implements Interceptor {
     private final HandlerFactory handlerFactory;
     private final ViewFactory viewFactory;
@@ -51,6 +53,7 @@ public class MessageInterceptor implements Interceptor {
     public List<? extends BotApiMethod<?>> intercept(Update update) {
         Message message = update.getMessage();
         User from = message.getFrom();
+        log.info("Get message from user : {} with id : {} ",from.getUserName(),from.getId());
         chatId = message.getChatId();
         telegramUserId = from.getId();
         State state;
@@ -72,6 +75,7 @@ public class MessageInterceptor implements Interceptor {
     }
 
     State interceptTextCommand(String command, String username, Long telegramUserId) throws TextCommandNotFoundException {
+        log.info("Intercept text command : {} by user : {} with id : {}",command,username,telegramUserId);
         String parsedAsCommand = command.toUpperCase().replace("/", "");
         try {
             TextCommand.valueOf(parsedAsCommand);
@@ -83,6 +87,7 @@ public class MessageInterceptor implements Interceptor {
     }
 
     private State interceptSufficientInput(Update update) throws InsufficientInputException {
+        log.info("Intercept sufficient input by user with id:{}",telegramUserId);
         UserData cached = UserDataCache.get(telegramUserId);
         if (cached == null) throw new InsufficientInputException();
         State currentState = cached.getStateHistory().peek();
