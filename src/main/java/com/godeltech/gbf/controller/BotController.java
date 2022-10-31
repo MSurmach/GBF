@@ -1,6 +1,6 @@
 package com.godeltech.gbf.controller;
 
-import com.godeltech.gbf.autorization.UpdateAutorization;
+import com.godeltech.gbf.authorization.AuthorizationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,13 +16,12 @@ import org.telegram.telegrambots.starter.SpringWebhookBot;
 public class BotController {
 
     private SpringWebhookBot springWebhookBot;
-    private UpdateAutorization authorization;
+    private AuthorizationService authorizationService;
 
     @PostMapping("/callback/${telegram.bot.endpoint}")
-    public BotApiMethod<?> onWebhookUpdateReceived(@RequestBody Update update) {
+    public void onWebhookUpdateReceived(@RequestBody Update update) {
         log.info("Get update") ;
-        if (authorization.isValid(update))
+        if (authorizationService.isValid(update))
             springWebhookBot.onWebhookUpdateReceived(update);
-        return null;
     }
 }
