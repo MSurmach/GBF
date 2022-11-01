@@ -10,6 +10,7 @@ import com.godeltech.gbf.service.offer.OfferService;
 import com.godeltech.gbf.service.user.TelegramUserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,4 +44,9 @@ public class OfferServiceImpl implements OfferService {
         List<Offer> expiredOffers = offerRepository.findAll(OfferSpecs.byDateAfter(expiredDate));
         offerRepository.deleteAll(expiredOffers);
     }
+
+    public Page<Offer> findAllOffersByUserId(Long userId, int pageNumber) {
+        return null;
+    }
+
 }
