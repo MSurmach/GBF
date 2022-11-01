@@ -2,13 +2,13 @@ package com.godeltech.gbf.service.view.impl;
 
 import com.godeltech.gbf.factory.impl.KeyboardFactory;
 import com.godeltech.gbf.factory.impl.MessageFactory;
-import com.godeltech.gbf.gui.keyboard.impl.SuccessRegistrationKeyboardType;
 import com.godeltech.gbf.gui.keyboard.impl.PaginationKeyboardType;
+import com.godeltech.gbf.gui.keyboard.impl.SuccessRegistrationKeyboardType;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.TelegramUser;
-import com.godeltech.gbf.service.user.UserService;
+import com.godeltech.gbf.service.user.TelegramUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -16,15 +16,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.godeltech.gbf.model.Role.CLIENT;
-import static com.godeltech.gbf.model.Role.COURIER;
-import static com.godeltech.gbf.model.State.REGISTRATIONS;
-import static com.godeltech.gbf.model.State.REQUESTS;
-
 
 @AllArgsConstructor
 public abstract class PaginatedView  {
-    private UserService userService;
+    private TelegramUserService telegramUserService;
     private PaginationKeyboardType paginationKeyboard;
     private SuccessRegistrationKeyboardType backMenuKeyboard;
     private MessageFactory messageFactory;
@@ -34,23 +29,24 @@ public abstract class PaginatedView  {
     public List<SendMessage> buildView(Long chatId, UserData userData) {
         long telegramId = userData.getTelegramId();
         State currentState = userData.getStateHistory().peek();
-        Page<TelegramUser> page = switch (userData.getRole()) {
-            case REGISTRATIONS_VIEWER -> {
-                if (currentState == REGISTRATIONS)
-                    yield userService.findUsersByTelegramIdAndRole(telegramId, COURIER, userData.getPageNumber());
-                else
-                    yield userService.findTelegramUsersBySearchDataAndRole(userData.getTempForSearch(), CLIENT, userData.getPageNumber());
-            }
-            case REQUESTS_VIEWER -> {
-                if (currentState == REQUESTS)
-                    yield userService.findUsersByTelegramIdAndRole(telegramId, CLIENT, userData.getPageNumber());
-                else
-                    yield userService.findTelegramUsersBySearchDataAndRole(userData.getTempForSearch(), COURIER, userData.getPageNumber());
-            }
-            case CLIENT ->
-                    userService.findTelegramUsersBySearchDataAndRole(userData.getTempForSearch(), COURIER, userData.getPageNumber());
-            default -> null;
-        };
+        Page<TelegramUser> page = null;
+//        switch (userData.getRole()) {
+//            case REGISTRATIONS_VIEWER -> {
+//                if (currentState == REGISTRATIONS)
+//                    yield telegramUserService.findUsersByTelegramIdAndRole(telegramId, COURIER, userData.getPageNumber());
+//                else
+//                    yield telegramUserService.findTelegramUsersBySearchDataAndRole(userData.getTempForSearch(), CLIENT, userData.getPageNumber());
+//            }
+//            case REQUESTS_VIEWER -> {
+//                if (currentState == REQUESTS)
+//                    yield telegramUserService.findUsersByTelegramIdAndRole(telegramId, CLIENT, userData.getPageNumber());
+//                else
+//                    yield telegramUserService.findTelegramUsersBySearchDataAndRole(userData.getTempForSearch(), COURIER, userData.getPageNumber());
+//            }
+//            case CLIENT ->
+//                    telegramUserService.findTelegramUsersBySearchDataAndRole(userData.getTempForSearch(), COURIER, userData.getPageNumber());
+//            default -> null;
+//        };
         userData.setPage(page);
         List<SendMessage> messages = new ArrayList<>();
         var keyboardMarkup = (page != null && !page.isEmpty()) ?

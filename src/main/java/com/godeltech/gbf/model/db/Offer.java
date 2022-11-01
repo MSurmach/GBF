@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -24,7 +22,7 @@ public class Offer {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne
     @JoinColumn(name = "telegramUserId")
     private TelegramUser telegramUser;
 
@@ -34,8 +32,11 @@ public class Offer {
     @Column
     private LocalDate endDate;
 
-    @OneToMany(mappedBy = "offer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "offer",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @OrderBy("orderNumber")
     private List<RoutePoint> routePoints;
 
 

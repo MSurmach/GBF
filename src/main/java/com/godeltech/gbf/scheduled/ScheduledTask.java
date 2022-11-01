@@ -1,6 +1,6 @@
 package com.godeltech.gbf.scheduled;
 
-import com.godeltech.gbf.service.user.UserService;
+import com.godeltech.gbf.service.offer.OfferService;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -12,19 +12,19 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ScheduledTask {
 
-    private UserService userService;
+    private OfferService offerService;
 
     @Scheduled(cron = "@midnight")
     @Transactional
     public void removeExpiredRecords() {
         LocalDate localDateNow = LocalDate.now();
-        userService.removeByExpiredAtBefore(localDateNow);
+        offerService.removeByExpiredAtBefore(localDateNow);
     }
 
     @Scheduled(cron = "@midnight")
     @Transactional
     public void removeRequestAfter5Days() {
         LocalDate after5Days = LocalDate.now().minusDays(5);
-        userService.removeByChangedAtBefore(after5Days);
+        offerService.removeByChangedAtBefore(after5Days);
     }
 }
