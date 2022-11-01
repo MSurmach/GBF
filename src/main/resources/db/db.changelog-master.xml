@@ -9,5 +9,5 @@
     <include file="classpath:db/changelog/v.0.3/2022-10-27-changes-create-table-offer.xml"/>
     <include file="classpath:db/changelog/v.0.3/2022-10-27-changes-create-table-route_point.xml"/>
     <include file="classpath:db/changelog/v.0.4/2022-10-28-changes-create-table-bot_message.xml"/>
-    <include file="classpath:db/changelog/v.0.5/2022-10-31-changes-type-field-in-bot_message.xml"/>
+
 </databaseChangeLog>
