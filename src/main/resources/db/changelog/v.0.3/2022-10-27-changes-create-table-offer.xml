@@ -17,10 +17,8 @@
                 <constraints nullable="false" foreignKeyName="fk_offer_user" references="telegram_user(id)"/>
             </column>
             <column name="start_date" type="date">
-                <constraints nullable="false"/>
             </column>
             <column name="end_date" type="date">
-                <constraints nullable="false"/>
             </column>
             <column name="comment" type="VARCHAR(2000)"/>
             <column name="delivery" type="INT"/>
