@@ -2,8 +2,9 @@ package com.godeltech.gbf.factory.impl;
 
 import com.godeltech.gbf.factory.Factory;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
-import com.godeltech.gbf.gui.keyboard.impl.EmptyKeyboardType;
+import com.godeltech.gbf.gui.keyboard.impl.NotFoundKeyboardType;
 import com.godeltech.gbf.model.State;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class KeyboardFactory implements Factory<KeyboardType> {
 
 
@@ -26,7 +28,8 @@ public class KeyboardFactory implements Factory<KeyboardType> {
 
     @Override
     public KeyboardType get(State state) {
+        log.info("Get keyboard type by state : {}",state);
         return keyboardContext.getOrDefault(state,
-                (KeyboardType) new EmptyKeyboardType());
+                (KeyboardType) new NotFoundKeyboardType());
     }
 }

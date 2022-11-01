@@ -19,6 +19,7 @@ import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.interceptor.InterceptorTypes;
 import com.godeltech.gbf.service.view.ViewType;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -34,20 +35,21 @@ import static com.godeltech.gbf.model.State.MENU;
 import static com.godeltech.gbf.service.interceptor.InterceptorTypes.CALLBACK;
 
 @Service
+@Slf4j
 public class CallbackInterceptor implements Interceptor {
     private final HandlerFactory handlerFactory;
     private final ViewFactory viewFactory;
-    private final MessageInterceptor messageInterceptor;
+    private final MessageTextInterceptor messageTextInterceptor;
 
     @Getter
     private Long telegramUserId;
     @Getter
     private Long chatId;
 
-    public CallbackInterceptor(HandlerFactory handlerFactory, ViewFactory viewFactory, MessageInterceptor messageInterceptor) {
+    public CallbackInterceptor(HandlerFactory handlerFactory, ViewFactory viewFactory, MessageTextInterceptor messageTextInterceptor) {
         this.handlerFactory = handlerFactory;
         this.viewFactory = viewFactory;
-        this.messageInterceptor = messageInterceptor;
+        this.messageTextInterceptor = messageTextInterceptor;
     }
 
     @Override
@@ -60,6 +62,8 @@ public class CallbackInterceptor implements Interceptor {
         Message message = update.getCallbackQuery().getMessage();
         CallbackQuery callbackQuery = update.getCallbackQuery();
         User from = callbackQuery.getFrom();
+        log.info("Got callback from user : {}", from.getUserName());
+
         telegramUserId = from.getId();
         chatId = callbackQuery.getMessage().getChatId();
         UserData cached = null;
@@ -70,15 +74,18 @@ public class CallbackInterceptor implements Interceptor {
             cached.getCallbackHistory().push(callbackQuery.getData());
             nextState = handleUpdate(update);
         } catch (CachedUserDataNotFound e) {
-            nextState = messageInterceptor.interceptTextCommand(TextCommand.START.getDescription(), from.getUserName(), telegramUserId);
+            log.info("Initialize new user");
+            nextState=MENU;
+            UserDataCache.initializeByIdAndUsername(telegramUserId,from.getUserName());
+//            nextState = messageTextInterceptor.interceptTextCommand(TextCommand.START.getDescription(), from.getUserName(), telegramUserId);
             cached = UserDataCache.get(telegramUserId);
         }
         cached.getStateHistory().push(nextState);
-        ViewType<? extends BotApiMethod<?>> viewType = viewFactory.get(nextState);
-        return viewType.buildView(chatId, cached);
+        return viewFactory.get(nextState).buildView(chatId, cached);
     }
 
     private State handleUpdate(Update update) {
+        log.info("Handle update with callback data : {}",update.getCallbackQuery().getData());
         try {
             return interceptRole(update);
         } catch (RoleNotFoundException illegalArgumentException) {
@@ -98,6 +105,7 @@ public class CallbackInterceptor implements Interceptor {
     }
 
     private UserData pullFromCache(Long telegramUserId) throws CachedUserDataNotFound {
+        log.info("Pull from cache with user id : {}", telegramUserId);
         UserData cached = UserDataCache.get(telegramUserId);
         if (cached == null) throw new CachedUserDataNotFound();
         return cached;
@@ -106,11 +114,13 @@ public class CallbackInterceptor implements Interceptor {
     private State interceptRole(Update update) throws RoleNotFoundException {
         try {
             String callback = update.getCallbackQuery().getData();
+            log.info("Intercept role with callback : {}", callback);
             Role role = Role.valueOf(callback);
             UserData cached = UserDataCache.get(telegramUserId);
             cached.setRole(role);
             return role.getFirstState();
         } catch (IllegalArgumentException exception) {
+            log.error(exception.getMessage());
             throw new RoleNotFoundException();
         }
     }
@@ -118,7 +128,9 @@ public class CallbackInterceptor implements Interceptor {
     private State interceptNavigationButton(Update update) throws NotNavigationButtonException {
         String callback = update.getCallbackQuery().getData();
         try {
+            log.info("Intercept navigation buttons with callback : {}", callback);
             NavigationBotButton botButton = NavigationBotButton.valueOf(callback);
+
             UserData userData = UserDataCache.get(telegramUserId);
             return switch (botButton) {
                 case GLOBAL_BACK -> {
@@ -131,6 +143,7 @@ public class CallbackInterceptor implements Interceptor {
                 }
             };
         } catch (IllegalArgumentException illegalArgumentException) {
+            log.error(illegalArgumentException.getMessage());
             throw new NotNavigationButtonException();
         }
     }
@@ -139,7 +152,9 @@ public class CallbackInterceptor implements Interceptor {
         String callback = update.getCallbackQuery().getData();
         UserData userData = UserDataCache.get(telegramUserId);
         try {
+            log.info("Intercept pagination button with callback : {}", callback);
             PaginationButton clickedButton = PaginationButton.valueOf(callback);
+
             Page<TelegramUser> page = userData.getPage();
             switch (clickedButton) {
                 case PAGE_START -> userData.setPageNumber(0);
@@ -163,6 +178,7 @@ public class CallbackInterceptor implements Interceptor {
             return userData.getStateHistory().peek();
 
         } catch (IllegalArgumentException illegalArgumentException) {
+            log.error(illegalArgumentException.getMessage());
             throw new NotPaginationButtonException();
         }
     }

@@ -3,6 +3,7 @@ package com.godeltech.gbf.service.bot_message;
 import com.godeltech.gbf.model.db.BotMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BotMessageService {
@@ -11,4 +12,6 @@ public interface BotMessageService {
     void delete(BotMessage botMessage);
 
     List<BotMessage> findAllByTelegramIdAndChatId(Long telegramId, Long chatId);
+
+    List<BotMessage> findExpiredMessageByDate(LocalDateTime expiredDate);
 }

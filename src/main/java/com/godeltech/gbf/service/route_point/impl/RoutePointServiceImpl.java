@@ -6,6 +6,7 @@ import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.repository.RoutePointRepository;
 import com.godeltech.gbf.service.route_point.RoutePointService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import static com.godeltech.gbf.repository.specification.RoutePointSpecs.*;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class RoutePointServiceImpl implements RoutePointService {
 
     private RoutePointRepository routePointRepository;
@@ -26,6 +28,7 @@ public class RoutePointServiceImpl implements RoutePointService {
     public List<RoutePoint> findRoutePointsByNeededRoutePointsAndByRoleAndNotEqualToTelegramId(List<RoutePoint> neededRoute,
                                                                                                Role role,
                                                                                                Long telegramId) {
+        log.info("Find route points by routes : {} , role : {}, user id : {}",neededRoute,role,telegramId);
         List<RoutePoint> routePoints = new LinkedList<>();
         for (RoutePoint neededRoutePoint : neededRoute) {
             Specification<RoutePoint> searchSpecification =

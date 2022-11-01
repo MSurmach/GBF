@@ -1,15 +1,17 @@
 package com.godeltech.gbf.service.alert.impl;
 
 import com.godeltech.gbf.GbfBot;
-import com.godeltech.gbf.service.alert.Alert;
+import com.godeltech.gbf.service.alert.ExceptionResponseService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Service
 @AllArgsConstructor
-public class AlertImpl implements Alert {
+public class ExceptionResponseServiceImpl implements ExceptionResponseService {
     private GbfBot gbfBot;
 
     @Override
@@ -26,4 +28,14 @@ public class AlertImpl implements Alert {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public SendMessage makeSendMessage(Message message, String messageText) {
+        return SendMessage.builder()
+                .chatId(message.getChatId().toString())
+                .text(messageText)
+                .build();
+    }
+
+
 }
