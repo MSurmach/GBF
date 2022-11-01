@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface BotMessageRepository extends JpaRepository<BotMessage, Integer> {
     List<BotMessage> findAllByUserIdAndChatId(Long telegramId, Long chatId);
-    List<BotMessage> findByCreatedAtAfter(LocalDateTime localDateTime);
+    List<BotMessage> findByCreatedAtBefore(LocalDateTime localDateTime);
 }

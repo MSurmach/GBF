@@ -48,7 +48,7 @@ public class BotMessageServiceImpl implements BotMessageService {
     @Override
     public List<BotMessage> findExpiredMessageByDate(LocalDateTime expiredDate) {
         log.info("Find messages by expired date : {}",expiredDate);
-        return botMessageRepository.findByCreatedAtAfter(expiredDate);
+        return botMessageRepository.findByCreatedAtBefore(expiredDate);
     }
 
 }

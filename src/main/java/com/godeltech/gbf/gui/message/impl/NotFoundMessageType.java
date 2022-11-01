@@ -1,5 +1,6 @@
 package com.godeltech.gbf.gui.message.impl;
 
+import com.godeltech.gbf.exception.NotFoundStateTypeException;
 import com.godeltech.gbf.gui.message.MessageType;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
@@ -12,6 +13,6 @@ public class NotFoundMessageType implements MessageType {
 
     @Override
     public String getMessage(UserData userData) {
-        return null;
+        throw new NotFoundStateTypeException(NotFoundMessageType.class, userData.getUsername(), userData.getId());
     }
 }

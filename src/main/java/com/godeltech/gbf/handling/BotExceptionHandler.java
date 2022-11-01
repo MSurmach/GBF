@@ -4,7 +4,7 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.exception.DeleteMessageException;
 import com.godeltech.gbf.exception.MembershipException;
 import com.godeltech.gbf.exception.MessageFromGroupException;
-import com.godeltech.gbf.exception.WrongInputException;
+import com.godeltech.gbf.exception.NotFoundStateTypeException;
 import com.godeltech.gbf.service.alert.ExceptionResponseService;
 import com.godeltech.gbf.service.validator.exceptions.EmptyButtonCalendarException;
 import com.godeltech.gbf.service.validator.exceptions.GbfException;
@@ -27,6 +27,7 @@ public class BotExceptionHandler {
 
     @ExceptionHandler(GbfException.class)
     public void handleCountryNotFoundException(GbfException exception) {
+        log.info(exception.getAlertMessage());
         String callbackQueryId = exception.getCallbackQueryId();
         String alertMessage = exception.getAlertMessage();
         exceptionResponseService.showAlert(callbackQueryId, alertMessage);
@@ -34,6 +35,7 @@ public class BotExceptionHandler {
 
     @ExceptionHandler(EmptyButtonCalendarException.class)
     public void handleEmptyButton(EmptyButtonCalendarException emptyButtonCalendarException) {
+        log.info(emptyButtonCalendarException.getClass().getName());
         String callback = emptyButtonCalendarException.getButtonCallback();
         String neededAlertCode = callback.equals("emptyDay") ?
                 ALERT_CALENDAR_EMPTY_DAY_CODE :
@@ -42,33 +44,39 @@ public class BotExceptionHandler {
         String alertMessage = lms.getLocaleMessage(neededAlertCode);
         exceptionResponseService.showAlert(callbackQueryId, alertMessage);
     }
-
-    @ExceptionHandler(WrongInputException.class)
-    public void handleWrongInput(WrongInputException exception) {
-
-    }
+//
+//    @ExceptionHandler(WrongInputException.class)
+//    public void handleWrongInput(WrongInputException exception) {
+//
+//    }
 
     @ExceptionHandler(MembershipException.class)
-    public void handleMembershipException(MembershipException exception){
+    public void handleMembershipException(MembershipException exception) {
         User user = exception.getBotMessage().getFrom();
         log.error("User isn't a member of chmoki group with username : {} and id : {}",
-                user.getUserName(),user.getId());
+                user.getUserName(), user.getId());
         exceptionResponseService.makeSendMessage(exception.getBotMessage(),
                 lms.getLocaleMessage(TEXT_MESSAGE_OF_MEMBERSHIP));
     }
 
     @ExceptionHandler(MessageFromGroupException.class)
-    public void handleMessageFromGroupException(MessageFromGroupException exception){
+    public void handleMessageFromGroupException(MessageFromGroupException exception) {
 //        Do nothing !!
     }
 
     @ExceptionHandler(DeleteMessageException.class)
-    public void handleDeleteMessageException(DeleteMessageException exception){
+    public void handleDeleteMessageException(DeleteMessageException exception) {
         log.error(exception.getMessage());
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public void handleAll(Exception exception) {
-//
-//    }
+    @ExceptionHandler(RuntimeException.class)
+    public void handleAll(RuntimeException exception) {
+        log.error("Get runtime exception with message : {} and with stacktrace : {}",
+                exception.getMessage(), exception.getStackTrace());
+    }
+
+    @ExceptionHandler(NotFoundStateTypeException.class)
+    public void handleNotFoundStateTypeException(NotFoundStateTypeException exception) {
+        log.error(exception.getMessage());
+    }
 }

@@ -29,5 +29,4 @@ public class MessageFactory implements Factory<MessageType> {
         log.info("Get message type by state : {}",state);
         return messageContext.getOrDefault(state, (MessageType) new NotFoundMessageType());
     }
-
 }

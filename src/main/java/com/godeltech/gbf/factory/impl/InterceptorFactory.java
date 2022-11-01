@@ -24,9 +24,10 @@ public class InterceptorFactory {
 
     public Interceptor getInterceptor(Update update) {
         if (update.hasCallbackQuery()) {
-            log.info("Get callback by user : {}", update.getCallbackQuery().getFrom().getUserName());
+            log.info("Get callback interceptor by user : {}", update.getCallbackQuery().getFrom().getUserName());
             return interceptorContext.get(InterceptorTypes.CALLBACK);
         } else {
+            log.info("Get message interceptor by user : {}",update.getMessage().getFrom().getUserName());
             return interceptorContext.get(InterceptorTypes.MESSAGE);
         }
     }

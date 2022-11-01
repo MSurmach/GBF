@@ -24,19 +24,19 @@ public class ScheduledTask {
     private final OfferService offerService;
     private final GbfBot gbfBot;
 
-    @Scheduled(cron = "@midnight")
+    @Scheduled(fixedDelayString ="${schedule.work}")
     @Transactional
     public void removeExpiredMessages() {
-        LocalDateTime expiredDate = LocalDateTime.now().plusHours(7);
-        log.info("Remove expired message whose date is after : {}", expiredDate);
-        List<BotMessage> expiredMessages = botMessageService.findExpiredMessageByDate(expiredDate);
+        LocalDateTime now = LocalDateTime.now().minusHours(41);
+        log.info("Remove expired message whose date is before : {}", now);
+        List<BotMessage> expiredMessages = botMessageService.findExpiredMessageByDate(now);
         expiredMessages.forEach(botMessage -> {
             botMessageService.delete(botMessage);
             gbfBot.deleteExpiredMessage(botMessage);
         });
     }
 
-    @Scheduled(fixedDelayString ="${schedule.work}")
+    @Scheduled(cron = "@midnight")
     @Transactional
     public void removeExpiredOffers() {
         LocalDate expiredDate = LocalDate.now();
