@@ -17,7 +17,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="chat_id" type="BIGINT"/>
-            <column name="created_at" type="date">
+            <column name="created_at" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
 

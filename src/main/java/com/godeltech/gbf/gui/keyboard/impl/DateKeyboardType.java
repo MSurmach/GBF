@@ -18,11 +18,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static com.godeltech.gbf.gui.DateUtils.formatMonth;
-import static com.godeltech.gbf.gui.DateUtils.formatYear;
-import static com.godeltech.gbf.gui.button.ButtonUtils.*;
+import static com.godeltech.gbf.gui.utils.DateUtils.formatMonth;
+import static com.godeltech.gbf.gui.utils.DateUtils.formatYear;
+import static com.godeltech.gbf.gui.utils.ButtonUtils.*;
 import static com.godeltech.gbf.gui.button.CalendarBotButton.*;
-import static com.godeltech.gbf.gui.keyboard.KeyboardUtils.backAndMenuMarkup;
+import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 @AllArgsConstructor

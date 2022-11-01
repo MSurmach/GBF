@@ -4,8 +4,8 @@ import com.godeltech.gbf.gui.button.FormButton;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.HandlerType;
-import com.godeltech.gbf.service.user.UserService;
-import com.godeltech.gbf.service.validator.OfferValidator;
+import com.godeltech.gbf.service.offer.OfferService;
+import com.godeltech.gbf.service.validator.RouteValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +18,8 @@ import static com.godeltech.gbf.model.State.FORM;
 @AllArgsConstructor
 public class FormHandlerType implements HandlerType {
 
-    private UserService userService;
-    private OfferValidator offerValidator;
+    private final OfferService offerService;
+    private RouteValidator routeValidator;
 
     @Override
     public State getState() {
@@ -34,31 +34,16 @@ public class FormHandlerType implements HandlerType {
             case ADD_ROUTE, EDIT_ROUTE -> userData.setTempRoute(new LinkedList<>(userData.getRoute()));
             case ADD_DATES, EDIT_DATES -> {
                 LocalDate startDate = userData.getStartDate();
-                if (startDate!=null){
+                if (startDate != null) {
                     userData.setTempStartDate(LocalDate.from(startDate));
                     userData.setTempEndDate(LocalDate.from(userData.getEndDate()));
                 }
             }
             case FORM_CONFIRM_AS_COURIER, FORM_CONFIRM_AS_CLIENT, FORM_CONFIRM_AS_REGISTRATION_VIEWER -> {
-                offerValidator.validateOfferBeforeSave(userData);
-                userService.save(userData);
+                routeValidator.checkRouteIsNotEmpty(userData.getRoute(), userData.getCallbackQueryId());
+                offerService.save(userData);
             }
         }
         return clicked.getNextState();
     }
-
-//    private State saveAndGetAppropriateState(UserData userData) {
-//        State nextState = switch (userData.getRole()) {
-//            case COURIER -> SUCCESS_REGISTRATION;
-//            case CLIENT -> {
-//                TelegramUser telegramUser = ModelUtils.telegramUser(userData);
-//                userData.setTempForSearch(telegramUser);
-//                yield COURIERS_LIST_RESULT;
-//            }
-//            case REGISTRATIONS_VIEWER -> REGISTRATIONS;
-//            case REQUESTS_VIEWER -> REQUESTS;
-//        };
-//        userService.save(userData);
-//        return nextState;
-//    }
 }

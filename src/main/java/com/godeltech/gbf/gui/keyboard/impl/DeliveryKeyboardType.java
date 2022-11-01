@@ -5,15 +5,17 @@ import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.db.Delivery;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import static com.godeltech.gbf.gui.button.ButtonUtils.createLocalButton;
-import static com.godeltech.gbf.gui.keyboard.KeyboardUtils.backAndMenuMarkup;
+import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButton;
+import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 @AllArgsConstructor
@@ -27,10 +29,19 @@ public class DeliveryKeyboardType implements KeyboardType {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        InlineKeyboardMarkup loadKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
-        return new KeyboardMarkupAppender(loadKeyboardMarkup).
+        Delivery[] deliveries = Delivery.values();
+        for (var index = 0; index < deliveries.length; ) {
+            var columnCount = 3;
+            List<InlineKeyboardButton> deliveryButtonRow = new ArrayList<>();
+            while (columnCount > 0 && index != deliveries.length) {
+                deliveryButtonRow.add(createLocalButton(deliveries[index].name(), deliveries[index].name(), lms));
+                columnCount--;
+                index++;
+            }
+            keyboard.add(deliveryButtonRow);
+        }
+        return new KeyboardMarkupAppender(new InlineKeyboardMarkup(keyboard)).
                 append(backAndMenuMarkup(lms)).
                 result();
     }

@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import java.time.LocalDate;
 
 public interface UserService {
-    public Page<TelegramUser> findTelegramUsersBySearchDataAndRole(TelegramUser searchData, Role role, int pageNumber);
+    Page<TelegramUser> findTelegramUsersBySearchDataAndRole(TelegramUser searchData, Role role, int pageNumber);
 
     Page<TelegramUser> findUsersByTelegramIdAndRole(Long telegramUserId, Role role, int pageNumber);
 

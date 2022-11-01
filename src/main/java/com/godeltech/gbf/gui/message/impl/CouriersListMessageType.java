@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import static com.godeltech.gbf.gui.message.MessageUtils.*;
+import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 
 @Service
 @AllArgsConstructor
@@ -30,7 +30,7 @@ public class CouriersListMessageType implements MessageType, PaginationInfo<Tele
         return lms.getLocaleMessage(COURIERS_LIST_HEADER, userData.getUsername()) +
                 routeDetails(userData.getRoute(), lms) +
                 datesDetails(userData.getStartDate(), userData.getEndDate(), lms) +
-                deliveryDetails(userData.getDeliverySize(), lms) +
+                deliveryDetails(userData.getDelivery(), lms) +
                 seatsDetails(userData.getSeats(), lms) +
                 commentDetails(userData.getComment(), lms);
     }

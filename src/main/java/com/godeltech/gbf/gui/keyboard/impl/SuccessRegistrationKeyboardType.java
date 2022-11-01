@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
-import static com.godeltech.gbf.gui.keyboard.KeyboardUtils.menuMarkup;
+import static com.godeltech.gbf.gui.utils.KeyboardUtils.menuMarkup;
 
 @Component
 @AllArgsConstructor

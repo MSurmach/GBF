@@ -1,5 +1,6 @@
 package com.godeltech.gbf.model;
 
+import com.godeltech.gbf.model.db.Delivery;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.TelegramUser;
 import lombok.*;
@@ -17,7 +18,7 @@ public class UserData {
     private Long id;
     private Long telegramId;
     private String username;
-    private int deliverySize;
+    private Delivery delivery;
     private int seats;
     private String comment;
     private LinkedList<RoutePoint> tempRoute = new LinkedList<>();
@@ -47,7 +48,7 @@ public class UserData {
         return route.isEmpty() &&
                 startDate == null &&
                 comment == null &&
-                deliverySize == 0 &&
+                delivery == null &&
                 seats == 0;
     }
 }

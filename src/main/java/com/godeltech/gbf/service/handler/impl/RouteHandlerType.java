@@ -1,6 +1,5 @@
 package com.godeltech.gbf.service.handler.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.button.RouteButton;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
@@ -13,11 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
-
-import static com.godeltech.gbf.model.State.FORM;
-import static com.godeltech.gbf.model.State.ROUTE;
 
 @Service
 @AllArgsConstructor
@@ -47,7 +42,7 @@ public class RouteHandlerType implements HandlerType {
                 normalizeRoutePointsOrders(tempRoute);
             }
             case CONFIRM_ROUTE -> {
-                routeValidator.checkRouteHasLessThan2Points(tempRoute, userData.getCallbackQueryId());
+                routeValidator.checkRouteHasMoreOrEqualsThan2Points(tempRoute, userData.getCallbackQueryId());
                 userData.setRoute(new LinkedList<>(tempRoute));
                 tempRoute.clear();
             }

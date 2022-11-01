@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.godeltech.gbf.gui.button.RequestButton.*;
-import static com.godeltech.gbf.gui.button.ButtonUtils.createLocalButtonWithData;
+import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButtonWithData;
 
 @Component
 @AllArgsConstructor

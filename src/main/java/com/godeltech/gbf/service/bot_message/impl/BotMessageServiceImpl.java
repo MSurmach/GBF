@@ -8,7 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,7 +26,7 @@ public class BotMessageServiceImpl implements BotMessageService {
                 .messageId(message.getMessageId())
                 .userId(userId)
                 .chatId(message.getChatId())
-                .createdAt(LocalDate.now())
+                .createdAt(Timestamp.valueOf(LocalDateTime.now()))
                 .build());
     }
 

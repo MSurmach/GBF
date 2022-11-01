@@ -8,36 +8,21 @@ import com.godeltech.gbf.model.UserData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static com.godeltech.gbf.gui.message.MessageUtils.*;
+import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 import static com.godeltech.gbf.gui.message.impl.RegistrationsMessageType.REGISTRATION_DATA_ID;
 import static com.godeltech.gbf.gui.message.impl.RequestsMessageType.REQUESTS_DATA_ID;
 
 @Component
 @AllArgsConstructor
 public class FormMessageType implements MessageType {
-    public final static String COURIER_INSTRUCTION_CODE = "form.courier.instruction";
-    public final static String COURIER_ESSENTIAL_INFO_CODE = "form.courier.essential.info";
-    public final static String CLIENT_INSTRUCTION_CODE = "form.client.instruction";
-    public final static String CLIENT_ESSENTIAL_INFO_CODE = "form.client.essential.info";
+    public final static String INSTRUCTION_COURIER_ABOUT_CODE = "form.instruction.courier.about";
+    public final static String INSTRUCTION_CLIENT_ABOUT_CODE = "form.instruction.client.about";
     public final static String DETAILS_HEADER_EMPTY_CODE = "form.details.header.empty";
     public final static String DETAILS_HEADER_FULL_CODE = "form.details.header.full";
     public final static String REGISTRATIONS_VIEWER_INSTRUCTION_CODE = "form.registrationsViewer.instruction";
     public final static String REQUESTS_VIEWER_INSTRUCTION_CODE = "form.requestsViewer.instruction";
-    private LocalMessageSource lms;
 
-    @Override
-    public String initialMessage(UserData userData) {
-        Role currentRole = userData.getRole();
-        return switch (currentRole) {
-            case COURIER -> lms.getLocaleMessage(COURIER_INSTRUCTION_CODE, userData.getUsername()) +
-                    lms.getLocaleMessage(COURIER_ESSENTIAL_INFO_CODE);
-            case CLIENT -> lms.getLocaleMessage(CLIENT_INSTRUCTION_CODE, userData.getUsername()) +
-                    lms.getLocaleMessage(CLIENT_ESSENTIAL_INFO_CODE);
-            case REGISTRATIONS_VIEWER ->
-                    lms.getLocaleMessage(REGISTRATIONS_VIEWER_INSTRUCTION_CODE, userData.getUsername());
-            case REQUESTS_VIEWER -> lms.getLocaleMessage(REQUESTS_VIEWER_INSTRUCTION_CODE, userData.getUsername());
-        };
-    }
+    private LocalMessageSource lms;
 
     @Override
     public State getState() {
@@ -46,20 +31,31 @@ public class FormMessageType implements MessageType {
 
     @Override
     public String getMessage(UserData userData) {
-        return header(userData) +
+        return instructions(userData.getRole(), userData.getUsername()) +
+                detailsHeader(userData.getRole(), userData.isEmpty(), userData.getId()) +
                 routeDetails(userData.getRoute(), lms) +
                 datesDetails(userData.getStartDate(), userData.getEndDate(), lms) +
-                deliveryDetails(userData.getDeliverySize(), lms) +
+                deliveryDetails(userData.getDelivery(), lms) +
                 seatsDetails(userData.getSeats(), lms) +
                 commentDetails(userData.getComment(), lms);
     }
 
-    private String header(UserData userData) {
-        if (userData.isEmpty()) return lms.getLocaleMessage(DETAILS_HEADER_EMPTY_CODE);
-        return switch (userData.getRole()) {
+    private String detailsHeader(Role role, boolean isEmptyData, Long userId) {
+
+        if (isEmptyData) return lms.getLocaleMessage(DETAILS_HEADER_EMPTY_CODE);
+        return switch (role) {
             case COURIER, CLIENT -> lms.getLocaleMessage(DETAILS_HEADER_FULL_CODE);
-            case REGISTRATIONS_VIEWER -> lms.getLocaleMessage(REGISTRATION_DATA_ID, userData.getId().toString());
-            case REQUESTS_VIEWER -> lms.getLocaleMessage(REQUESTS_DATA_ID, userData.getId().toString());
+            case REGISTRATIONS_VIEWER -> lms.getLocaleMessage(REGISTRATION_DATA_ID, userId.toString());
+            case REQUESTS_VIEWER -> lms.getLocaleMessage(REQUESTS_DATA_ID, userId.toString());
+        };
+    }
+
+    private String instructions(Role role, String username) {
+        return switch (role) {
+            case COURIER -> lms.getLocaleMessage(INSTRUCTION_COURIER_ABOUT_CODE, username);
+            case CLIENT -> lms.getLocaleMessage(INSTRUCTION_CLIENT_ABOUT_CODE, username);
+            case REGISTRATIONS_VIEWER -> lms.getLocaleMessage(REGISTRATIONS_VIEWER_INSTRUCTION_CODE, username);
+            case REQUESTS_VIEWER -> lms.getLocaleMessage(REQUESTS_VIEWER_INSTRUCTION_CODE, username);
         };
     }
 }

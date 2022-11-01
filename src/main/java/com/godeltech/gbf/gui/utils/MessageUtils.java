@@ -1,16 +1,19 @@
-package com.godeltech.gbf.gui.message;
+package com.godeltech.gbf.gui.utils;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.DateUtils;
+import com.godeltech.gbf.model.db.Delivery;
 import com.godeltech.gbf.model.db.RoutePoint;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class MessageUtils {
     public final static String DETAILS_DATES_CODE = "details.dates";
     public final static String DETAILS_COMMENT_CODE = "details.comment";
+    public final static String DETAILS_DELIVERY_CODE = "details.delivery";
     public final static String DETAILS_ROUTE_CODE = "details.route";
     public final static String DETAILS_SEATS_CODE = "details.seats";
     public final static String DETAILS_EMPTY = "";
@@ -57,9 +60,11 @@ public class MessageUtils {
                 DETAILS_EMPTY;
     }
 
-    public static String deliveryDetails(int packageSize, LocalMessageSource lms) {
-        return packageSize != 0 ?
-                DETAILS_EMPTY :
-                DETAILS_EMPTY;
+    public static String deliveryDetails(Delivery delivery, LocalMessageSource lms) {
+        if (delivery != null) {
+            String deliveryName = lms.getLocaleMessage(delivery.name());
+            return lms.getLocaleMessage(DETAILS_DELIVERY_CODE, deliveryName);
+        }
+        return DETAILS_EMPTY;
     }
 }

@@ -13,9 +13,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.*;
 
-import static com.godeltech.gbf.gui.button.ButtonUtils.createLocalButton;
+import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButton;
 import static com.godeltech.gbf.gui.button.FormButton.*;
-import static com.godeltech.gbf.gui.keyboard.KeyboardUtils.backAndMenuMarkup;
+import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 public class FormKeyboardType implements KeyboardType {
@@ -46,7 +46,7 @@ public class FormKeyboardType implements KeyboardType {
         keyboard.add(routeButton(isRouteEmpty));
         if (!isRouteEmpty)
             keyboard.add(datesButton(Objects.isNull(userData.getStartDate())));
-        keyboard.add(deliveryButton(userData.getDeliverySize() == 0));
+        keyboard.add(deliveryButton(userData.getDelivery() == null));
         keyboard.add(seatsButton(userData.getSeats() == 0));
         keyboard.add(commentButton(Objects.isNull(userData.getComment())));
         keyboard.add(confirmButton(userData.getRole()));
@@ -68,8 +68,8 @@ public class FormKeyboardType implements KeyboardType {
                 List.of(buttons.get(EDIT_DATES));
     }
 
-    private List<InlineKeyboardButton> deliveryButton(boolean isDeliverySizeZero) {
-        return isDeliverySizeZero ?
+    private List<InlineKeyboardButton> deliveryButton(boolean isDeliveryNull) {
+        return isDeliveryNull ?
                 List.of(buttons.get(ADD_DELIVERY)) :
                 List.of(buttons.get(EDIT_DELIVERY));
     }

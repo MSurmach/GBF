@@ -3,7 +3,7 @@ package com.godeltech.gbf.service.validator;
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.service.validator.exceptions.GbfException;
-import com.godeltech.gbf.gui.DateUtils;
+import com.godeltech.gbf.gui.utils.DateUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

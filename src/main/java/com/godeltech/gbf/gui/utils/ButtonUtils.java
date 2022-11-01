@@ -1,4 +1,4 @@
-package com.godeltech.gbf.gui.button;
+package com.godeltech.gbf.gui.utils;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.button.BotButton;
@@ -25,6 +25,13 @@ public class ButtonUtils {
     public static InlineKeyboardButton createButtonWithData(String label, BotButton botButton, String data) {
         var button = new InlineKeyboardButton(label);
         String callback = botButton + SPLITTER + data;
+        button.setCallbackData(callback);
+        return button;
+    }
+
+    public static InlineKeyboardButton createButton(BotButton botButton) {
+        var button = new InlineKeyboardButton(botButton.name());
+        String callback = botButton.name();
         button.setCallbackData(callback);
         return button;
     }

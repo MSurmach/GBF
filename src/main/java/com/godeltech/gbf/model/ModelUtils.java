@@ -1,8 +1,27 @@
 package com.godeltech.gbf.model;
 
+import com.godeltech.gbf.model.db.Offer;
 import com.godeltech.gbf.model.db.TelegramUser;
 
 public class ModelUtils {
+
+    public static Offer createOffer(UserData userData) {
+        TelegramUser telegramUser = TelegramUser.builder().
+                id(userData.getTelegramId()).
+                userName(userData.getUsername()).
+                build();
+        return Offer.builder().
+                telegramUser(telegramUser).
+                startDate(userData.getStartDate()).
+                endDate(userData.getEndDate()).
+                routePoints(userData.getRoute()).
+                comment(userData.getComment()).
+                seats(userData.getSeats()).
+                role(userData.getRole()).
+                delivery(userData.getDelivery()).
+                build();
+    }
+
     public static TelegramUser telegramUser(UserData userData) {
 //        LinkedList<RoutePoint> routePoints = userData.getRoutePoints();
 //        routePoints.getLast().setOrderNumber(routePoints.size() - 1);

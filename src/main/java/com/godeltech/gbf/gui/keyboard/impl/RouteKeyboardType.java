@@ -18,10 +18,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.godeltech.gbf.gui.button.ButtonUtils.createLocalButton;
-import static com.godeltech.gbf.gui.button.ButtonUtils.createLocalButtonWithData;
+import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButton;
+import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButtonWithData;
 import static com.godeltech.gbf.gui.button.RouteButton.*;
-import static com.godeltech.gbf.gui.keyboard.KeyboardUtils.backAndMenuMarkup;
+import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 @AllArgsConstructor

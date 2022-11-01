@@ -1,18 +1,16 @@
 package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.DateUtils;
+import com.godeltech.gbf.gui.utils.DateUtils;
 import com.godeltech.gbf.gui.message.MessageType;
-import com.godeltech.gbf.gui.message.MessageUtils;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.model.db.RoutePoint;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-import static com.godeltech.gbf.gui.message.MessageUtils.datesDetails;
+import static com.godeltech.gbf.gui.utils.MessageUtils.datesDetails;
 
 @Service
 @AllArgsConstructor
