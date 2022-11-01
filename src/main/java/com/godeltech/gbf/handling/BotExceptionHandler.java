@@ -69,11 +69,11 @@ public class BotExceptionHandler {
         log.error(exception.getMessage());
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public void handleAll(RuntimeException exception) {
-        log.error("Get runtime exception with message : {} and with stacktrace : {}",
-                exception.getMessage(), exception.getStackTrace());
-    }
+//    @ExceptionHandler(RuntimeException.class)
+//    public void handleAll(RuntimeException exception) {
+//        log.error("Get runtime exception with message : {} and with stacktrace : {}",
+//                exception.getMessage(), exception.getStackTrace());
+//    }
 
     @ExceptionHandler(NotFoundStateTypeException.class)
     public void handleNotFoundStateTypeException(NotFoundStateTypeException exception) {
