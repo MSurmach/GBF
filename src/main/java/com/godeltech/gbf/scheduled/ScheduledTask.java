@@ -2,11 +2,10 @@ package com.godeltech.gbf.scheduled;
 
 import com.godeltech.gbf.GbfBot;
 import com.godeltech.gbf.model.db.BotMessage;
-import com.godeltech.gbf.service.offer.OfferService;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
+import com.godeltech.gbf.service.offer.OfferService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +23,7 @@ public class ScheduledTask {
     private final OfferService offerService;
     private final GbfBot gbfBot;
 
-    @Scheduled(fixedDelayString ="${schedule.work}")
+    @Scheduled(fixedDelayString = "${schedule.work}")
     @Transactional
     public void removeExpiredMessages() {
         LocalDateTime now = LocalDateTime.now().minusHours(41);

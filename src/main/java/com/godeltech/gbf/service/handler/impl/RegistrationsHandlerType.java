@@ -7,7 +7,7 @@ import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.service.handler.HandlerType;
-import com.godeltech.gbf.service.user.UserService;
+import com.godeltech.gbf.service.user.TelegramUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import static com.godeltech.gbf.model.State.*;
 @Service
 @AllArgsConstructor
 public class RegistrationsHandlerType implements HandlerType {
-    private UserService userService;
+    private TelegramUserService telegramUserService;
 
     @Override
     public State getState() {
@@ -39,7 +39,7 @@ public class RegistrationsHandlerType implements HandlerType {
                 yield FORM;
             }
             case REGISTRATION_DELETE -> {
-                userService.deleteById(userId);
+                //telegramUserService.deleteById(userId);
                 yield REGISTRATIONS;
             }
             case REGISTRATION_FIND_CLIENTS -> {

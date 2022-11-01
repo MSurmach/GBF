@@ -4,14 +4,6 @@ import com.godeltech.gbf.model.db.TelegramUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import java.util.Optional;
-
 public interface TelegramUserRepository extends JpaRepository<TelegramUser, Long>, JpaSpecificationExecutor<TelegramUser> {
-//    Page<TelegramUser> findUsersByTelegramIdAndRole(Long telegramId, Role role, Pageable pageable);
 
-    Optional<TelegramUser> findUserById(Long id);
-
-//    void removeByExpiredAtBefore(LocalDate date);
-
-//    void removeByChangedAtBefore(LocalDate date);
 }
