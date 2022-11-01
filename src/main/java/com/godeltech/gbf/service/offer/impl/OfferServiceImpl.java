@@ -15,24 +15,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class OfferServiceImpl implements OfferService {
     private final OfferRepository offerRepository;
     private final TelegramUserService telegramUserService;
 
 
     @Override
+    @Transactional
     public void save(UserData userData) {
         Offer newOffer = ModelUtils.createOffer(userData);
-        Optional<TelegramUser> telegramUserOptional = telegramUserService.getById(userData.getTelegramId());
-        if (telegramUserOptional.isPresent())
-            newOffer.setTelegramUser(telegramUserOptional.get());
-        else
-            newOffer.setTelegramUser(telegramUserService.save(userData));
+        TelegramUser telegramUser = telegramUserService.getOrCreateUser(userData.getTelegramId(), userData.getUsername());
+        newOffer.setTelegramUser(telegramUser);
         offerRepository.save(newOffer);
     }
 

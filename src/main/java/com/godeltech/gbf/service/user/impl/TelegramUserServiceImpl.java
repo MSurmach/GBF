@@ -6,20 +6,26 @@ import com.godeltech.gbf.repository.TelegramUserRepository;
 import com.godeltech.gbf.service.user.TelegramUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class TelegramUserServiceImpl implements TelegramUserService {
     private TelegramUserRepository telegramUserRepository;
 
     @Override
-    public Optional<TelegramUser> getById(Long id) {
-        return telegramUserRepository.findById(id);
+    @Transactional
+    public TelegramUser getOrCreateUser(Long id, String username) {
+        return telegramUserRepository.findById(id)
+                .orElse(telegramUserRepository.save(TelegramUser.builder()
+                        .id(id)
+                        .userName(username)
+                        .build()));
     }
 
     @Override
+    @Transactional
     public TelegramUser save(UserData userData) {
         TelegramUser telegramUser = TelegramUser.builder().
                 id(userData.getTelegramId()).

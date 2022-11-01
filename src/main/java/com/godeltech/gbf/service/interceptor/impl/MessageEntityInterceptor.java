@@ -2,7 +2,6 @@ package com.godeltech.gbf.service.interceptor.impl;
 
 import com.godeltech.gbf.cache.UserDataCache;
 import com.godeltech.gbf.exception.TextCommandNotFoundException;
-import com.godeltech.gbf.factory.impl.HandlerFactory;
 import com.godeltech.gbf.factory.impl.ViewFactory;
 import com.godeltech.gbf.gui.command.TextCommand;
 import com.godeltech.gbf.model.State;
@@ -10,7 +9,6 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.interceptor.InterceptorTypes;
-import com.godeltech.gbf.service.view.ViewType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,17 +24,14 @@ import static com.godeltech.gbf.model.State.MENU;
 @Service
 @Slf4j
 public class MessageEntityInterceptor implements Interceptor {
-    private final HandlerFactory handlerFactory;
     private final ViewFactory viewFactory;
-
     private final BotMessageService botMessageService;
     @Getter
     private Long telegramUserId;
     @Getter
     private Long chatId;
 
-    public MessageEntityInterceptor(HandlerFactory handlerFactory, ViewFactory viewFactory, BotMessageService botMessageService) {
-        this.handlerFactory = handlerFactory;
+    public MessageEntityInterceptor(ViewFactory viewFactory,BotMessageService botMessageService) {
         this.viewFactory = viewFactory;
         this.botMessageService = botMessageService;
     }

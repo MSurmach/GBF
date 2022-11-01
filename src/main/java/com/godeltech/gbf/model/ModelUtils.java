@@ -6,7 +6,7 @@ import com.godeltech.gbf.model.db.TelegramUser;
 public class ModelUtils {
 
     public static Offer createOffer(UserData userData) {
-        return Offer.builder().
+        Offer offer = Offer.builder().
                 startDate(userData.getStartDate()).
                 endDate(userData.getEndDate()).
                 routePoints(userData.getRoute()).
@@ -15,6 +15,8 @@ public class ModelUtils {
                 role(userData.getRole()).
                 delivery(userData.getDelivery()).
                 build();
+        userData.getRoute().forEach(routePoint -> routePoint.setOffer(offer));
+        return offer;
     }
 
     public static TelegramUser telegramUser(UserData userData) {
