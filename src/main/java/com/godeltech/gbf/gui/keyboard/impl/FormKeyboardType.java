@@ -13,9 +13,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.*;
 
+import static com.godeltech.gbf.gui.button.ButtonUtils.createLocalButton;
 import static com.godeltech.gbf.gui.button.FormButton.*;
-import static com.godeltech.gbf.utils.ButtonUtils.createLocalButton;
-import static com.godeltech.gbf.utils.KeyboardUtils.backAndMenuMarkup;
+import static com.godeltech.gbf.gui.keyboard.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 public class FormKeyboardType implements KeyboardType {
@@ -42,12 +42,13 @@ public class FormKeyboardType implements KeyboardType {
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        keyboard.add(routeButton(userData));
-        if (Objects.isNull(userData.getTempStartDate()))
-            keyboard.add(datesButton(userData));
-        keyboard.add(deliveryButton(userData));
-        keyboard.add(seatsButton(userData));
-        keyboard.add(commentButton(userData));
+        boolean isRouteEmpty = userData.getRoute().isEmpty();
+        keyboard.add(routeButton(isRouteEmpty));
+        if (!isRouteEmpty)
+            keyboard.add(datesButton(Objects.isNull(userData.getStartDate())));
+        keyboard.add(deliveryButton(userData.getDeliverySize() == 0));
+        keyboard.add(seatsButton(userData.getSeats() == 0));
+        keyboard.add(commentButton(Objects.isNull(userData.getComment())));
         keyboard.add(confirmButton(userData.getRole()));
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(keyboard);
         return new KeyboardMarkupAppender(keyboardMarkup).
@@ -55,33 +56,32 @@ public class FormKeyboardType implements KeyboardType {
                 result();
     }
 
-    private List<InlineKeyboardButton> routeButton(UserData userData) {
-        var route = userData.getRoute();
-        return route.isEmpty() ?
+    private List<InlineKeyboardButton> routeButton(boolean isEmptyRoute) {
+        return isEmptyRoute ?
                 List.of(buttons.get(ADD_ROUTE)) :
                 List.of(buttons.get(EDIT_ROUTE));
     }
 
-    private List<InlineKeyboardButton> datesButton(UserData userData) {
-        return userData.getTempStartDate() == null ?
+    private List<InlineKeyboardButton> datesButton(boolean isStartDateNull) {
+        return isStartDateNull ?
                 List.of(buttons.get(ADD_DATES)) :
                 List.of(buttons.get(EDIT_DATES));
     }
 
-    private List<InlineKeyboardButton> deliveryButton(UserData userData) {
-        return userData.getDeliverySize() == 0 ?
+    private List<InlineKeyboardButton> deliveryButton(boolean isDeliverySizeZero) {
+        return isDeliverySizeZero ?
                 List.of(buttons.get(ADD_DELIVERY)) :
                 List.of(buttons.get(EDIT_DELIVERY));
     }
 
-    private List<InlineKeyboardButton> seatsButton(UserData userData) {
-        return userData.getSeats() == 0 ?
+    private List<InlineKeyboardButton> seatsButton(boolean isSeatsZero) {
+        return isSeatsZero ?
                 List.of(buttons.get(ADD_SEATS)) :
                 List.of(buttons.get(EDIT_SEATS));
     }
 
-    private List<InlineKeyboardButton> commentButton(UserData userData) {
-        return userData.getComment() == null ?
+    private List<InlineKeyboardButton> commentButton(boolean isCommentNull) {
+        return isCommentNull ?
                 List.of(buttons.get(ADD_COMMENT)) :
                 List.of(buttons.get(EDIT_COMMENT));
     }

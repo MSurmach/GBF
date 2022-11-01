@@ -24,7 +24,6 @@ public class BackHandlerType implements HandlerType {
         stateAndBackStateMap.put(REQUESTS, MENU);
         stateAndBackStateMap.put(REGISTRATIONS, MENU);
         stateAndBackStateMap.put(WRONG_INPUT, MENU);
-        stateAndBackStateMap.put(INTERMEDIATE_EDITOR, FORM);
         stateAndBackStateMap.put(COMMENT, FORM);
         stateAndBackStateMap.put(SEATS, FORM);
         stateAndBackStateMap.put(DELIVERY, FORM);

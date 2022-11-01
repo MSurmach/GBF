@@ -1,15 +1,18 @@
 package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.gui.DateUtils;
 import com.godeltech.gbf.gui.message.MessageType;
+import com.godeltech.gbf.gui.message.MessageUtils;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.model.db.RoutePoint;
-import com.godeltech.gbf.utils.DateUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+
+import static com.godeltech.gbf.gui.message.MessageUtils.datesDetails;
 
 @Service
 @AllArgsConstructor
@@ -32,17 +35,7 @@ public class DateMessageType implements MessageType {
         String nowDate = DateUtils.shortFormatDate(LocalDate.now());
         String nowDateInfo = lms.getLocaleMessage(DATE_TODAY_CODE, nowDate);
         return nowDateInfo +
-                buildInfoAboutDates(userData.getTempRoutePoint()) +
+                datesDetails(userData.getTempStartDate(), userData.getTempEndDate(), lms) +
                 lms.getLocaleMessage(DATE_QUESTION_CODE);
-    }
-
-    private String buildInfoAboutDates(RoutePoint routePoint) {
-//        LocalDate startDate = routePoint.getStartDate();
-//        LocalDate endDate = routePoint.getEndDate();
-//        if (startDate == null && endDate == null) return lms.getLocaleMessage(DATE_INFO_NOT_SELECTED_CODE);
-//        return startDate.equals(endDate) ?
-//                lms.getLocaleMessage(DATE_INFO_SELECTED_CODE, DateUtils.shortFormatDate(startDate)) :
-//                lms.getLocaleMessage(DATE_INFO_SELECTED_CODE, DateUtils.dateAsRange(startDate, endDate));
-        return null;
     }
 }

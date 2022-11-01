@@ -10,14 +10,15 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import static com.godeltech.gbf.gui.message.MessageUtils.*;
+
 @Service
 @AllArgsConstructor
 public class RequestsMessageType implements MessageType, PaginationInfo<TelegramUser> {
-    private LocalMessageSource lms;
-    private DetailsCreator detailsCreator;
     public final static String REQUESTS_EXIST_INITIAL = "requests.exist.initial";
     public final static String REQUESTS_NOT_EXIST_INITIAL = "requests.notExist.initial";
     public final static String REQUESTS_DATA_ID = "request.data.id";
+    private LocalMessageSource lms;
 
     @Override
     public State getState() {
@@ -26,8 +27,12 @@ public class RequestsMessageType implements MessageType, PaginationInfo<Telegram
 
     @Override
     public String getMessage(UserData userData) {
-        String recordIdHeader = lms.getLocaleMessage(REQUESTS_DATA_ID, userData.getId().toString());
-        return recordIdHeader + detailsCreator.createAllDetails(userData);
+        return lms.getLocaleMessage(REQUESTS_DATA_ID, userData.getId().toString()) +
+                routeDetails(userData.getRoute(), lms) +
+                datesDetails(userData.getStartDate(), userData.getEndDate(), lms) +
+                deliveryDetails(userData.getDeliverySize(), lms) +
+                seatsDetails(userData.getSeats(), lms) +
+                commentDetails(userData.getComment(), lms);
     }
 
     public String initialMessage(UserData userData) {

@@ -8,6 +8,7 @@ import com.godeltech.gbf.model.UserData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import static com.godeltech.gbf.gui.message.MessageUtils.*;
 import static com.godeltech.gbf.gui.message.impl.RegistrationsMessageType.REGISTRATION_DATA_ID;
 import static com.godeltech.gbf.gui.message.impl.RequestsMessageType.REQUESTS_DATA_ID;
 
@@ -23,7 +24,6 @@ public class FormMessageType implements MessageType {
     public final static String REGISTRATIONS_VIEWER_INSTRUCTION_CODE = "form.registrationsViewer.instruction";
     public final static String REQUESTS_VIEWER_INSTRUCTION_CODE = "form.requestsViewer.instruction";
     private LocalMessageSource lms;
-    private DetailsCreator detailsCreator;
 
     @Override
     public String initialMessage(UserData userData) {
@@ -47,11 +47,15 @@ public class FormMessageType implements MessageType {
     @Override
     public String getMessage(UserData userData) {
         return header(userData) +
-                detailsCreator.createAllDetails(userData);
+                routeDetails(userData.getRoute(), lms) +
+                datesDetails(userData.getStartDate(), userData.getEndDate(), lms) +
+                deliveryDetails(userData.getDeliverySize(), lms) +
+                seatsDetails(userData.getSeats(), lms) +
+                commentDetails(userData.getComment(), lms);
     }
 
     private String header(UserData userData) {
-//        if (userData.isEmpty()) return lms.getLocaleMessage(DETAILS_HEADER_EMPTY_CODE);
+        if (userData.isEmpty()) return lms.getLocaleMessage(DETAILS_HEADER_EMPTY_CODE);
         return switch (userData.getRole()) {
             case COURIER, CLIENT -> lms.getLocaleMessage(DETAILS_HEADER_FULL_CODE);
             case REGISTRATIONS_VIEWER -> lms.getLocaleMessage(REGISTRATION_DATA_ID, userData.getId().toString());

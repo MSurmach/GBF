@@ -1,14 +1,16 @@
 package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.gui.message.MessageType;
 import com.godeltech.gbf.gui.message.PaginationInfo;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.gui.message.MessageType;
 import com.godeltech.gbf.model.db.TelegramUser;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import static com.godeltech.gbf.gui.message.MessageUtils.*;
 
 @Service
 @AllArgsConstructor
@@ -16,7 +18,6 @@ public class CouriersListMessageType implements MessageType, PaginationInfo<Tele
     public final static String COURIERS_LIST_INITIAL_EXIST = "couriers.list.initial.exist";
     public final static String COURIERS_LIST_INITIAL_NOT_EXIST = "couriers.list.initial.notExist";
     public final static String COURIERS_LIST_HEADER = "couriers.list.header";
-    private final DetailsCreator detailsCreator;
     private LocalMessageSource lms;
 
     @Override
@@ -27,7 +28,11 @@ public class CouriersListMessageType implements MessageType, PaginationInfo<Tele
     @Override
     public String getMessage(UserData userData) {
         return lms.getLocaleMessage(COURIERS_LIST_HEADER, userData.getUsername()) +
-                detailsCreator.createAllDetails(userData);
+                routeDetails(userData.getRoute(), lms) +
+                datesDetails(userData.getStartDate(), userData.getEndDate(), lms) +
+                deliveryDetails(userData.getDeliverySize(), lms) +
+                seatsDetails(userData.getSeats(), lms) +
+                commentDetails(userData.getComment(), lms);
     }
 
     public String initialMessage(UserData userData) {

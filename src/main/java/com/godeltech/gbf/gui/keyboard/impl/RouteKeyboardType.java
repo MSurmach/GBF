@@ -18,10 +18,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.godeltech.gbf.gui.button.RouteButton.SELECT_CITY;
-import static com.godeltech.gbf.utils.ButtonUtils.createLocalButtonWithData;
-import static com.godeltech.gbf.utils.KeyboardUtils.backAndMenuMarkup;
-import static com.godeltech.gbf.utils.KeyboardUtils.confirmMarkup;
+import static com.godeltech.gbf.gui.button.ButtonUtils.createLocalButton;
+import static com.godeltech.gbf.gui.button.ButtonUtils.createLocalButtonWithData;
+import static com.godeltech.gbf.gui.button.RouteButton.*;
+import static com.godeltech.gbf.gui.keyboard.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 @AllArgsConstructor
@@ -38,27 +38,34 @@ public class RouteKeyboardType implements KeyboardType {
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
         List<City> allCities = cityService.findAll();
-        LinkedList<RoutePoint> userRoutePoints = userData.getTempRoute();
+        LinkedList<RoutePoint> route = userData.getTempRoute();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         for (var index = 0; index < allCities.size(); ) {
             var columnCount = 3;
-            List<InlineKeyboardButton> buttonRow = new ArrayList<>();
+            List<InlineKeyboardButton> citiesRow = new ArrayList<>();
             while (columnCount > 0 && index != allCities.size()) {
                 City city = allCities.get(index);
-                Optional<RoutePoint> found = userRoutePoints.stream().filter(routePoint -> routePoint.getCity().equals(city)).findFirst();
+                Optional<RoutePoint> found = route.stream().filter(routePoint -> routePoint.getCity().equals(city)).findFirst();
                 String statusLabel = found.map(this::statusLabel).orElse(null);
                 String cityName = city.getName();
-                buttonRow.add(createLocalButtonWithData(statusLabel, cityName, SELECT_CITY, cityName, lms));
+                citiesRow.add(createLocalButtonWithData(statusLabel, cityName, SELECT_CITY, cityName, lms));
                 columnCount--;
                 index++;
             }
-            keyboard.add(buttonRow);
+            keyboard.add(citiesRow);
         }
+        if (!route.isEmpty())
+            keyboard.add(routeControlsRow());
         InlineKeyboardMarkup countryKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
         return new KeyboardMarkupAppender(countryKeyboardMarkup).
-                append(confirmMarkup(lms)).
                 append(backAndMenuMarkup(lms)).
                 result();
+    }
+
+    private List<InlineKeyboardButton> routeControlsRow() {
+        var clearButton = createLocalButton(CLEAR_ROUTE, lms);
+        var confirmRouteButton = createLocalButton(CONFIRM_ROUTE, lms);
+        return List.of(clearButton, confirmRouteButton);
     }
 
     private String statusLabel(RoutePoint routePoint) {

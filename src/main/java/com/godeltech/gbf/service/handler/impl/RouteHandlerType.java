@@ -1,17 +1,20 @@
 package com.godeltech.gbf.service.handler.impl;
 
+import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.button.RouteButton;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.UserData;
-import com.godeltech.gbf.model.db.City;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.Status;
 import com.godeltech.gbf.service.city.CityService;
 import com.godeltech.gbf.service.handler.HandlerType;
+import com.godeltech.gbf.service.validator.RouteValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 import static com.godeltech.gbf.model.State.FORM;
 import static com.godeltech.gbf.model.State.ROUTE;
@@ -21,6 +24,7 @@ import static com.godeltech.gbf.model.State.ROUTE;
 public class RouteHandlerType implements HandlerType {
 
     private CityService cityService;
+    private RouteValidator routeValidator;
 
     @Override
     public State getState() {
@@ -32,23 +36,24 @@ public class RouteHandlerType implements HandlerType {
         String callback = userData.getCallbackHistory().peek();
         String[] split = callback.split(":");
         var clicked = RouteButton.valueOf(split[0]);
-        String cityName = split[1];
-        return switch (clicked) {
+        LinkedList<RoutePoint> tempRoute = userData.getTempRoute();
+        switch (clicked) {
             case SELECT_CITY -> {
-                City city = cityService.findCityByName(cityName);
-                LinkedList<RoutePoint> tempRoute = userData.getTempRoute();
-                if (!tempRoute.removeFirstOccurrence(city))
-                    tempRoute.add(new RoutePoint(city));
+                String cityName = split[1];
+                var city = cityService.findCityByName(cityName);
+                Optional<RoutePoint> routePointOptional = tempRoute.stream().filter(routePoint -> routePoint.getCity().equals(city)).findFirst();
+                if (routePointOptional.isPresent()) tempRoute.remove(routePointOptional.get());
+                else tempRoute.add(new RoutePoint(city));
                 normalizeRoutePointsOrders(tempRoute);
-                yield ROUTE;
             }
             case CONFIRM_ROUTE -> {
-                LinkedList<RoutePoint> tempRoute = userData.getTempRoute();
-                userData.setRoute(tempRoute);
+                routeValidator.checkRouteHasLessThan2Points(tempRoute, userData.getCallbackQueryId());
+                userData.setRoute(new LinkedList<>(tempRoute));
                 tempRoute.clear();
-                yield FORM;
             }
+            case CLEAR_ROUTE -> tempRoute.clear();
         };
+        return clicked.getNextState();
     }
 
     private void normalizeRoutePointsOrders(LinkedList<RoutePoint> route) {

@@ -38,6 +38,12 @@ public class DateHandlerType implements HandlerType {
             }
             case NEXT, PREVIOUS -> userData.getCallbackHistory().remove(1);
             case IGNORE -> throw new EmptyButtonCalendarException(split[1], userData.getCallbackQueryId());
+            case CONFIRM_DATE -> {
+                userData.setStartDate(LocalDate.from(userData.getTempStartDate()));
+                userData.setEndDate(LocalDate.from(userData.getTempEndDate()));
+                userData.setTempStartDate(null);
+                userData.setTempEndDate(null);
+            }
         }
         return clickedButton.getNextState();
     }

@@ -9,6 +9,9 @@ import com.godeltech.gbf.service.validator.OfferValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.LinkedList;
+
 import static com.godeltech.gbf.model.State.FORM;
 
 @Service
@@ -28,6 +31,14 @@ public class FormHandlerType implements HandlerType {
         var callback = userData.getCallbackHistory().peek();
         var clicked = FormButton.valueOf(callback);
         switch (clicked) {
+            case ADD_ROUTE, EDIT_ROUTE -> userData.setTempRoute(new LinkedList<>(userData.getRoute()));
+            case ADD_DATES, EDIT_DATES -> {
+                LocalDate startDate = userData.getStartDate();
+                if (startDate!=null){
+                    userData.setTempStartDate(LocalDate.from(startDate));
+                    userData.setTempEndDate(LocalDate.from(userData.getEndDate()));
+                }
+            }
             case FORM_CONFIRM_AS_COURIER, FORM_CONFIRM_AS_CLIENT, FORM_CONFIRM_AS_REGISTRATION_VIEWER -> {
                 offerValidator.validateOfferBeforeSave(userData);
                 userService.save(userData);

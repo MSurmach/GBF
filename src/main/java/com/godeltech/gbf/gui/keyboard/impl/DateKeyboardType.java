@@ -18,18 +18,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static com.godeltech.gbf.gui.DateUtils.formatMonth;
+import static com.godeltech.gbf.gui.DateUtils.formatYear;
+import static com.godeltech.gbf.gui.button.ButtonUtils.*;
 import static com.godeltech.gbf.gui.button.CalendarBotButton.*;
-import static com.godeltech.gbf.utils.ButtonUtils.*;
-import static com.godeltech.gbf.utils.DateUtils.formatMonth;
-import static com.godeltech.gbf.utils.DateUtils.formatYear;
-import static com.godeltech.gbf.utils.KeyboardUtils.backAndMenuMarkup;
+import static com.godeltech.gbf.gui.keyboard.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 @AllArgsConstructor
 public class DateKeyboardType implements KeyboardType {
+    public final static String DATE_MARKER = "date.marker";
     private LocalMessageSource lms;
-    public final static String START_DATE_MARK = "start.flag";
-    public final static String END_DATE_MARK = "end.flag";
 
     @Override
     public State getState() {
@@ -111,7 +110,7 @@ public class DateKeyboardType implements KeyboardType {
         for (int index = shift; index < columnCount; index++) {
             if (day <= date.lengthOfMonth()) {
                 var dayButton = (Objects.equals(date, userData.getTempStartDate()) || Objects.equals(date, userData.getTempEndDate())) ?
-                        markButtonAsExisted(userData, date) :
+                        createLocalButtonWithData(DATE_MARKER, SELECT_DAY, date.toString(), lms) :
                         createButtonWithData(Integer.toString(day++), SELECT_DAY, date.toString());
                 row.add(dayButton);
                 date = date.plusDays(1);
@@ -124,17 +123,5 @@ public class DateKeyboardType implements KeyboardType {
 
     private List<InlineKeyboardButton> confirmDateRow() {
         return List.of(createLocalButton(CONFIRM_DATE, lms));
-    }
-
-    private InlineKeyboardButton markButtonAsExisted(UserData userData, LocalDate date) {
-        LocalDate startDate = userData.getTempStartDate();
-        LocalDate endDate = userData.getTempEndDate();
-        if (Objects.equals(startDate, endDate)) {
-            String label = lms.getLocaleMessage(START_DATE_MARK) + lms.getLocaleMessage(END_DATE_MARK);
-            return createButtonWithData(label, SELECT_DAY, date.toString());
-        }
-        if (Objects.equals(startDate, date))
-            return createLocalButtonWithData(START_DATE_MARK, SELECT_DAY, date.toString(), lms);
-        return createLocalButtonWithData(END_DATE_MARK, SELECT_DAY, date.toString(), lms);
     }
 }

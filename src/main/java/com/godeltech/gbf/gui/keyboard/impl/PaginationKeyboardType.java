@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.godeltech.gbf.gui.button.PaginationButton.*;
-import static com.godeltech.gbf.utils.ButtonUtils.createButton;
-import static com.godeltech.gbf.utils.ButtonUtils.createLocalButton;
-import static com.godeltech.gbf.utils.KeyboardUtils.menuMarkup;
+import static com.godeltech.gbf.gui.button.ButtonUtils.createButton;
+import static com.godeltech.gbf.gui.button.ButtonUtils.createLocalButton;
+import static com.godeltech.gbf.gui.keyboard.KeyboardUtils.menuMarkup;
 
 @Component
 @AllArgsConstructor

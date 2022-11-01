@@ -5,10 +5,10 @@ import com.godeltech.gbf.model.UserData;
 import com.godeltech.gbf.service.handler.HandlerType;
 import org.springframework.stereotype.Service;
 
-import static com.godeltech.gbf.model.State.DELIVERY;
+import static com.godeltech.gbf.model.State.FORM;
 
 @Service
-public class CargoPeopleHandlerType implements HandlerType {
+public class SeatsHandlerType implements HandlerType {
 
     @Override
     public State getState() {
@@ -21,9 +21,9 @@ public class CargoPeopleHandlerType implements HandlerType {
         try {
             int count = Integer.parseInt(callback);
             userData.setSeats(count);
-            return DELIVERY;
+            return FORM;
         } catch (NumberFormatException numberFormatException) {
-            return userData.getStateHistory().peek();
+            return userData.getStateHistory().pop();
         }
     }
 }

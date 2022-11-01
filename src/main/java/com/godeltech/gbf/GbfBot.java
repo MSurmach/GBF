@@ -5,6 +5,7 @@ import com.godeltech.gbf.factory.impl.InterceptorFactory;
 import com.godeltech.gbf.model.db.BotMessage;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.interceptor.Interceptor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
@@ -20,6 +21,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Component
+@Slf4j
 public class GbfBot extends SpringWebhookBot {
     private final InterceptorFactory interceptorFactory;
     private final TelegramBotConfig telegramBotConfig;
@@ -74,7 +76,7 @@ public class GbfBot extends SpringWebhookBot {
                     botMessageService.save(telegramUserId, message);
                 }
             } catch (TelegramApiException e) {
-                throw new RuntimeException(e);
+                log.error(e.getMessage());
             }
         }
     }
@@ -90,7 +92,7 @@ public class GbfBot extends SpringWebhookBot {
                 try {
                     execute(deleteMessage);
                 } catch (TelegramApiException e) {
-                    throw new RuntimeException(e);
+                    log.error(e.getMessage());
                 }
             });
     }

@@ -1,4 +1,4 @@
-package com.godeltech.gbf.utils;
+package com.godeltech.gbf.gui.button;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.button.BotButton;

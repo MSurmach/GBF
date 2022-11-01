@@ -1,7 +1,7 @@
-package com.godeltech.gbf.utils;
+package com.godeltech.gbf.gui.keyboard;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.utils.ButtonUtils;
+import com.godeltech.gbf.gui.button.ButtonUtils;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -11,7 +11,7 @@ import java.util.List;
 import static com.godeltech.gbf.gui.button.CommonButton.CONFIRM;
 import static com.godeltech.gbf.gui.button.NavigationBotButton.GLOBAL_BACK;
 import static com.godeltech.gbf.gui.button.NavigationBotButton.MENU;
-import static com.godeltech.gbf.utils.ButtonUtils.createLocalButton;
+import static com.godeltech.gbf.gui.button.ButtonUtils.createLocalButton;
 
 public class KeyboardUtils {
 

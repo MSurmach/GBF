@@ -1,7 +1,6 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.button.DeliveryBotButton;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.State;
@@ -13,9 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.*;
 
-import static com.godeltech.gbf.gui.button.CargoBotButton.*;
-import static com.godeltech.gbf.utils.ButtonUtils.createLocalButton;
-import static com.godeltech.gbf.utils.KeyboardUtils.backAndMenuMarkup;
+import static com.godeltech.gbf.gui.button.ButtonUtils.createLocalButton;
+import static com.godeltech.gbf.gui.keyboard.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 @AllArgsConstructor

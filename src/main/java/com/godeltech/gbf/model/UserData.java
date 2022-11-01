@@ -42,4 +42,12 @@ public class UserData {
         this.telegramId = telegramId;
         this.username = username;
     }
+
+    public boolean isEmpty() {
+        return route.isEmpty() &&
+                startDate == null &&
+                comment == null &&
+                deliverySize == 0 &&
+                seats == 0;
+    }
 }
