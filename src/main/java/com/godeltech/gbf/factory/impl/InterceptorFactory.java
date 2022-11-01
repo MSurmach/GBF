@@ -27,8 +27,10 @@ public class InterceptorFactory {
             log.info("Get callback interceptor by user : {}", update.getCallbackQuery().getFrom().getUserName());
             return interceptorContext.get(InterceptorTypes.CALLBACK);
         } else {
-            log.info("Get message interceptor by user : {}",update.getMessage().getFrom().getUserName());
-            return interceptorContext.get(InterceptorTypes.MESSAGE);
+            log.info("Get message interceptors by user : {}", update.getMessage().getFrom().getUserName());
+            return update.getMessage().hasEntities() ?
+                    interceptorContext.get(InterceptorTypes.MESSAGE_ENTITY) :
+                    interceptorContext.get(InterceptorTypes.MESSAGE_TEXT);
         }
     }
 }

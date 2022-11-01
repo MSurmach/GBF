@@ -39,17 +39,17 @@ import static com.godeltech.gbf.service.interceptor.InterceptorTypes.CALLBACK;
 public class CallbackInterceptor implements Interceptor {
     private final HandlerFactory handlerFactory;
     private final ViewFactory viewFactory;
-    private final MessageInterceptor messageInterceptor;
+    private final MessageTextInterceptor messageTextInterceptor;
 
     @Getter
     private Long telegramUserId;
     @Getter
     private Long chatId;
 
-    public CallbackInterceptor(HandlerFactory handlerFactory, ViewFactory viewFactory, MessageInterceptor messageInterceptor) {
+    public CallbackInterceptor(HandlerFactory handlerFactory, ViewFactory viewFactory, MessageTextInterceptor messageTextInterceptor) {
         this.handlerFactory = handlerFactory;
         this.viewFactory = viewFactory;
-        this.messageInterceptor = messageInterceptor;
+        this.messageTextInterceptor = messageTextInterceptor;
     }
 
     @Override
@@ -74,12 +74,14 @@ public class CallbackInterceptor implements Interceptor {
             cached.getCallbackHistory().push(callbackQuery.getData());
             nextState = handleUpdate(update);
         } catch (CachedUserDataNotFound e) {
-            nextState = messageInterceptor.interceptTextCommand(TextCommand.START.getDescription(), from.getUserName(), telegramUserId);
+            log.info("Initialize new user");
+            nextState=MENU;
+            UserDataCache.initializeByIdAndUsername(telegramUserId,from.getUserName());
+//            nextState = messageTextInterceptor.interceptTextCommand(TextCommand.START.getDescription(), from.getUserName(), telegramUserId);
             cached = UserDataCache.get(telegramUserId);
         }
         cached.getStateHistory().push(nextState);
-        ViewType<? extends BotApiMethod<?>> viewType = viewFactory.get(nextState);
-        return viewType.buildView(chatId, cached);
+        return viewFactory.get(nextState).buildView(chatId, cached);
     }
 
     private State handleUpdate(Update update) {
