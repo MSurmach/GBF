@@ -4,7 +4,7 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.gui.utils.ButtonUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ public class YearKeyboardType implements KeyboardType {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
+    public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
         LocalDate[] years = getYearsArray(4);
         List<InlineKeyboardButton> yearButtons = Arrays.stream(years).
                 map(date -> ButtonUtils.createButtonWithData(Integer.toString(date.getYear()), SELECT_YEAR, date.toString())).

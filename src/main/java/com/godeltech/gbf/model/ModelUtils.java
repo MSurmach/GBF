@@ -5,21 +5,21 @@ import com.godeltech.gbf.model.db.TelegramUser;
 
 public class ModelUtils {
 
-    public static Offer createOffer(UserData userData) {
+    public static Offer createOffer(SessionData sessionData) {
         Offer offer = Offer.builder().
-                startDate(userData.getStartDate()).
-                endDate(userData.getEndDate()).
-                routePoints(userData.getRoute()).
-                comment(userData.getComment()).
-                seats(userData.getSeats()).
-                role(userData.getRole()).
-                delivery(userData.getDelivery()).
+                startDate(sessionData.getStartDate()).
+                endDate(sessionData.getEndDate()).
+                routePoints(sessionData.getRoute()).
+                comment(sessionData.getComment()).
+                seats(sessionData.getSeats()).
+                role(sessionData.getRole()).
+                delivery(sessionData.getDelivery()).
                 build();
-        userData.getRoute().forEach(routePoint -> routePoint.setOffer(offer));
+        sessionData.getRoute().forEach(routePoint -> routePoint.setOffer(offer));
         return offer;
     }
 
-    public static TelegramUser telegramUser(UserData userData) {
+    public static TelegramUser telegramUser(SessionData sessionData) {
 //        LinkedList<RoutePoint> routePoints = userData.getRoutePoints();
 //        routePoints.getLast().setOrderNumber(routePoints.size() - 1);
 //        LocalDate nowTime = LocalDate.now();
@@ -42,7 +42,7 @@ public class ModelUtils {
         return null;
     }
 
-    public static void resetUserData(UserData userData) {
+    public static void resetUserData(SessionData sessionData) {
 //        userData.setId(null);
 //        userData.setDocumentsExist(false);
 //        userData.setDeliverySize(0);
@@ -60,7 +60,7 @@ public class ModelUtils {
 //        userData.setTempCountry(null);
     }
 
-    public static UserData createUserDataFromTelegramUser(TelegramUser telegramUser) {
+    public static SessionData createUserDataFromTelegramUser(TelegramUser telegramUser) {
         return null;
 //        return UserData.builder().
 //                id(telegramUser.getId()).
@@ -75,7 +75,7 @@ public class ModelUtils {
 //                build();
     }
 
-    public static void copyData(UserData to, TelegramUser from) {
+    public static void copyData(SessionData to, TelegramUser from) {
 //        to.setId(from.getId());
 //        to.setTelegramId(from.getTelegramId());
 //        to.setUsername(from.getUsername());

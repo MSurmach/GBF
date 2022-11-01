@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.offer.impl;
 
 import com.godeltech.gbf.model.ModelUtils;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.Offer;
 import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.repository.OfferRepository;
@@ -11,6 +11,8 @@ import com.godeltech.gbf.service.user.TelegramUserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,9 +30,9 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    public void save(UserData userData) {
-        Offer newOffer = ModelUtils.createOffer(userData);
-        TelegramUser telegramUser = telegramUserService.getOrCreateUser(userData.getTelegramId(), userData.getUsername());
+    public void save(SessionData sessionData) {
+        Offer newOffer = ModelUtils.createOffer(sessionData);
+        TelegramUser telegramUser = telegramUserService.getOrCreateUser(sessionData.getTelegramId(), sessionData.getUsername());
         newOffer.setTelegramUser(telegramUser);
         offerRepository.save(newOffer);
     }
@@ -44,7 +46,10 @@ public class OfferServiceImpl implements OfferService {
     }
 
     public Page<Offer> findAllOffersByUserId(Long userId, int pageNumber) {
-        return null;
+        log.info("Find offers by user id : {} and page number : {}",userId,pageNumber);
+        Pageable pageable = PageRequest.of(pageNumber,1);
+        Page<Offer> offersByTelegramUserId = offerRepository.findOffersByTelegramUserId(userId, pageable);
+        return offersByTelegramUserId;
     }
 
 }

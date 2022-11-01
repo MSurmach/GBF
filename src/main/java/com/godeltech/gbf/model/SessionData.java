@@ -14,7 +14,7 @@ import java.util.LinkedList;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserData {
+public class SessionData {
     private Long id;
     private Long telegramId;
     private String username;
@@ -33,13 +33,18 @@ public class UserData {
     //possibility to delete
 
     private RoutePoint tempRoutePoint;
+
     private LinkedList<State> stateHistory = new LinkedList<>();
+
     private LinkedList<String> callbackHistory = new LinkedList<>();
+
     private Page<TelegramUser> page;
+
     private int pageNumber;
+
     private TelegramUser tempForSearch;
 
-    public UserData(Long telegramId, String username) {
+    public SessionData(Long telegramId, String username) {
         this.telegramId = telegramId;
         this.username = username;
     }

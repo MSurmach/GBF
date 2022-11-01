@@ -1,14 +1,14 @@
 package com.godeltech.gbf.gui.message;
 
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 
 public interface MessageType {
     State getState();
 
-    String getMessage(UserData userData);
+    String getMessage(SessionData sessionData);
 
-    default String initialMessage(UserData userData) {
+    default String initialMessage(SessionData sessionData) {
         return "";
     }
 }

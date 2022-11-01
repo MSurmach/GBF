@@ -3,7 +3,7 @@ package com.godeltech.gbf.gui.keyboard.impl;
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -25,7 +25,7 @@ public class MainMenuKeyboardType implements KeyboardType {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
+    public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
         var courierButton = createLocalButton(COURIER, lms);
         var clientButton = createLocalButton(CLIENT, lms);
         var registrationsButton = createLocalButton(REGISTRATIONS_VIEWER, lms);

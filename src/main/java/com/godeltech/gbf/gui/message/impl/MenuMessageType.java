@@ -3,7 +3,7 @@ package com.godeltech.gbf.gui.message.impl;
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +20,7 @@ public class MenuMessageType implements MessageType {
     }
 
     @Override
-    public String getMessage(UserData userData) {
-        return localMessageSource.getLocaleMessage(MENU_CODE, userData.getUsername());
+    public String getMessage(SessionData sessionData) {
+        return localMessageSource.getLocaleMessage(MENU_CODE, sessionData.getUsername());
     }
 }

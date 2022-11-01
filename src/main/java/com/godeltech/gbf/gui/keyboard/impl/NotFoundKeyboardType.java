@@ -2,7 +2,7 @@ package com.godeltech.gbf.gui.keyboard.impl;
 
 import com.godeltech.gbf.exception.NotFoundStateTypeException;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -14,7 +14,7 @@ public class NotFoundKeyboardType implements KeyboardType {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        throw new NotFoundStateTypeException(NotFoundKeyboardType.class, userData.getUsername(), userData.getId());
+    public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
+        throw new NotFoundStateTypeException(NotFoundKeyboardType.class, sessionData.getUsername(), sessionData.getId());
     }
 }

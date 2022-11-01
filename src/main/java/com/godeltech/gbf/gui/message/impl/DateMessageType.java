@@ -4,7 +4,7 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.utils.DateUtils;
 import com.godeltech.gbf.gui.message.MessageType;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,11 +29,11 @@ public class DateMessageType implements MessageType {
     }
 
     @Override
-    public String getMessage(UserData userData) {
+    public String getMessage(SessionData sessionData) {
         String nowDate = DateUtils.shortFormatDate(LocalDate.now());
         String nowDateInfo = lms.getLocaleMessage(DATE_TODAY_CODE, nowDate);
         return nowDateInfo +
-                datesDetails(userData.getTempStartDate(), userData.getTempEndDate(), lms) +
+                datesDetails(sessionData.getTempStartDate(), sessionData.getTempEndDate(), lms) +
                 lms.getLocaleMessage(DATE_QUESTION_CODE);
     }
 }

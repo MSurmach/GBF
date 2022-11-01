@@ -6,12 +6,11 @@ import com.godeltech.gbf.exception.WrongInputException;
 import com.godeltech.gbf.factory.impl.HandlerFactory;
 import com.godeltech.gbf.factory.impl.ViewFactory;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.interceptor.InterceptorTypes;
-import com.godeltech.gbf.service.view.ViewType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -57,7 +56,7 @@ public class MessageTextInterceptor implements Interceptor {
         telegramUserId = from.getId();
         botMessageService.save(telegramUserId, message);
         State state = interceptSufficientInput(update);
-        UserData cached = UserDataCache.get(telegramUserId);
+        SessionData cached = UserDataCache.get(telegramUserId);
         cached.getStateHistory().push(state);
         cached.getCallbackHistory().push(update.getMessage().getText());
         return viewFactory.get(state).buildView(chatId, cached);
@@ -65,7 +64,7 @@ public class MessageTextInterceptor implements Interceptor {
 
     private State interceptSufficientInput(Update update) throws InsufficientInputException {
         log.info("Intercept sufficient input by user with id:{}", telegramUserId);
-        UserData cached = UserDataCache.get(telegramUserId);
+        SessionData cached = UserDataCache.get(telegramUserId);
         if (cached == null) throw new InsufficientInputException();
         State currentState = cached.getStateHistory().peek();
         if (currentState == SEATS || currentState == COMMENT) {

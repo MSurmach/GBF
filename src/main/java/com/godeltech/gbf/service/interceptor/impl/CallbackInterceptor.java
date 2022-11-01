@@ -9,15 +9,13 @@ import com.godeltech.gbf.factory.impl.HandlerFactory;
 import com.godeltech.gbf.factory.impl.ViewFactory;
 import com.godeltech.gbf.gui.button.NavigationBotButton;
 import com.godeltech.gbf.gui.button.PaginationButton;
-import com.godeltech.gbf.gui.command.TextCommand;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.interceptor.InterceptorTypes;
-import com.godeltech.gbf.service.view.ViewType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -66,7 +64,7 @@ public class CallbackInterceptor implements Interceptor {
 
         telegramUserId = from.getId();
         chatId = callbackQuery.getMessage().getChatId();
-        UserData cached = null;
+        SessionData cached = null;
         State nextState = null;
         try {
             cached = pullFromCache(telegramUserId);
@@ -95,7 +93,7 @@ public class CallbackInterceptor implements Interceptor {
                 try {
                     return interceptPaginationButton(update);
                 } catch (NotPaginationButtonException notPaginationButtonException) {
-                    UserData cached = UserDataCache.get(telegramUserId);
+                    SessionData cached = UserDataCache.get(telegramUserId);
                     State currentState = cached.getStateHistory().peek();
                     HandlerType handlerType = handlerFactory.get(currentState);
                     return handlerType.handle(cached);
@@ -104,9 +102,9 @@ public class CallbackInterceptor implements Interceptor {
         }
     }
 
-    private UserData pullFromCache(Long telegramUserId) throws CachedUserDataNotFound {
+    private SessionData pullFromCache(Long telegramUserId) throws CachedUserDataNotFound {
         log.info("Pull from cache with user id : {}", telegramUserId);
-        UserData cached = UserDataCache.get(telegramUserId);
+        SessionData cached = UserDataCache.get(telegramUserId);
         if (cached == null) throw new CachedUserDataNotFound();
         return cached;
     }
@@ -116,7 +114,7 @@ public class CallbackInterceptor implements Interceptor {
             String callback = update.getCallbackQuery().getData();
             log.info("Intercept role with callback : {}", callback);
             Role role = Role.valueOf(callback);
-            UserData cached = UserDataCache.get(telegramUserId);
+            SessionData cached = UserDataCache.get(telegramUserId);
             cached.setRole(role);
             return role.getFirstState();
         } catch (IllegalArgumentException exception) {
@@ -131,15 +129,15 @@ public class CallbackInterceptor implements Interceptor {
             log.info("Intercept navigation buttons with callback : {}", callback);
             NavigationBotButton botButton = NavigationBotButton.valueOf(callback);
 
-            UserData userData = UserDataCache.get(telegramUserId);
+            SessionData sessionData = UserDataCache.get(telegramUserId);
             return switch (botButton) {
                 case GLOBAL_BACK -> {
                     HandlerType handlerType = handlerFactory.get(BACK);
-                    yield handlerType.handle(userData);
+                    yield handlerType.handle(sessionData);
                 }
                 case MENU -> {
                     HandlerType handlerType = handlerFactory.get(MENU);
-                    yield handlerType.handle(userData);
+                    yield handlerType.handle(sessionData);
                 }
             };
         } catch (IllegalArgumentException illegalArgumentException) {
@@ -150,32 +148,32 @@ public class CallbackInterceptor implements Interceptor {
 
     private State interceptPaginationButton(Update update) throws NotPaginationButtonException {
         String callback = update.getCallbackQuery().getData();
-        UserData userData = UserDataCache.get(telegramUserId);
+        SessionData sessionData = UserDataCache.get(telegramUserId);
         try {
             log.info("Intercept pagination button with callback : {}", callback);
             PaginationButton clickedButton = PaginationButton.valueOf(callback);
 
-            Page<TelegramUser> page = userData.getPage();
+            Page<TelegramUser> page = sessionData.getPage();
             switch (clickedButton) {
-                case PAGE_START -> userData.setPageNumber(0);
+                case PAGE_START -> sessionData.setPageNumber(0);
                 case PAGE_PREVIOUS -> {
                     if (page.hasPrevious()) {
-                        int previousPageNumber = userData.getPageNumber() - 1;
-                        userData.setPageNumber(previousPageNumber);
+                        int previousPageNumber = sessionData.getPageNumber() - 1;
+                        sessionData.setPageNumber(previousPageNumber);
                     }
                 }
                 case PAGE_NEXT -> {
                     if (page.hasNext()) {
-                        int nextPageNumber = userData.getPageNumber() + 1;
-                        userData.setPageNumber(nextPageNumber);
+                        int nextPageNumber = sessionData.getPageNumber() + 1;
+                        sessionData.setPageNumber(nextPageNumber);
                     }
                 }
                 case PAGE_END -> {
                     int lastPageNumber = page.getTotalPages() - 1;
-                    userData.setPageNumber(lastPageNumber);
+                    sessionData.setPageNumber(lastPageNumber);
                 }
             }
-            return userData.getStateHistory().peek();
+            return sessionData.getStateHistory().peek();
 
         } catch (IllegalArgumentException illegalArgumentException) {
             log.error(illegalArgumentException.getMessage());

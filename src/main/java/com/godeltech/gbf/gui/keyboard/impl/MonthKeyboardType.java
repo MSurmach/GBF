@@ -4,7 +4,7 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.gui.utils.ButtonUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -34,8 +34,8 @@ public class MonthKeyboardType implements KeyboardType {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
-        String callback = userData.getCallbackHistory().peek();
+    public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
+        String callback = sessionData.getCallbackHistory().peek();
         String date = callback.split(":")[1];
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         LocalDate callBackDate = LocalDate.parse(date);

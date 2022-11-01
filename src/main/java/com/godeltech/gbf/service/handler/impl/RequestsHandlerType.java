@@ -4,7 +4,7 @@ import com.godeltech.gbf.gui.button.RequestButton;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.user.TelegramUserService;
@@ -26,17 +26,17 @@ public class RequestsHandlerType implements HandlerType {
     }
 
     @Override
-    public State handle(UserData userData) {
-        String callback = userData.getCallbackHistory().peek();
+    public State handle(SessionData sessionData) {
+        String callback = sessionData.getCallbackHistory().peek();
         String[] splitCallback = callback.split(":");
         RequestButton clickedButton = RequestButton.valueOf(splitCallback[0]);
         long userId = Long.parseLong(splitCallback[1]);
-        userData.setPageNumber(0);
+        sessionData.setPageNumber(0);
         return switch (clickedButton) {
             case REQUEST_EDIT -> {
-                TelegramUser telegramUser = getUserFromPage(userData.getPage());
-                ModelUtils.copyData(userData, telegramUser);
-                userData.setRole(Role.REQUESTS_VIEWER);
+                TelegramUser telegramUser = getUserFromPage(sessionData.getPage());
+                ModelUtils.copyData(sessionData, telegramUser);
+                sessionData.setRole(Role.REQUESTS_VIEWER);
                 yield FORM;
             }
             case REQUEST_DELETE -> {
@@ -44,8 +44,8 @@ public class RequestsHandlerType implements HandlerType {
                 yield REQUESTS;
             }
             case REQUEST_FIND_COURIERS -> {
-                TelegramUser telegramUserFromPage = getUserFromPage(userData.getPage());
-                userData.setTempForSearch(telegramUserFromPage);
+                TelegramUser telegramUserFromPage = getUserFromPage(sessionData.getPage());
+                sessionData.setTempForSearch(telegramUserFromPage);
                 yield COURIERS_LIST_RESULT;
             }
         };

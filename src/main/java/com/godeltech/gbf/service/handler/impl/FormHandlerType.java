@@ -2,7 +2,7 @@ package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.gui.button.FormButton;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.offer.OfferService;
 import com.godeltech.gbf.service.validator.RouteValidator;
@@ -27,21 +27,21 @@ public class FormHandlerType implements HandlerType {
     }
 
     @Override
-    public State handle(UserData userData) {
-        var callback = userData.getCallbackHistory().peek();
+    public State handle(SessionData sessionData) {
+        var callback = sessionData.getCallbackHistory().peek();
         var clicked = FormButton.valueOf(callback);
         switch (clicked) {
-            case ADD_ROUTE, EDIT_ROUTE -> userData.setTempRoute(new LinkedList<>(userData.getRoute()));
+            case ADD_ROUTE, EDIT_ROUTE -> sessionData.setTempRoute(new LinkedList<>(sessionData.getRoute()));
             case ADD_DATES, EDIT_DATES -> {
-                LocalDate startDate = userData.getStartDate();
+                LocalDate startDate = sessionData.getStartDate();
                 if (startDate != null) {
-                    userData.setTempStartDate(LocalDate.from(startDate));
-                    userData.setTempEndDate(LocalDate.from(userData.getEndDate()));
+                    sessionData.setTempStartDate(LocalDate.from(startDate));
+                    sessionData.setTempEndDate(LocalDate.from(sessionData.getEndDate()));
                 }
             }
             case FORM_CONFIRM_AS_COURIER, FORM_CONFIRM_AS_CLIENT, FORM_CONFIRM_AS_REGISTRATION_VIEWER -> {
-                routeValidator.checkRouteIsNotEmpty(userData.getRoute(), userData.getCallbackQueryId());
-                offerService.save(userData);
+                routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId());
+                offerService.save(sessionData);
             }
         }
         return clicked.getNextState();

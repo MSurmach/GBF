@@ -6,7 +6,7 @@ import com.godeltech.gbf.gui.keyboard.impl.PaginationKeyboardType;
 import com.godeltech.gbf.gui.keyboard.impl.SuccessRegistrationKeyboardType;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.service.user.TelegramUserService;
 import lombok.AllArgsConstructor;
@@ -26,9 +26,9 @@ public abstract class PaginatedView  {
     private KeyboardFactory keyboardFactory;
 
 
-    public List<SendMessage> buildView(Long chatId, UserData userData) {
-        long telegramId = userData.getTelegramId();
-        State currentState = userData.getStateHistory().peek();
+    public List<SendMessage> buildView(Long chatId, SessionData sessionData) {
+        long telegramId = sessionData.getTelegramId();
+        State currentState = sessionData.getStateHistory().peek();
         Page<TelegramUser> page = null;
 //        switch (userData.getRole()) {
 //            case REGISTRATIONS_VIEWER -> {
@@ -47,20 +47,20 @@ public abstract class PaginatedView  {
 //                    telegramUserService.findTelegramUsersBySearchDataAndRole(userData.getTempForSearch(), COURIER, userData.getPageNumber());
 //            default -> null;
 //        };
-        userData.setPage(page);
+        sessionData.setPage(page);
         List<SendMessage> messages = new ArrayList<>();
         var keyboardMarkup = (page != null && !page.isEmpty()) ?
-                paginationKeyboard.getKeyboardMarkup(userData) :
-                backMenuKeyboard.getKeyboardMarkup(userData);
+                paginationKeyboard.getKeyboardMarkup(sessionData) :
+                backMenuKeyboard.getKeyboardMarkup(sessionData);
         messages.add(SendMessage.builder().
                 chatId(chatId).
                 parseMode("html").
-                text(messageFactory.get(currentState).initialMessage(userData)).
+                text(messageFactory.get(currentState).initialMessage(sessionData)).
                 replyMarkup(keyboardMarkup).
                 build());
         if (page != null && !page.isEmpty()) {
             for (TelegramUser telegramUser : page) {
-                UserData fromDb = ModelUtils.createUserDataFromTelegramUser(telegramUser);
+                SessionData fromDb = ModelUtils.createUserDataFromTelegramUser(telegramUser);
                 SendMessage sendMessage = SendMessage.builder().
                         chatId(chatId).
                         parseMode("html").

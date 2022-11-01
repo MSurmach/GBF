@@ -4,7 +4,7 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -29,10 +29,10 @@ public class PaginationKeyboardType implements KeyboardType {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
+    public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
         var startButton = createLocalButton(PAGE_START, lms);
         var prevButton = createLocalButton(PAGE_PREVIOUS, lms);
-        var pageNumber = userData.getPageNumber() + 1;
+        var pageNumber = sessionData.getPageNumber() + 1;
         var pageButton = createButton(
                 lms.getLocaleMessage(PAGE_CURRENT.name(), String.valueOf(pageNumber)),
                 PAGE_CURRENT.name());

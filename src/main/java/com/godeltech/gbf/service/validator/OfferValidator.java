@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.validator;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.service.validator.exceptions.GbfException;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class OfferValidator {
 
     public final static String ALERT_DATES_EMPTY_CODE = "alert.dates.empty";
 
-    public void validateOfferBeforeSave(UserData userData) {
+    public void validateOfferBeforeSave(SessionData sessionData) {
 //        LinkedList<RoutePoint> routePoints = userData.getRoutePoints();
 //        String callbackQueryId = userData.getCallbackQueryId();
 //        checkIfRoutePointsAreEmpty(routePoints, callbackQueryId).
@@ -27,19 +27,19 @@ public class OfferValidator {
 //                checkIfCargoIsNotEmpty(userData, callbackQueryId);
     }
 
-    public OfferValidator checkIfRoutePointsAreEmpty(UserData userData) {
-        LinkedList<RoutePoint> routePoints = userData.getTempRoute();
+    public OfferValidator checkIfRoutePointsAreEmpty(SessionData sessionData) {
+        LinkedList<RoutePoint> routePoints = sessionData.getTempRoute();
         if (routePoints.isEmpty()) {
             String alertMessage = lms.getLocaleMessage(ALERT_ROUTE_EMPTY_CODE);
-            throw new GbfException(userData.getCallbackQueryId(), alertMessage);
+            throw new GbfException(sessionData.getCallbackQueryId(), alertMessage);
         }
         return this;
     }
 
-    public OfferValidator checkIfDatesAreEmpty(UserData userData) {
-        if (userData.getTempStartDate() == null) {
+    public OfferValidator checkIfDatesAreEmpty(SessionData sessionData) {
+        if (sessionData.getTempStartDate() == null) {
             String alertMessage = lms.getLocaleMessage(ALERT_DATES_EMPTY_CODE);
-            throw new GbfException(userData.getCallbackQueryId(), alertMessage);
+            throw new GbfException(sessionData.getCallbackQueryId(), alertMessage);
         }
         return this;
     }
@@ -62,7 +62,7 @@ public class OfferValidator {
 //        return this;
 //    }
 
-    public void checkIfCargoIsNotEmpty(UserData userData, String callbackQueryId) {
+    public void checkIfCargoIsNotEmpty(SessionData sessionData, String callbackQueryId) {
 //        if (userData.isCargoEmpty()) {
 //            String alertMessage = lms.getLocaleMessage(ALERT_CARGO_EMPTY_CODE);
 //            throw new GbfException(callbackQueryId, alertMessage);

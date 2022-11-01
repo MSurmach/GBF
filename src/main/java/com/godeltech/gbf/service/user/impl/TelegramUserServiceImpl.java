@@ -1,6 +1,6 @@
 package com.godeltech.gbf.service.user.impl;
 
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.repository.TelegramUserRepository;
 import com.godeltech.gbf.service.user.TelegramUserService;
@@ -26,10 +26,10 @@ public class TelegramUserServiceImpl implements TelegramUserService {
 
     @Override
     @Transactional
-    public TelegramUser save(UserData userData) {
+    public TelegramUser save(SessionData sessionData) {
         TelegramUser telegramUser = TelegramUser.builder().
-                id(userData.getTelegramId()).
-                userName(userData.getUsername()).
+                id(sessionData.getTelegramId()).
+                userName(sessionData.getUsername()).
                 build();
         return telegramUserRepository.save(telegramUser);
     }

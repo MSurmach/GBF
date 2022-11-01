@@ -4,7 +4,7 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.Delivery;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ public class DeliveryKeyboardType implements KeyboardType {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
+    public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         Delivery[] deliveries = Delivery.values();
         for (var index = 0; index < deliveries.length; ) {

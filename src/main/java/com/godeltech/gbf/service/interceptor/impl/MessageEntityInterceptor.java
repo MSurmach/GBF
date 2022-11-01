@@ -5,7 +5,7 @@ import com.godeltech.gbf.exception.TextCommandNotFoundException;
 import com.godeltech.gbf.factory.impl.ViewFactory;
 import com.godeltech.gbf.gui.command.TextCommand;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.interceptor.InterceptorTypes;
@@ -50,7 +50,7 @@ public class MessageEntityInterceptor implements Interceptor {
         telegramUserId = user.getId();
         botMessageService.save(telegramUserId, message);
         State state = interceptTextCommand(message.getText(), user.getUserName(), telegramUserId);
-        UserData cached = UserDataCache.get(telegramUserId);
+        SessionData cached = UserDataCache.get(telegramUserId);
         cached.getStateHistory().push(state);
         cached.getCallbackHistory().push(update.getMessage().getText());
         return viewFactory.get(state).buildView(chatId, cached);

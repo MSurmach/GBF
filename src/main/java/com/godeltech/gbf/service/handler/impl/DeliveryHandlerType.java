@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.Delivery;
 import com.godeltech.gbf.service.handler.HandlerType;
 import org.springframework.stereotype.Service;
@@ -19,9 +19,9 @@ public class DeliveryHandlerType implements HandlerType {
 
 
     @Override
-    public State handle(UserData userData) {
-        String callback = userData.getCallbackHistory().peek();
-        userData.setDelivery(Delivery.valueOf(callback));
+    public State handle(SessionData sessionData) {
+        String callback = sessionData.getCallbackHistory().peek();
+        sessionData.setDelivery(Delivery.valueOf(callback));
         return FORM;
     }
 }

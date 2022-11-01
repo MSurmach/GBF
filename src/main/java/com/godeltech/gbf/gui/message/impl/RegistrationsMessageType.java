@@ -4,7 +4,7 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
 import com.godeltech.gbf.gui.message.PaginationInfo;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.TelegramUser;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,18 +26,18 @@ public class RegistrationsMessageType implements MessageType, PaginationInfo<Tel
     }
 
     @Override
-    public String getMessage(UserData userData) {
-        return lms.getLocaleMessage(REGISTRATION_DATA_ID, userData.getId().toString()) +
-                routeDetails(userData.getRoute(), lms) +
-                datesDetails(userData.getStartDate(), userData.getEndDate(), lms) +
-                deliveryDetails(userData.getDelivery(), lms) +
-                seatsDetails(userData.getSeats(), lms) +
-                commentDetails(userData.getComment(), lms);
+    public String getMessage(SessionData sessionData) {
+        return lms.getLocaleMessage(REGISTRATION_DATA_ID, sessionData.getId().toString()) +
+                routeDetails(sessionData.getRoute(), lms) +
+                datesDetails(sessionData.getStartDate(), sessionData.getEndDate(), lms) +
+                deliveryDetails(sessionData.getDelivery(), lms) +
+                seatsDetails(sessionData.getSeats(), lms) +
+                commentDetails(sessionData.getComment(), lms);
     }
 
-    public String initialMessage(UserData userData) {
-        Page<TelegramUser> page = userData.getPage();
-        String username = userData.getUsername();
+    public String initialMessage(SessionData sessionData) {
+        Page<TelegramUser> page = sessionData.getPage();
+        String username = sessionData.getUsername();
         return (page != null && !page.isEmpty()) ?
                 lms.getLocaleMessage(REGISTRATIONS_EXIST_CODE, username) +
                         paginationInfoLocalMessage(page, lms) :

@@ -4,7 +4,7 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.City;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.service.city.CityService;
@@ -36,9 +36,9 @@ public class RouteKeyboardType implements KeyboardType {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
+    public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
         List<City> allCities = cityService.findAll();
-        LinkedList<RoutePoint> route = userData.getTempRoute();
+        LinkedList<RoutePoint> route = sessionData.getTempRoute();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         for (var index = 0; index < allCities.size(); ) {
             var columnCount = 3;

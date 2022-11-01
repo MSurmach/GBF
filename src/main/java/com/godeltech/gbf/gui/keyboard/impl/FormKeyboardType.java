@@ -6,7 +6,7 @@ import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -40,16 +40,16 @@ public class FormKeyboardType implements KeyboardType {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(UserData userData) {
+    public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        boolean isRouteEmpty = userData.getRoute().isEmpty();
+        boolean isRouteEmpty = sessionData.getRoute().isEmpty();
         keyboard.add(routeButton(isRouteEmpty));
         if (!isRouteEmpty)
-            keyboard.add(datesButton(Objects.isNull(userData.getStartDate())));
-        keyboard.add(deliveryButton(userData.getDelivery() == null));
-        keyboard.add(seatsButton(userData.getSeats() == 0));
-        keyboard.add(commentButton(Objects.isNull(userData.getComment())));
-        keyboard.add(confirmButton(userData.getRole()));
+            keyboard.add(datesButton(Objects.isNull(sessionData.getStartDate())));
+        keyboard.add(deliveryButton(sessionData.getDelivery() == null));
+        keyboard.add(seatsButton(sessionData.getSeats() == 0));
+        keyboard.add(commentButton(Objects.isNull(sessionData.getComment())));
+        keyboard.add(confirmButton(sessionData.getRole()));
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(keyboard);
         return new KeyboardMarkupAppender(keyboardMarkup).
                 append(backAndMenuMarkup(lms)).

@@ -2,7 +2,7 @@ package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.gui.button.RouteButton;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.Status;
 import com.godeltech.gbf.service.city.CityService;
@@ -27,11 +27,11 @@ public class RouteHandlerType implements HandlerType {
     }
 
     @Override
-    public State handle(UserData userData) {
-        String callback = userData.getCallbackHistory().peek();
+    public State handle(SessionData sessionData) {
+        String callback = sessionData.getCallbackHistory().peek();
         String[] split = callback.split(":");
         var clicked = RouteButton.valueOf(split[0]);
-        LinkedList<RoutePoint> tempRoute = userData.getTempRoute();
+        LinkedList<RoutePoint> tempRoute = sessionData.getTempRoute();
         switch (clicked) {
             case SELECT_CITY -> {
                 String cityName = split[1];
@@ -42,8 +42,8 @@ public class RouteHandlerType implements HandlerType {
                 normalizeRoutePointsOrders(tempRoute);
             }
             case CONFIRM_ROUTE -> {
-                routeValidator.checkRouteHasMoreOrEqualsThan2Points(tempRoute, userData.getCallbackQueryId());
-                userData.setRoute(new LinkedList<>(tempRoute));
+                routeValidator.checkRouteHasMoreOrEqualsThan2Points(tempRoute, sessionData.getCallbackQueryId());
+                sessionData.setRoute(new LinkedList<>(tempRoute));
                 tempRoute.clear();
             }
             case CLEAR_ROUTE -> tempRoute.clear();

@@ -4,7 +4,7 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
 import com.godeltech.gbf.gui.utils.MessageUtils;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.Status;
 import lombok.AllArgsConstructor;
@@ -26,9 +26,9 @@ public class RouteMessageType implements MessageType {
     }
 
     @Override
-    public String getMessage(UserData userData) {
-        LinkedList<RoutePoint> tempRoute = userData.getTempRoute();
-        String about = lms.getLocaleMessage(ROUTE_INFO_ABOUT, userData.getUsername());
+    public String getMessage(SessionData sessionData) {
+        LinkedList<RoutePoint> tempRoute = sessionData.getTempRoute();
+        String about = lms.getLocaleMessage(ROUTE_INFO_ABOUT, sessionData.getUsername());
         String routeDetails = MessageUtils.routeDetails(tempRoute, lms);
         String question = tempRoute.stream().anyMatch(routePoint -> routePoint.getStatus() == Status.INITIAL) ?
                 lms.getLocaleMessage(ROUTE_QUESTION_NEXT_POINT) :

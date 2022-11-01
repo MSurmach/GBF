@@ -4,7 +4,7 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.UserData;
+import com.godeltech.gbf.model.SessionData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -23,9 +23,9 @@ public class SeatsMessageType implements MessageType {
     }
 
     @Override
-    public String getMessage(UserData userData) {
+    public String getMessage(SessionData sessionData) {
         String info = lms.getLocaleMessage(SEATS_INFO_CODE);
-        String roleQuestion = userData.getRole() == Role.COURIER ?
+        String roleQuestion = sessionData.getRole() == Role.COURIER ?
                 lms.getLocaleMessage(SEATS_COURIER_CODE) :
                 lms.getLocaleMessage(SEATS_CLIENT_CODE);
         return info + roleQuestion;
