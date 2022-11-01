@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-
-import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -36,16 +34,6 @@ public class OfferServiceImpl implements OfferService {
         else
             newOffer.setTelegramUser(telegramUserService.save(userData));
         offerRepository.save(newOffer);
-    }
-
-    @Override
-    public void removeByExpiredAtBefore(LocalDate localDate) {
-
-    }
-
-    @Override
-    public void removeByChangedAtBefore(LocalDate localDate) {
-
     }
 
     @Override
