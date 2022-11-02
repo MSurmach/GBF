@@ -89,7 +89,7 @@ public class OfferServiceImpl implements OfferService {
         Specification<Offer> specification = getSpecificationForId(offersId);
         List<Specification<Offer>> specifications = new ArrayList<>();
         addSpecificationForRole(Role.COURIER,specifications);
-        addSpecificationForExcludingUser(sessionData.getTelegramUserId(),specifications);
+//        addSpecificationForExcludingUser(sessionData.getTelegramUserId(),specifications);
         addSpecificationForDates(sessionData.getStartDate(), sessionData.getEndDate(), specifications);
         addCourierSpecificationForSeats(sessionData.getSeats(), specifications);
         addSpecificationForCourierDelivery(sessionData.getDelivery(), specifications);
@@ -107,7 +107,7 @@ public class OfferServiceImpl implements OfferService {
         Specification<Offer> specification = getSpecificationForId(routePoints);
         List<Specification<Offer>> specifications = new ArrayList<>();
         addSpecificationForRole(Role.COURIER,specifications);
-        addSpecificationForExcludingUser(sessionData.getTelegramUserId(),specifications);
+//        addSpecificationForExcludingUser(sessionData.getTelegramUserId(),specifications);
         addSpecificationForDates(sessionData.getStartDate(), sessionData.getEndDate(), specifications);
         addClientSpecificationForSeats(sessionData.getSeats(), specifications);
         addSpecificationForDelivery(sessionData.getDelivery(), specifications);
