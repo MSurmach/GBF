@@ -106,7 +106,7 @@ public class OfferServiceImpl implements OfferService {
             return null;
         Specification<Offer> specification = getSpecificationForId(routePoints);
         List<Specification<Offer>> specifications = new ArrayList<>();
-        addSpecificationForRole(Role.COURIER,specifications);
+        addSpecificationForRole(Role.CLIENT,specifications);
 //        addSpecificationForExcludingUser(sessionData.getTelegramUserId(),specifications);
         addSpecificationForDates(sessionData.getStartDate(), sessionData.getEndDate(), specifications);
         addClientSpecificationForSeats(sessionData.getSeats(), specifications);
