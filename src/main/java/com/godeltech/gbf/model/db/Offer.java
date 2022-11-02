@@ -53,4 +53,9 @@ public class Offer {
     @Column
     @Enumerated(EnumType.ORDINAL)
     private Delivery delivery;
+
+    public void addRoutePoint(RoutePoint routePoint){
+        routePoints.add(routePoint);
+        routePoint.setOffer(this);
+    }
 }

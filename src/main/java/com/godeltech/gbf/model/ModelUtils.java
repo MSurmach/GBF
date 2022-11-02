@@ -9,15 +9,16 @@ public class ModelUtils {
 
     public static Offer mapSessionDataToOffer(SessionData sessionData) {
         Offer offer = Offer.builder().
+                id(sessionData.getOfferId()).
                 startDate(sessionData.getStartDate()).
                 endDate(sessionData.getEndDate()).
-                routePoints(sessionData.getRoute()).
+                routePoints(new LinkedList<>()).
                 comment(sessionData.getComment()).
                 seats(sessionData.getSeats()).
                 role(sessionData.getRole()).
                 delivery(sessionData.getDelivery()).
                 build();
-        sessionData.getRoute().forEach(routePoint -> routePoint.setOffer(offer));
+        sessionData.getRoute().forEach(offer::addRoutePoint);
         return offer;
     }
 
