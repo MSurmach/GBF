@@ -1,9 +1,6 @@
 package com.godeltech.gbf.model.db;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -30,6 +27,7 @@ public class RoutePoint {
 
     @ManyToOne
     @JoinColumn(name = "offer_id", nullable = false)
+    @ToString.Exclude
     private Offer offer;
 
     public RoutePoint(City city) {

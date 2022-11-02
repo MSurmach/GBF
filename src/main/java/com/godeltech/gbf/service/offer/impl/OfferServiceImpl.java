@@ -113,8 +113,9 @@ public class OfferServiceImpl implements OfferService {
 
     private Specification<Offer> createSpecificationForClient(SessionData sessionData) {
         log.info("Create specification for Client");
-        List<RoutePoint> routePoints = routePointService.findRoutePointsByNeededRoutePointsAndByRoleAndNotEqualToTelegramId(sessionData.getRoute(),
-                Role.CLIENT,
+        List<RoutePoint> routePoints =
+                routePointService.findRoutePointsByNeededRoutePointsAndByRoleAndNotEqualToTelegramId(sessionData.getRoute(),
+                Role.COURIER,
                 sessionData.getTelegramUserId());
         if (routePoints.isEmpty())
             return null;
