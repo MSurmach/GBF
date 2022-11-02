@@ -20,7 +20,7 @@ public class MenuHandlerType implements HandlerType {
     @Override
     public State handle(SessionData sessionData) {
         ModelUtils.resetUserData(sessionData);
-        UserDataCache.initializeByIdAndUsername(sessionData.getTelegramId(), sessionData.getUsername());
+        UserDataCache.initializeByIdAndUsername(sessionData.getTelegramUserId(), sessionData.getUsername());
         return MENU;
     }
 }

@@ -1,6 +1,7 @@
 package com.godeltech.gbf.model;
 
 import com.godeltech.gbf.model.db.Delivery;
+import com.godeltech.gbf.model.db.Offer;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.TelegramUser;
 import lombok.*;
@@ -15,8 +16,10 @@ import java.util.LinkedList;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SessionData {
-    private Long id;
-    private Long telegramId;
+    private Long offerId;
+    private Long telegramUserId;
+    private String firstName;
+    private String lastName;
     private String username;
     private Delivery delivery;
     private int seats;
@@ -30,22 +33,20 @@ public class SessionData {
     private Role role;
     private String callbackQueryId;
 
-    //possibility to delete
-
     private RoutePoint tempRoutePoint;
 
     private LinkedList<State> stateHistory = new LinkedList<>();
 
     private LinkedList<String> callbackHistory = new LinkedList<>();
 
-    private Page<TelegramUser> page;
+    private Page<Offer> page;
 
     private int pageNumber;
 
-    private TelegramUser tempForSearch;
+    private Offer tempForSearch;
 
-    public SessionData(Long telegramId, String username) {
-        this.telegramId = telegramId;
+    public SessionData(Long telegramUserId, String username) {
+        this.telegramUserId = telegramUserId;
         this.username = username;
     }
 

@@ -27,7 +27,7 @@ public class RequestKeyboardType implements KeyboardType {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
-        String recordId = String.valueOf(sessionData.getId());
+        String recordId = String.valueOf(sessionData.getOfferId());
         var editButton = createLocalButtonWithData(REQUEST_EDIT, recordId, lms);
         var deleteButton = createLocalButtonWithData(REQUEST_DELETE, recordId, lms);
         var findButton = createLocalButtonWithData(REQUEST_FIND_COURIERS, recordId, lms);

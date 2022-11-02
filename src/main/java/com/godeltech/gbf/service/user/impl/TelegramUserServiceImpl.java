@@ -28,7 +28,7 @@ public class TelegramUserServiceImpl implements TelegramUserService {
     @Transactional
     public TelegramUser save(SessionData sessionData) {
         TelegramUser telegramUser = TelegramUser.builder().
-                id(sessionData.getTelegramId()).
+                id(sessionData.getTelegramUserId()).
                 userName(sessionData.getUsername()).
                 build();
         return telegramUserRepository.save(telegramUser);

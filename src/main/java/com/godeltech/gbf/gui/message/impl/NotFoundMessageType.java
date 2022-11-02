@@ -13,6 +13,6 @@ public class NotFoundMessageType implements MessageType {
 
     @Override
     public String getMessage(SessionData sessionData) {
-        throw new NotFoundStateTypeException(NotFoundMessageType.class, sessionData.getUsername(), sessionData.getId());
+        throw new NotFoundStateTypeException(NotFoundMessageType.class, sessionData.getUsername(), sessionData.getOfferId());
     }
 }

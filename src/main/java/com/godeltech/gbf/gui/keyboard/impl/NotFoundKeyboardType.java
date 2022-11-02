@@ -15,6 +15,6 @@ public class NotFoundKeyboardType implements KeyboardType {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
-        throw new NotFoundStateTypeException(NotFoundKeyboardType.class, sessionData.getUsername(), sessionData.getId());
+        throw new NotFoundStateTypeException(NotFoundKeyboardType.class, sessionData.getUsername(), sessionData.getOfferId());
     }
 }

@@ -32,7 +32,7 @@ public class FormMessageType implements MessageType {
     @Override
     public String getMessage(SessionData sessionData) {
         return instructions(sessionData.getRole(), sessionData.getUsername()) +
-                detailsHeader(sessionData.getRole(), sessionData.isEmpty(), sessionData.getId()) +
+                detailsHeader(sessionData.getRole(), sessionData.isEmpty(), sessionData.getOfferId()) +
                 routeDetails(sessionData.getRoute(), lms) +
                 datesDetails(sessionData.getStartDate(), sessionData.getEndDate(), lms) +
                 deliveryDetails(sessionData.getDelivery(), lms) +

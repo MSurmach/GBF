@@ -13,6 +13,6 @@ public class NotFoundHandlerType implements HandlerType {
 
     @Override
     public State handle(SessionData sessionData) {
-        throw new NotFoundStateTypeException(NotFoundHandlerType.class, sessionData.getUsername(), sessionData.getId());
+        throw new NotFoundStateTypeException(NotFoundHandlerType.class, sessionData.getUsername(), sessionData.getOfferId());
     }
 }

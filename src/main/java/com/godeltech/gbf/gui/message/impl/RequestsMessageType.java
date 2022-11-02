@@ -27,7 +27,7 @@ public class RequestsMessageType implements MessageType, PaginationInfo<Telegram
 
     @Override
     public String getMessage(SessionData sessionData) {
-        return lms.getLocaleMessage(REQUESTS_DATA_ID, sessionData.getId().toString()) +
+        return lms.getLocaleMessage(REQUESTS_DATA_ID, sessionData.getOfferId().toString()) +
                 routeDetails(sessionData.getRoute(), lms) +
                 datesDetails(sessionData.getStartDate(), sessionData.getEndDate(), lms) +
                 deliveryDetails(sessionData.getDelivery(), lms) +

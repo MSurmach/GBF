@@ -27,7 +27,7 @@ public class RegistrationsMessageType implements MessageType, PaginationInfo<Tel
 
     @Override
     public String getMessage(SessionData sessionData) {
-        return lms.getLocaleMessage(REGISTRATION_DATA_ID, sessionData.getId().toString()) +
+        return lms.getLocaleMessage(REGISTRATION_DATA_ID, sessionData.getOfferId().toString()) +
                 routeDetails(sessionData.getRoute(), lms) +
                 datesDetails(sessionData.getStartDate(), sessionData.getEndDate(), lms) +
                 deliveryDetails(sessionData.getDelivery(), lms) +

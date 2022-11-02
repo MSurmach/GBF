@@ -5,8 +5,10 @@ import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.db.Offer;
 import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.service.handler.HandlerType;
+import com.godeltech.gbf.service.offer.OfferService;
 import com.godeltech.gbf.service.user.TelegramUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,7 +20,7 @@ import static com.godeltech.gbf.model.State.*;
 @AllArgsConstructor
 public class RequestsHandlerType implements HandlerType {
 
-    private TelegramUserService telegramUserService;
+    private OfferService offerService;
 
     @Override
     public State getState() {
@@ -30,28 +32,24 @@ public class RequestsHandlerType implements HandlerType {
         String callback = sessionData.getCallbackHistory().peek();
         String[] splitCallback = callback.split(":");
         RequestButton clickedButton = RequestButton.valueOf(splitCallback[0]);
-        long userId = Long.parseLong(splitCallback[1]);
+        long offerId = Long.parseLong(splitCallback[1]);
         sessionData.setPageNumber(0);
         return switch (clickedButton) {
             case REQUEST_EDIT -> {
-                TelegramUser telegramUser = getUserFromPage(sessionData.getPage());
-                ModelUtils.copyData(sessionData, telegramUser);
+                Offer toEditOffer = sessionData.getPage().getContent().get(0);
+                ModelUtils.copyOfferToSessionData(sessionData, toEditOffer);
                 sessionData.setRole(Role.REQUESTS_VIEWER);
                 yield FORM;
             }
             case REQUEST_DELETE -> {
-               // telegramUserService.deleteById(userId);
+                offerService.deleteOfferById(offerId);
                 yield REQUESTS;
             }
             case REQUEST_FIND_COURIERS -> {
-                TelegramUser telegramUserFromPage = getUserFromPage(sessionData.getPage());
-                sessionData.setTempForSearch(telegramUserFromPage);
+                Offer toFindOffer = sessionData.getPage().getContent().get(0);
+                sessionData.setTempForSearch(toFindOffer);
                 yield COURIERS_LIST_RESULT;
             }
         };
-    }
-
-    private TelegramUser getUserFromPage(Page<TelegramUser> page) {
-        return page.getContent().get(0);
     }
 }
