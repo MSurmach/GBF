@@ -14,10 +14,13 @@ public class ModelUtils {
                 routePoints(new LinkedList<>()).
                 comment(sessionData.getComment()).
                 seats(sessionData.getSeats()).
-                role(sessionData.getRole()).
                 delivery(sessionData.getDelivery()).
                 build();
         sessionData.getRoute().forEach(offer::addRoutePoint);
+        switch (sessionData.getRole()) {
+            case REGISTRATIONS_VIEWER -> offer.setRole(Role.COURIER);
+            case REQUESTS_VIEWER -> offer.setRole(Role.CLIENT);
+        }
         return offer;
     }
 
@@ -33,7 +36,7 @@ public class ModelUtils {
         sessionData.setStateHistory(new LinkedList<>());
         sessionData.setCallbackHistory(new LinkedList<>());
         sessionData.setCallbackQueryId(null);
-        sessionData.setTempForSearch(null);
+        sessionData.setSearchOffer(null);
         sessionData.setPageNumber(0);
         sessionData.setPage(null);
     }

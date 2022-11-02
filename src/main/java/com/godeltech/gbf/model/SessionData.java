@@ -42,7 +42,7 @@ public class SessionData {
 
     private int pageNumber;
 
-    private Offer tempForSearch;
+    private Offer searchOffer;
 
     public SessionData(Long telegramUserId, String username, String firstName, String lastName) {
         this.telegramUserId = telegramUserId;

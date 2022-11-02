@@ -1,10 +1,7 @@
 package com.godeltech.gbf.model.db;
 
 import com.godeltech.gbf.model.Role;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -37,6 +34,7 @@ public class Offer {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     @OrderBy("orderNumber")
+    @ToString.Exclude
     private List<RoutePoint> routePoints;
 
 

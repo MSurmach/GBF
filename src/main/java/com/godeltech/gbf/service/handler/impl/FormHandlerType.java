@@ -1,8 +1,10 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.gui.button.FormButton;
-import com.godeltech.gbf.model.State;
+import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.State;
+import com.godeltech.gbf.model.db.Offer;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.offer.OfferService;
 import com.godeltech.gbf.service.validator.RouteValidator;
@@ -39,9 +41,14 @@ public class FormHandlerType implements HandlerType {
                     sessionData.setTempEndDate(LocalDate.from(sessionData.getEndDate()));
                 }
             }
-            case FORM_CONFIRM_AS_COURIER, FORM_CONFIRM_AS_CLIENT, FORM_CONFIRM_AS_REGISTRATION_VIEWER -> {
+            case FORM_CONFIRM_AS_COURIER, FORM_CONFIRM_AS_REQUEST_VIEWER, FORM_CONFIRM_AS_REGISTRATION_VIEWER -> {
                 routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId());
                 offerService.save(sessionData);
+            }
+            case FORM_CONFIRM_AS_CLIENT -> {
+                routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId());
+                Offer offer = ModelUtils.mapSessionDataToOffer(sessionData);
+                sessionData.setSearchOffer(offer);
             }
         }
         return clicked.getNextState();

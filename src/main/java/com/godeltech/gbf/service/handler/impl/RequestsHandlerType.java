@@ -6,12 +6,9 @@ import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.Offer;
-import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.offer.OfferService;
-import com.godeltech.gbf.service.user.TelegramUserService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import static com.godeltech.gbf.model.State.*;
@@ -47,7 +44,7 @@ public class RequestsHandlerType implements HandlerType {
             }
             case REQUEST_FIND_COURIERS -> {
                 Offer toFindOffer = sessionData.getPage().getContent().get(0);
-                sessionData.setTempForSearch(toFindOffer);
+                sessionData.setSearchOffer(toFindOffer);
                 yield COURIERS_LIST_RESULT;
             }
         };

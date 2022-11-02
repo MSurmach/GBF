@@ -38,10 +38,6 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     public void save(SessionData sessionData) {
-        switch (sessionData.getRole()) {
-            case REGISTRATIONS_VIEWER -> sessionData.setRole(Role.COURIER);
-            case REQUESTS_VIEWER -> sessionData.setRole(Role.CLIENT);
-        }
         Offer newOffer = ModelUtils.mapSessionDataToOffer(sessionData);
         TelegramUser telegramUser = telegramUserService.getOrCreateUser(sessionData.getTelegramUserId(), sessionData.getUsername());
         newOffer.setTelegramUser(telegramUser);
