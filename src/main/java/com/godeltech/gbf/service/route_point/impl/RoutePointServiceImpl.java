@@ -1,22 +1,20 @@
 package com.godeltech.gbf.service.route_point.impl;
 
 import com.godeltech.gbf.model.Role;
-import com.godeltech.gbf.model.db.City;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.repository.RoutePointRepository;
+import com.godeltech.gbf.repository.specification.RoutePointSpecs;
 import com.godeltech.gbf.service.route_point.RoutePointService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.godeltech.gbf.model.Role.CLIENT;
-import static com.godeltech.gbf.model.Role.COURIER;
-import static com.godeltech.gbf.repository.specification.RoutePointSpecs.*;
 
 @Service
 @AllArgsConstructor
@@ -28,7 +26,7 @@ public class RoutePointServiceImpl implements RoutePointService {
     public List<RoutePoint> findRoutePointsByNeededRoutePointsAndByRoleAndNotEqualToTelegramId(List<RoutePoint> neededRoute,
                                                                                                Role role,
                                                                                                Long telegramId) {
-        log.info("Find route points by routes : {} , role : {}, user id : {}",neededRoute,role,telegramId);
+        log.info("Find route points by routes : {} , role : {}, user id : {}", neededRoute, role, telegramId);
         List<RoutePoint> routePoints = new LinkedList<>();
         for (RoutePoint neededRoutePoint : neededRoute) {
             Specification<RoutePoint> searchSpecification =
@@ -38,6 +36,13 @@ public class RoutePointServiceImpl implements RoutePointService {
             routePoints.addAll(routePointRepository.findAll(searchSpecification));
         }
         return routePoints;
+    }
+
+    @Override
+    public List<RoutePoint> findOffersIdByRoutePointsAndByRoleAndNotEqualToTelegramId(List<RoutePoint> routePoints, Role role, Long offerId) {
+        log.info("Find offers id by routes :{} , role : {}, user id : {}", routePoints, role, offerId);
+        return routePointRepository.findAll(RoutePointSpecs.byCitiesName(routePoints.stream()
+                .map(routePoint -> routePoint.getCity().getId()).collect(Collectors.toList())).and(RoutePointSpecs.roleAndNotEqualToTelegramId(role, offerId)));
     }
 
     private Specification<RoutePoint> buildCourierSearchSpecification(RoutePoint routePoint, Long telegramId) {

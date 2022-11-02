@@ -5,6 +5,7 @@ import com.godeltech.gbf.gui.message.MessageType;
 import com.godeltech.gbf.gui.message.PaginationInfo;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.db.Offer;
 import com.godeltech.gbf.model.db.TelegramUser;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,7 +37,7 @@ public class ClientsListMessageType implements MessageType, PaginationInfo<Teleg
     }
 
     public String initialMessage(SessionData sessionData) {
-        Page<TelegramUser> page = sessionData.getPage();
+        Page<Offer> page = sessionData.getPage();
         return (page != null && !page.isEmpty()) ?
                 lms.getLocaleMessage(CLIENTS_LIST_INITIAL_EXIST, sessionData.getUsername()) +
                         paginationInfoLocalMessage(page, lms) :
