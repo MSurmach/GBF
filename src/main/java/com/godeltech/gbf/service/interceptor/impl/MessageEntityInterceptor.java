@@ -1,11 +1,11 @@
 package com.godeltech.gbf.service.interceptor.impl;
 
-import com.godeltech.gbf.cache.UserDataCache;
+import com.godeltech.gbf.cache.SessionDataCache;
 import com.godeltech.gbf.exception.TextCommandNotFoundException;
 import com.godeltech.gbf.factory.impl.ViewFactory;
 import com.godeltech.gbf.gui.command.TextCommand;
-import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.interceptor.InterceptorTypes;
@@ -31,7 +31,7 @@ public class MessageEntityInterceptor implements Interceptor {
     @Getter
     private Long chatId;
 
-    public MessageEntityInterceptor(ViewFactory viewFactory,BotMessageService botMessageService) {
+    public MessageEntityInterceptor(ViewFactory viewFactory, BotMessageService botMessageService) {
         this.viewFactory = viewFactory;
         this.botMessageService = botMessageService;
     }
@@ -49,19 +49,19 @@ public class MessageEntityInterceptor implements Interceptor {
         chatId = message.getChatId();
         telegramUserId = user.getId();
         botMessageService.save(telegramUserId, message);
-        State state = interceptTextCommand(message.getText(), user.getUserName(), telegramUserId);
-        SessionData cached = UserDataCache.get(telegramUserId);
+        State state = interceptTextCommand(message.getText(), user.getUserName(), user.getFirstName(), user.getLastName(), telegramUserId);
+        SessionData cached = SessionDataCache.get(telegramUserId);
         cached.getStateHistory().push(state);
         cached.getCallbackHistory().push(update.getMessage().getText());
         return viewFactory.get(state).buildView(chatId, cached);
     }
 
-    State interceptTextCommand(String command, String username, Long telegramUserId) throws TextCommandNotFoundException {
+    State interceptTextCommand(String command, String username, String firstName, String lastName, Long telegramUserId) throws TextCommandNotFoundException {
         log.info("Intercept text command : {} by user : {} with id : {}", command, username, telegramUserId);
         String parsedAsCommand = command.toUpperCase().replace("/", "");
         switch (TextCommand.valueOf(parsedAsCommand)) {
             case START -> {
-                UserDataCache.initializeByIdAndUsername(telegramUserId, username);
+                SessionDataCache.initializeByIdAndUsernameAndFirstNameAndLastName(telegramUserId, username, firstName, lastName);
                 return MENU;
             }
             default -> throw new TextCommandNotFoundException();

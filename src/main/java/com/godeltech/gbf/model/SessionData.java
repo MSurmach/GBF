@@ -3,7 +3,6 @@ package com.godeltech.gbf.model;
 import com.godeltech.gbf.model.db.Delivery;
 import com.godeltech.gbf.model.db.Offer;
 import com.godeltech.gbf.model.db.RoutePoint;
-import com.godeltech.gbf.model.db.TelegramUser;
 import lombok.*;
 import org.springframework.data.domain.Page;
 
@@ -45,9 +44,11 @@ public class SessionData {
 
     private Offer tempForSearch;
 
-    public SessionData(Long telegramUserId, String username) {
+    public SessionData(Long telegramUserId, String username, String firstName, String lastName) {
         this.telegramUserId = telegramUserId;
         this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public boolean isEmpty() {

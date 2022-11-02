@@ -1,6 +1,6 @@
 package com.godeltech.gbf.service.interceptor.impl;
 
-import com.godeltech.gbf.cache.UserDataCache;
+import com.godeltech.gbf.cache.SessionDataCache;
 import com.godeltech.gbf.exception.InsufficientInputException;
 import com.godeltech.gbf.exception.WrongInputException;
 import com.godeltech.gbf.factory.impl.HandlerFactory;
@@ -56,7 +56,7 @@ public class MessageTextInterceptor implements Interceptor {
         telegramUserId = from.getId();
         botMessageService.save(telegramUserId, message);
         State state = interceptSufficientInput(update);
-        SessionData cached = UserDataCache.get(telegramUserId);
+        SessionData cached = SessionDataCache.get(telegramUserId);
         cached.getStateHistory().push(state);
         cached.getCallbackHistory().push(update.getMessage().getText());
         return viewFactory.get(state).buildView(chatId, cached);
@@ -64,7 +64,7 @@ public class MessageTextInterceptor implements Interceptor {
 
     private State interceptSufficientInput(Update update) throws InsufficientInputException {
         log.info("Intercept sufficient input by user with id:{}", telegramUserId);
-        SessionData cached = UserDataCache.get(telegramUserId);
+        SessionData cached = SessionDataCache.get(telegramUserId);
         if (cached == null) throw new InsufficientInputException();
         State currentState = cached.getStateHistory().peek();
         if (currentState == SEATS || currentState == COMMENT) {

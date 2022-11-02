@@ -1,7 +1,6 @@
 package com.godeltech.gbf.model;
 
 import com.godeltech.gbf.model.db.Offer;
-import com.godeltech.gbf.model.db.TelegramUser;
 
 import java.util.LinkedList;
 
@@ -22,45 +21,21 @@ public class ModelUtils {
         return offer;
     }
 
-    public static TelegramUser telegramUser(SessionData sessionData) {
-//        LinkedList<RoutePoint> routePoints = userData.getRoutePoints();
-//        routePoints.getLast().setOrderNumber(routePoints.size() - 1);
-//        LocalDate nowTime = LocalDate.now();
-//        LocalDate expiredAtDate = userData.getRoutePoints().getLast().getVisitDate();
-//        TelegramUser telegramUser = TelegramUser.builder().
-//                id(userData.getId()).
-//                telegramId(userData.getTelegramId()).
-//                username(userData.getUsername()).
-//                documentsExist(userData.isDocumentsExist()).
-//                packageSize(userData.getDeliverySize()).
-//                companionCount(userData.getSeats()).
-//                comment(userData.getComment()).
-//                routePoints(new LinkedList<>()).
-//                role(userData.getRole()).
-//                changedAt(nowTime).
-//                expiredAt(expiredAtDate).
-//                build();
-//        routePoints.forEach(telegramUser::addRoutePoint);
-//        return telegramUser;
-        return null;
-    }
-
-    public static void resetUserData(SessionData sessionData) {
-//        userData.setId(null);
-//        userData.setDocumentsExist(false);
-//        userData.setDeliverySize(0);
-//        userData.setSeats(0);
-//        userData.setComment(null);
-//        userData.setRoutePoints(new LinkedList<>());
-//        userData.setTempRoutePoint(null);
-//        userData.setStateHistory(new LinkedList<>());
-//        userData.setCallbackHistory(new LinkedList<>());
-//        userData.setPage(null);
-//        userData.setPageNumber(0);
-//        userData.setRole(null);
-//        userData.setCallbackQueryId(null);
-//        userData.setTempForSearch(null);
-//        userData.setTempCountry(null);
+    public static void resetSessionData(SessionData sessionData) {
+        sessionData.setOfferId(null);
+        sessionData.setDelivery(null);
+        sessionData.setSeats(0);
+        sessionData.setRole(null);
+        sessionData.setRoute(new LinkedList<>());
+        sessionData.setStartDate(null);
+        sessionData.setEndDate(null);
+        sessionData.setComment(null);
+        sessionData.setStateHistory(new LinkedList<>());
+        sessionData.setCallbackHistory(new LinkedList<>());
+        sessionData.setCallbackQueryId(null);
+        sessionData.setTempForSearch(null);
+        sessionData.setPageNumber(0);
+        sessionData.setPage(null);
     }
 
     public static SessionData mapOfferToSessionData(Offer offer) {
