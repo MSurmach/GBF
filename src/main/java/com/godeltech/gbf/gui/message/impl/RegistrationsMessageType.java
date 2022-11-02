@@ -3,9 +3,9 @@ package com.godeltech.gbf.gui.message.impl;
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
 import com.godeltech.gbf.gui.message.PaginationInfo;
-import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
-import com.godeltech.gbf.model.db.TelegramUser;
+import com.godeltech.gbf.model.State;
+import com.godeltech.gbf.model.db.Offer;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 
 @Service
 @AllArgsConstructor
-public class RegistrationsMessageType implements MessageType, PaginationInfo<TelegramUser> {
+public class RegistrationsMessageType implements MessageType, PaginationInfo<Offer> {
     public final static String REGISTRATIONS_EXIST_CODE = "registrations.exist";
     public final static String REGISTRATIONS_NOT_EXIST_CODE = "registrations.notExist";
     public final static String REGISTRATION_DATA_ID = "registration.data.id";
@@ -36,7 +36,7 @@ public class RegistrationsMessageType implements MessageType, PaginationInfo<Tel
     }
 
     public String initialMessage(SessionData sessionData) {
-        Page<TelegramUser> page = sessionData.getPage();
+        Page<Offer> page = sessionData.getPage();
         String username = sessionData.getUsername();
         return (page != null && !page.isEmpty()) ?
                 lms.getLocaleMessage(REGISTRATIONS_EXIST_CODE, username) +

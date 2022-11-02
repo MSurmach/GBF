@@ -3,9 +3,9 @@ package com.godeltech.gbf.gui.message.impl;
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
 import com.godeltech.gbf.gui.message.PaginationInfo;
-import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
-import com.godeltech.gbf.model.db.TelegramUser;
+import com.godeltech.gbf.model.State;
+import com.godeltech.gbf.model.db.Offer;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 
 @Service
 @AllArgsConstructor
-public class RequestsMessageType implements MessageType, PaginationInfo<TelegramUser> {
+public class RequestsMessageType implements MessageType, PaginationInfo<Offer> {
     public final static String REQUESTS_EXIST_INITIAL = "requests.exist.initial";
     public final static String REQUESTS_NOT_EXIST_INITIAL = "requests.notExist.initial";
     public final static String REQUESTS_DATA_ID = "request.data.id";
@@ -36,7 +36,7 @@ public class RequestsMessageType implements MessageType, PaginationInfo<Telegram
     }
 
     public String initialMessage(SessionData sessionData) {
-        Page<TelegramUser> pages = sessionData.getPage();
+        Page<Offer> pages = sessionData.getPage();
         String username = sessionData.getUsername();
         return (pages != null && !pages.isEmpty()) ?
                 lms.getLocaleMessage(REQUESTS_EXIST_INITIAL, username) +

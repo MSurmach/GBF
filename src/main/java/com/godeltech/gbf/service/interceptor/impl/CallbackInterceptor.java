@@ -10,9 +10,9 @@ import com.godeltech.gbf.factory.impl.ViewFactory;
 import com.godeltech.gbf.gui.button.NavigationBotButton;
 import com.godeltech.gbf.gui.button.PaginationButton;
 import com.godeltech.gbf.model.Role;
-import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
-import com.godeltech.gbf.model.db.TelegramUser;
+import com.godeltech.gbf.model.State;
+import com.godeltech.gbf.model.db.Offer;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.interceptor.InterceptorTypes;
@@ -153,7 +153,7 @@ public class CallbackInterceptor implements Interceptor {
             log.info("Intercept pagination button with callback : {}", callback);
             PaginationButton clickedButton = PaginationButton.valueOf(callback);
 
-            Page<TelegramUser> page = sessionData.getPage();
+            Page<Offer> page = sessionData.getPage();
             switch (clickedButton) {
                 case PAGE_START -> sessionData.setPageNumber(0);
                 case PAGE_PREVIOUS -> {

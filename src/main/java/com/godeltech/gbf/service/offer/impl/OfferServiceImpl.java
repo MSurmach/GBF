@@ -35,7 +35,6 @@ public class OfferServiceImpl implements OfferService {
     private final TelegramUserService telegramUserService;
     private final RoutePointService routePointService;
 
-
     @Override
     @Transactional
     public void save(SessionData sessionData) {
@@ -69,7 +68,6 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    @Transactional
     public Page<Offer> findAllOffersBySessionDataAndRole(SessionData sessionData, Role client, int pageNumber) {
         log.info("Find offers by session date : {} and role : {}", sessionData, client);
         Specification<Offer> specification = client == Role.CLIENT ?
@@ -84,7 +82,7 @@ public class OfferServiceImpl implements OfferService {
     private Specification<Offer> createSpecificationForCourier(SessionData sessionData) {
         log.info("Create specification for courier");
         List<RoutePoint> routePoints = routePointService.findRoutePointsByNeededRoutePointsAndByRoleAndNotEqualToTelegramId(sessionData.getRoute(),
-                Role.CLIENT,
+                Role.COURIER,
                 sessionData.getTelegramUserId());
         if (routePoints.isEmpty())
             return null;
@@ -112,7 +110,7 @@ public class OfferServiceImpl implements OfferService {
     private Specification<Offer> createSpecificationForClient(SessionData sessionData) {
         log.info("Create specification for Client");
         List<RoutePoint> routePoints = routePointService.findRoutePointsByNeededRoutePointsAndByRoleAndNotEqualToTelegramId(sessionData.getRoute(),
-                Role.COURIER,
+                Role.CLIENT,
                 sessionData.getTelegramUserId());
         if (routePoints.isEmpty())
             return null;
@@ -153,6 +151,4 @@ public class OfferServiceImpl implements OfferService {
             specifications.add(OfferSpecs.datesBetween(startDate,endDate));
         }
     }
-
-
 }

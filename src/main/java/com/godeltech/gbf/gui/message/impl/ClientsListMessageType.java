@@ -3,10 +3,9 @@ package com.godeltech.gbf.gui.message.impl;
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
 import com.godeltech.gbf.gui.message.PaginationInfo;
-import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
-import com.godeltech.gbf.model.db.TelegramUser;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -15,7 +14,7 @@ import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 
 @Component
 @AllArgsConstructor
-public class ClientsListMessageType implements MessageType, PaginationInfo<TelegramUser> {
+public class ClientsListMessageType implements MessageType, PaginationInfo<Offer> {
     public final static String CLIENTS_LIST_INITIAL_EXIST = "clients.list.initial.exist";
     public final static String CLIENTS_LIST_INITIAL_NOT_EXIST = "clients.list.initial.notExist";
     public final static String CLIENTS_LIST_HEADER = "clients.list.header";
