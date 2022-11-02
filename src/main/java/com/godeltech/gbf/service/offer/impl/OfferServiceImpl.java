@@ -38,6 +38,10 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     public void save(SessionData sessionData) {
+        switch (sessionData.getRole()) {
+            case REGISTRATIONS_VIEWER -> sessionData.setRole(Role.COURIER);
+            case REQUESTS_VIEWER -> sessionData.setRole(Role.CLIENT);
+        }
         Offer newOffer = ModelUtils.mapSessionDataToOffer(sessionData);
         TelegramUser telegramUser = telegramUserService.getOrCreateUser(sessionData.getTelegramUserId(), sessionData.getUsername());
         newOffer.setTelegramUser(telegramUser);
@@ -76,7 +80,7 @@ public class OfferServiceImpl implements OfferService {
         Pageable pageable = PageRequest.of(pageNumber, 1);
         return specification == null ?
                 Page.empty() :
-                offerRepository.findAll(specification,pageable);
+                offerRepository.findAll(specification, pageable);
     }
 
     private Specification<Offer> createSpecificationForCourier(SessionData sessionData) {
@@ -86,23 +90,23 @@ public class OfferServiceImpl implements OfferService {
                 sessionData.getTelegramUserId());
         if (routePoints.isEmpty())
             return null;
-        Specification<Offer> specification= getSpecificationForRoutePoints(routePoints);
+        Specification<Offer> specification = getSpecificationForRoutePoints(routePoints);
         List<Specification<Offer>> specifications = new ArrayList<>();
-        addSpecificationForDates(sessionData.getStartDate(),sessionData.getEndDate(),specifications);
-        addCourierSpecificationForSeats(sessionData.getSeats(),specifications);
-        addSpecificationForCourierDelivery(sessionData.getDelivery(),specifications);
+        addSpecificationForDates(sessionData.getStartDate(), sessionData.getEndDate(), specifications);
+        addCourierSpecificationForSeats(sessionData.getSeats(), specifications);
+        addSpecificationForCourierDelivery(sessionData.getDelivery(), specifications);
         specifications.forEach(specification::and);
         return specification;
     }
 
     private void addCourierSpecificationForSeats(int seats, List<Specification<Offer>> specifications) {
-        if (seats==0)
+        if (seats == 0)
             return;
         specifications.add(OfferSpecs.bySeatsGreater(seats));
     }
 
     private void addSpecificationForCourierDelivery(Delivery delivery, List<Specification<Offer>> specifications) {
-        if (delivery==null)
+        if (delivery == null)
             return;
         specifications.add(OfferSpecs.byDeliveryLessOrEqualOrIsNull(delivery));
     }
@@ -114,11 +118,11 @@ public class OfferServiceImpl implements OfferService {
                 sessionData.getTelegramUserId());
         if (routePoints.isEmpty())
             return null;
-        Specification<Offer> specification= getSpecificationForRoutePoints(routePoints);
+        Specification<Offer> specification = getSpecificationForRoutePoints(routePoints);
         List<Specification<Offer>> specifications = new ArrayList<>();
-        addSpecificationForDates(sessionData.getStartDate(),sessionData.getEndDate(),specifications);
-        addClientSpecificationForSeats(sessionData.getSeats(),specifications);
-        addSpecificationForDelivery(sessionData.getDelivery(),specifications);
+        addSpecificationForDates(sessionData.getStartDate(), sessionData.getEndDate(), specifications);
+        addClientSpecificationForSeats(sessionData.getSeats(), specifications);
+        addSpecificationForDelivery(sessionData.getDelivery(), specifications);
         specifications.forEach(specification::and);
         return specification;
     }
@@ -130,25 +134,25 @@ public class OfferServiceImpl implements OfferService {
     }
 
     private void addSpecificationForDelivery(Delivery delivery, List<Specification<Offer>> specifications) {
-        if (delivery==null)
+        if (delivery == null)
             return;
         specifications.add(OfferSpecs.byDeliveryLessOrEqual(delivery));
     }
 
     private void addClientSpecificationForSeats(int seats, List<Specification<Offer>> specifications) {
-        if (seats==0)
+        if (seats == 0)
             return;
         specifications.add(OfferSpecs.bySeatsLess(seats));
     }
 
     private void addSpecificationForDates(LocalDate startDate, LocalDate endDate, List<Specification<Offer>> specifications) {
-        if (startDate==null){
+        if (startDate == null) {
             return;
         }
-        if (startDate.equals(endDate)){
+        if (startDate.equals(endDate)) {
             specifications.add(OfferSpecs.startDateEqual(startDate).or(OfferSpecs.dateBetween(startDate)));
-        }else {
-            specifications.add(OfferSpecs.datesBetween(startDate,endDate));
+        } else {
+            specifications.add(OfferSpecs.datesBetween(startDate, endDate));
         }
     }
 }
