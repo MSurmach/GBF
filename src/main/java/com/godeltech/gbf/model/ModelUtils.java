@@ -14,6 +14,7 @@ public class ModelUtils {
                 routePoints(new LinkedList<>()).
                 comment(sessionData.getComment()).
                 seats(sessionData.getSeats()).
+                role(sessionData.getRole()).
                 delivery(sessionData.getDelivery()).
                 build();
         sessionData.getRoute().forEach(offer::addRoutePoint);

@@ -7,8 +7,8 @@ import com.godeltech.gbf.gui.keyboard.impl.PaginationKeyboardType;
 import com.godeltech.gbf.gui.utils.KeyboardUtils;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
-import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
 import com.godeltech.gbf.service.offer.OfferService;
 import lombok.AllArgsConstructor;
@@ -24,7 +24,7 @@ import static com.godeltech.gbf.model.State.REQUESTS;
 
 
 @AllArgsConstructor
-public abstract class PaginatedView  {
+public abstract class PaginatedView {
     private OfferService offerService;
     private PaginationKeyboardType paginationKeyboard;
     private MessageFactory messageFactory;
@@ -40,16 +40,16 @@ public abstract class PaginatedView  {
                 if (currentState == REGISTRATIONS)
                     yield offerService.findAllOffersByUserIdAndRole(telegramId, Role.COURIER, sessionData.getPageNumber());
                 else
-                    yield offerService.findSuitableOffersByGivenOffer(sessionData, sessionData.getPageNumber());
+                    yield offerService.findSuitableOffersByGivenOffer(sessionData.getSearchOffer(), sessionData.getPageNumber());
             }
             case REQUESTS_VIEWER -> {
                 if (currentState == REQUESTS)
                     yield offerService.findAllOffersByUserIdAndRole(telegramId, CLIENT, sessionData.getPageNumber());
                 else
-                    yield offerService.findSuitableOffersByGivenOffer(sessionData, sessionData.getPageNumber());
+                    yield offerService.findSuitableOffersByGivenOffer(sessionData.getSearchOffer(), sessionData.getPageNumber());
             }
             case CLIENT ->
-                    offerService.findSuitableOffersByGivenOffer(sessionData, sessionData.getPageNumber());
+                    offerService.findSuitableOffersByGivenOffer(sessionData.getSearchOffer(), sessionData.getPageNumber());
             default -> null;
         };
         sessionData.setPage(page);

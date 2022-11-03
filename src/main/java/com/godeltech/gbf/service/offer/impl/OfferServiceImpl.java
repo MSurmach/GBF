@@ -90,7 +90,7 @@ public class OfferServiceImpl implements OfferService {
 
         Specification<Offer> specification = getSpecificationForId(offers);
         specification = addSpecificationForRole(Role.CLIENT, specification);
-        specification = addSpecificationForExcludingUser(givenOffer.getTelegramUser().getId(), specification);
+       // specification = addSpecificationForExcludingUser(givenOffer.getTelegramUser().getId(), specification);
         specification = addSpecificationForDates(givenOffer.getStartDate(), givenOffer.getEndDate(), specification);
         specification = addCourierSpecificationForSeats(givenOffer.getSeats(), specification);
         specification = addSpecificationForCourierDelivery(givenOffer.getDelivery(), specification);
@@ -103,17 +103,17 @@ public class OfferServiceImpl implements OfferService {
         if (offersId.isEmpty())
             return null;
         List<Offer> offers = offerRepository.findAllById(offersId);
-        checkOfferOrder(offers, sessionData.getRoutePoints());
+        offers = checkOfferOrder(offers, sessionData.getRoutePoints());
         Specification<Offer> specification = getSpecificationForId(offers);
         specification = addSpecificationForRole(Role.COURIER, specification);
-        specification = addSpecificationForExcludingUser(sessionData.getTelegramUser().getId(), specification);
+        //specification = addSpecificationForExcludingUser(sessionData.getTelegramUser().getId(), specification);
         specification = addSpecificationForDates(sessionData.getStartDate(), sessionData.getEndDate(), specification);
         specification = addClientSpecificationForSeats(sessionData.getSeats(), specification);
         specification = addClientSpecificationForDelivery(sessionData.getDelivery(), specification);
         return specification;
     }
 
-    private List<Offer> checkOfferOrder(List<Offer> offers,List<RoutePoint> route) {
+    private List<Offer> checkOfferOrder(List<Offer> offers, List<RoutePoint> route) {
         return offers.stream()
                 .filter(offer -> checkRoutePointsOrder(route, offer.getRoutePoints()))
                 .collect(Collectors.toList());

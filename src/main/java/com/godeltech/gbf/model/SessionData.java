@@ -32,8 +32,6 @@ public class SessionData {
     private Role role;
     private String callbackQueryId;
 
-    private RoutePoint tempRoutePoint;
-
     private LinkedList<State> stateHistory = new LinkedList<>();
 
     private LinkedList<String> callbackHistory = new LinkedList<>();

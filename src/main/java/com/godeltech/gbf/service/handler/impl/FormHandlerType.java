@@ -49,6 +49,7 @@ public class FormHandlerType implements HandlerType {
                 routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId());
                 Offer offer = ModelUtils.mapSessionDataToOffer(sessionData);
                 sessionData.setSearchOffer(offer);
+                offerService.save(sessionData);
             }
         }
         return clicked.getNextState();
