@@ -2,7 +2,6 @@ package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
-import com.godeltech.gbf.gui.message.PaginationInfo;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
@@ -14,7 +13,7 @@ import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 
 @Component
 @AllArgsConstructor
-public class ClientsListMessageType implements MessageType, PaginationInfo<Offer> {
+public class ClientsListMessageType implements MessageType {
     public final static String CLIENTS_LIST_INITIAL_EXIST = "clients.list.initial.exist";
     public final static String CLIENTS_LIST_INITIAL_NOT_EXIST = "clients.list.initial.notExist";
     public final static String CLIENTS_LIST_HEADER = "clients.list.header";
@@ -38,8 +37,7 @@ public class ClientsListMessageType implements MessageType, PaginationInfo<Offer
     public String initialMessage(SessionData sessionData) {
         Page<Offer> page = sessionData.getPage();
         return (page != null && !page.isEmpty()) ?
-                lms.getLocaleMessage(CLIENTS_LIST_INITIAL_EXIST, sessionData.getUsername()) +
-                        paginationInfoLocalMessage(page, lms) :
+                lms.getLocaleMessage(CLIENTS_LIST_INITIAL_EXIST, sessionData.getUsername()) :
                 lms.getLocaleMessage(CLIENTS_LIST_INITIAL_NOT_EXIST, sessionData.getUsername());
     }
 }

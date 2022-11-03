@@ -2,7 +2,6 @@ package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
-import com.godeltech.gbf.gui.message.PaginationInfo;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
@@ -14,7 +13,7 @@ import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 
 @Service
 @AllArgsConstructor
-public class RequestsMessageType implements MessageType, PaginationInfo<Offer> {
+public class RequestsMessageType implements MessageType {
     public final static String REQUESTS_EXIST_INITIAL = "requests.exist.initial";
     public final static String REQUESTS_NOT_EXIST_INITIAL = "requests.notExist.initial";
     public final static String REQUESTS_DATA_ID = "request.data.id";
@@ -39,8 +38,7 @@ public class RequestsMessageType implements MessageType, PaginationInfo<Offer> {
         Page<Offer> pages = sessionData.getPage();
         String username = sessionData.getUsername();
         return (pages != null && !pages.isEmpty()) ?
-                lms.getLocaleMessage(REQUESTS_EXIST_INITIAL, username) +
-                        paginationInfoLocalMessage(pages, lms) :
+                lms.getLocaleMessage(REQUESTS_EXIST_INITIAL, username) :
                 lms.getLocaleMessage(REQUESTS_NOT_EXIST_INITIAL, username);
     }
 }

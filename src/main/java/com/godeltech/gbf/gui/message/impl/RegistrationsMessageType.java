@@ -2,7 +2,6 @@ package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
-import com.godeltech.gbf.gui.message.PaginationInfo;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
@@ -14,7 +13,7 @@ import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 
 @Service
 @AllArgsConstructor
-public class RegistrationsMessageType implements MessageType, PaginationInfo<Offer> {
+public class RegistrationsMessageType implements MessageType {
     public final static String REGISTRATIONS_EXIST_CODE = "registrations.exist";
     public final static String REGISTRATIONS_NOT_EXIST_CODE = "registrations.notExist";
     public final static String REGISTRATION_DATA_ID = "registration.data.id";
@@ -39,8 +38,7 @@ public class RegistrationsMessageType implements MessageType, PaginationInfo<Off
         Page<Offer> page = sessionData.getPage();
         String username = sessionData.getUsername();
         return (page != null && !page.isEmpty()) ?
-                lms.getLocaleMessage(REGISTRATIONS_EXIST_CODE, username) +
-                        paginationInfoLocalMessage(page, lms) :
+                lms.getLocaleMessage(REGISTRATIONS_EXIST_CODE, username) :
                 lms.getLocaleMessage(REGISTRATIONS_NOT_EXIST_CODE, username);
     }
 }
