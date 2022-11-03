@@ -13,6 +13,7 @@ import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
+import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.interceptor.InterceptorTypes;
@@ -37,6 +38,7 @@ import static com.godeltech.gbf.service.interceptor.InterceptorTypes.CALLBACK;
 public class CallbackInterceptor implements Interceptor {
     private final HandlerFactory handlerFactory;
     private final ViewFactory viewFactory;
+    private final BotMessageService botMessageService;
     private final MessageTextInterceptor messageTextInterceptor;
 
     @Getter
@@ -44,9 +46,10 @@ public class CallbackInterceptor implements Interceptor {
     @Getter
     private Long chatId;
 
-    public CallbackInterceptor(HandlerFactory handlerFactory, ViewFactory viewFactory, MessageTextInterceptor messageTextInterceptor) {
+    public CallbackInterceptor(HandlerFactory handlerFactory, ViewFactory viewFactory, BotMessageService botMessageService, MessageTextInterceptor messageTextInterceptor) {
         this.handlerFactory = handlerFactory;
         this.viewFactory = viewFactory;
+        this.botMessageService = botMessageService;
         this.messageTextInterceptor = messageTextInterceptor;
     }
 
@@ -57,6 +60,9 @@ public class CallbackInterceptor implements Interceptor {
 
     @Override
     public List<? extends BotApiMethod<?>> intercept(Update update) {
+        botMessageService.checkBotMessage(update.getMessage().getMessageId(),
+                update.getCallbackQuery().getFrom().getId(),
+                update.getMessage().getChatId() );
         Message message = update.getCallbackQuery().getMessage();
         CallbackQuery callbackQuery = update.getCallbackQuery();
         User from = callbackQuery.getFrom();
