@@ -22,6 +22,12 @@ public class ButtonUtils {
         return button;
     }
 
+    public static InlineKeyboardButton createButton(String label, BotButton botButton) {
+        var button = new InlineKeyboardButton(label);
+        button.setCallbackData(botButton.name());
+        return button;
+    }
+
     public static InlineKeyboardButton createButtonWithData(String label, BotButton botButton, String data) {
         var button = new InlineKeyboardButton(label);
         String callback = botButton + SPLITTER + data;

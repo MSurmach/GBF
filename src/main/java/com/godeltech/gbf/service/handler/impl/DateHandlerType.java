@@ -39,15 +39,19 @@ public class DateHandlerType implements HandlerType {
             case NEXT, PREVIOUS -> sessionData.getCallbackHistory().remove(1);
             case IGNORE -> throw new EmptyButtonCalendarException(split[1], sessionData.getCallbackQueryId());
             case CONFIRM_DATE -> {
-                sessionData.setStartDate(LocalDate.from(sessionData.getTempStartDate()));
-                sessionData.setEndDate(LocalDate.from(sessionData.getTempEndDate()));
-                sessionData.setTempStartDate(null);
-                sessionData.setTempEndDate(null);
+                LocalDate tempStartDate = sessionData.getTempStartDate();
+                LocalDate tempEndDate = sessionData.getTempEndDate();
+                sessionData.setStartDate(
+                        Objects.isNull(tempStartDate) ?
+                                null :
+                                LocalDate.from(tempStartDate));
+                sessionData.setEndDate(
+                        Objects.isNull(tempEndDate) ?
+                                null :
+                                LocalDate.from(tempEndDate));
+                sessionData.clearTemp();
             }
-            case CLEAR_DATES -> {
-                sessionData.setTempStartDate(null);
-                sessionData.setTempEndDate(null);
-            }
+            case CLEAR_DATES -> sessionData.clearTemp();
         }
         return clickedButton.getNextState();
     }

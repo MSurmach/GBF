@@ -3,8 +3,8 @@ package com.godeltech.gbf.gui.keyboard.impl;
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
-import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Delivery;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ public class DeliveryKeyboardType implements KeyboardType {
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         Delivery[] deliveries = Delivery.values();
-        for (var index = 0; index < deliveries.length; ) {
+        for (var index = 1; index < deliveries.length; ) {
             var columnCount = 3;
             List<InlineKeyboardButton> deliveryButtonRow = new ArrayList<>();
             while (columnCount > 0 && index != deliveries.length) {
@@ -41,6 +41,7 @@ public class DeliveryKeyboardType implements KeyboardType {
             }
             keyboard.add(deliveryButtonRow);
         }
+        keyboard.add(List.of(createLocalButton(Delivery.EMPTY.name(), Delivery.EMPTY.name(), lms)));
         return new KeyboardMarkupAppender(new InlineKeyboardMarkup(keyboard)).
                 append(backAndMenuMarkup(lms)).
                 result();

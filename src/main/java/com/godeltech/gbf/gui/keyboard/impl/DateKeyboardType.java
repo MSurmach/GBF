@@ -50,8 +50,8 @@ public class DateKeyboardType implements KeyboardType {
         keyboard.add(monthWithPaginationRow(date));
         keyboard.add(daysOfWeekRow());
         keyboard.addAll(calendarMarkup(date, sessionData));
+        keyboard.add(confirmDateRow());
         if (sessionData.getTempStartDate() != null) {
-            keyboard.add(confirmDateRow());
             keyboard.add(clearDateRow());
         }
         return new KeyboardMarkupAppender().

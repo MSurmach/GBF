@@ -42,6 +42,12 @@ public class SessionData {
 
     private Offer searchOffer;
 
+    public void clearTemp() {
+        tempStartDate = null;
+        tempEndDate = null;
+        tempRoute = new LinkedList<>();
+    }
+
     public SessionData(Long telegramUserId, String username, String firstName, String lastName) {
         this.telegramUserId = telegramUserId;
         this.username = username;

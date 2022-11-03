@@ -5,9 +5,7 @@ import com.godeltech.gbf.model.db.Delivery;
 import com.godeltech.gbf.model.db.RoutePoint;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class MessageUtils {
@@ -19,18 +17,52 @@ public class MessageUtils {
     public final static String DETAILS_EMPTY = "";
 
     public static String routeDetails(List<RoutePoint> route, LocalMessageSource lms) {
-        if (route.isEmpty()) return DETAILS_EMPTY;
+        return route.isEmpty() ? DETAILS_EMPTY :
+                lms.getLocaleMessage(DETAILS_ROUTE_CODE, routeContent(route, true, lms));
+    }
+
+    public static String datesDetails(LocalDate startDate, LocalDate endDate, LocalMessageSource lms) {
+        return Objects.isNull(startDate) && Objects.isNull(endDate) ? DETAILS_EMPTY :
+                lms.getLocaleMessage(DETAILS_DATES_CODE, datesContent(startDate, endDate));
+    }
+
+    public static String deliveryDetails(Delivery delivery, LocalMessageSource lms) {
+        return Objects.isNull(delivery) || Objects.equals(delivery, Delivery.EMPTY) ?
+                DETAILS_EMPTY :
+                lms.getLocaleMessage(DETAILS_DELIVERY_CODE, deliveryContent(delivery, lms));
+    }
+
+    public static String commentDetails(String comment, LocalMessageSource lms) {
+        return Objects.isNull(comment) ?
+                DETAILS_EMPTY :
+                lms.getLocaleMessage(DETAILS_COMMENT_CODE, comment);
+    }
+
+    public static String seatsDetails(int seats, LocalMessageSource lms) {
+        return seats != 0 ?
+                lms.getLocaleMessage(DETAILS_SEATS_CODE, String.valueOf(seats)) :
+                DETAILS_EMPTY;
+    }
+
+    public static String routeContent(List<RoutePoint> route, boolean statusImage, LocalMessageSource lms) {
         final String arrow = " ➜ ";
         var stringBuilder = new StringBuilder();
         for (int index = 0; index < route.size(); index++) {
             RoutePoint routePoint = route.get(index);
             String localCityName = lms.getLocaleMessage(routePoint.getCity().getName());
-            String cityStatusImage = statusImage(routePoint, lms);
-            stringBuilder.append(cityStatusImage).append(" ").append(localCityName);
+            if (statusImage)
+                stringBuilder.append(statusImage(routePoint, lms)).append(" ");
+            stringBuilder.append(localCityName);
             if (index != route.size() - 1)
                 stringBuilder.append(arrow);
         }
-        return lms.getLocaleMessage(DETAILS_ROUTE_CODE, stringBuilder.toString());
+        return stringBuilder.toString();
+    }
+
+    public static String datesContent(LocalDate startDate, LocalDate endDate) {
+        return startDate.equals(endDate) ?
+                DateUtils.shortFormatDate(startDate) :
+                DateUtils.dateAsRange(startDate, endDate);
     }
 
     public static String statusImage(RoutePoint routePoint, LocalMessageSource lms) {
@@ -41,30 +73,7 @@ public class MessageUtils {
         };
     }
 
-    public static String commentDetails(String comment, LocalMessageSource lms) {
-        return comment != null ?
-                lms.getLocaleMessage(DETAILS_COMMENT_CODE, comment) :
-                DETAILS_EMPTY;
-    }
-
-    public static String datesDetails(LocalDate startDate, LocalDate endDate, LocalMessageSource lms) {
-        if (Objects.isNull(startDate) && Objects.isNull(endDate)) return DETAILS_EMPTY;
-        return startDate.equals(endDate) ?
-                lms.getLocaleMessage(DETAILS_DATES_CODE, DateUtils.shortFormatDate(startDate)) :
-                lms.getLocaleMessage(DETAILS_DATES_CODE, DateUtils.dateAsRange(startDate, endDate));
-    }
-
-    public static String seatsDetails(int seats, LocalMessageSource lms) {
-        return seats != 0 ?
-                lms.getLocaleMessage(DETAILS_SEATS_CODE, String.valueOf(seats)) :
-                DETAILS_EMPTY;
-    }
-
-    public static String deliveryDetails(Delivery delivery, LocalMessageSource lms) {
-        if (delivery != null) {
-            String deliveryName = lms.getLocaleMessage(delivery.name());
-            return lms.getLocaleMessage(DETAILS_DELIVERY_CODE, deliveryName);
-        }
-        return DETAILS_EMPTY;
+    public static String deliveryContent(Delivery delivery, LocalMessageSource lms) {
+        return lms.getLocaleMessage(delivery.name());
     }
 }
