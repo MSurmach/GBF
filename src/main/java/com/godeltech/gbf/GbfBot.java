@@ -99,7 +99,7 @@ public class GbfBot extends SpringWebhookBot {
             previousMessages.forEach(previousMessage -> {
                 botMessageService.delete(previousMessage);
                 DeleteMessage deleteMessage = DeleteMessage.builder()
-                        .chatId(previousMessage.getChatId())
+                        .chatId(previousMessage.getChatId().toString())
                         .messageId(previousMessage.getMessageId())
                         .build();
                 try {
@@ -118,7 +118,7 @@ public class GbfBot extends SpringWebhookBot {
         try {
             execute(DeleteMessage.builder()
                     .messageId(botMessage.getMessageId())
-                    .chatId(botMessage.getChatId())
+                    .chatId(botMessage.getChatId().toString())
                     .build());
         } catch (TelegramApiException e) {
             log.error(e.getMessage());

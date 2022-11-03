@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.godeltech.gbf.model.Role.CLIENT;
-import static com.godeltech.gbf.model.Role.COURIER;
 import static com.godeltech.gbf.model.State.REGISTRATIONS;
 import static com.godeltech.gbf.model.State.REQUESTS;
 
@@ -41,16 +40,16 @@ public abstract class PaginatedView  {
                 if (currentState == REGISTRATIONS)
                     yield offerService.findAllOffersByUserIdAndRole(telegramId, Role.COURIER, sessionData.getPageNumber());
                 else
-                    yield offerService.findAllOffersBySessionDataAndRole(sessionData, CLIENT, sessionData.getPageNumber());
+                    yield offerService.findSuitableOffersByGivenOffer(sessionData, sessionData.getPageNumber());
             }
             case REQUESTS_VIEWER -> {
                 if (currentState == REQUESTS)
                     yield offerService.findAllOffersByUserIdAndRole(telegramId, CLIENT, sessionData.getPageNumber());
                 else
-                    yield offerService.findAllOffersBySessionDataAndRole(sessionData, COURIER, sessionData.getPageNumber());
+                    yield offerService.findSuitableOffersByGivenOffer(sessionData, sessionData.getPageNumber());
             }
             case CLIENT ->
-                    offerService.findAllOffersBySessionDataAndRole(sessionData, COURIER, sessionData.getPageNumber());
+                    offerService.findSuitableOffersByGivenOffer(sessionData, sessionData.getPageNumber());
             default -> null;
         };
         sessionData.setPage(page);
