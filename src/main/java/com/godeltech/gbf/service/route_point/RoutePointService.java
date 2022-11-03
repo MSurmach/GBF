@@ -7,11 +7,9 @@ import liquibase.pro.packaged.R;
 import java.util.List;
 
 public interface RoutePointService {
-    List<RoutePoint> findRoutePointsByNeededRoutePointsAndByRoleAndNotEqualToTelegramId(List<RoutePoint> neededRoute,
-                                                                                        Role role,
-                                                                                        Long telegramId);
+//    List<RoutePoint> findRoutePointsByNeededRoutePointsAndByRoleAndNotEqualToTelegramId(List<RoutePoint> neededRoute,
+//                                                                                        Role role,
+//                                                                                        Long telegramId);
 
-    List<RoutePoint> findOffersIdByRoutePointsAndByRoleAndNotEqualToTelegramId(List<RoutePoint> routePoints,
-                                                                      Role role,
-                                                                      Long offerId);
+    List<Long> findOffersIdByRoutePoints(List<RoutePoint> routePoints);
 }

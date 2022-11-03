@@ -5,7 +5,6 @@ import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.Delivery;
 import com.godeltech.gbf.model.db.Offer;
-import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.repository.OfferRepository;
 import com.godeltech.gbf.repository.specification.OfferSpecs;
@@ -24,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -81,18 +79,43 @@ public class OfferServiceImpl implements OfferService {
 
     private Specification<Offer> createSpecificationForCourier(SessionData sessionData) {
         log.info("Create specification for courier");
-        List<RoutePoint> routePoints = routePointService.findRoutePointsByNeededRoutePointsAndByRoleAndNotEqualToTelegramId(sessionData.getRoute(),
-                Role.COURIER,
-                sessionData.getTelegramUserId());
-        if (routePoints.isEmpty())
+        List<Long> offersId = routePointService.findOffersIdByRoutePoints(sessionData.getRoute());
+        if (offersId.isEmpty())
             return null;
-        Specification<Offer> specification = getSpecificationForRoutePoints(routePoints);
+        Specification<Offer> specification = getSpecificationForId(offersId);
         List<Specification<Offer>> specifications = new ArrayList<>();
+        addSpecificationForRole(Role.COURIER,specifications);
+//        addSpecificationForExcludingUser(sessionData.getTelegramUserId(),specifications);
         addSpecificationForDates(sessionData.getStartDate(), sessionData.getEndDate(), specifications);
         addCourierSpecificationForSeats(sessionData.getSeats(), specifications);
         addSpecificationForCourierDelivery(sessionData.getDelivery(), specifications);
         specifications.forEach(specification::and);
         return specification;
+    }
+    private Specification<Offer> createSpecificationForClient(SessionData sessionData) {
+        log.info("Create specification for Client");
+        List<Long> routePoints =
+                routePointService.findOffersIdByRoutePoints(sessionData.getRoute());
+//                Role.COURIER,
+//                sessionData.getTelegramUserId());
+        if (routePoints.isEmpty())
+            return null;
+        Specification<Offer> specification = getSpecificationForId(routePoints);
+        List<Specification<Offer>> specifications = new ArrayList<>();
+        addSpecificationForRole(Role.CLIENT,specifications);
+//        addSpecificationForExcludingUser(sessionData.getTelegramUserId(),specifications);
+        addSpecificationForDates(sessionData.getStartDate(), sessionData.getEndDate(), specifications);
+        addClientSpecificationForSeats(sessionData.getSeats(), specifications);
+        addSpecificationForDelivery(sessionData.getDelivery(), specifications);
+        specifications.forEach(specification::and);
+        return specification;
+    }
+    private void addSpecificationForExcludingUser(Long telegramUserId, List<Specification<Offer>> specifications) {
+        specifications.add(OfferSpecs.byNotEqualUserId(telegramUserId));
+    }
+
+    private void addSpecificationForRole(Role role, List<Specification<Offer>> specifications) {
+        specifications.add(OfferSpecs.byRole(role));
     }
 
     private void addCourierSpecificationForSeats(int seats, List<Specification<Offer>> specifications) {
@@ -107,26 +130,10 @@ public class OfferServiceImpl implements OfferService {
         specifications.add(OfferSpecs.byDeliveryLessOrEqualOrIsNull(delivery));
     }
 
-    private Specification<Offer> createSpecificationForClient(SessionData sessionData) {
-        log.info("Create specification for Client");
-        List<RoutePoint> routePoints = routePointService.findRoutePointsByNeededRoutePointsAndByRoleAndNotEqualToTelegramId(sessionData.getRoute(),
-                Role.CLIENT,
-                sessionData.getTelegramUserId());
-        if (routePoints.isEmpty())
-            return null;
-        Specification<Offer> specification = getSpecificationForRoutePoints(routePoints);
-        List<Specification<Offer>> specifications = new ArrayList<>();
-        addSpecificationForDates(sessionData.getStartDate(), sessionData.getEndDate(), specifications);
-        addClientSpecificationForSeats(sessionData.getSeats(), specifications);
-        addSpecificationForDelivery(sessionData.getDelivery(), specifications);
-        specifications.forEach(specification::and);
-        return specification;
-    }
 
-    private Specification<Offer> getSpecificationForRoutePoints(List<RoutePoint> routePoints) {
-        return OfferSpecs.byOfferId(routePoints.stream()
-                .map(routePoint -> routePoint.getOffer().getId())
-                .collect(Collectors.toList()));
+
+    private Specification<Offer> getSpecificationForId(List<Long> idList) {
+        return OfferSpecs.byOfferId(idList);
     }
 
     private void addSpecificationForDelivery(Delivery delivery, List<Specification<Offer>> specifications) {

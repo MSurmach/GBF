@@ -3,11 +3,11 @@ package com.godeltech.gbf.repository.specification;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.db.Delivery;
 import com.godeltech.gbf.model.db.Offer;
+import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.TelegramUser;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -93,5 +93,20 @@ public class OfferSpecs {
     public static Specification<Offer> byDateAfter(LocalDate date){
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.greaterThan(root.get("endDate"),date);
+    }
+
+    public static Specification<Offer> byCitiesName(List<Integer> cities) {
+        return (root, query, criteriaBuilder) -> {
+            Join<Offer,RoutePoint> offerRoutePointJoin = root.join("routePoint");
+            Predicate byCities = offerRoutePointJoin.get("city").in(cities);
+            Expression<Long> offerIdCount = criteriaBuilder.count(offerRoutePointJoin.get("offer"));
+            CriteriaQuery<?> offer = query.groupBy(offerRoutePointJoin.get("offer"))
+                    .having(byCities, criteriaBuilder.greaterThanOrEqualTo(offerIdCount, 2L));
+            return criteriaBuilder.and();
+        };
+    }
+
+    public static Specification<Offer> byNotEqualUserId(Long telegramUserId) {
+        return (root, query, criteriaBuilder) ->criteriaBuilder.notEqual(root.get("telegramUser"),telegramUserId);
     }
 }
