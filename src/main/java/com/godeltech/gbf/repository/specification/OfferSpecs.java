@@ -29,9 +29,9 @@ public class OfferSpecs {
 
     public static Specification<Offer> dateBetween(LocalDate startDate){
         return (root, query, criteriaBuilder)  -> {
-            Predicate dateGreater = criteriaBuilder.greaterThanOrEqualTo(root.get("startDate"), startDate);
-            Predicate dateLess = criteriaBuilder.lessThanOrEqualTo(root.get("endDate"),startDate);
-            return criteriaBuilder.and(dateGreater,dateLess);
+            Predicate dateLess = criteriaBuilder.lessThanOrEqualTo(root.get("startDate"), startDate);
+            Predicate dateGreater = criteriaBuilder.greaterThanOrEqualTo(root.get("endDate"),startDate);
+            return criteriaBuilder.and(dateLess,dateGreater);
         };
     }
 
