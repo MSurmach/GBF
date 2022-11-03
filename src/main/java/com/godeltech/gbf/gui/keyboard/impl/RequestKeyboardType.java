@@ -5,6 +5,7 @@ import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -17,6 +18,7 @@ import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButtonWithData;
 
 @Component
 @AllArgsConstructor
+@Slf4j
 public class RequestKeyboardType implements KeyboardType {
     private LocalMessageSource lms;
 
@@ -28,6 +30,8 @@ public class RequestKeyboardType implements KeyboardType {
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
         String recordId = String.valueOf(sessionData.getOfferId());
+        log.debug("Create request keyboard type for session data with user id : {} and username : {} with income recordId :{}",
+                sessionData.getTelegramUserId(),sessionData.getUsername(),recordId );
         var editButton = createLocalButtonWithData(REQUEST_EDIT, recordId, lms);
         var deleteButton = createLocalButtonWithData(REQUEST_DELETE, recordId, lms);
         var findButton = createLocalButtonWithData(REQUEST_FIND_COURIERS, recordId, lms);

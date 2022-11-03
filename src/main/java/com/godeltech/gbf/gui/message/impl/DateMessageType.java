@@ -6,20 +6,21 @@ import com.godeltech.gbf.gui.message.MessageType;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
+import static com.godeltech.gbf.gui.utils.ConstantUtil.DATE_QUESTION_CODE;
+import static com.godeltech.gbf.gui.utils.ConstantUtil.DATE_TODAY_CODE;
 import static com.godeltech.gbf.gui.utils.MessageUtils.datesDetails;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class DateMessageType implements MessageType {
 
-    public final static String DATE_QUESTION_CODE = "date.question";
-    public final static String DATE_TODAY_CODE = "date.today";
-    public final static String DATE_INFO_SELECTED_CODE = "date.info.selected";
-    public final static String DATE_INFO_NOT_SELECTED_CODE = "date.info.notSelected";
+
 
     private final LocalMessageSource lms;
 
@@ -30,6 +31,8 @@ public class DateMessageType implements MessageType {
 
     @Override
     public String getMessage(SessionData sessionData) {
+        log.debug("Create date message type for session data with user id : {} and username : {}",
+                sessionData.getTelegramUserId(),sessionData.getUsername() );
         String nowDate = DateUtils.shortFormatDate(LocalDate.now());
         String nowDateInfo = lms.getLocaleMessage(DATE_TODAY_CODE, nowDate);
         return nowDateInfo +

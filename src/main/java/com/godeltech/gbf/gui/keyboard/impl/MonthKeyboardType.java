@@ -7,6 +7,7 @@ import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.gui.utils.ButtonUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -25,6 +26,7 @@ import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 @AllArgsConstructor
+@Slf4j
 public class MonthKeyboardType implements KeyboardType {
     private LocalMessageSource lms;
 
@@ -39,6 +41,8 @@ public class MonthKeyboardType implements KeyboardType {
         String date = callback.split(":")[1];
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         LocalDate callBackDate = LocalDate.parse(date);
+        log.debug("Create month keyboard type for session data with user id : {} and username : {} with income date : {}",
+                sessionData.getTelegramUserId(),sessionData.getUsername(),callBackDate );
         addYearHeader(callBackDate, keyboard);
         Month[] months = Month.values();
         for (var index = 0; index < months.length; ) {

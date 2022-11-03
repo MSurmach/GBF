@@ -4,11 +4,15 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.gui.message.MessageType;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import static com.godeltech.gbf.gui.utils.ConstantUtil.WRONG_INPUT_CODE;
+
 @Component
+@Slf4j
 public class WrongInputMessageType implements MessageType {
-    private final static String WRONG_INPUT_CODE = "wrong_input";
+
     private final LocalMessageSource localMessageSource;
 
     public WrongInputMessageType(LocalMessageSource localMessageSource) {
@@ -22,6 +26,8 @@ public class WrongInputMessageType implements MessageType {
 
     @Override
     public String getMessage(SessionData sessionData) {
+        log.debug("Create wrong input message type for session data with user id : {} and username : {}",
+                sessionData.getTelegramUserId(),sessionData.getUsername() );
         return localMessageSource.getLocaleMessage(WRONG_INPUT_CODE, sessionData.getUsername());
     }
 }

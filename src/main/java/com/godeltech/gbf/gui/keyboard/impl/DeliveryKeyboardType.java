@@ -7,6 +7,7 @@ import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.Delivery;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -18,6 +19,7 @@ import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButton;
 import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
+@Slf4j
 @AllArgsConstructor
 public class DeliveryKeyboardType implements KeyboardType {
     private LocalMessageSource lms;
@@ -29,6 +31,8 @@ public class DeliveryKeyboardType implements KeyboardType {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
+        log.debug("Create delivery keyboard type for session data with user id : {} and username : {}",
+                sessionData.getTelegramUserId(),sessionData.getUsername() );
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         Delivery[] deliveries = Delivery.values();
         for (var index = 0; index < deliveries.length; ) {

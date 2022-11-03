@@ -6,6 +6,7 @@ import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -26,6 +27,7 @@ import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 @AllArgsConstructor
+@Slf4j
 public class DateKeyboardType implements KeyboardType {
     public final static String DATE_MARKER = "date.marker";
     private LocalMessageSource lms;
@@ -37,12 +39,17 @@ public class DateKeyboardType implements KeyboardType {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
+
         String callback = sessionData.getCallbackHistory().peek();
         LocalDate date;
         try {
             String callbackDate = callback.split(":")[1];
             date = LocalDate.parse(callbackDate);
+            log.debug("Create date keyboard type for session data with user id : {} and username : {} and income date :{}",
+                    sessionData.getTelegramUserId(),sessionData.getUsername(),date );
         } catch (IndexOutOfBoundsException exception) {
+            log.debug("Create date keyboard type for session data with user id : {} and username : {} without income date",
+                    sessionData.getTelegramUserId(),sessionData.getUsername() );
             date = LocalDate.now();
         }
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();

@@ -6,15 +6,16 @@ import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import static com.godeltech.gbf.gui.utils.ConstantUtil.*;
 
 @Component
 @AllArgsConstructor
+@Slf4j
 public class SeatsMessageType implements MessageType {
 
-    private final static String SEATS_COURIER_CODE = "seats.courier";
-    private final static String SEATS_CLIENT_CODE = "seats.client";
-    private final static String SEATS_INFO_CODE = "seats.info";
     private final LocalMessageSource lms;
 
     @Override
@@ -24,6 +25,8 @@ public class SeatsMessageType implements MessageType {
 
     @Override
     public String getMessage(SessionData sessionData) {
+        log.debug("Create seats message type for session data with user id : {} and username : {}",
+                sessionData.getTelegramUserId(),sessionData.getUsername() );
         String info = lms.getLocaleMessage(SEATS_INFO_CODE);
         String roleQuestion = sessionData.getRole() == Role.COURIER ?
                 lms.getLocaleMessage(SEATS_COURIER_CODE) :

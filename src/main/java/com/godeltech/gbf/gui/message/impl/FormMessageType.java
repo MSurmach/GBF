@@ -6,21 +6,17 @@ import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import static com.godeltech.gbf.gui.utils.ConstantUtil.*;
 import static com.godeltech.gbf.gui.utils.MessageUtils.*;
-import static com.godeltech.gbf.gui.message.impl.RegistrationsMessageType.REGISTRATION_DATA_ID;
-import static com.godeltech.gbf.gui.message.impl.RequestsMessageType.REQUESTS_DATA_ID;
 
 @Component
 @AllArgsConstructor
+@Slf4j
 public class FormMessageType implements MessageType {
-    public final static String INSTRUCTION_COURIER_ABOUT_CODE = "form.instruction.courier.about";
-    public final static String INSTRUCTION_CLIENT_ABOUT_CODE = "form.instruction.client.about";
-    public final static String DETAILS_HEADER_EMPTY_CODE = "form.details.header.empty";
-    public final static String DETAILS_HEADER_FULL_CODE = "form.details.header.full";
-    public final static String REGISTRATIONS_VIEWER_INSTRUCTION_CODE = "form.registrationsViewer.instruction";
-    public final static String REQUESTS_VIEWER_INSTRUCTION_CODE = "form.requestsViewer.instruction";
+
 
     private LocalMessageSource lms;
 
@@ -31,6 +27,8 @@ public class FormMessageType implements MessageType {
 
     @Override
     public String getMessage(SessionData sessionData) {
+        log.debug("Create form message type for session data with user id : {} and username : {}",
+                sessionData.getTelegramUserId(),sessionData.getUsername() );
         return instructions(sessionData.getRole(), sessionData.getUsername()) +
                 detailsHeader(sessionData.getRole(), sessionData.isEmpty(), sessionData.getOfferId()) +
                 routeDetails(sessionData.getRoute(), lms) +
