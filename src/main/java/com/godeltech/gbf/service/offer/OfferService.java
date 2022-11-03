@@ -19,5 +19,5 @@ public interface OfferService {
 
     //основной метод поиска. Ищем по переданной сессии, роли может быть две: курьер или клиент. Для этих двух ролей надо по разному комбинировать спецификации. Вначале ищем по маршруту (через RouteService), находим пересечения, вытягиваем айдишники офферов нужных нам.
     // Потом дополнительно парсим этот лист маршрутов дабы входило в друг друга и уже в этих айдишниках офферов ищем все остальное.
-    Page<Offer> findAllOffersBySessionDataAndRole(SessionData sessionData, Role client, int pageNumber);
+    Page<Offer> findSuitableOffersByGivenOffer(Offer offer, int pageNumber);
 }

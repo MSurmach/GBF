@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,11 +71,11 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public Page<Offer> findAllOffersBySessionDataAndRole(SessionData sessionData, Role client, int pageNumber) {
-        log.info("Find offers by session date : {} and role : {}", sessionData, client);
-        Specification<Offer> specification = client == Role.CLIENT ?
-                createSpecificationForClient(sessionData) :
-                createSpecificationForCourier(sessionData);
+    public Page<Offer> findSuitableOffersByGivenOffer(Offer offer, int pageNumber) {
+        log.info("Find offers by offer : {} and role : {}", offer, offer.getRole());
+        Specification<Offer> specification = offer.getRole() == Role.CLIENT ?
+                createSpecificationForSearchingCouriers(offer) :
+                createSpecificationForSearchingClients(offer);
         Pageable pageable = PageRequest.of(pageNumber, 1);
 
         return specification == null ?
@@ -85,40 +84,40 @@ public class OfferServiceImpl implements OfferService {
     }
 
 
-    private Specification<Offer> createSpecificationForCourier(SessionData sessionData) {
+    private Specification<Offer> createSpecificationForSearchingClients(Offer givenOffer) {
         log.info("Create specification for courier");
-        List<Long> offersId = routePointService.findOffersIdByRoutePoints(sessionData.getRoute());
+        List<Long> offersId = routePointService.findOffersIdByRoutePoints(givenOffer.getRoutePoints());
         if (offersId.isEmpty())
             return null;
         List<Offer> offers = offerRepository.findAllById(offersId);
-        offers = checkOfferOrder(offers, sessionData.getRoute());
+        offers = checkOfferOrder(offers, givenOffer.getRoutePoints());
 
         Specification<Offer> specification = getSpecificationForId(offers);
-        specification = addSpecificationForRole(Role.COURIER, specification);
-        specification = addSpecificationForExcludingUser(sessionData.getTelegramUserId(), specification);
-        specification = addSpecificationForDates(sessionData.getStartDate(), sessionData.getEndDate(), specification);
-        specification = addCourierSpecificationForSeats(sessionData.getSeats(), specification);
-        specification = addSpecificationForCourierDelivery(sessionData.getDelivery(), specification);
+        specification = addSpecificationForRole(Role.CLIENT, specification);
+        specification = addSpecificationForExcludingUser(givenOffer.getTelegramUser().getId(), specification);
+        specification = addSpecificationForDates(givenOffer.getStartDate(), givenOffer.getEndDate(), specification);
+        specification = addCourierSpecificationForSeats(givenOffer.getSeats(), specification);
+        specification = addSpecificationForCourierDelivery(givenOffer.getDelivery(), specification);
         return specification;
     }
 
-    private Specification<Offer> createSpecificationForClient(SessionData sessionData) {
+    private Specification<Offer> createSpecificationForSearchingCouriers(Offer sessionData) {
         log.info("Create specification for Client");
-        List<Long> offersId = routePointService.findOffersIdByRoutePoints(sessionData.getRoute());
+        List<Long> offersId = routePointService.findOffersIdByRoutePoints(sessionData.getRoutePoints());
         if (offersId.isEmpty())
             return null;
         List<Offer> offers = offerRepository.findAllById(offersId);
-        checkOfferOrder(offers, sessionData.getRoute());
+        checkOfferOrder(offers, sessionData.getRoutePoints());
         Specification<Offer> specification = getSpecificationForId(offers);
-        specification = addSpecificationForRole(Role.CLIENT, specification);
-        specification = addSpecificationForExcludingUser(sessionData.getTelegramUserId(), specification);
+        specification = addSpecificationForRole(Role.COURIER, specification);
+        specification = addSpecificationForExcludingUser(sessionData.getTelegramUser().getId(), specification);
         specification = addSpecificationForDates(sessionData.getStartDate(), sessionData.getEndDate(), specification);
         specification = addClientSpecificationForSeats(sessionData.getSeats(), specification);
         specification = addClientSpecificationForDelivery(sessionData.getDelivery(), specification);
         return specification;
     }
 
-    private List<Offer> checkOfferOrder(List<Offer> offers, LinkedList<RoutePoint> route) {
+    private List<Offer> checkOfferOrder(List<Offer> offers,List<RoutePoint> route) {
         return offers.stream()
                 .filter(offer -> checkRoutePointsOrder(route, offer.getRoutePoints()))
                 .collect(Collectors.toList());
