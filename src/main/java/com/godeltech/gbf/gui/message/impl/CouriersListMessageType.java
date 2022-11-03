@@ -7,17 +7,18 @@ import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import static com.godeltech.gbf.gui.utils.ConstantUtil.*;
 import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class CouriersListMessageType implements MessageType, PaginationInfo<Offer> {
-    public final static String COURIERS_LIST_INITIAL_EXIST = "couriers.list.initial.exist";
-    public final static String COURIERS_LIST_INITIAL_NOT_EXIST = "couriers.list.initial.notExist";
-    public final static String COURIERS_LIST_HEADER = "couriers.list.header";
+
     private LocalMessageSource lms;
 
     @Override
@@ -27,6 +28,8 @@ public class CouriersListMessageType implements MessageType, PaginationInfo<Offe
 
     @Override
     public String getMessage(SessionData sessionData) {
+        log.debug("Create courier list message type for session data with user id : {} and username : {}",
+                sessionData.getTelegramUserId(),sessionData.getUsername() );
         return lms.getLocaleMessage(COURIERS_LIST_HEADER, sessionData.getUsername()) +
                 routeDetails(sessionData.getRoute(), lms) +
                 datesDetails(sessionData.getStartDate(), sessionData.getEndDate(), lms) +

@@ -7,17 +7,18 @@ import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import static com.godeltech.gbf.gui.utils.ConstantUtil.*;
 import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class RequestsMessageType implements MessageType, PaginationInfo<Offer> {
-    public final static String REQUESTS_EXIST_INITIAL = "requests.exist.initial";
-    public final static String REQUESTS_NOT_EXIST_INITIAL = "requests.notExist.initial";
-    public final static String REQUESTS_DATA_ID = "request.data.id";
+
     private LocalMessageSource lms;
 
     @Override
@@ -27,6 +28,8 @@ public class RequestsMessageType implements MessageType, PaginationInfo<Offer> {
 
     @Override
     public String getMessage(SessionData sessionData) {
+        log.debug("Create request message type for session data with user id : {} and username : {}",
+                sessionData.getTelegramUserId(),sessionData.getUsername() );
         return lms.getLocaleMessage(REQUESTS_DATA_ID, sessionData.getOfferId().toString()) +
                 routeDetails(sessionData.getRoute(), lms) +
                 datesDetails(sessionData.getStartDate(), sessionData.getEndDate(), lms) +

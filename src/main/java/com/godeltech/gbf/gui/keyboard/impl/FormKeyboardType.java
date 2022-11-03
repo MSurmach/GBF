@@ -10,6 +10,7 @@ import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Delivery;
 import com.godeltech.gbf.model.db.RoutePoint;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -25,12 +26,11 @@ import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButton;
 import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
+@Slf4j
 @AllArgsConstructor
 public class FormKeyboardType implements KeyboardType {
 
     private final LocalMessageSource lms;
-    public final static String SYMBOL_EDIT_CODE = "symbol.edit";
-    public final static String SPACE = " ";
 
     @Override
     public State getState() {
@@ -39,6 +39,8 @@ public class FormKeyboardType implements KeyboardType {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
+        log.debug("Create form keyboard type for session data with user id : {} and username : {}",
+                sessionData.getTelegramUserId(), sessionData.getUsername());
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         boolean isRouteEmpty = sessionData.getRoute().isEmpty();
         keyboard.add(routeButton(sessionData.getRoute()));

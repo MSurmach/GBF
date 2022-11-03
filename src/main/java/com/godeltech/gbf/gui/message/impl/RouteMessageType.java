@@ -8,16 +8,18 @@ import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.Status;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 
+import static com.godeltech.gbf.gui.utils.ConstantUtil.*;
+
 @Component
 @AllArgsConstructor
+@Slf4j
 public class RouteMessageType implements MessageType {
-    public final static String ROUTE_INFO_ABOUT = "route.info.about";
-    public final static String ROUTE_QUESTION_INITIAL_POINT = "route.question.initialPoint";
-    public final static String ROUTE_QUESTION_NEXT_POINT = "route.question.nextPoint";
+
     private final LocalMessageSource lms;
 
     @Override
@@ -27,6 +29,8 @@ public class RouteMessageType implements MessageType {
 
     @Override
     public String getMessage(SessionData sessionData) {
+        log.debug("Create route message type for session data with user id : {} and username : {}",
+                sessionData.getTelegramUserId(),sessionData.getUsername() );
         LinkedList<RoutePoint> tempRoute = sessionData.getTempRoute();
         String about = lms.getLocaleMessage(ROUTE_INFO_ABOUT, sessionData.getUsername());
         String routeDetails = MessageUtils.routeDetails(tempRoute, lms);

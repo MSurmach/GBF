@@ -5,15 +5,15 @@ import com.godeltech.gbf.gui.message.MessageType;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import static com.godeltech.gbf.gui.utils.ConstantUtil.*;
 
 @Component
 @AllArgsConstructor
+@Slf4j
 public class DeliveryMessageType implements MessageType {
-
-    public final static String DELIVERY_DESCRIPTION_CODE = "delivery.description";
-    public final static String DELIVERY_COURIER_QUESTION_CODE = "delivery.courier.question";
-    public final static String DELIVERY_CLIENT_QUESTION_CODE = "delivery.client.question";
 
     private final LocalMessageSource lms;
 
@@ -24,6 +24,8 @@ public class DeliveryMessageType implements MessageType {
 
     @Override
     public String getMessage(SessionData sessionData) {
+        log.debug("Create delivery message type for session data with user id : {} and username : {}",
+                sessionData.getTelegramUserId(),sessionData.getUsername() );
         String question = switch (sessionData.getRole()) {
             case COURIER, REGISTRATIONS_VIEWER -> lms.getLocaleMessage(DELIVERY_COURIER_QUESTION_CODE);
             case CLIENT, REQUESTS_VIEWER -> lms.getLocaleMessage(DELIVERY_CLIENT_QUESTION_CODE);
