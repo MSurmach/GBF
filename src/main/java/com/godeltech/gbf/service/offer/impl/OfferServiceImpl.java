@@ -131,6 +131,8 @@ public class OfferServiceImpl implements OfferService {
         var minRouteSize = minRoute.size();
         var place = 0;
         for (RoutePoint pointFromMinRoute : minRoute) {
+
+            maxRoute.lastIndexOf(pointFromMinRoute);
             for (var index = place; index < maxRoute.size(); index++) {
                 var pointFromMaxRoute = maxRoute.get(index);
                 if (pointFromMinRoute.getCity().equals(pointFromMaxRoute.getCity())) {
@@ -154,7 +156,7 @@ public class OfferServiceImpl implements OfferService {
     private Specification<Offer> addCourierSpecificationForSeats(int seats, Specification<Offer> specification) {
         if (seats == 0)
             return specification;
-        return specification.and(OfferSpecs.bySeatsGreater(seats));
+        return specification.and(OfferSpecs.bySeatsLess(seats));
     }
 
     private Specification<Offer> addSpecificationForCourierDelivery(Delivery delivery, Specification<Offer> specification) {
@@ -171,13 +173,13 @@ public class OfferServiceImpl implements OfferService {
     private Specification<Offer> addClientSpecificationForDelivery(Delivery delivery, Specification<Offer> specification) {
         if (delivery == null)
             return specification;
-        return specification.and(OfferSpecs.byDeliveryLessOrEqual(delivery));
+        return specification.and(OfferSpecs.byDeliveryGreaterOrEqual(delivery));
     }
 
     private Specification<Offer> addClientSpecificationForSeats(int seats, Specification<Offer> specification) {
         if (seats == 0)
             return specification;
-        return specification.and(OfferSpecs.bySeatsLess(seats));
+        return specification.and(OfferSpecs.bySeatsGreater(seats).or(OfferSpecs.bySeatsIsNull()));
     }
 
     private Specification<Offer> addSpecificationForDates(LocalDate startDate, LocalDate endDate, Specification<Offer> specification) {

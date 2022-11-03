@@ -64,6 +64,9 @@ public class OfferSpecs {
     public static Specification<Offer> bySeatsGreater(Integer seats){
         return ((root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("seats"),seats));
     }
+    public static Specification<Offer> bySeatsIsNull(){
+        return ((root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get("seats")));
+    }
 
     public static Specification<Offer> byOfferId(List<Long> offers_id) {
         return (root, query, criteriaBuilder) -> root.in(offers_id);
@@ -74,9 +77,9 @@ public class OfferSpecs {
                 criteriaBuilder.equal(root.get("role"), role);
     }
 
-    public static Specification<Offer> byDeliveryLessOrEqual(Delivery delivery) {
+    public static Specification<Offer> byDeliveryGreaterOrEqual(Delivery delivery) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.lessThanOrEqualTo(root.get("delivery"), delivery);
+                criteriaBuilder.greaterThanOrEqualTo(root.get("delivery"), delivery);
     }
     public static Specification<Offer> byDeliveryLessOrEqualOrIsNull(Delivery delivery) {
         return (root, query, criteriaBuilder) ->{
