@@ -10,8 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.godeltech.gbf.model.Role.CLIENT;
@@ -83,5 +85,6 @@ public class RoutePointServiceImpl implements RoutePointService {
         log.info("Find id's of offers by route points : {}" ,routePoints);
         return routePointRepository.findOffersId(routePoints.stream().map(routePoint -> routePoint.getCity().getId())
                 .collect(Collectors.toList()));
+
     }
 }

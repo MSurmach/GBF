@@ -5,6 +5,7 @@ import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.Delivery;
 import com.godeltech.gbf.model.db.Offer;
+import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.repository.OfferRepository;
 import com.godeltech.gbf.repository.specification.OfferSpecs;
@@ -21,8 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -76,90 +78,121 @@ public class OfferServiceImpl implements OfferService {
                 createSpecificationForClient(sessionData) :
                 createSpecificationForCourier(sessionData);
         Pageable pageable = PageRequest.of(pageNumber, 1);
+
         return specification == null ?
                 Page.empty() :
                 offerRepository.findAll(specification, pageable);
     }
+
 
     private Specification<Offer> createSpecificationForCourier(SessionData sessionData) {
         log.info("Create specification for courier");
         List<Long> offersId = routePointService.findOffersIdByRoutePoints(sessionData.getRoute());
         if (offersId.isEmpty())
             return null;
-        Specification<Offer> specification = getSpecificationForId(offersId);
-        List<Specification<Offer>> specifications = new ArrayList<>();
-        addSpecificationForRole(Role.COURIER,specifications);
-//        addSpecificationForExcludingUser(sessionData.getTelegramUserId(),specifications);
-        addSpecificationForDates(sessionData.getStartDate(), sessionData.getEndDate(), specifications);
-        addCourierSpecificationForSeats(sessionData.getSeats(), specifications);
-        addSpecificationForCourierDelivery(sessionData.getDelivery(), specifications);
-        specifications.forEach(specification::and);
+        List<Offer> offers = offerRepository.findAllById(offersId);
+        offers = checkOfferOrder(offers, sessionData.getRoute());
+
+        Specification<Offer> specification = getSpecificationForId(offers);
+        specification = addSpecificationForRole(Role.COURIER, specification);
+        specification = addSpecificationForExcludingUser(sessionData.getTelegramUserId(), specification);
+        specification = addSpecificationForDates(sessionData.getStartDate(), sessionData.getEndDate(), specification);
+        specification = addCourierSpecificationForSeats(sessionData.getSeats(), specification);
+        specification = addSpecificationForCourierDelivery(sessionData.getDelivery(), specification);
         return specification;
     }
+
     private Specification<Offer> createSpecificationForClient(SessionData sessionData) {
         log.info("Create specification for Client");
-        List<Long> routePoints =
-                routePointService.findOffersIdByRoutePoints(sessionData.getRoute());
-//                Role.COURIER,
-//                sessionData.getTelegramUserId());
-        if (routePoints.isEmpty())
+        List<Long> offersId = routePointService.findOffersIdByRoutePoints(sessionData.getRoute());
+        if (offersId.isEmpty())
             return null;
-        Specification<Offer> specification = getSpecificationForId(routePoints);
-        List<Specification<Offer>> specifications = new ArrayList<>();
-        addSpecificationForRole(Role.CLIENT,specifications);
-//        addSpecificationForExcludingUser(sessionData.getTelegramUserId(),specifications);
-        addSpecificationForDates(sessionData.getStartDate(), sessionData.getEndDate(), specifications);
-        addClientSpecificationForSeats(sessionData.getSeats(), specifications);
-        addSpecificationForDelivery(sessionData.getDelivery(), specifications);
-        specifications.forEach(specification::and);
+        List<Offer> offers = offerRepository.findAllById(offersId);
+        checkOfferOrder(offers, sessionData.getRoute());
+        Specification<Offer> specification = getSpecificationForId(offers);
+        specification = addSpecificationForRole(Role.CLIENT, specification);
+        specification = addSpecificationForExcludingUser(sessionData.getTelegramUserId(), specification);
+        specification = addSpecificationForDates(sessionData.getStartDate(), sessionData.getEndDate(), specification);
+        specification = addClientSpecificationForSeats(sessionData.getSeats(), specification);
+        specification = addClientSpecificationForDelivery(sessionData.getDelivery(), specification);
         return specification;
     }
-    private void addSpecificationForExcludingUser(Long telegramUserId, List<Specification<Offer>> specifications) {
-        specifications.add(OfferSpecs.byNotEqualUserId(telegramUserId));
+
+    private List<Offer> checkOfferOrder(List<Offer> offers, LinkedList<RoutePoint> route) {
+        return offers.stream()
+                .filter(offer -> checkRoutePointsOrder(route, offer.getRoutePoints()))
+                .collect(Collectors.toList());
     }
 
-    private void addSpecificationForRole(Role role, List<Specification<Offer>> specifications) {
-        specifications.add(OfferSpecs.byRole(role));
+    private boolean checkRoutePointsOrder(List<RoutePoint> givenRoute, List<RoutePoint> targetRoute) {
+        List<RoutePoint> minRoute, maxRoute;
+        if (givenRoute.size() < targetRoute.size()) {
+            minRoute = givenRoute;
+            maxRoute = targetRoute;
+        } else {
+            minRoute = targetRoute;
+            maxRoute = givenRoute;
+        }
+        var minRouteSize = minRoute.size();
+        var place = 0;
+        for (RoutePoint pointFromMinRoute : minRoute) {
+            for (var index = place; index < maxRoute.size(); index++) {
+                var pointFromMaxRoute = maxRoute.get(index);
+                if (pointFromMinRoute.getCity().equals(pointFromMaxRoute.getCity())) {
+                    place = index;
+                    minRouteSize--;
+                    break;
+                }
+            }
+        }
+        return minRouteSize == 0;
     }
 
-    private void addCourierSpecificationForSeats(int seats, List<Specification<Offer>> specifications) {
+    private Specification<Offer> addSpecificationForExcludingUser(Long telegramUserId, Specification<Offer> specification) {
+        return specification.and(OfferSpecs.byNotEqualUserId(telegramUserId));
+    }
+
+    private Specification<Offer> addSpecificationForRole(Role role, Specification<Offer> specification) {
+        return specification.and(OfferSpecs.byRole(role));
+    }
+
+    private Specification<Offer> addCourierSpecificationForSeats(int seats, Specification<Offer> specification) {
         if (seats == 0)
-            return;
-        specifications.add(OfferSpecs.bySeatsGreater(seats));
+            return specification;
+        return specification.and(OfferSpecs.bySeatsGreater(seats));
     }
 
-    private void addSpecificationForCourierDelivery(Delivery delivery, List<Specification<Offer>> specifications) {
+    private Specification<Offer> addSpecificationForCourierDelivery(Delivery delivery, Specification<Offer> specification) {
         if (delivery == null)
-            return;
-        specifications.add(OfferSpecs.byDeliveryLessOrEqualOrIsNull(delivery));
+            return specification;
+        return specification.and(OfferSpecs.byDeliveryLessOrEqualOrIsNull(delivery));
     }
 
 
-
-    private Specification<Offer> getSpecificationForId(List<Long> idList) {
-        return OfferSpecs.byOfferId(idList);
+    private Specification<Offer> getSpecificationForId(List<Offer> offerList) {
+        return OfferSpecs.byOfferId(offerList.stream().map(Offer::getId).collect(Collectors.toList()));
     }
 
-    private void addSpecificationForDelivery(Delivery delivery, List<Specification<Offer>> specifications) {
+    private Specification<Offer> addClientSpecificationForDelivery(Delivery delivery, Specification<Offer> specification) {
         if (delivery == null)
-            return;
-        specifications.add(OfferSpecs.byDeliveryLessOrEqual(delivery));
+            return specification;
+        return specification.and(OfferSpecs.byDeliveryLessOrEqual(delivery));
     }
 
-    private void addClientSpecificationForSeats(int seats, List<Specification<Offer>> specifications) {
+    private Specification<Offer> addClientSpecificationForSeats(int seats, Specification<Offer> specification) {
         if (seats == 0)
-            return;
-        specifications.add(OfferSpecs.bySeatsLess(seats));
+            return specification;
+        return specification.and(OfferSpecs.bySeatsLess(seats));
     }
 
-    private void addSpecificationForDates(LocalDate startDate, LocalDate endDate, List<Specification<Offer>> specifications) {
+    private Specification<Offer> addSpecificationForDates(LocalDate startDate, LocalDate endDate, Specification<Offer> specification) {
         if (startDate == null) {
-            return;
+            return specification;
         }
         if (startDate.equals(endDate)) {
-            specifications.add(OfferSpecs.startDateEqual(startDate).or(OfferSpecs.dateBetween(startDate)));
+            return specification.and((OfferSpecs.startDateEqual(startDate).or(OfferSpecs.dateBetween(startDate))));
         } else {
-            specifications.add(OfferSpecs.datesBetween(startDate, endDate));
+            return specification.and(OfferSpecs.datesBetween(startDate, endDate));
         }
     }
 }
