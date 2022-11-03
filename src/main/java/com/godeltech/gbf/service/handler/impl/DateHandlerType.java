@@ -1,8 +1,8 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.gui.button.CalendarBotButton;
-import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.validator.DateValidator;
 import com.godeltech.gbf.service.validator.exceptions.EmptyButtonCalendarException;
@@ -41,6 +41,10 @@ public class DateHandlerType implements HandlerType {
             case CONFIRM_DATE -> {
                 sessionData.setStartDate(LocalDate.from(sessionData.getTempStartDate()));
                 sessionData.setEndDate(LocalDate.from(sessionData.getTempEndDate()));
+                sessionData.setTempStartDate(null);
+                sessionData.setTempEndDate(null);
+            }
+            case CLEAR_DATES -> {
                 sessionData.setTempStartDate(null);
                 sessionData.setTempEndDate(null);
             }

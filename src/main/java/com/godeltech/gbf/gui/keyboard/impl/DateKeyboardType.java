@@ -3,8 +3,8 @@ package com.godeltech.gbf.gui.keyboard.impl;
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
-import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -18,10 +18,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static com.godeltech.gbf.gui.button.CalendarBotButton.*;
+import static com.godeltech.gbf.gui.utils.ButtonUtils.*;
 import static com.godeltech.gbf.gui.utils.DateUtils.formatMonth;
 import static com.godeltech.gbf.gui.utils.DateUtils.formatYear;
-import static com.godeltech.gbf.gui.utils.ButtonUtils.*;
-import static com.godeltech.gbf.gui.button.CalendarBotButton.*;
 import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
@@ -50,8 +50,10 @@ public class DateKeyboardType implements KeyboardType {
         keyboard.add(monthWithPaginationRow(date));
         keyboard.add(daysOfWeekRow());
         keyboard.addAll(calendarMarkup(date, sessionData));
-        if (sessionData.getTempStartDate() != null)
+        if (sessionData.getTempStartDate() != null) {
             keyboard.add(confirmDateRow());
+            keyboard.add(clearDateRow());
+        }
         return new KeyboardMarkupAppender().
                 append(new InlineKeyboardMarkup(keyboard)).
                 append(backAndMenuMarkup(lms)).
@@ -111,7 +113,8 @@ public class DateKeyboardType implements KeyboardType {
             if (day <= date.lengthOfMonth()) {
                 var dayButton = (Objects.equals(date, sessionData.getTempStartDate()) || Objects.equals(date, sessionData.getTempEndDate())) ?
                         createLocalButtonWithData(DATE_MARKER, SELECT_DAY, date.toString(), lms) :
-                        createButtonWithData(Integer.toString(day++), SELECT_DAY, date.toString());
+                        createButtonWithData(Integer.toString(day), SELECT_DAY, date.toString());
+                day++;
                 row.add(dayButton);
                 date = date.plusDays(1);
             } else {
@@ -123,5 +126,9 @@ public class DateKeyboardType implements KeyboardType {
 
     private List<InlineKeyboardButton> confirmDateRow() {
         return List.of(createLocalButton(CONFIRM_DATE, lms));
+    }
+
+    private List<InlineKeyboardButton> clearDateRow() {
+        return List.of(createLocalButton(CLEAR_DATES, lms));
     }
 }
