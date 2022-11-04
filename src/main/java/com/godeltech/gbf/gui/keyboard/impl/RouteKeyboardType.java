@@ -9,6 +9,7 @@ import com.godeltech.gbf.model.db.City;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.service.city.CityService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -25,6 +26,7 @@ import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 @AllArgsConstructor
+@Slf4j
 public class RouteKeyboardType implements KeyboardType {
 
     private LocalMessageSource lms;
@@ -37,6 +39,8 @@ public class RouteKeyboardType implements KeyboardType {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
+        log.debug("Create route keyboard type for session data with user id : {} and username : {}",
+                sessionData.getTelegramUserId(),sessionData.getUsername() );
         List<City> allCities = cityService.findAll();
         LinkedList<RoutePoint> route = sessionData.getTempRoute();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();

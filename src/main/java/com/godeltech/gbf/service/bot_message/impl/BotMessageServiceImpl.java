@@ -11,7 +11,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-
 import java.util.List;
 
 @Service
@@ -42,14 +41,27 @@ public class BotMessageServiceImpl implements BotMessageService {
 
     @Override
     public List<BotMessage> findAllByTelegramIdAndChatId(Long telegramId, Long chatId) {
-        log.info("Find message by telegram id : {} and chat id: {}",telegramId,chatId);
+        log.info("Find message by telegram id : {} and chat id: {}", telegramId, chatId);
         return botMessageRepository.findAllByUserIdAndChatId(telegramId, chatId);
     }
 
     @Override
     public List<BotMessage> findExpiredMessageByDate(LocalDateTime expiredDate) {
-        log.info("Find messages by expired date : {}",expiredDate);
+        log.info("Find messages by expired date : {}", expiredDate);
         return botMessageRepository.findByCreatedAtBefore(Timestamp.valueOf(expiredDate));
+    }
+
+    @Override
+    @Transactional
+    public void checkBotMessage(Integer messageId, Long userId, Long chatId) {
+        log.info("Check message with id : {}", messageId);
+        if (!botMessageRepository.existsById(messageId))
+            botMessageRepository.save(BotMessage.builder()
+                    .messageId(messageId)
+                    .userId(userId)
+                    .chatId(chatId)
+                    .createdAt(Timestamp.valueOf(LocalDateTime.now()))
+                    .build());
     }
 
 }

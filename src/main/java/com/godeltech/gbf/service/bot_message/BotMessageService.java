@@ -14,4 +14,6 @@ public interface BotMessageService {
     List<BotMessage> findAllByTelegramIdAndChatId(Long telegramId, Long chatId);
 
     List<BotMessage> findExpiredMessageByDate(LocalDateTime expiredDate);
+
+    void checkBotMessage(Integer messageId, Long userId, Long chatId);
 }

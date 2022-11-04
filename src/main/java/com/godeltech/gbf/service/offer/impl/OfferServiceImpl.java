@@ -55,7 +55,7 @@ public class OfferServiceImpl implements OfferService {
     public Page<Offer> findAllOffersByUserIdAndRole(Long userId, Role role, int pageNumber) {
         log.info("Find offers by user id : {} and role : {} ", userId, role);
         Pageable pageable = PageRequest.of(pageNumber, 1);
-        return offerRepository.findOffersByTelegramUserIdAndRole(userId, role, pageable);
+        return offerRepository.findOffersByTelegramUserIdAndRoleOrderById(userId, role, pageable);
 
     }
 
@@ -87,13 +87,12 @@ public class OfferServiceImpl implements OfferService {
             return null;
         List<Offer> offers = offerRepository.findAllById(offersId);
         offers = checkOfferOrder(offers, givenOffer.getRoutePoints());
-
         Specification<Offer> specification = getSpecificationForId(offers);
-        specification = addSpecificationForRole(Role.CLIENT, specification);
+        specification = addSpecificationByRole(Role.CLIENT, specification);
        // specification = addSpecificationForExcludingUser(givenOffer.getTelegramUser().getId(), specification);
-        specification = addSpecificationForDates(givenOffer.getStartDate(), givenOffer.getEndDate(), specification);
-        specification = addCourierSpecificationForSeats(givenOffer.getSeats(), specification);
-        specification = addSpecificationForCourierDelivery(givenOffer.getDelivery(), specification);
+        specification = addSpecificationByDates(givenOffer.getStartDate(), givenOffer.getEndDate(), specification);
+        specification = addSpecificationBySeatsForSearchingClients(givenOffer.getSeats(), specification);
+        specification = addSpecificationByDeliveryForSearchingClients(givenOffer.getDelivery(), specification);
         return specification;
     }
 
@@ -105,11 +104,11 @@ public class OfferServiceImpl implements OfferService {
         List<Offer> offers = offerRepository.findAllById(offersId);
         offers = checkOfferOrder(offers, sessionData.getRoutePoints());
         Specification<Offer> specification = getSpecificationForId(offers);
-        specification = addSpecificationForRole(Role.COURIER, specification);
+        specification = addSpecificationByRole(Role.COURIER, specification);
         //specification = addSpecificationForExcludingUser(sessionData.getTelegramUser().getId(), specification);
-        specification = addSpecificationForDates(sessionData.getStartDate(), sessionData.getEndDate(), specification);
-        specification = addClientSpecificationForSeats(sessionData.getSeats(), specification);
-        specification = addClientSpecificationForDelivery(sessionData.getDelivery(), specification);
+        specification = addSpecificationByDates(sessionData.getStartDate(), sessionData.getEndDate(), specification);
+        specification = addSpecificationBySeatsForSearchingCouriers(sessionData.getSeats(), specification);
+        specification = addSpecificationByDeliveryForSearchingCouriers(sessionData.getDelivery(), specification);
         return specification;
     }
 
@@ -149,17 +148,17 @@ public class OfferServiceImpl implements OfferService {
         return specification.and(OfferSpecs.byNotEqualUserId(telegramUserId));
     }
 
-    private Specification<Offer> addSpecificationForRole(Role role, Specification<Offer> specification) {
+    private Specification<Offer> addSpecificationByRole(Role role, Specification<Offer> specification) {
         return specification.and(OfferSpecs.byRole(role));
     }
 
-    private Specification<Offer> addCourierSpecificationForSeats(int seats, Specification<Offer> specification) {
+    private Specification<Offer> addSpecificationBySeatsForSearchingClients(int seats, Specification<Offer> specification) {
         if (seats == 0)
             return specification;
         return specification.and(OfferSpecs.bySeatsLess(seats));
     }
 
-    private Specification<Offer> addSpecificationForCourierDelivery(Delivery delivery, Specification<Offer> specification) {
+    private Specification<Offer> addSpecificationByDeliveryForSearchingClients(Delivery delivery, Specification<Offer> specification) {
         if (delivery == null)
             return specification;
         return specification.and(OfferSpecs.byDeliveryLessOrEqualOrIsNull(delivery));
@@ -167,22 +166,27 @@ public class OfferServiceImpl implements OfferService {
 
 
     private Specification<Offer> getSpecificationForId(List<Offer> offerList) {
-        return OfferSpecs.byOfferId(offerList.stream().map(Offer::getId).collect(Collectors.toList()));
+        List<Long> idList = offerList.stream().map(Offer::getId).collect(Collectors.toList());
+        log.debug("Get specification with list of id : {}",idList);
+        return OfferSpecs.byOfferId(idList);
     }
 
-    private Specification<Offer> addClientSpecificationForDelivery(Delivery delivery, Specification<Offer> specification) {
+    private Specification<Offer> addSpecificationByDeliveryForSearchingCouriers(Delivery delivery, Specification<Offer> specification) {
+        log.debug("Add client specification for delivery with income delivery :{}",delivery);
         if (delivery == null)
             return specification;
         return specification.and(OfferSpecs.byDeliveryGreaterOrEqual(delivery));
     }
 
-    private Specification<Offer> addClientSpecificationForSeats(int seats, Specification<Offer> specification) {
+    private Specification<Offer> addSpecificationBySeatsForSearchingCouriers(int seats, Specification<Offer> specification) {
+        log.debug("Add client specification for seat with income value seats : {}",seats);
         if (seats == 0)
             return specification;
         return specification.and(OfferSpecs.bySeatsGreater(seats).or(OfferSpecs.bySeatsIsNull()));
     }
 
-    private Specification<Offer> addSpecificationForDates(LocalDate startDate, LocalDate endDate, Specification<Offer> specification) {
+    private Specification<Offer> addSpecificationByDates(LocalDate startDate, LocalDate endDate, Specification<Offer> specification) {
+        log.debug("Add date specification with income values : startDate : {} and endDate: {}",startDate,endDate);
         if (startDate == null) {
             return specification;
         }

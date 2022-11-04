@@ -72,8 +72,8 @@ public class CallbackInterceptor implements Interceptor {
             nextState = handleUpdate(update);
         } catch (CachedUserDataNotFound e) {
             log.info("Initialize new user");
-            nextState = MENU;
-            SessionDataCache.initializeByIdAndUsernameAndFirstNameAndLastName(telegramUserId, from.getUserName(), from.getFirstName(), from.getLastName());
+            nextState=MENU;
+            SessionDataCache.initializeByIdAndUsernameAndFirstNameAndLastName(telegramUserId,from.getUserName(), from.getFirstName(), from.getLastName());
 //            nextState = messageTextInterceptor.interceptTextCommand(TextCommand.START.getDescription(), from.getUserName(), telegramUserId);
             cached = SessionDataCache.get(telegramUserId);
         }

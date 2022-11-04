@@ -7,6 +7,7 @@ import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.gui.utils.ButtonUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -21,6 +22,7 @@ import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 @AllArgsConstructor
+@Slf4j
 public class YearKeyboardType implements KeyboardType {
 
     private LocalMessageSource lms;
@@ -32,6 +34,8 @@ public class YearKeyboardType implements KeyboardType {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
+        log.debug("Create year keyboard type for session data with user id : {} and username : {}",
+                sessionData.getTelegramUserId(),sessionData.getUsername() );
         LocalDate[] years = getYearsArray(4);
         List<InlineKeyboardButton> yearButtons = Arrays.stream(years).
                 map(date -> ButtonUtils.createButtonWithData(Integer.toString(date.getYear()), SELECT_YEAR, date.toString())).
