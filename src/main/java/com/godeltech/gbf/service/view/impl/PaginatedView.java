@@ -1,11 +1,7 @@
 package com.godeltech.gbf.service.view.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.factory.impl.KeyboardFactory;
 import com.godeltech.gbf.factory.impl.MessageFactory;
-import com.godeltech.gbf.gui.keyboard.impl.PaginationKeyboardType;
-import com.godeltech.gbf.gui.utils.KeyboardUtils;
-import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
@@ -15,7 +11,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.godeltech.gbf.model.Role.CLIENT;
@@ -26,10 +21,8 @@ import static com.godeltech.gbf.model.State.REQUESTS;
 @AllArgsConstructor
 public abstract class PaginatedView {
     private OfferService offerService;
-    private PaginationKeyboardType paginationKeyboard;
     private MessageFactory messageFactory;
     private KeyboardFactory keyboardFactory;
-    private LocalMessageSource lms;
 
 
     public List<SendMessage> buildView(Long chatId, SessionData sessionData) {
@@ -53,28 +46,12 @@ public abstract class PaginatedView {
             default -> null;
         };
         sessionData.setPage(page);
-        List<SendMessage> messages = new ArrayList<>();
-        var keyboardMarkup = (page != null && !page.isEmpty()) ?
-                paginationKeyboard.getKeyboardMarkup(sessionData) :
-                KeyboardUtils.backAndMenuMarkup(lms);
-        messages.add(SendMessage.builder().
+        SendMessage sendMessage = SendMessage.builder().
                 chatId(chatId).
                 parseMode("html").
-                text(messageFactory.get(currentState).initialMessage(sessionData)).
-                replyMarkup(keyboardMarkup).
-                build());
-        if (page != null && !page.isEmpty()) {
-            for (Offer offer : page) {
-                SessionData fromDb = ModelUtils.mapOfferToSessionData(offer);
-                SendMessage sendMessage = SendMessage.builder().
-                        chatId(chatId).
-                        parseMode("html").
-                        text(messageFactory.get(currentState).getMessage(fromDb)).
-                        replyMarkup(keyboardFactory.get(currentState).getKeyboardMarkup(fromDb)).
-                        build();
-                messages.add(sendMessage);
-            }
-        }
-        return messages;
+                text(messageFactory.get(currentState).getMessage(sessionData)).
+                replyMarkup(keyboardFactory.get(currentState).getKeyboardMarkup(sessionData)).
+                build();
+        return List.of(sendMessage);
     }
 }

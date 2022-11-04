@@ -14,9 +14,9 @@ import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 @Component
 @AllArgsConstructor
 public class ClientsListMessageType implements MessageType {
-    public final static String CLIENTS_LIST_INITIAL_EXIST = "clients.list.initial.exist";
-    public final static String CLIENTS_LIST_INITIAL_NOT_EXIST = "clients.list.initial.notExist";
-    public final static String CLIENTS_LIST_HEADER = "clients.list.header";
+    public final static String CLIENTS_EXIST_CODE = "clients.exist";
+    public final static String CLIENTS_NOT_EXIST_CODE = "clients.notExist";
+    public final static String CLIENT_HEADER = "client.header";
 
     private LocalMessageSource lms;
 
@@ -27,17 +27,16 @@ public class ClientsListMessageType implements MessageType {
 
     @Override
     public String getMessage(SessionData sessionData) {
-        return lms.getLocaleMessage(CLIENTS_LIST_HEADER, sessionData.getUsername()) + routeDetails(sessionData.getRoute(), lms) +
-                datesDetails(sessionData.getStartDate(), sessionData.getEndDate(), lms) +
-                deliveryDetails(sessionData.getDelivery(), lms) +
-                seatsDetails(sessionData.getSeats(), lms) +
-                commentDetails(sessionData.getComment(), lms);
-    }
-
-    public String initialMessage(SessionData sessionData) {
         Page<Offer> page = sessionData.getPage();
-        return (page != null && !page.isEmpty()) ?
-                lms.getLocaleMessage(CLIENTS_LIST_INITIAL_EXIST, sessionData.getUsername()) :
-                lms.getLocaleMessage(CLIENTS_LIST_INITIAL_NOT_EXIST, sessionData.getUsername());
+        String username = sessionData.getUsername();
+        if (page == null || page.isEmpty()) return lms.getLocaleMessage(CLIENTS_NOT_EXIST_CODE, username);
+        Offer offer = page.getContent().get(0);
+        return lms.getLocaleMessage(CLIENTS_EXIST_CODE, username) +
+                lms.getLocaleMessage(CLIENT_HEADER, offer.getTelegramUser().getUserName()) +
+                routeDetails(offer.getRoutePoints(), lms) +
+                datesDetails(offer.getStartDate(), offer.getEndDate(), lms) +
+                deliveryDetails(offer.getDelivery(), lms) +
+                seatsDetails(offer.getSeats(), lms) +
+                commentDetails(offer.getComment(), lms);
     }
 }

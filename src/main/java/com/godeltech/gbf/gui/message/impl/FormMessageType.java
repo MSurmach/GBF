@@ -9,8 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import static com.godeltech.gbf.gui.utils.MessageUtils.*;
-import static com.godeltech.gbf.gui.message.impl.RegistrationsMessageType.REGISTRATION_DATA_ID;
-import static com.godeltech.gbf.gui.message.impl.RequestsMessageType.REQUESTS_DATA_ID;
+import static com.godeltech.gbf.gui.message.impl.RegistrationsMessageType.REGISTRATION_DATA_ID_CODE;
+import static com.godeltech.gbf.gui.message.impl.RequestsMessageType.REQUEST_DATA_ID;
 
 @Component
 @AllArgsConstructor
@@ -45,8 +45,8 @@ public class FormMessageType implements MessageType {
         if (isEmptyData) return lms.getLocaleMessage(DETAILS_HEADER_EMPTY_CODE);
         return switch (role) {
             case COURIER, CLIENT -> lms.getLocaleMessage(DETAILS_HEADER_FULL_CODE);
-            case REGISTRATIONS_VIEWER -> lms.getLocaleMessage(REGISTRATION_DATA_ID, userId.toString());
-            case REQUESTS_VIEWER -> lms.getLocaleMessage(REQUESTS_DATA_ID, userId.toString());
+            case REGISTRATIONS_VIEWER -> lms.getLocaleMessage(REGISTRATION_DATA_ID_CODE, userId.toString());
+            case REQUESTS_VIEWER -> lms.getLocaleMessage(REQUEST_DATA_ID, userId.toString());
         };
     }
 

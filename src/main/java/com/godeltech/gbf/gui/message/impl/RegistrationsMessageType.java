@@ -16,7 +16,7 @@ import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 public class RegistrationsMessageType implements MessageType {
     public final static String REGISTRATIONS_EXIST_CODE = "registrations.exist";
     public final static String REGISTRATIONS_NOT_EXIST_CODE = "registrations.notExist";
-    public final static String REGISTRATION_DATA_ID = "registration.data.id";
+    public final static String REGISTRATION_DATA_ID_CODE = "registration.data.id";
     private LocalMessageSource lms;
 
     @Override
@@ -26,19 +26,16 @@ public class RegistrationsMessageType implements MessageType {
 
     @Override
     public String getMessage(SessionData sessionData) {
-        return lms.getLocaleMessage(REGISTRATION_DATA_ID, sessionData.getOfferId().toString()) +
-                routeDetails(sessionData.getRoute(), lms) +
-                datesDetails(sessionData.getStartDate(), sessionData.getEndDate(), lms) +
-                deliveryDetails(sessionData.getDelivery(), lms) +
-                seatsDetails(sessionData.getSeats(), lms) +
-                commentDetails(sessionData.getComment(), lms);
-    }
-
-    public String initialMessage(SessionData sessionData) {
         Page<Offer> page = sessionData.getPage();
         String username = sessionData.getUsername();
-        return (page != null && !page.isEmpty()) ?
-                lms.getLocaleMessage(REGISTRATIONS_EXIST_CODE, username) :
-                lms.getLocaleMessage(REGISTRATIONS_NOT_EXIST_CODE, username);
+        if (page == null || page.isEmpty()) return lms.getLocaleMessage(REGISTRATIONS_NOT_EXIST_CODE, username);
+        Offer offer = page.getContent().get(0);
+        return lms.getLocaleMessage(REGISTRATIONS_EXIST_CODE, username) +
+                lms.getLocaleMessage(REGISTRATION_DATA_ID_CODE, offer.getId().toString()) +
+                routeDetails(offer.getRoutePoints(), lms) +
+                datesDetails(offer.getStartDate(), offer.getEndDate(), lms) +
+                deliveryDetails(offer.getDelivery(), lms) +
+                seatsDetails(offer.getSeats(), lms) +
+                commentDetails(offer.getComment(), lms);
     }
 }
