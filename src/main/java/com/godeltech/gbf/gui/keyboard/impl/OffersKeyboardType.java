@@ -4,6 +4,7 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.utils.KeyboardUtils;
+import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
@@ -16,18 +17,18 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.godeltech.gbf.gui.button.RegistrationBotButton.*;
+import static com.godeltech.gbf.gui.button.OffersBotButton.*;
 import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButtonWithData;
 
 @Component
 @AllArgsConstructor
-public class RegistrationKeyboardType implements KeyboardType {
+public class OffersKeyboardType implements KeyboardType {
     private final LocalMessageSource lms;
     private final PaginationKeyboardType paginationKeyboardType;
 
     @Override
     public State getState() {
-        return State.REGISTRATIONS;
+        return State.OFFERS;
     }
 
     @Override
@@ -35,9 +36,11 @@ public class RegistrationKeyboardType implements KeyboardType {
         Page<Offer> page = sessionData.getPage();
         if (page == null || page.isEmpty()) return KeyboardUtils.menuMarkup(lms);
         String offerId = page.getContent().get(0).getId().toString();
-        var editButton = createLocalButtonWithData(REGISTRATION_EDIT, offerId, lms);
-        var deleteButton = createLocalButtonWithData(REGISTRATION_DELETE, offerId, lms);
-        var findButton = createLocalButtonWithData(REGISTRATION_FIND_CLIENTS, offerId, lms);
+        var editButton = createLocalButtonWithData(OFFER_EDIT, offerId, lms);
+        var deleteButton = createLocalButtonWithData(OFFER_DELETE, offerId, lms);
+        var findButton = sessionData.getRole() == Role.REGISTRATIONS_VIEWER ?
+                createLocalButtonWithData(OFFER_FIND_CLIENTS, offerId, lms) :
+                createLocalButtonWithData(OFFER_FIND_COURIERS, offerId, lms);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(List.of(editButton, deleteButton, findButton));
         var keyboardMarkup = new InlineKeyboardMarkup(keyboard);

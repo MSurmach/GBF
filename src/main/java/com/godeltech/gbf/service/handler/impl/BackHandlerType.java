@@ -21,8 +21,7 @@ public class BackHandlerType implements HandlerType {
 
     static {
         stateAndBackStateMap.put(FORM, MENU);
-        stateAndBackStateMap.put(REQUESTS, MENU);
-        stateAndBackStateMap.put(REGISTRATIONS, MENU);
+        stateAndBackStateMap.put(OFFERS, MENU);
         stateAndBackStateMap.put(WRONG_INPUT, MENU);
         stateAndBackStateMap.put(COMMENT, FORM);
         stateAndBackStateMap.put(SEATS, FORM);
@@ -31,8 +30,8 @@ public class BackHandlerType implements HandlerType {
         stateAndBackStateMap.put(ROUTE, FORM);
         stateAndBackStateMap.put(YEAR, DATE);
         stateAndBackStateMap.put(MONTH, DATE);
-        stateAndBackStateMap.put(COURIERS_LIST_RESULT, REQUESTS);
-        stateAndBackStateMap.put(CLIENTS_LIST_RESULT, REGISTRATIONS);
+        stateAndBackStateMap.put(COURIERS_SEARCH_RESULT, OFFERS);
+        stateAndBackStateMap.put(CLIENTS_SEARCH_RESULT, OFFERS);
     }
 
     @Override

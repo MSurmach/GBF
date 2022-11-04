@@ -21,7 +21,7 @@ public class CouriersListMessageType implements MessageType {
 
     @Override
     public State getState() {
-        return State.COURIERS_LIST_RESULT;
+        return State.COURIERS_SEARCH_RESULT;
     }
 
     @Override

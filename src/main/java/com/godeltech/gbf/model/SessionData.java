@@ -42,6 +42,8 @@ public class SessionData {
 
     private Offer searchOffer;
 
+    private boolean isEditable;
+
     public void clearTemp() {
         tempStartDate = null;
         tempEndDate = null;

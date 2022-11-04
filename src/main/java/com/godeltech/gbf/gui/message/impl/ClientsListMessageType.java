@@ -22,7 +22,7 @@ public class ClientsListMessageType implements MessageType {
 
     @Override
     public State getState() {
-        return State.CLIENTS_LIST_RESULT;
+        return State.CLIENTS_SEARCH_RESULT;
     }
 
     @Override

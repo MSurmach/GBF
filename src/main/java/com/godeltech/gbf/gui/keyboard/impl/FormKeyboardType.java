@@ -23,14 +23,13 @@ import static com.godeltech.gbf.gui.button.FormButton.*;
 import static com.godeltech.gbf.gui.utils.ButtonUtils.createButton;
 import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButton;
 import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
+import static com.godeltech.gbf.model.Role.COURIER;
 
 @Component
 @AllArgsConstructor
 public class FormKeyboardType implements KeyboardType {
 
     private final LocalMessageSource lms;
-    public final static String SYMBOL_EDIT_CODE = "symbol.edit";
-    public final static String SPACE = " ";
 
     @Override
     public State getState() {
@@ -47,7 +46,11 @@ public class FormKeyboardType implements KeyboardType {
         keyboard.add(deliveryButton(sessionData.getDelivery()));
         keyboard.add(seatsButton(sessionData.getSeats()));
         keyboard.add(commentButton(sessionData.getComment()));
-        keyboard.add(confirmButton(sessionData.getRole()));
+        keyboard.add(
+                sessionData.isEditable() ?
+                        saveChangesButton() :
+                        confirmButton(sessionData.getRole())
+        );
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(keyboard);
         return new KeyboardMarkupAppender(keyboardMarkup).
                 append(backAndMenuMarkup(lms)).
@@ -88,11 +91,12 @@ public class FormKeyboardType implements KeyboardType {
     }
 
     private List<InlineKeyboardButton> confirmButton(Role role) {
-        return switch (role) {
-            case COURIER -> List.of(createLocalButton(FORM_CONFIRM_AS_COURIER, lms));
-            case CLIENT -> List.of(createLocalButton(FORM_CONFIRM_AS_CLIENT, lms));
-            case REGISTRATIONS_VIEWER -> List.of(createLocalButton(FORM_CONFIRM_AS_REGISTRATION_VIEWER, lms));
-            case REQUESTS_VIEWER -> List.of(createLocalButton(FORM_CONFIRM_AS_REQUEST_VIEWER, lms));
-        };
+        return Objects.equals(role, COURIER) ?
+                List.of(createLocalButton(REGISTER, lms)) :
+                List.of(createLocalButton(SEARCH_CLIENTS, lms));
+    }
+
+    private List<InlineKeyboardButton> saveChangesButton() {
+        return List.of(createLocalButton(SAVE_CHANGES, lms));
     }
 }

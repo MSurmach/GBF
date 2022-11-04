@@ -2,6 +2,7 @@ package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.gui.button.FormButton;
 import com.godeltech.gbf.model.ModelUtils;
+import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
@@ -41,17 +42,26 @@ public class FormHandlerType implements HandlerType {
                     sessionData.setTempEndDate(LocalDate.from(sessionData.getEndDate()));
                 }
             }
-            case FORM_CONFIRM_AS_COURIER, FORM_CONFIRM_AS_REQUEST_VIEWER, FORM_CONFIRM_AS_REGISTRATION_VIEWER -> {
-                routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId());
-                offerService.save(sessionData);
+            case REGISTER -> checkAndSave(sessionData);
+            case SAVE_CHANGES -> {
+                checkAndSave(sessionData);
+                sessionData.setEditable(false);
+                switch (sessionData.getRole()) {
+                    case COURIER -> sessionData.setRole(Role.REGISTRATIONS_VIEWER);
+                    case CLIENT -> sessionData.setRole(Role.REQUESTS_VIEWER);
+                }
             }
-            case FORM_CONFIRM_AS_CLIENT -> {
-                routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId());
+            case SEARCH_CLIENTS -> {
+                checkAndSave(sessionData);
                 Offer offer = ModelUtils.mapSessionDataToOffer(sessionData);
                 sessionData.setSearchOffer(offer);
-                offerService.save(sessionData);
             }
         }
         return clicked.getNextState();
+    }
+
+    private void checkAndSave(SessionData sessionData) {
+        routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId());
+        offerService.save(sessionData);
     }
 }
