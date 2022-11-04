@@ -65,7 +65,7 @@ public class OfferSpecs {
         return ((root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("seats"),seats));
     }
     public static Specification<Offer> bySeatsIsNull(){
-        return ((root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get("seats")));
+        return ((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("seats"),0));
     }
 
     public static Specification<Offer> byOfferId(List<Long> offers_id) {
