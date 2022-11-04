@@ -2,12 +2,11 @@ package com.godeltech.gbf.model;
 
 import lombok.Getter;
 
-import static com.godeltech.gbf.model.State.FORM;
-import static com.godeltech.gbf.model.State.OFFERS;
+import static com.godeltech.gbf.model.State.*;
 
 public enum Role {
     COURIER(FORM), CLIENT(FORM),
-    REGISTRATIONS_VIEWER(OFFERS), REQUESTS_VIEWER(OFFERS);
+    REGISTRATIONS_VIEWER(REGISTRATIONS), REQUESTS_VIEWER(REQUESTS);
     @Getter
     private final State firstState;
 

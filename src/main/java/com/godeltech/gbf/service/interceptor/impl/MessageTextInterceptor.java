@@ -4,21 +4,22 @@ import com.godeltech.gbf.cache.SessionDataCache;
 import com.godeltech.gbf.exception.InsufficientInputException;
 import com.godeltech.gbf.exception.WrongInputException;
 import com.godeltech.gbf.factory.impl.HandlerFactory;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.factory.impl.ViewFactory;
 import com.godeltech.gbf.model.State;
+import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.interceptor.InterceptorTypes;
-import com.godeltech.gbf.service.view.View;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
+
+import java.util.List;
 
 import static com.godeltech.gbf.model.State.COMMENT;
 import static com.godeltech.gbf.model.State.SEATS;
@@ -27,7 +28,7 @@ import static com.godeltech.gbf.model.State.SEATS;
 @Slf4j
 public class MessageTextInterceptor implements Interceptor {
     private final HandlerFactory handlerFactory;
-    private final View<? extends BotApiMethod<?>> view;
+    private final ViewFactory viewFactory;
 
     private final BotMessageService botMessageService;
     @Getter
@@ -35,9 +36,9 @@ public class MessageTextInterceptor implements Interceptor {
     @Getter
     private Long chatId;
 
-    public MessageTextInterceptor(HandlerFactory handlerFactory, View<SendMessage> view, BotMessageService botMessageService) {
+    public MessageTextInterceptor(HandlerFactory handlerFactory, ViewFactory viewFactory, BotMessageService botMessageService) {
         this.handlerFactory = handlerFactory;
-        this.view = view;
+        this.viewFactory = viewFactory;
         this.botMessageService = botMessageService;
     }
 
@@ -47,7 +48,7 @@ public class MessageTextInterceptor implements Interceptor {
     }
 
     @Override
-    public BotApiMethod<?> intercept(Update update) {
+    public List<? extends BotApiMethod<?>> intercept(Update update) {
         Message message = update.getMessage();
         User from = message.getFrom();
         log.info("Get message from user : {} with id : {} ", from.getUserName(), from.getId());
@@ -58,7 +59,7 @@ public class MessageTextInterceptor implements Interceptor {
         SessionData cached = SessionDataCache.get(telegramUserId);
         cached.getStateHistory().push(state);
         cached.getCallbackHistory().push(update.getMessage().getText());
-        return view.buildView(chatId, cached);
+        return viewFactory.get(state).buildView(chatId, cached);
     }
 
     private State interceptSufficientInput(Update update) throws InsufficientInputException {

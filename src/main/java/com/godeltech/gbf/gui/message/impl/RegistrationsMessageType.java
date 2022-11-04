@@ -13,25 +13,25 @@ import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 
 @Service
 @AllArgsConstructor
-public class CouriersListMessageType implements MessageType {
-    public final static String COURIERS_EXIST = "couriers.exist";
-    public final static String COURIERS_NOT_EXIST = "couriers.notExist";
-    public final static String COURIER_HEADER = "courier.header";
+public class RegistrationsMessageType implements MessageType {
+    public final static String REGISTRATIONS_EXIST_CODE = "registrations.exist";
+    public final static String REGISTRATIONS_NOT_EXIST_CODE = "registrations.notExist";
+    public final static String REGISTRATION_DATA_ID_CODE = "registration.data.id";
     private LocalMessageSource lms;
 
     @Override
     public State getState() {
-        return State.COURIERS_LIST_RESULT;
+        return State.REGISTRATIONS;
     }
 
     @Override
     public String getMessage(SessionData sessionData) {
         Page<Offer> page = sessionData.getPage();
         String username = sessionData.getUsername();
-        if (page == null || page.isEmpty()) return lms.getLocaleMessage(COURIERS_NOT_EXIST, username);
+        if (page == null || page.isEmpty()) return lms.getLocaleMessage(REGISTRATIONS_NOT_EXIST_CODE, username);
         Offer offer = page.getContent().get(0);
-        return lms.getLocaleMessage(COURIERS_EXIST, username) +
-                lms.getLocaleMessage(COURIER_HEADER, offer.getTelegramUser().getUserName()) +
+        return lms.getLocaleMessage(REGISTRATIONS_EXIST_CODE, username) +
+                lms.getLocaleMessage(REGISTRATION_DATA_ID_CODE, offer.getId().toString()) +
                 routeDetails(offer.getRoutePoints(), lms) +
                 datesDetails(offer.getStartDate(), offer.getEndDate(), lms) +
                 deliveryDetails(offer.getDelivery(), lms) +

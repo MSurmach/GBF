@@ -20,7 +20,7 @@ public class ClientListKeyboardType implements KeyboardType {
 
     @Override
     public State getState() {
-        return State.CLIENTS_SEARCH_RESULT;
+        return State.CLIENTS_LIST_RESULT;
     }
 
     @Override

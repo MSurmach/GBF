@@ -18,6 +18,10 @@ public class ModelUtils {
                 delivery(sessionData.getDelivery()).
                 build();
         sessionData.getRoute().forEach(offer::addRoutePoint);
+        switch (sessionData.getRole()) {
+            case REGISTRATIONS_VIEWER -> offer.setRole(Role.COURIER);
+            case REQUESTS_VIEWER -> offer.setRole(Role.CLIENT);
+        }
         return offer;
     }
 
@@ -36,7 +40,6 @@ public class ModelUtils {
         sessionData.setSearchOffer(null);
         sessionData.setPageNumber(0);
         sessionData.setPage(null);
-        sessionData.setEditable(false);
     }
 
     public static SessionData mapOfferToSessionData(Offer offer) {
@@ -63,7 +66,7 @@ public class ModelUtils {
         to.setFirstName(from.getTelegramUser().getFirstName());
         to.setLastName(from.getTelegramUser().getLastName());
         to.setSeats(from.getSeats());
-        to.setDelivery(from.getDelivery());
+        to.setDelivery(from.getDelivery());;
         to.setComment(from.getComment());
         to.setRoute(new LinkedList<>(from.getRoutePoints()));
         to.setRole(from.getRole());
