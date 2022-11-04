@@ -60,9 +60,9 @@ public class CallbackInterceptor implements Interceptor {
 
     @Override
     public List<? extends BotApiMethod<?>> intercept(Update update) {
-        botMessageService.checkBotMessage(update.getMessage().getMessageId(),
+        botMessageService.checkBotMessage(update.getCallbackQuery().getMessage().getMessageId(),
                 update.getCallbackQuery().getFrom().getId(),
-                update.getMessage().getChatId() );
+                update.getCallbackQuery().getMessage().getChatId());
         Message message = update.getCallbackQuery().getMessage();
         CallbackQuery callbackQuery = update.getCallbackQuery();
         User from = callbackQuery.getFrom();
@@ -79,8 +79,8 @@ public class CallbackInterceptor implements Interceptor {
             nextState = handleUpdate(update);
         } catch (CachedUserDataNotFound e) {
             log.info("Initialize new user");
-            nextState=MENU;
-            SessionDataCache.initializeByIdAndUsernameAndFirstNameAndLastName(telegramUserId,from.getUserName(), from.getFirstName(), from.getLastName());
+            nextState = MENU;
+            SessionDataCache.initializeByIdAndUsernameAndFirstNameAndLastName(telegramUserId, from.getUserName(), from.getFirstName(), from.getLastName());
 //            nextState = messageTextInterceptor.interceptTextCommand(TextCommand.START.getDescription(), from.getUserName(), telegramUserId);
             cached = SessionDataCache.get(telegramUserId);
         }
@@ -89,7 +89,7 @@ public class CallbackInterceptor implements Interceptor {
     }
 
     private State handleUpdate(Update update) {
-        log.info("Handle update with callback data : {}",update.getCallbackQuery().getData());
+        log.info("Handle update with callback data : {}", update.getCallbackQuery().getData());
         try {
             return interceptRole(update);
         } catch (RoleNotFoundException illegalArgumentException) {
