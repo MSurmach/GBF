@@ -54,12 +54,13 @@ public class BotMessageServiceImpl implements BotMessageService {
     @Override
     @Transactional
     public void checkBotMessage(Integer messageId, Long userId, Long chatId) {
-        log.info("Check message with id : {}",messageId);
+        log.info("Check message with id : {}", messageId);
         if (!botMessageRepository.existsById(messageId))
             botMessageRepository.save(BotMessage.builder()
                     .messageId(messageId)
                     .userId(userId)
                     .chatId(chatId)
+                    .createdAt(Timestamp.valueOf(LocalDateTime.now()))
                     .build());
     }
 
