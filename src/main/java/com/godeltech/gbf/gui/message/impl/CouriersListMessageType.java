@@ -2,23 +2,21 @@ package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
-import com.godeltech.gbf.gui.message.PaginationInfo;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import static com.godeltech.gbf.gui.utils.ConstantUtil.*;
 import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 
 @Service
 @AllArgsConstructor
-@Slf4j
-public class CouriersListMessageType implements MessageType, PaginationInfo<Offer> {
-
+public class CouriersListMessageType implements MessageType {
+    public final static String COURIERS_EXIST = "couriers.exist";
+    public final static String COURIERS_NOT_EXIST = "couriers.notExist";
+    public final static String COURIER_HEADER = "courier.header";
     private LocalMessageSource lms;
 
     @Override
@@ -28,21 +26,16 @@ public class CouriersListMessageType implements MessageType, PaginationInfo<Offe
 
     @Override
     public String getMessage(SessionData sessionData) {
-        log.debug("Create courier list message type for session data with user id : {} and username : {}",
-                sessionData.getTelegramUserId(),sessionData.getUsername() );
-        return lms.getLocaleMessage(COURIERS_LIST_HEADER, sessionData.getUsername()) +
-                routeDetails(sessionData.getRoute(), lms) +
-                datesDetails(sessionData.getStartDate(), sessionData.getEndDate(), lms) +
-                deliveryDetails(sessionData.getDelivery(), lms) +
-                seatsDetails(sessionData.getSeats(), lms) +
-                commentDetails(sessionData.getComment(), lms);
-    }
-
-    public String initialMessage(SessionData sessionData) {
         Page<Offer> page = sessionData.getPage();
-        return (page != null && !page.isEmpty()) ?
-                lms.getLocaleMessage(COURIERS_LIST_INITIAL_EXIST, sessionData.getUsername()) +
-                        paginationInfoLocalMessage(page, lms) :
-                lms.getLocaleMessage(COURIERS_LIST_INITIAL_NOT_EXIST, sessionData.getUsername());
+        String username = sessionData.getUsername();
+        if (page == null || page.isEmpty()) return lms.getLocaleMessage(COURIERS_NOT_EXIST, username);
+        Offer offer = page.getContent().get(0);
+        return lms.getLocaleMessage(COURIERS_EXIST, username) +
+                lms.getLocaleMessage(COURIER_HEADER, offer.getTelegramUser().getUserName()) +
+                routeDetails(offer.getRoutePoints(), lms) +
+                datesDetails(offer.getStartDate(), offer.getEndDate(), lms) +
+                deliveryDetails(offer.getDelivery(), lms) +
+                seatsDetails(offer.getSeats(), lms) +
+                commentDetails(offer.getComment(), lms);
     }
 }

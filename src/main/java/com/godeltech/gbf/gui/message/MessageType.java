@@ -7,8 +7,4 @@ public interface MessageType {
     State getState();
 
     String getMessage(SessionData sessionData);
-
-    default String initialMessage(SessionData sessionData) {
-        return "";
-    }
 }
