@@ -37,10 +37,10 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     public void save(SessionData sessionData) {
-        Offer newOffer = ModelUtils.mapSessionDataToOffer(sessionData);
+        Offer offer = ModelUtils.mapSessionDataToOffer(sessionData);
         TelegramUser telegramUser = telegramUserService.getOrCreateUser(sessionData.getTelegramUserId(), sessionData.getUsername());
-        newOffer.setTelegramUser(telegramUser);
-        offerRepository.save(newOffer);
+        offer.setTelegramUser(telegramUser);
+        offerRepository.save(offer);
     }
 
     @Override

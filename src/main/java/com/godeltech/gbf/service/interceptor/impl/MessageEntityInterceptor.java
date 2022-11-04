@@ -2,37 +2,36 @@ package com.godeltech.gbf.service.interceptor.impl;
 
 import com.godeltech.gbf.cache.SessionDataCache;
 import com.godeltech.gbf.exception.TextCommandNotFoundException;
-import com.godeltech.gbf.factory.impl.ViewFactory;
 import com.godeltech.gbf.gui.command.TextCommand;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.interceptor.InterceptorTypes;
+import com.godeltech.gbf.service.view.View;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
-
-import java.util.List;
 
 import static com.godeltech.gbf.model.State.MENU;
 
 @Service
 @Slf4j
 public class MessageEntityInterceptor implements Interceptor {
-    private final ViewFactory viewFactory;
+    private final View<? extends BotApiMethod<?>> view;
     private final BotMessageService botMessageService;
     @Getter
     private Long telegramUserId;
     @Getter
     private Long chatId;
 
-    public MessageEntityInterceptor(ViewFactory viewFactory, BotMessageService botMessageService) {
-        this.viewFactory = viewFactory;
+    public MessageEntityInterceptor(View<SendMessage> view, BotMessageService botMessageService) {
+        this.view = view;
         this.botMessageService = botMessageService;
     }
 
@@ -42,7 +41,7 @@ public class MessageEntityInterceptor implements Interceptor {
     }
 
     @Override
-    public List<? extends BotApiMethod<?>> intercept(Update update) {
+    public BotApiMethod<?> intercept(Update update) {
         Message message = update.getMessage();
         User user = message.getFrom();
         log.info("Get message user user : {} with id : {} ", user.getUserName(), user.getId());
@@ -53,7 +52,7 @@ public class MessageEntityInterceptor implements Interceptor {
         SessionData cached = SessionDataCache.get(telegramUserId);
         cached.getStateHistory().push(state);
         cached.getCallbackHistory().push(update.getMessage().getText());
-        return viewFactory.get(state).buildView(chatId, cached);
+        return view.buildView(chatId, cached);
     }
 
     State interceptTextCommand(String command, String username, String firstName, String lastName, Long telegramUserId) throws TextCommandNotFoundException {
