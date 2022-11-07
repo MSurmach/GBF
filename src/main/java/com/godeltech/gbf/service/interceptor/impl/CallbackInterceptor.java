@@ -6,7 +6,6 @@ import com.godeltech.gbf.exception.NotNavigationButtonException;
 import com.godeltech.gbf.exception.NotPaginationButtonException;
 import com.godeltech.gbf.exception.RoleNotFoundException;
 import com.godeltech.gbf.factory.impl.HandlerFactory;
-import com.godeltech.gbf.factory.impl.ViewFactory;
 import com.godeltech.gbf.gui.button.NavigationBotButton;
 import com.godeltech.gbf.gui.button.PaginationButton;
 import com.godeltech.gbf.model.Role;
@@ -17,6 +16,7 @@ import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.interceptor.InterceptorTypes;
+import com.godeltech.gbf.service.view.View;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,8 +27,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-import java.util.List;
-
 import static com.godeltech.gbf.model.State.BACK;
 import static com.godeltech.gbf.model.State.MENU;
 import static com.godeltech.gbf.service.interceptor.InterceptorTypes.CALLBACK;
@@ -37,17 +35,16 @@ import static com.godeltech.gbf.service.interceptor.InterceptorTypes.CALLBACK;
 @Slf4j
 public class CallbackInterceptor implements Interceptor {
     private final HandlerFactory handlerFactory;
-    private final ViewFactory viewFactory;
     private final BotMessageService botMessageService;
-
+    private final View<? extends BotApiMethod<?>> view;
     @Getter
     private Long telegramUserId;
     @Getter
     private Long chatId;
 
-    public CallbackInterceptor(HandlerFactory handlerFactory, ViewFactory viewFactory, BotMessageService botMessageService) {
+    public CallbackInterceptor(HandlerFactory handlerFactory, View<? extends BotApiMethod<?>> view, BotMessageService botMessageService) {
         this.handlerFactory = handlerFactory;
-        this.viewFactory = viewFactory;
+        this.view = view;
         this.botMessageService = botMessageService;
     }
 
@@ -57,16 +54,14 @@ public class CallbackInterceptor implements Interceptor {
     }
 
     @Override
-    public List<? extends BotApiMethod<?>> intercept(Update update) {
-        botMessageService.checkBotMessage(update.getCallbackQuery().getMessage().getMessageId(),
-                update.getCallbackQuery().getFrom().getId(), update.getCallbackQuery().getMessage().getChatId());
+    public BotApiMethod<?> intercept(Update update) {
         Message message = update.getCallbackQuery().getMessage();
         CallbackQuery callbackQuery = update.getCallbackQuery();
         User from = callbackQuery.getFrom();
         log.info("Got callback from user : {}", from.getUserName());
-
         telegramUserId = from.getId();
         chatId = callbackQuery.getMessage().getChatId();
+        botMessageService.checkBotMessage(message.getMessageId(), telegramUserId, chatId);
         SessionData cached = null;
         State nextState = null;
         try {
@@ -78,11 +73,10 @@ public class CallbackInterceptor implements Interceptor {
             log.info("Initialize new user");
             nextState = MENU;
             SessionDataCache.initializeByIdAndUsernameAndFirstNameAndLastName(telegramUserId, from.getUserName(), from.getFirstName(), from.getLastName());
-//            nextState = messageTextInterceptor.interceptTextCommand(TextCommand.START.getDescription(), from.getUserName(), telegramUserId);
             cached = SessionDataCache.get(telegramUserId);
         }
         cached.getStateHistory().push(nextState);
-        return viewFactory.get(nextState).buildView(chatId, cached);
+        return view.buildView(chatId, cached);
     }
 
     private State handleUpdate(Update update) {
