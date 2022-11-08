@@ -14,7 +14,6 @@ import static com.godeltech.gbf.gui.utils.ConstantUtil.*;
 @AllArgsConstructor
 @Slf4j
 public class SeatsMessageType implements MessageType {
-
     private final LocalMessageSource lms;
 
     @Override

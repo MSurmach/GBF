@@ -12,18 +12,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+import static com.godeltech.gbf.gui.utils.ConstantUtil.*;
 import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 
 @Service
 @AllArgsConstructor
 public class OffersMessageType implements MessageType {
-    public final static String REGISTRATIONS_EXIST_CODE = "registrations.exist";
-    public final static String REGISTRATIONS_NOT_EXIST_CODE = "registrations.notExist";
-    public final static String REGISTRATION_ID_CODE = "registration.id";
-
-    public final static String REQUESTS_EXIST_CODE = "requests.exist";
-    public final static String REQUESTS_NOT_EXIST_CODE = "requests.notExist";
-    public final static String REQUEST_ID_CODE = "request.id";
     private LocalMessageSource lms;
 
     @Override
