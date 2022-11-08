@@ -1,6 +1,7 @@
 package com.godeltech.gbf.model;
 
 import com.godeltech.gbf.model.db.Offer;
+import com.godeltech.gbf.model.db.TelegramUser;
 
 import java.util.LinkedList;
 
@@ -16,6 +17,12 @@ public class ModelUtils {
                 seats(sessionData.getSeats()).
                 role(sessionData.getRole()).
                 delivery(sessionData.getDelivery()).
+                telegramUser(TelegramUser.builder()
+                        .id(sessionData.getTelegramUserId())
+                        .userName(sessionData.getUsername())
+                        .firstName(sessionData.getFirstName())
+                        .lastName(sessionData.getLastName())
+                        .build()).
                 build();
         sessionData.getRoute().forEach(offer::addRoutePoint);
         return offer;
