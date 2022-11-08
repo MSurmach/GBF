@@ -27,6 +27,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
+import java.util.Arrays;
+
 import static com.godeltech.gbf.model.State.BACK;
 import static com.godeltech.gbf.model.State.MENU;
 import static com.godeltech.gbf.service.interceptor.InterceptorTypes.CALLBACK;
@@ -81,22 +83,7 @@ public class CallbackInterceptor implements Interceptor {
 
     private State handleUpdate(Update update) {
         log.info("Handle update with callback data : {}", update.getCallbackQuery().getData());
-        try {
             return interceptRole(update);
-        } catch (RoleNotFoundException illegalArgumentException) {
-            try {
-                return interceptNavigationButton(update);
-            } catch (NotNavigationButtonException notNavigationButtonException) {
-                try {
-                    return interceptPaginationButton(update);
-                } catch (NotPaginationButtonException notPaginationButtonException) {
-                    SessionData cached = SessionDataCache.get(telegramUserId);
-                    State currentState = cached.getStateHistory().peek();
-                    HandlerType handlerType = handlerFactory.get(currentState);
-                    return handlerType.handle(cached);
-                }
-            }
-        }
     }
 
     private SessionData pullFromCache(Long telegramUserId) throws CachedUserDataNotFound {
@@ -106,7 +93,7 @@ public class CallbackInterceptor implements Interceptor {
         return cached;
     }
 
-    private State interceptRole(Update update) throws RoleNotFoundException {
+    private State interceptRole(Update update){
         try {
             String callback = update.getCallbackQuery().getData();
             log.info("Intercept role with callback : {}", callback);
@@ -115,12 +102,12 @@ public class CallbackInterceptor implements Interceptor {
             cached.setRole(role);
             return role.getFirstState();
         } catch (IllegalArgumentException exception) {
-            log.error(exception.getMessage());
-            throw new RoleNotFoundException();
+            log.info(exception.getMessage()+" It is turn for intercepting Navigation Button");
+            return interceptNavigationButton(update);
         }
     }
 
-    private State interceptNavigationButton(Update update) throws NotNavigationButtonException {
+    private State interceptNavigationButton(Update update){
         String callback = update.getCallbackQuery().getData();
         try {
             log.info("Intercept navigation buttons with callback : {}", callback);
@@ -138,12 +125,12 @@ public class CallbackInterceptor implements Interceptor {
                 }
             };
         } catch (IllegalArgumentException illegalArgumentException) {
-            log.error(illegalArgumentException.getMessage());
-            throw new NotNavigationButtonException();
+            log.info(illegalArgumentException.getMessage() +" It's turn for intercepting Pagination Button");
+            return interceptPaginationButton(update);
         }
     }
 
-    private State interceptPaginationButton(Update update) throws NotPaginationButtonException {
+    private State interceptPaginationButton(Update update){
         String callback = update.getCallbackQuery().getData();
         SessionData sessionData = SessionDataCache.get(telegramUserId);
         try {
@@ -173,8 +160,11 @@ public class CallbackInterceptor implements Interceptor {
             return sessionData.getStateHistory().peek();
 
         } catch (IllegalArgumentException illegalArgumentException) {
-            log.error(illegalArgumentException.getMessage());
-            throw new NotPaginationButtonException();
+            log.info(illegalArgumentException.getMessage());
+            SessionData cached = SessionDataCache.get(telegramUserId);
+            State currentState = cached.getStateHistory().peek();
+            HandlerType handlerType = handlerFactory.get(currentState);
+            return handlerType.handle(cached);
         }
     }
 }
