@@ -64,31 +64,25 @@ public class GbfBot extends SpringWebhookBot {
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         Interceptor interceptor = interceptorFactory.getInterceptor(update);
-        List<? extends BotApiMethod<?>> methods = interceptor.intercept(update);
+        BotApiMethod<?> method = interceptor.intercept(update);
         if (interceptor.getType() == InterceptorTypes.MESSAGE_ENTITY)
             addMenuCommands(update.getMessage());
-        executeMethod(methods, interceptor.getTelegramUserId(), interceptor.getChatId());
+        executeMethod(method, interceptor.getTelegramUserId(), interceptor.getChatId());
         return null;
     }
 
-
-    private void executeMethod(List<? extends BotApiMethod<?>> methods, Long telegramUserId, Long chatId) {
-        log.info("Execute methods for user with id : {} and chat id : {}", telegramUserId, chatId);
-        int stage = 0;
-        for (BotApiMethod<?> method : methods) {
-            try {
-                Serializable executed = execute(method);
-                if (executed instanceof Message message) {
-                    if (stage == 0) {
-                        stage++;
-                        deletePreviousMessage(telegramUserId, chatId);
-                    }
-                    botMessageService.save(telegramUserId, message);
-                }
-            } catch (TelegramApiException e) {
-                throw new RuntimeException(e);
+    private void executeMethod(BotApiMethod<?> method, Long telegramUserId, Long chatId) {
+        log.info("Execute method for user with id : {} and chat id : {}", telegramUserId, chatId);
+        try {
+            Serializable executed = execute(method);
+            if (executed instanceof Message message) {
+                deletePreviousMessage(telegramUserId, chatId);
+                botMessageService.save(telegramUserId, message);
             }
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
         }
+
     }
 
     public void deletePreviousMessage(Long telegramUserId, Long chatId) {

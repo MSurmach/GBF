@@ -37,10 +37,10 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     public void save(SessionData sessionData) {
-        Offer newOffer = ModelUtils.mapSessionDataToOffer(sessionData);
+        Offer offer = ModelUtils.mapSessionDataToOffer(sessionData);
         TelegramUser telegramUser = telegramUserService.getOrCreateUser(sessionData.getTelegramUserId(), sessionData.getUsername());
-        newOffer.setTelegramUser(telegramUser);
-        offerRepository.save(newOffer);
+        offer.setTelegramUser(telegramUser);
+        offerRepository.save(offer);
     }
 
     @Override
@@ -55,8 +55,7 @@ public class OfferServiceImpl implements OfferService {
     public Page<Offer> findAllOffersByUserIdAndRole(Long userId, Role role, int pageNumber) {
         log.info("Find offers by user id : {} and role : {} ", userId, role);
         Pageable pageable = PageRequest.of(pageNumber, 1);
-        return offerRepository.findOffersByTelegramUserIdAndRoleOrderById(userId, role, pageable);
-
+        return offerRepository.findOffersByTelegramUserIdAndRoleOrderByIdDesc(userId, role, pageable);
     }
 
     @Override
@@ -89,7 +88,7 @@ public class OfferServiceImpl implements OfferService {
         offers = checkOfferOrder(offers, givenOffer.getRoutePoints());
         Specification<Offer> specification = getSpecificationForId(offers);
         specification = addSpecificationByRole(Role.CLIENT, specification);
-       // specification = addSpecificationForExcludingUser(givenOffer.getTelegramUser().getId(), specification);
+        specification = addSpecificationForExcludingUser(givenOffer.getTelegramUser().getId(), specification);
         specification = addSpecificationByDates(givenOffer.getStartDate(), givenOffer.getEndDate(), specification);
         specification = addSpecificationBySeatsForSearchingClients(givenOffer.getSeats(), specification);
         specification = addSpecificationByDeliveryForSearchingClients(givenOffer.getDelivery(), specification);
@@ -105,7 +104,7 @@ public class OfferServiceImpl implements OfferService {
         offers = checkOfferOrder(offers, sessionData.getRoutePoints());
         Specification<Offer> specification = getSpecificationForId(offers);
         specification = addSpecificationByRole(Role.COURIER, specification);
-        //specification = addSpecificationForExcludingUser(sessionData.getTelegramUser().getId(), specification);
+        specification = addSpecificationForExcludingUser(sessionData.getTelegramUser().getId(), specification);
         specification = addSpecificationByDates(sessionData.getStartDate(), sessionData.getEndDate(), specification);
         specification = addSpecificationBySeatsForSearchingCouriers(sessionData.getSeats(), specification);
         specification = addSpecificationByDeliveryForSearchingCouriers(sessionData.getDelivery(), specification);

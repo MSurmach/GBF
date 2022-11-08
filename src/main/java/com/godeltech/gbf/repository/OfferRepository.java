@@ -7,8 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import java.util.List;
-
 public interface OfferRepository extends JpaRepository<Offer,Long>, JpaSpecificationExecutor<Offer> {
-    Page<Offer> findOffersByTelegramUserIdAndRoleOrderById(Long telegramUserId, Role role, Pageable pageable);
+    Page<Offer> findOffersByTelegramUserIdAndRoleOrderByIdDesc(Long telegramUserId, Role role, Pageable pageable);
 }

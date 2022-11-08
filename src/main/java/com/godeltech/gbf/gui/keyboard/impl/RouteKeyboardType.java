@@ -3,8 +3,9 @@ package com.godeltech.gbf.gui.keyboard.impl;
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
-import com.godeltech.gbf.model.State;
+import com.godeltech.gbf.gui.utils.ButtonUtils;
 import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.City;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.service.city.CityService;
@@ -19,9 +20,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButton;
-import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButtonWithData;
 import static com.godeltech.gbf.gui.button.RouteButton.*;
+import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButton;
 import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
@@ -52,7 +52,7 @@ public class RouteKeyboardType implements KeyboardType {
                 Optional<RoutePoint> found = route.stream().filter(routePoint -> routePoint.getCity().equals(city)).findFirst();
                 String statusLabel = found.map(this::statusLabel).orElse(null);
                 String cityName = city.getName();
-                citiesRow.add(createLocalButtonWithData(statusLabel, cityName, SELECT_CITY, cityName, lms));
+                citiesRow.add(ButtonUtils.createLocalButtonWithData(statusLabel, cityName, SELECT_CITY, cityName, lms));
                 columnCount--;
                 index++;
             }
