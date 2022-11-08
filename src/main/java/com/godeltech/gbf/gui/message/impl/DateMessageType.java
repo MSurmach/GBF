@@ -1,10 +1,10 @@
 package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.utils.DateUtils;
 import com.godeltech.gbf.gui.message.MessageType;
-import com.godeltech.gbf.model.State;
+import com.godeltech.gbf.gui.utils.DateUtils;
 import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,6 @@ import static com.godeltech.gbf.gui.utils.MessageUtils.datesDetails;
 @AllArgsConstructor
 @Slf4j
 public class DateMessageType implements MessageType {
-
-
 
     private final LocalMessageSource lms;
 

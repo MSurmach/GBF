@@ -21,6 +21,7 @@ import java.util.Objects;
 
 import static com.godeltech.gbf.gui.button.CalendarBotButton.*;
 import static com.godeltech.gbf.gui.utils.ButtonUtils.*;
+import static com.godeltech.gbf.gui.utils.ConstantUtil.DATE_MARKER;
 import static com.godeltech.gbf.gui.utils.DateUtils.formatMonth;
 import static com.godeltech.gbf.gui.utils.DateUtils.formatYear;
 import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
@@ -29,7 +30,6 @@ import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 @AllArgsConstructor
 @Slf4j
 public class DateKeyboardType implements KeyboardType {
-    public final static String DATE_MARKER = "date.marker";
     private LocalMessageSource lms;
 
     @Override

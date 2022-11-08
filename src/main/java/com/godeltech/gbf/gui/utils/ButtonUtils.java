@@ -4,11 +4,9 @@ import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.button.BotButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-public class ButtonUtils {
+import static com.godeltech.gbf.gui.utils.ConstantUtil.*;
 
-    private final static String IGNORE = "IGNORE";
-    private final static String SPLITTER = ":";
-    private final static String SPACE = " ";
+public class ButtonUtils {
 
     public static InlineKeyboardButton createLocalButton(String label, String callBack, LocalMessageSource lms) {
         var button = new InlineKeyboardButton(lms.getLocaleMessage(label));

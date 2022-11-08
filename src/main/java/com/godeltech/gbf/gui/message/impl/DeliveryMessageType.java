@@ -2,11 +2,13 @@ package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
-import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 import static com.godeltech.gbf.gui.utils.ConstantUtil.*;
 
@@ -30,6 +32,9 @@ public class DeliveryMessageType implements MessageType {
             case COURIER, REGISTRATIONS_VIEWER -> lms.getLocaleMessage(DELIVERY_COURIER_QUESTION_CODE);
             case CLIENT, REQUESTS_VIEWER -> lms.getLocaleMessage(DELIVERY_CLIENT_QUESTION_CODE);
         };
-        return lms.getLocaleMessage(DELIVERY_DESCRIPTION_CODE) + question;
+        String note = Objects.isNull(sessionData.getDelivery())?
+                EMPTY:
+                lms.getLocaleMessage(DELIVERY_NOTE_CODE);
+        return lms.getLocaleMessage(DELIVERY_DESCRIPTION_CODE) + question + note;
     }
 }

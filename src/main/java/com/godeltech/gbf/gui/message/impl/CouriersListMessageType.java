@@ -9,14 +9,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import static com.godeltech.gbf.gui.utils.ConstantUtil.*;
 import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 
 @Service
 @AllArgsConstructor
 public class CouriersListMessageType implements MessageType {
-    public final static String COURIERS_EXIST = "couriers.exist";
-    public final static String COURIERS_NOT_EXIST = "couriers.notExist";
-    public final static String COURIER_HEADER = "courier.header";
     private LocalMessageSource lms;
 
     @Override

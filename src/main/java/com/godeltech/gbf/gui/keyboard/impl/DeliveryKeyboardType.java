@@ -18,13 +18,14 @@ import java.util.Objects;
 
 import static com.godeltech.gbf.gui.utils.ButtonUtils.createButton;
 import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButton;
+import static com.godeltech.gbf.gui.utils.ConstantUtil.DELIVERY_MARKER_CODE;
 import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
 @Slf4j
 @AllArgsConstructor
 public class DeliveryKeyboardType implements KeyboardType {
-    public static final String DELIVERY_MARKER_CODE = "delivery.marker";
+
     private LocalMessageSource lms;
 
     @Override

@@ -10,20 +10,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-import static com.godeltech.gbf.gui.message.impl.OffersMessageType.REGISTRATION_ID_CODE;
-import static com.godeltech.gbf.gui.message.impl.OffersMessageType.REQUEST_ID_CODE;
+import static com.godeltech.gbf.gui.utils.ConstantUtil.*;
 import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 
 @Component
 @AllArgsConstructor
 public class FormMessageType implements MessageType {
-    public final static String INSTRUCTION_COURIER_ABOUT_CODE = "form.instruction.courier.about";
-    public final static String INSTRUCTION_CLIENT_ABOUT_CODE = "form.instruction.client.about";
-    public final static String INSTRUCTION_REGISTRATIONS_VIEWER_ABOUT_CODE = "form.instruction.registrationViewer.about";
-    public final static String INSTRUCTION_REQUESTS_VIEWER_ABOUT_CODE = "form.instruction.requestsViewer.about";
-    public final static String DETAILS_HEADER_EMPTY_CODE = "form.details.header.empty";
-    public final static String DETAILS_HEADER_FULL_CODE = "form.details.header.full";
-
     private LocalMessageSource lms;
 
     @Override

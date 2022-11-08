@@ -9,14 +9,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import static com.godeltech.gbf.gui.utils.ConstantUtil.*;
 import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 
 @Component
 @AllArgsConstructor
 public class ClientsListMessageType implements MessageType {
-    public final static String CLIENTS_EXIST_CODE = "clients.exist";
-    public final static String CLIENTS_NOT_EXIST_CODE = "clients.notExist";
-    public final static String CLIENT_HEADER = "client.header";
+
 
     private LocalMessageSource lms;
 
