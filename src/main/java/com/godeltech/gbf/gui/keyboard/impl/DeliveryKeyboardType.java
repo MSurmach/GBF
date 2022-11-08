@@ -14,7 +14,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import static com.godeltech.gbf.gui.utils.ButtonUtils.createButton;
 import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButton;
 import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 
@@ -22,6 +24,7 @@ import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 @Slf4j
 @AllArgsConstructor
 public class DeliveryKeyboardType implements KeyboardType {
+    public static final String DELIVERY_MARKER_CODE = "delivery.marker";
     private LocalMessageSource lms;
 
     @Override
@@ -32,22 +35,30 @@ public class DeliveryKeyboardType implements KeyboardType {
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
         log.debug("Create delivery keyboard type for session data with user id : {} and username : {}",
-                sessionData.getTelegramUserId(),sessionData.getUsername() );
+                sessionData.getTelegramUserId(), sessionData.getUsername());
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         Delivery[] deliveries = Delivery.values();
-        for (var index = 1; index < deliveries.length; ) {
+        Delivery selectedDelivery = sessionData.getDelivery();
+        for (var index = 0; index < deliveries.length; ) {
             var columnCount = 3;
             List<InlineKeyboardButton> deliveryButtonRow = new ArrayList<>();
             while (columnCount > 0 && index != deliveries.length) {
-                deliveryButtonRow.add(createLocalButton(deliveries[index].name(), deliveries[index].name(), lms));
+                Delivery delivery = deliveries[index];
+                deliveryButtonRow.add(
+                        !Objects.isNull(selectedDelivery) && Objects.equals(delivery, selectedDelivery) ?
+                                createButton(attachMarkToLabel(delivery.name()), delivery.name()) :
+                                createLocalButton(delivery.name(), delivery.name(), lms));
                 columnCount--;
                 index++;
             }
             keyboard.add(deliveryButtonRow);
         }
-        keyboard.add(List.of(createLocalButton(Delivery.EMPTY.name(), Delivery.EMPTY.name(), lms)));
         return new KeyboardMarkupAppender(new InlineKeyboardMarkup(keyboard)).
                 append(backAndMenuMarkup(lms)).
                 result();
+    }
+
+    private String attachMarkToLabel(String label) {
+        return lms.getLocaleMessage(label) + lms.getLocaleMessage(DELIVERY_MARKER_CODE);
     }
 }

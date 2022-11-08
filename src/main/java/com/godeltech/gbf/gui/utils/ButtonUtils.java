@@ -49,11 +49,11 @@ public class ButtonUtils {
         return button;
     }
 
-    public static InlineKeyboardButton createLocalButtonWithData(String preLabel, String label, BotButton botButton, String data, LocalMessageSource lms) {
+    public static InlineKeyboardButton createLocalButtonWithData(String preLabelCode, String label, BotButton botButton, String data, LocalMessageSource lms) {
         String localLabel = lms.getLocaleMessage(label);
-        var button = preLabel == null ?
+        var button = preLabelCode == null ?
                 new InlineKeyboardButton(localLabel) :
-                new InlineKeyboardButton(preLabel + SPACE + localLabel);
+                new InlineKeyboardButton(preLabelCode + SPACE + localLabel);
         String callback = botButton + SPLITTER + data;
         button.setCallbackData(callback);
         return button;

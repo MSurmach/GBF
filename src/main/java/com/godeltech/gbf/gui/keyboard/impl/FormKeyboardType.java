@@ -76,7 +76,7 @@ public class FormKeyboardType implements KeyboardType {
     }
 
     private List<InlineKeyboardButton> deliveryButton(Delivery delivery) {
-        if (Objects.isNull(delivery) || Objects.equals(delivery, Delivery.EMPTY))
+        if (Objects.isNull(delivery))
             return List.of(createLocalButton(ADD_DELIVERY, lms));
         String label = lms.getLocaleMessage(EDIT_DELIVERY.name(), MessageUtils.deliveryContent(delivery, lms));
         return List.of(createButton(label, EDIT_DELIVERY));

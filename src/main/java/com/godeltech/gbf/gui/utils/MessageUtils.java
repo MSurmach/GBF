@@ -27,7 +27,7 @@ public class MessageUtils {
     }
 
     public static String deliveryDetails(Delivery delivery, LocalMessageSource lms) {
-        return Objects.isNull(delivery) || Objects.equals(delivery, Delivery.EMPTY) ?
+        return Objects.isNull(delivery) ?
                 DETAILS_EMPTY :
                 lms.getLocaleMessage(DETAILS_DELIVERY_CODE, deliveryContent(delivery, lms));
     }
