@@ -8,5 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface OfferRepository extends JpaRepository<Offer,Long>, JpaSpecificationExecutor<Offer> {
+
     Page<Offer> findOffersByTelegramUserIdAndRoleOrderByIdDesc(Long telegramUserId, Role role, Pageable pageable);
+
+    Page<Offer> findAllByRole(Role role,Pageable pageable);
 }

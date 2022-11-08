@@ -58,6 +58,7 @@ public class OfferServiceImpl implements OfferService {
         return offerRepository.findOffersByTelegramUserIdAndRoleOrderByIdDesc(userId, role, pageable);
     }
 
+
     @Override
     @Transactional
     public void deleteOfferById(Long offerId) {
@@ -76,6 +77,13 @@ public class OfferServiceImpl implements OfferService {
         return specification == null ?
                 Page.empty() :
                 offerRepository.findAll(specification, pageable);
+    }
+
+    @Override
+    public Page<Offer> findAllByRole(Role role, int pageNumber) {
+        log.info("Find all offers by role : {}",role);
+        Pageable pageable = PageRequest.of(pageNumber,3);
+        return offerRepository.findAllByRole(role,pageable);
     }
 
 
