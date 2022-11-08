@@ -55,8 +55,7 @@ public class OfferServiceImpl implements OfferService {
     public Page<Offer> findAllOffersByUserIdAndRole(Long userId, Role role, int pageNumber) {
         log.info("Find offers by user id : {} and role : {} ", userId, role);
         Pageable pageable = PageRequest.of(pageNumber, 1);
-        return offerRepository.findOffersByTelegramUserIdAndRoleOrderById(userId, role, pageable);
-
+        return offerRepository.findOffersByTelegramUserIdAndRoleOrderByIdDesc(userId, role, pageable);
     }
 
     @Override
