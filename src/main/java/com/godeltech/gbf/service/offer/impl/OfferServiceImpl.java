@@ -155,7 +155,7 @@ public class OfferServiceImpl implements OfferService {
     private Specification<Offer> addSpecificationBySeatsForSearchingClients(int seats, Specification<Offer> specification) {
         if (seats == 0)
             return specification;
-        return specification.and(OfferSpecs.bySeatsLess(seats));
+        return specification.and(OfferSpecs.bySeatsLess(seats).or(OfferSpecs.bySeatsIsNull()));
     }
 
     private Specification<Offer> addSpecificationByDeliveryForSearchingClients(Delivery delivery, Specification<Offer> specification) {
@@ -175,7 +175,7 @@ public class OfferServiceImpl implements OfferService {
         log.debug("Add client specification for delivery with income delivery :{}",delivery);
         if (delivery == null)
             return specification;
-        return specification.and(OfferSpecs.byDeliveryGreaterOrEqual(delivery));
+        return specification.and(OfferSpecs.byDeliveryGreaterOrEqual(delivery).or(OfferSpecs.byDeliveryIsNull()));
     }
 
     private Specification<Offer> addSpecificationBySeatsForSearchingCouriers(int seats, Specification<Offer> specification) {
@@ -191,9 +191,12 @@ public class OfferServiceImpl implements OfferService {
             return specification;
         }
         if (startDate.equals(endDate)) {
-            return specification.and((OfferSpecs.startDateEqual(startDate).or(OfferSpecs.dateBetween(startDate))));
+            return specification.and((OfferSpecs.startDateEqual(startDate)
+                    .or(OfferSpecs.dateBetween(startDate)))
+                    .or(OfferSpecs.startDateIsNull()));
         } else {
-            return specification.and(OfferSpecs.datesBetween(startDate, endDate));
+            return specification.and(OfferSpecs.datesBetween(startDate, endDate)
+                    .or(OfferSpecs.startDateIsNull()));
         }
     }
 }

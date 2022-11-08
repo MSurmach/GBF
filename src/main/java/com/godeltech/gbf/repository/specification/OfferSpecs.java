@@ -42,21 +42,6 @@ public class OfferSpecs {
             return criteriaBuilder.or(betweenStartDate,betweenEndDate);
         };
     }
-    public static Specification<Offer> startDateAfter(LocalDate startDate) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("startDate"), startDate);
-    }
-
-    public static Specification<Offer> startDateBeforeEndDate(LocalDate startDate) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get("endDate"), startDate);
-    }
-
-    public static Specification<Offer> endDateAfter(LocalDate endDate) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("endDate"), endDate);
-    }
-
-    public static Specification<Offer> endDateAfterStartDate(LocalDate endDate) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get("startDate"), endDate);
-    }
     public static Specification<Offer> bySeatsLess(Integer seats){
         return ((root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get("seats"),seats));
     }
@@ -92,6 +77,10 @@ public class OfferSpecs {
     public static Specification<Offer> byDeliveryMoreOrEqual(Delivery delivery) {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.greaterThanOrEqualTo(root.get("delivery"), delivery);
+    }
+    public static Specification<Offer> byDeliveryIsNull() {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.isNull(root.get("delivery"));
     }
     public static Specification<Offer> byDateAfter(LocalDate date){
         return (root, query, criteriaBuilder) ->
