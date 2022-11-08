@@ -42,26 +42,27 @@ public class FormHandlerType implements HandlerType {
                     sessionData.setTempEndDate(LocalDate.from(sessionData.getEndDate()));
                 }
             }
-            case REGISTER -> checkAndSave(sessionData);
+            case REGISTER -> {
+                routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId());
+                offerService.save(sessionData);
+            }
             case SAVE_CHANGES -> {
-                checkAndSave(sessionData);
+                routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId());
                 sessionData.setEditable(false);
+                offerService.save(sessionData);
                 switch (sessionData.getRole()) {
                     case COURIER -> sessionData.setRole(Role.REGISTRATIONS_VIEWER);
                     case CLIENT -> sessionData.setRole(Role.REQUESTS_VIEWER);
                 }
             }
             case SEARCH_CLIENTS -> {
-                checkAndSave(sessionData);
+                routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId());
                 Offer offer = ModelUtils.mapSessionDataToOffer(sessionData);
                 sessionData.setSearchOffer(offer);
+                offerService.save(sessionData);
             }
         }
         return clicked.getNextState();
     }
 
-    private void checkAndSave(SessionData sessionData) {
-        routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId());
-        offerService.save(sessionData);
-    }
 }
