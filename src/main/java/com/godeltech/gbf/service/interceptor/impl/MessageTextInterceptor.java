@@ -20,8 +20,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-import static com.godeltech.gbf.model.State.COMMENT;
-import static com.godeltech.gbf.model.State.SEATS;
+import static com.godeltech.gbf.model.State.*;
 
 @Service
 @Slf4j
@@ -66,7 +65,7 @@ public class MessageTextInterceptor implements Interceptor {
         SessionData cached = SessionDataCache.get(telegramUserId);
         if (cached == null) throw new InsufficientInputException();
         State currentState = cached.getStateHistory().peek();
-        if (currentState == SEATS || currentState == COMMENT) {
+        if (currentState == SEATS || currentState == COMMENT || currentState == FEEDBACK) {
             String text = update.getMessage().getText();
             cached.getCallbackHistory().push(text);
             HandlerType handlerType = handlerFactory.get(currentState);
