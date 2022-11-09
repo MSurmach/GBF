@@ -26,6 +26,15 @@ public class TelegramUserServiceImpl implements TelegramUserService {
 
     @Override
     @Transactional
+    public TelegramUser findById(Long id) {
+        return telegramUserRepository.findById(id).
+                orElse(telegramUserRepository.save(TelegramUser.builder()
+                .id(id)
+                .build()));
+    }
+
+    @Override
+    @Transactional
     public TelegramUser save(SessionData sessionData) {
         TelegramUser telegramUser = TelegramUser.builder().
                 id(sessionData.getTelegramUserId()).
