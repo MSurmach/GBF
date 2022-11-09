@@ -24,7 +24,7 @@ public class CouriersListMessageType implements MessageType {
 
     @Override
     public String getMessage(SessionData sessionData) {
-        Page<Offer> page = sessionData.getPage();
+        Page<Offer> page = sessionData.getOffers();
         String username = sessionData.getUsername();
         if (page == null || page.isEmpty()) return lms.getLocaleMessage(COURIERS_NOT_EXIST, username);
         Offer offer = page.getContent().get(0);

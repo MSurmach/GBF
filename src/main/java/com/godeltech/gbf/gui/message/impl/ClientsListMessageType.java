@@ -26,7 +26,7 @@ public class ClientsListMessageType implements MessageType {
 
     @Override
     public String getMessage(SessionData sessionData) {
-        Page<Offer> page = sessionData.getPage();
+        Page<Offer> page = sessionData.getOffers();
         String username = sessionData.getUsername();
         if (page == null || page.isEmpty()) return lms.getLocaleMessage(CLIENTS_NOT_EXIST_CODE, username);
         Offer offer = page.getContent().get(0);

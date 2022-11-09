@@ -12,15 +12,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
+import static com.godeltech.gbf.model.State.ALL_OFFERS;
+
 @Component
 @AllArgsConstructor
-public class ClientListKeyboardType implements KeyboardType {
+public class AllOffersKeyboardType implements KeyboardType {
     private final LocalMessageSource lms;
     private final PaginationKeyboardType paginationKeyboardType;
 
     @Override
     public State getState() {
-        return State.CLIENTS_SEARCH_RESULT;
+        return ALL_OFFERS;
     }
 
     @Override

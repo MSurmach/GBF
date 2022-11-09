@@ -22,18 +22,18 @@ public class OffersMessageType implements MessageType {
 
     @Override
     public State getState() {
-        return State.OFFERS;
+        return State.MY_OFFERS;
     }
 
     @Override
     public String getMessage(SessionData sessionData) {
         Role role = sessionData.getRole();
         String username = sessionData.getUsername();
-        Page<Offer> page = sessionData.getPage();
+        Page<Offer> page = sessionData.getOffers();
         if (page == null || page.isEmpty()) return offersNotFoundMessage(role, username);
         Offer offer = page.getContent().get(0);
         return aboutMessage(role, username) +
-                offerHeaderWithIdMessage(role, offer.getId().toString()) +
+                offerHeaderWithIdMessage(offer.getRole(), offer.getId().toString()) +
                 routeDetails(offer.getRoutePoints(), lms) +
                 datesDetails(offer.getStartDate(), offer.getEndDate(), lms) +
                 deliveryDetails(offer.getDelivery(), lms) +
@@ -48,7 +48,7 @@ public class OffersMessageType implements MessageType {
     }
 
     private String offerHeaderWithIdMessage(Role role, String offerId) {
-        return Objects.equals(role, Role.REGISTRATIONS_VIEWER) ?
+        return Objects.equals(role, Role.COURIER) ?
                 lms.getLocaleMessage(REGISTRATION_ID_CODE, offerId) :
                 lms.getLocaleMessage(REQUEST_ID_CODE, offerId);
     }

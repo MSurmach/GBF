@@ -6,7 +6,7 @@ import static com.godeltech.gbf.model.State.*;
 
 public enum OffersBotButton implements BotButton {
     OFFER_EDIT(FORM),
-    OFFER_DELETE(OFFERS),
+    OFFER_DELETE(MY_OFFERS),
     OFFER_FIND_CLIENTS(CLIENTS_SEARCH_RESULT),
     OFFER_FIND_COURIERS(COURIERS_SEARCH_RESULT);
     final State nextState;

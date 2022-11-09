@@ -13,7 +13,7 @@ public enum FormButton implements BotButton {
     ADD_COMMENT(COMMENT), EDIT_COMMENT(COMMENT),
     REGISTER(SUCCESS_REGISTRATION),
     SEARCH_CLIENTS(COURIERS_SEARCH_RESULT),
-    SAVE_CHANGES(OFFERS);
+    SAVE_CHANGES(MY_OFFERS);
 
     @Getter
     private final State nextState;

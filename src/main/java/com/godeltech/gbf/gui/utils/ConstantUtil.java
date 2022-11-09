@@ -46,9 +46,15 @@ public class ConstantUtil {
     public final static String REGISTRATIONS_NOT_EXIST_CODE = "registrations.notExist";
     public final static String REGISTRATION_ID_CODE = "registration.id";
 
+    public final static String ALL_REGISTRATIONS_EXIST_CODE = "allRegistrations.exist";
+    public final static String ALL_REGISTRATIONS_NOT_EXIST_CODE = "allRegistrations.notExist";
+
     public final static String REQUESTS_EXIST_CODE = "requests.exist";
     public final static String REQUESTS_NOT_EXIST_CODE = "requests.notExist";
     public final static String REQUEST_ID_CODE = "request.id";
+
+    public final static String ALL_REQUESTS_EXIST_CODE = "allRequests.exist";
+    public final static String ALL_REQUESTS_NOT_EXIST_CODE = "allRequests.notExist";
 
     //    route message type
     public final static String ROUTE_INFO_ABOUT = "route.info.about";
@@ -74,6 +80,10 @@ public class ConstantUtil {
     public final static String DETAILS_DELIVERY_CODE = "details.delivery";
     public final static String DETAILS_ROUTE_CODE = "details.route";
     public final static String DETAILS_SEATS_CODE = "details.seats";
+
+    //feedback
+    public final static String FEEDBACK_ABOUT_CODE = "feedback.about";
+    public final static String FEEDBACK_QUESTION_CODE = "feedback.question";
 
     //markers
     public final static String DATE_MARKER = "date.marker";

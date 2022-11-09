@@ -10,16 +10,16 @@ import com.godeltech.gbf.service.offer.OfferService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.godeltech.gbf.model.State.OFFERS;
+import static com.godeltech.gbf.model.State.MY_OFFERS;
 
 @Service
 @AllArgsConstructor
-public class OffersHandlerType implements HandlerType {
+public class MyOffersHandlerType implements HandlerType {
     private final OfferService offerService;
 
     @Override
     public State getState() {
-        return OFFERS;
+        return MY_OFFERS;
     }
 
     @Override
@@ -31,13 +31,13 @@ public class OffersHandlerType implements HandlerType {
         sessionData.setPageNumber(0);
         switch (clickedButton) {
             case OFFER_EDIT -> {
-                Offer toEditOffer = sessionData.getPage().getContent().get(0);
+                Offer toEditOffer = sessionData.getOffers().getContent().get(0);
                 ModelUtils.copyOfferToSessionData(sessionData, toEditOffer);
                 sessionData.setEditable(true);
             }
             case OFFER_DELETE -> offerService.deleteOfferById(offerId);
             case OFFER_FIND_CLIENTS, OFFER_FIND_COURIERS -> {
-                Offer toFindOffer = sessionData.getPage().getContent().get(0);
+                Offer toFindOffer = sessionData.getOffers().getContent().get(0);
                 sessionData.setSearchOffer(toFindOffer);
             }
         }
