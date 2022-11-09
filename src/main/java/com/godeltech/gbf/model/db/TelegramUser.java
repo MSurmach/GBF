@@ -27,7 +27,7 @@ public class TelegramUser {
     @Column
     private String lastName;
 
-    @Column(unique = true, nullable = false)
+    @Column
     private String userName;
 
 }
