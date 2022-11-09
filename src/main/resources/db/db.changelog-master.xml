@@ -10,5 +10,6 @@
     <include file="classpath:db/changelog/v.0.3/2022-10-27-changes-create-table-route_point.xml"/>
     <include file="classpath:db/changelog/v.0.4/2022-10-28-changes-create-table-bot_message.xml"/>
     <include file="classpath:db/changelog/v.0.5/2022-11-08-changes-drop-constraints-username-telegram_user.xml"/>
+    <include file="classpath:db/changelog/v.0.6/2022-11-09-changes-create-table-feedback.xml"/>
 
 </databaseChangeLog>

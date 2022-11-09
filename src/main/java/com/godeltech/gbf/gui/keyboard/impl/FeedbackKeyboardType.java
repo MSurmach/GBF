@@ -13,7 +13,7 @@ import static com.godeltech.gbf.model.State.FEEDBACK;
 
 @Component
 @AllArgsConstructor
-public class FeedBackKeyboardType implements KeyboardType {
+public class FeedbackKeyboardType implements KeyboardType {
     private final LocalMessageSource lms;
 
     @Override

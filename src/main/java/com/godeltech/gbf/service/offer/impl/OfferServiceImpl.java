@@ -97,7 +97,7 @@ public class OfferServiceImpl implements OfferService {
     public Page<Offer> findAllByRole(Role role, int pageNumber) {
         log.info("Find all offers by role : {}",role);
         Pageable pageable = PageRequest.of(pageNumber,3);
-        return offerRepository.findAllByRole(role,pageable);
+        return offerRepository.findAllByRoleOrderByIdDesc(role,pageable);
     }
 
 

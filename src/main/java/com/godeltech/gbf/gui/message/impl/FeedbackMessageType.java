@@ -12,7 +12,7 @@ import static com.godeltech.gbf.gui.utils.ConstantUtil.FEEDBACK_QUESTION_CODE;
 
 @Component
 @AllArgsConstructor
-public class FeedBackMessageType implements MessageType {
+public class FeedbackMessageType implements MessageType {
     private final LocalMessageSource lms;
 
     @Override
