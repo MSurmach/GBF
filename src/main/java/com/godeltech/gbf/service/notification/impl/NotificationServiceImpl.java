@@ -9,13 +9,11 @@ import com.godeltech.gbf.service.notification.NotificationService;
 import com.godeltech.gbf.service.offer.OfferService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.godeltech.gbf.gui.utils.ConstantUtil.CLIENT_NOTIFICATION;
 import static com.godeltech.gbf.gui.utils.ConstantUtil.COURIER_NOTIFICATION;
@@ -32,12 +30,12 @@ public class NotificationServiceImpl implements NotificationService {
     public void makeNotifications(NotificationEvent notificationEvent) {
         Offer savedOffer = (Offer) notificationEvent.getPayload();
         log.info("Make notification by saved offer : {} ", savedOffer);
-        List<Offer> offers =offerService.findSuitableOffersListByGivenOffer(savedOffer);
+        List<Offer> offers = offerService.findSuitableOffersListByGivenOffer(savedOffer);
         if (!offers.isEmpty()) {
             String textMessage = savedOffer.getRole() == Role.COURIER ?
                     localMessageSource.getLocaleMessage(CLIENT_NOTIFICATION) :
                     localMessageSource.getLocaleMessage(COURIER_NOTIFICATION);
-            offers.forEach(offer -> sendNotificationMessageToUser(offer,textMessage));
+            offers.forEach(offer -> sendNotificationMessageToUser(offer, textMessage));
         }
     }
 
@@ -46,10 +44,11 @@ public class NotificationServiceImpl implements NotificationService {
         try {
             gbfBot.execute(SendMessage.builder()
                     .chatId(offer.getTelegramUser().getId().toString())
-                    .text(textMessage+offer.getId())
+                    .text(textMessage + offer.getId())
                     .build());
         } catch (TelegramApiException e) {
-            log.error("");
+            log.error("Message couldn't send to telegramuser with id : {} and about offer with id : {}",
+                    offer.getTelegramUser().getId(), offer.getId());
         }
     }
 }

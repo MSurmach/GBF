@@ -22,8 +22,7 @@ public class EventListener implements AsyncConfigurer {
 
     @Async("threadPoolTaskExecutor")
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    @SneakyThrows
-    public void handleTransaction(NotificationEvent notificationEvent){
+    public void handleNotificationEvent(NotificationEvent notificationEvent){
         log.info("Got notification event ={}",notificationEvent);
         notificationService.makeNotifications(notificationEvent);
     }
