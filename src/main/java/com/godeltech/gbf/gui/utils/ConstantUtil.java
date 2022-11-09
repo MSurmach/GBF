@@ -85,6 +85,10 @@ public class ConstantUtil {
     public final static String FEEDBACK_ABOUT_CODE = "feedback.about";
     public final static String FEEDBACK_QUESTION_CODE = "feedback.question";
 
+    //All feedbacks
+    public final static String FEEDBACK_FROM_CODE = "feedback.from";
+    public final static String FEEDBACK_CONTENT_CODE = "feedback.content";
+
     //markers
     public final static String DATE_MARKER = "date.marker";
     public static final String DELIVERY_MARKER_CODE = "delivery.marker";
