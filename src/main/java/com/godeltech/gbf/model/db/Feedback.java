@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Entity
 @Table
-public class FeedBack {
+public class Feedback {
     @Id
     private Long id;
     @Column

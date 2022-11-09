@@ -6,6 +6,7 @@ import com.godeltech.gbf.model.db.Offer;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface OfferService {
     void save(SessionData sessionData);
@@ -19,4 +20,6 @@ public interface OfferService {
     Page<Offer> findSuitableOffersByGivenOffer(Offer offer, int pageNumber);
 
     Page<Offer> findAllByRole(Role role, int pageNumber);
+
+    List<Offer> findSuitableOffersListByGivenOffer(Offer offer);
 }

@@ -92,4 +92,8 @@ public class ConstantUtil {
     //markers
     public final static String DATE_MARKER = "date.marker";
     public static final String DELIVERY_MARKER_CODE = "delivery.marker";
+
+    //notifications
+    public final static String COURIER_NOTIFICATION ="notification.courier";
+    public final static String CLIENT_NOTIFICATION ="notification.client";
 }

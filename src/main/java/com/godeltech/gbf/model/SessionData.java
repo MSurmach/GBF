@@ -1,7 +1,7 @@
 package com.godeltech.gbf.model;
 
 import com.godeltech.gbf.model.db.Delivery;
-import com.godeltech.gbf.model.db.FeedBack;
+import com.godeltech.gbf.model.db.Feedback;
 import com.godeltech.gbf.model.db.Offer;
 import com.godeltech.gbf.model.db.RoutePoint;
 import lombok.*;
@@ -38,7 +38,7 @@ public class SessionData {
     private LinkedList<String> callbackHistory = new LinkedList<>();
 
     private Page<Offer> offers;
-    private Page<FeedBack> feedBacks;
+    private Page<Feedback> feedbacks;
     private int pageNumber;
     private Offer searchOffer;
     private boolean isEditable;

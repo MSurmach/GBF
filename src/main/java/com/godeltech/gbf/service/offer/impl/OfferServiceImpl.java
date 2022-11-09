@@ -1,5 +1,6 @@
 package com.godeltech.gbf.service.offer.impl;
 
+import com.godeltech.gbf.event.NotificationEvent;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
@@ -14,6 +15,7 @@ import com.godeltech.gbf.service.route_point.RoutePointService;
 import com.godeltech.gbf.service.user.TelegramUserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,14 +35,17 @@ public class OfferServiceImpl implements OfferService {
     private final OfferRepository offerRepository;
     private final TelegramUserService telegramUserService;
     private final RoutePointService routePointService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     @Transactional
     public void save(SessionData sessionData) {
+        log.info("Save offer with session date : {}",sessionData);
         Offer offer = ModelUtils.mapSessionDataToOffer(sessionData);
         TelegramUser telegramUser = telegramUserService.getOrCreateUser(sessionData.getTelegramUserId(), sessionData.getUsername());
         offer.setTelegramUser(telegramUser);
-        offerRepository.save(offer);
+        offer=offerRepository.save(offer);
+        applicationEventPublisher.publishEvent(new NotificationEvent(offer));
     }
 
     @Override
@@ -78,12 +83,21 @@ public class OfferServiceImpl implements OfferService {
                 Page.empty() :
                 offerRepository.findAll(specification, pageable);
     }
+    @Override
+    public List<Offer> findSuitableOffersListByGivenOffer(Offer offer) {
+        log.info("Find offers by offer : {} and role : {}", offer, offer.getRole());
+        Specification<Offer> specification = offer.getRole() == Role.CLIENT ?
+                createSpecificationForSearchingCouriers(offer) :
+                createSpecificationForSearchingClients(offer);
+
+        return offerRepository.findAll(specification);
+    }
 
     @Override
     public Page<Offer> findAllByRole(Role role, int pageNumber) {
         log.info("Find all offers by role : {}",role);
         Pageable pageable = PageRequest.of(pageNumber,3);
-        return offerRepository.findAllByRole(role,pageable);
+        return offerRepository.findAllByRoleOrderByIdDesc(role,pageable);
     }
 
 

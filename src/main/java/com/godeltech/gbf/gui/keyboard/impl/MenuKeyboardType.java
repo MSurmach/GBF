@@ -45,11 +45,11 @@ public class MenuKeyboardType implements KeyboardType {
         keyboard.add(List.of(clientButton));
         keyboard.add(List.of(myRegistrationsButton, myRequestsButton));
         keyboard.add(List.of(lookAtAllRegistrationsButton, lookAtAllRequestsButton));
-        keyboard.add(feedBackButtonsRow(sessionData.getTelegramUserId()));
+        keyboard.add(feedbackButtonsRow(sessionData.getTelegramUserId()));
         return new InlineKeyboardMarkup(keyboard);
     }
 
-    private List<InlineKeyboardButton> feedBackButtonsRow(Long telegramUserId) {
+    private List<InlineKeyboardButton> feedbackButtonsRow(Long telegramUserId) {
         var sendFeedbackButton = createLocalButton(SEND_FEEDBACK, lms);
         var lookAtFeedbacksButton = createLocalButton(LOOK_AT_FEEDBACKS, lms);
         return adminIdList.contains(telegramUserId) ?
