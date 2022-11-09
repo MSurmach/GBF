@@ -25,7 +25,7 @@ public class CourierListKeyboardType implements KeyboardType {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
-        Page<Offer> page = sessionData.getPage();
+        Page<Offer> page = sessionData.getOffers();
         if (page == null || page.isEmpty()) return KeyboardUtils.menuMarkup(lms);
         return new KeyboardMarkupAppender().
                 append(paginationKeyboardType.getKeyboardMarkup(sessionData)).

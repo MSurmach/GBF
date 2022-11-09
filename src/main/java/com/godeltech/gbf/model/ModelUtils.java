@@ -42,7 +42,7 @@ public class ModelUtils {
         sessionData.setCallbackQueryId(null);
         sessionData.setSearchOffer(null);
         sessionData.setPageNumber(0);
-        sessionData.setPage(null);
+        sessionData.setOffers(null);
         sessionData.setEditable(false);
     }
 

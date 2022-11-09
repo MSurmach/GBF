@@ -28,12 +28,12 @@ public class OffersKeyboardType implements KeyboardType {
 
     @Override
     public State getState() {
-        return State.OFFERS;
+        return State.MY_OFFERS;
     }
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
-        Page<Offer> page = sessionData.getPage();
+        Page<Offer> page = sessionData.getOffers();
         if (page == null || page.isEmpty()) return KeyboardUtils.menuMarkup(lms);
         String offerId = page.getContent().get(0).getId().toString();
         var editButton = createLocalButtonWithData(OFFER_EDIT, offerId, lms);

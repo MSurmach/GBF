@@ -35,7 +35,7 @@ public class PaginationKeyboardType implements KeyboardType {
         var startButton = createLocalButton(PAGE_START, lms);
         var prevButton = createLocalButton(PAGE_PREVIOUS, lms);
         var pageNumber = sessionData.getPageNumber() + 1;
-        var pageCount = sessionData.getPage().getTotalPages();
+        var pageCount = sessionData.getOffers().getTotalPages();
         var pageButton = createButton(
                 lms.getLocaleMessage(PAGE_CURRENT.name(), pageNumber + "/" + pageCount),
                 PAGE_CURRENT.name());
