@@ -28,7 +28,7 @@ public class SendMessageView implements View<SendMessage> {
     private final KeyboardFactory keyboardFactory;
     private final OfferService offerService;
 
-    private final List<State> preInitStates = List.of(OFFERS, COURIERS_SEARCH_RESULT, CLIENTS_SEARCH_RESULT);
+    private final List<State> preInitStates = List.of(MY_OFFERS, COURIERS_SEARCH_RESULT, CLIENTS_SEARCH_RESULT, ALL_OFFERS);
 
     public SendMessage buildView(Long chatId, SessionData sessionData) {
         State state = sessionData.getStateHistory().peek();
@@ -46,14 +46,17 @@ public class SendMessageView implements View<SendMessage> {
     private void preInitializeSearchResults(SessionData sessionData) {
         State state = sessionData.getStateHistory().peek();
         Page<Offer> page = switch (state) {
-            case OFFERS -> offerService.findAllOffersByUserIdAndRole(
+            case MY_OFFERS -> offerService.findAllOffersByUserIdAndRole(
                     sessionData.getTelegramUserId(),
+                    revertRoleForSearching(sessionData.getRole()),
+                    sessionData.getPageNumber());
+            case ALL_OFFERS -> offerService.findAllByRole(
                     revertRoleForSearching(sessionData.getRole()),
                     sessionData.getPageNumber());
             default ->
                     offerService.findSuitableOffersByGivenOffer(sessionData.getSearchOffer(), sessionData.getPageNumber());
         };
-        sessionData.setPage(page);
+        sessionData.setOffers(page);
     }
 
     private Role revertRoleForSearching(Role role) {
