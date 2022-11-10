@@ -1,12 +1,13 @@
 package com.godeltech.gbf.service.feedback;
 
 import com.godeltech.gbf.model.db.Feedback;
-import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public interface FeedbackService {
     void save(Feedback feedBack);
 
-    Page<Feedback> findAllFeedbacks(int pageNumber);
+    List<Feedback> findAllFeedbacks();
 
     void deleteFeedbackById(Long feedBackId);
 }

@@ -116,7 +116,6 @@ public class CallbackInterceptor implements Interceptor {
         try {
             log.info("Intercept pagination button with callback : {}", callback);
             PaginationButton clickedButton = PaginationButton.valueOf(callback);
-
             Page<Offer> page = sessionData.getOffers();
             switch (clickedButton) {
                 case PAGE_START -> sessionData.setPageNumber(0);

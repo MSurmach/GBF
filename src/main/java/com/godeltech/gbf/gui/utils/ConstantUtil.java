@@ -93,6 +93,11 @@ public class ConstantUtil {
     public static final String DELIVERY_MARKER_CODE = "delivery.marker";
 
     //notifications
-    public final static String COURIER_NOTIFICATION ="notification.courier";
-    public final static String CLIENT_NOTIFICATION ="notification.client";
+    public final static String COURIER_NOTIFICATION = "notification.courier";
+    public final static String CLIENT_NOTIFICATION = "notification.client";
+
+    //OfferIdInput
+    public final static String OFFER_ID_INPUT_INFO_CODE = "offer.id.input.info";
+    public final static String OFFER_ID_INPUT_REGISTRATION_QUESTION_CODE = "offer.id.input.registration.question";
+    public final static String OFFER_ID_INPUT_REQUEST_QUESTION_CODE = "offer.id.input.request.question";
 }

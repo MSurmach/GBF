@@ -27,7 +27,6 @@ public class MyOffersHandlerType implements HandlerType {
         String callback = sessionData.getCallbackHistory().peek();
         String[] splittedCallback = callback.split(":");
         var clickedButton = OffersBotButton.valueOf(splittedCallback[0]);
-        long offerId = Long.parseLong(splittedCallback[1]);
         sessionData.setPageNumber(0);
         switch (clickedButton) {
             case OFFER_EDIT -> {
@@ -35,7 +34,10 @@ public class MyOffersHandlerType implements HandlerType {
                 ModelUtils.copyOfferToSessionData(sessionData, toEditOffer);
                 sessionData.setEditable(true);
             }
-            case OFFER_DELETE -> offerService.deleteOfferById(offerId);
+            case OFFER_DELETE -> {
+                long offerId = Long.parseLong(splittedCallback[1]);
+                offerService.deleteOfferById(offerId);
+            }
             case OFFER_FIND_CLIENTS, OFFER_FIND_COURIERS -> {
                 Offer toFindOffer = sessionData.getOffers().getContent().get(0);
                 sessionData.setSearchOffer(toFindOffer);

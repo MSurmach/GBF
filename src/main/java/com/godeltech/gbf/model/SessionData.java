@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,7 +39,7 @@ public class SessionData {
     private LinkedList<String> callbackHistory = new LinkedList<>();
 
     private Page<Offer> offers;
-    private Page<Feedback> feedbacks;
+    private List<Feedback> feedbacks;
     private int pageNumber;
     private Offer searchOffer;
     private boolean isEditable;

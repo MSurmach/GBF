@@ -35,6 +35,7 @@ public class BackHandlerType implements HandlerType {
         stateAndBackStateMap.put(ALL_OFFERS, MENU);
         stateAndBackStateMap.put(FEEDBACK, MENU);
         stateAndBackStateMap.put(ALL_FEEDBACKS, MENU);
+        stateAndBackStateMap.put(OFFER_ID_INPUT, MY_OFFERS);
     }
 
     @Override
