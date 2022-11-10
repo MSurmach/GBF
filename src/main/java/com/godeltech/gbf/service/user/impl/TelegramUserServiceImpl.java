@@ -29,7 +29,6 @@ public class TelegramUserServiceImpl implements TelegramUserService {
     }
 
     @Override
-    @Transactional
     public TelegramUser findById(Long id) {
         log.info("Get telegram user by id : {}",id);
         return telegramUserRepository.findById(id)
