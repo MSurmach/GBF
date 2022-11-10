@@ -3,6 +3,7 @@ package com.godeltech.gbf.service.handler.impl;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Feedback;
+import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.service.feedback.FeedbackService;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.user.TelegramUserService;
@@ -27,10 +28,10 @@ public class FeedbackHandlerType implements HandlerType {
     public State handle(SessionData sessionData) {
         String feedBackContent = sessionData.getCallbackHistory().peek();
         sessionData.getStateHistory().pop();
-        telegramUserService.save(sessionData);
+        TelegramUser user = telegramUserService.getOrCreateUser(sessionData.getTelegramUserId(), sessionData.getUsername());
         feedbackService.save(Feedback.builder().
                 content(feedBackContent).
-                userId(sessionData.getTelegramUserId()).
+                userId(user.getId()).
                 build());
         return MENU;
     }

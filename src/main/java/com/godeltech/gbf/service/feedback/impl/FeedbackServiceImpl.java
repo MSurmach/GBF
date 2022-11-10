@@ -27,7 +27,8 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public List<Feedback> findAllFeedbacks() {
         log.info("Find all feedbacks");
-        return feedbackRepository.findAll();
+        List<Feedback> feedbacks = feedbackRepository.findAll();
+        return feedbacks;
     }
 
     @Override

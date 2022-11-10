@@ -1,10 +1,7 @@
 package com.godeltech.gbf.handling;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.exception.DeleteMessageException;
-import com.godeltech.gbf.exception.MembershipException;
-import com.godeltech.gbf.exception.MessageFromGroupException;
-import com.godeltech.gbf.exception.NotFoundStateTypeException;
+import com.godeltech.gbf.exception.*;
 import com.godeltech.gbf.service.alert.ExceptionResponseService;
 import com.godeltech.gbf.service.validator.exceptions.EmptyButtonCalendarException;
 import com.godeltech.gbf.service.validator.exceptions.GbfException;
@@ -77,6 +74,11 @@ public class BotExceptionHandler {
 
     @ExceptionHandler(NotFoundStateTypeException.class)
     public void handleNotFoundStateTypeException(NotFoundStateTypeException exception) {
+        log.error(exception.getMessage());
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public void handleResourceNotFoundException(ResourceNotFoundException exception){
         log.error(exception.getMessage());
     }
 }

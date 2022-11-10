@@ -8,5 +8,4 @@ public interface TelegramUserService {
 
     TelegramUser findById(Long id);
 
-    TelegramUser save(SessionData sessionData);
 }
