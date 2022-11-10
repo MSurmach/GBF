@@ -22,4 +22,6 @@ public interface OfferService {
     Page<Offer> findAllByRole(Role role, int pageNumber);
 
     List<Offer> findSuitableOffersListByGivenOffer(Offer offer);
+
+    int getOrderedNumberOfOfferWithId(Long id, Role role, Long offerId);
 }

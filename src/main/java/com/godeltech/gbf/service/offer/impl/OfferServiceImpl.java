@@ -1,6 +1,7 @@
 package com.godeltech.gbf.service.offer.impl;
 
 import com.godeltech.gbf.event.NotificationEvent;
+import com.godeltech.gbf.exception.WrongInputException;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
@@ -40,11 +41,11 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     public void save(SessionData sessionData) {
-        log.info("Save offer with session date : {}",sessionData);
+        log.info("Save offer with session date : {}", sessionData);
         Offer offer = ModelUtils.mapSessionDataToOffer(sessionData);
         TelegramUser telegramUser = telegramUserService.getOrCreateUser(sessionData.getTelegramUserId(), sessionData.getUsername());
         offer.setTelegramUser(telegramUser);
-        offer=offerRepository.save(offer);
+        offer = offerRepository.save(offer);
         applicationEventPublisher.publishEvent(new NotificationEvent(offer));
     }
 
@@ -83,6 +84,7 @@ public class OfferServiceImpl implements OfferService {
                 Page.empty() :
                 offerRepository.findAll(specification, pageable);
     }
+
     @Override
     public List<Offer> findSuitableOffersListByGivenOffer(Offer offer) {
         log.info("Find offers by offer : {} and role : {}", offer, offer.getRole());
@@ -94,10 +96,22 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    public int getOrderedNumberOfOfferWithId(Long userId, Role role, Long offerId) {
+        log.info("Find ordered number of offer with id : {}, role : {}, user id : {}",offerId,role,userId);
+        List<Offer> content = offerRepository.findOffersByTelegramUserIdAndRoleOrderByIdDesc(userId, role, Pageable.unpaged()).getContent();
+        return content.stream()
+                .filter(offer -> offer.getId().equals(offerId))
+                .findFirst()
+                .map(content::lastIndexOf)
+                .orElseThrow(WrongInputException::new);
+    }
+
+
+    @Override
     public Page<Offer> findAllByRole(Role role, int pageNumber) {
-        log.info("Find all offers by role : {}",role);
-        Pageable pageable = PageRequest.of(pageNumber,3);
-        return offerRepository.findAllByRoleOrderByIdDesc(role,pageable);
+        log.info("Find all offers by role : {}", role);
+        Pageable pageable = PageRequest.of(pageNumber, 3);
+        return offerRepository.findAllByRoleOrderByIdDesc(role, pageable);
     }
 
 
@@ -188,26 +202,26 @@ public class OfferServiceImpl implements OfferService {
 
     private Specification<Offer> getSpecificationForId(List<Offer> offerList) {
         List<Long> idList = offerList.stream().map(Offer::getId).collect(Collectors.toList());
-        log.debug("Get specification with list of id : {}",idList);
+        log.debug("Get specification with list of id : {}", idList);
         return OfferSpecs.byOfferId(idList);
     }
 
     private Specification<Offer> addSpecificationByDeliveryForSearchingCouriers(Delivery delivery, Specification<Offer> specification) {
-        log.debug("Add client specification for delivery with income delivery :{}",delivery);
+        log.debug("Add client specification for delivery with income delivery :{}", delivery);
         if (delivery == null)
             return specification;
         return specification.and(OfferSpecs.byDeliveryGreaterOrEqual(delivery).or(OfferSpecs.byDeliveryIsNull()));
     }
 
     private Specification<Offer> addSpecificationBySeatsForSearchingCouriers(int seats, Specification<Offer> specification) {
-        log.debug("Add client specification for seat with income value seats : {}",seats);
+        log.debug("Add client specification for seat with income value seats : {}", seats);
         if (seats == 0)
             return specification;
         return specification.and(OfferSpecs.bySeatsGreater(seats).or(OfferSpecs.bySeatsIsNull()));
     }
 
     private Specification<Offer> addSpecificationByDates(LocalDate startDate, LocalDate endDate, Specification<Offer> specification) {
-        log.debug("Add date specification with income values : startDate : {} and endDate: {}",startDate,endDate);
+        log.debug("Add date specification with income values : startDate : {} and endDate: {}", startDate, endDate);
         if (startDate == null) {
             return specification;
         }
@@ -220,4 +234,5 @@ public class OfferServiceImpl implements OfferService {
                     .or(OfferSpecs.startDateIsNull()));
         }
     }
+
 }
