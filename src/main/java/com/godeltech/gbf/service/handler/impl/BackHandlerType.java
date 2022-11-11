@@ -1,5 +1,6 @@
 package com.godeltech.gbf.service.handler.impl;
 
+import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.service.handler.HandlerType;
@@ -42,6 +43,8 @@ public class BackHandlerType implements HandlerType {
     @Override
     public State handle(SessionData sessionData) {
         State currentState = sessionData.getStateHistory().pop();
-        return stateAndBackStateMap.get(currentState);
+        State backState = stateAndBackStateMap.get(currentState);
+        if (backState==MENU) ModelUtils.resetSessionData(sessionData);
+        return backState;
     }
 }

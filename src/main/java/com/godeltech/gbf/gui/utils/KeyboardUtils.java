@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.godeltech.gbf.gui.button.CommonButton.CONFIRM;
-import static com.godeltech.gbf.gui.button.NavigationBotButton.GLOBAL_BACK;
+import static com.godeltech.gbf.gui.button.NavigationBotButton.BACK;
 import static com.godeltech.gbf.gui.button.NavigationBotButton.MENU;
 import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButton;
 
 public class KeyboardUtils {
 
     public static InlineKeyboardMarkup backAndMenuMarkup(LocalMessageSource lms) {
-        var backButton = createLocalButton(GLOBAL_BACK, lms);
+        var backButton = createLocalButton(BACK, lms);
         var menuButton = createLocalButton(MENU, lms);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(List.of(backButton, menuButton));
