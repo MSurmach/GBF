@@ -43,7 +43,7 @@ public class OfferServiceImpl implements OfferService {
     public void save(SessionData sessionData) {
         log.info("Save offer with session date : {}", sessionData);
         Offer offer = ModelUtils.mapSessionDataToOffer(sessionData);
-        TelegramUser telegramUser = telegramUserService.getOrCreateUser(sessionData.getTelegramUserId(), sessionData.getUsername());
+        TelegramUser telegramUser = telegramUserService.saveUser(sessionData.getTelegramUserId(), sessionData.getUsername());
         offer.setTelegramUser(telegramUser);
         offer = offerRepository.save(offer);
         applicationEventPublisher.publishEvent(new NotificationEvent(offer));

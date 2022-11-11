@@ -28,7 +28,7 @@ public class FeedbackHandlerType implements HandlerType {
     public State handle(SessionData sessionData) {
         String feedBackContent = sessionData.getCallbackHistory().peek();
         sessionData.getStateHistory().pop();
-        TelegramUser user = telegramUserService.getOrCreateUser(sessionData.getTelegramUserId(), sessionData.getUsername());
+        TelegramUser user = telegramUserService.saveUser(sessionData.getTelegramUserId(), sessionData.getUsername());
         feedbackService.save(Feedback.builder().
                 content(feedBackContent).
                 userId(user.getId()).
