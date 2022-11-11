@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import static com.godeltech.gbf.model.State.FEEDBACK;
-import static com.godeltech.gbf.model.State.MENU;
+import static com.godeltech.gbf.model.State.THANKS_FOR_FEEDBACK;
 
 @Service
 @AllArgsConstructor
@@ -33,6 +33,6 @@ public class FeedbackHandlerType implements HandlerType {
                 content(feedBackContent).
                 userId(user.getId()).
                 build());
-        return MENU;
+        return THANKS_FOR_FEEDBACK;
     }
 }

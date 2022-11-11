@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.offer.impl;
 
 import com.godeltech.gbf.event.NotificationEvent;
-import com.godeltech.gbf.exception.WrongInputException;
+import com.godeltech.gbf.exception.OfferNotFoundException;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
@@ -103,7 +103,7 @@ public class OfferServiceImpl implements OfferService {
                 .filter(offer -> offer.getId().equals(offerId))
                 .findFirst()
                 .map(content::lastIndexOf)
-                .orElseThrow(WrongInputException::new);
+                .orElseThrow(OfferNotFoundException::new);
     }
 
 
