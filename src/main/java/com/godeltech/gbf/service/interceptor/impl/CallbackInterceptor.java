@@ -95,7 +95,7 @@ public class CallbackInterceptor implements Interceptor {
             NavigationBotButton botButton = NavigationBotButton.valueOf(callback);
             SessionData sessionData = SessionDataCache.get(telegramUserId);
             return switch (botButton) {
-                case BACK -> {
+                case GLOBAL_BACK -> {
                     HandlerType handlerType = handlerFactory.get(BACK);
                     yield handlerType.handle(sessionData);
                 }
