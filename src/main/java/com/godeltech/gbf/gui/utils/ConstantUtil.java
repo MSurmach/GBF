@@ -103,4 +103,6 @@ public class ConstantUtil {
     //OfferIdNotFound
     public final static String OFFER_ID_REGISTRATION_NOT_FOUND_CODE = "offer.id.registration.notFound";
     public final static String OFFER_ID_REQUEST_NOT_FOUND_CODE = "offer.id.request.notFound";
+    //Thanks for feedback
+    public final static String THANKS_FOR_FEEDBACK_CODE = "feedback.thanks";
 }

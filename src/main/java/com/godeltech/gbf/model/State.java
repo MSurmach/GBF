@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum State {
-    BACK,
+    BACK, THANKS_FOR_FEEDBACK,
     FORM,
     MENU, SUCCESS_REGISTRATION, WRONG_INPUT,
     COMMENT,
