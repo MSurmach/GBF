@@ -105,4 +105,7 @@ public class ConstantUtil {
     public final static String OFFER_ID_REQUEST_NOT_FOUND_CODE = "offer.id.request.notFound";
     //Thanks for feedback
     public final static String THANKS_FOR_FEEDBACK_CODE = "feedback.thanks";
+
+    //Delete feedback by id
+    public final static String DELETE_FEEDBACK_BY_ID_CODE = "feedback.delete.question";
 }

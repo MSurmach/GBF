@@ -17,19 +17,20 @@ import java.util.stream.Collectors;
 @Slf4j
 public class KeyboardFactory implements Factory<KeyboardType> {
 
-
     private final Map<State, KeyboardType> keyboardContext;
+    private final NotFoundKeyboardType notFoundKeyboardType;
 
     @Autowired
-    public KeyboardFactory(List<KeyboardType> keyboardTypeContext) {
+    public KeyboardFactory(List<KeyboardType> keyboardTypeContext, NotFoundKeyboardType notFoundKeyboardType) {
         this.keyboardContext = keyboardTypeContext.stream().
                 collect(Collectors.toMap(KeyboardType::getState, Function.identity()));
+        this.notFoundKeyboardType = notFoundKeyboardType;
     }
 
     @Override
     public KeyboardType get(State state) {
         log.info("Get keyboard type by state : {}",state);
         return keyboardContext.getOrDefault(state,
-                (KeyboardType) new NotFoundKeyboardType());
+                notFoundKeyboardType);
     }
 }

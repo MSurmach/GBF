@@ -43,7 +43,7 @@ public class SessionData {
     private int pageNumber;
     private Offer searchOffer;
     private boolean isEditable;
-    private Long tempOfferIdSearch;
+    private Long tempOfferId;
 
     public void clearTemp() {
         tempStartDate = null;

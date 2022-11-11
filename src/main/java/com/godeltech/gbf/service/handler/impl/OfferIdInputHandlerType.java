@@ -27,7 +27,7 @@ public class OfferIdInputHandlerType implements HandlerType {
         String callback = sessionData.getCallbackHistory().peek();
         try {
             Long offerId = Long.parseLong(callback);
-            sessionData.setTempOfferIdSearch(offerId);
+            sessionData.setTempOfferId(offerId);
             Role role = sessionData.getRole().equals(Role.REGISTRATIONS_VIEWER) ? Role.COURIER : Role.CLIENT;
             int pageNumber = offerService.getOrderedNumberOfOfferWithId(sessionData.getTelegramUserId(), role, offerId);
             sessionData.setPageNumber(pageNumber);

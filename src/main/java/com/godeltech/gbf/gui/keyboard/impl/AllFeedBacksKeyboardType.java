@@ -8,7 +8,13 @@ import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.godeltech.gbf.gui.button.AllFeedbacksBotButton.DELETE_BY_ID;
+import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButton;
 import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 
 @Component
@@ -24,7 +30,11 @@ public class AllFeedBacksKeyboardType implements KeyboardType {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
-        return new KeyboardMarkupAppender().
+        var deleteByIdButton = createLocalButton(DELETE_BY_ID, lms);
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+        if (!sessionData.getFeedbacks().isEmpty() || sessionData.getFeedbacks() == null)
+            keyboard.add(List.of(deleteByIdButton));
+        return new KeyboardMarkupAppender(new InlineKeyboardMarkup(keyboard)).
                 append(backAndMenuMarkup(lms)).
                 result();
     }

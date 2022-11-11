@@ -25,7 +25,7 @@ public class OfferByIdNotFoundMessageType implements MessageType {
 
     @Override
     public String getMessage(SessionData sessionData) {
-        Long tempOfferIdSearch = sessionData.getTempOfferIdSearch();
+        Long tempOfferIdSearch = sessionData.getTempOfferId();
         return Objects.equals(sessionData.getRole(), REGISTRATIONS_VIEWER) ?
                 lms.getLocaleMessage(OFFER_ID_REGISTRATION_NOT_FOUND_CODE, tempOfferIdSearch.toString()):
                 lms.getLocaleMessage(OFFER_ID_REQUEST_NOT_FOUND_CODE, tempOfferIdSearch.toString());
