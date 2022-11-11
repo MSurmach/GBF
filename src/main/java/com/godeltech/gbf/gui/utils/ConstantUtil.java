@@ -100,6 +100,7 @@ public class ConstantUtil {
     public final static String OFFER_ID_INPUT_INFO_CODE = "offer.id.input.info";
     public final static String OFFER_ID_INPUT_REGISTRATION_QUESTION_CODE = "offer.id.input.registration.question";
     public final static String OFFER_ID_INPUT_REQUEST_QUESTION_CODE = "offer.id.input.request.question";
-
-
+    //OfferIdNotFound
+    public final static String OFFER_ID_REGISTRATION_NOT_FOUND_CODE = "offer.id.registration.notFound";
+    public final static String OFFER_ID_REQUEST_NOT_FOUND_CODE = "offer.id.request.notFound";
 }

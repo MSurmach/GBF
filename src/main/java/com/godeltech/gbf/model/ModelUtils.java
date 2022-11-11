@@ -44,6 +44,7 @@ public class ModelUtils {
         sessionData.setPageNumber(0);
         sessionData.setOffers(null);
         sessionData.setEditable(false);
+        sessionData.setTempOfferIdSearch(null);
     }
 
     public static SessionData mapOfferToSessionData(Offer offer) {

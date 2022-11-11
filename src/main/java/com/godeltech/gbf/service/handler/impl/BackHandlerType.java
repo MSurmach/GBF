@@ -12,11 +12,6 @@ import static com.godeltech.gbf.model.State.*;
 
 @Service
 public class BackHandlerType implements HandlerType {
-    @Override
-    public State getState() {
-        return BACK;
-    }
-
     public final static Map<State, State> stateAndBackStateMap = new HashMap<>();
 
     static {
@@ -36,6 +31,12 @@ public class BackHandlerType implements HandlerType {
         stateAndBackStateMap.put(FEEDBACK, MENU);
         stateAndBackStateMap.put(ALL_FEEDBACKS, MENU);
         stateAndBackStateMap.put(OFFER_ID_INPUT, MY_OFFERS);
+        stateAndBackStateMap.put(OFFER_BY_ID_NOT_FOUND, MY_OFFERS);
+    }
+
+    @Override
+    public State getState() {
+        return BACK;
     }
 
     @Override
