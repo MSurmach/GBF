@@ -21,7 +21,7 @@ public class TelegramUserServiceImpl implements TelegramUserService {
     @Transactional
     public TelegramUser getOrCreateUser(Long id, String username) {
         log.info("Get or create telegram user by id : {} and username : {}",id,username);
-        return telegramUserRepository.findById(id)
+        return telegramUserRepository.findByIdAndUserName(id,username)
                 .orElse(telegramUserRepository.save(TelegramUser.builder()
                         .id(id)
                         .userName(username)
