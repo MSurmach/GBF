@@ -53,7 +53,7 @@ public class OfferServiceImpl implements OfferService {
     @Transactional
     public void deleteExpiredOffersByDate(LocalDate expiredDate) {
         log.info("delete expired offers by date : {}", expiredDate);
-        List<Offer> expiredOffers = offerRepository.findAll(OfferSpecs.byDateAfter(expiredDate));
+        List<Offer> expiredOffers = offerRepository.findAllByEndDateBefore(expiredDate);
         offerRepository.deleteAll(expiredOffers);
     }
 
@@ -97,7 +97,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public int getOrderedNumberOfOfferWithId(Long userId, Role role, Long offerId) {
-        log.info("Find ordered number of offer with id : {}, role : {}, user id : {}",offerId,role,userId);
+        log.info("Find ordered number of offer with id : {}, role : {}, user id : {}", offerId, role, userId);
         List<Offer> content = offerRepository.findOffersByTelegramUserIdAndRoleOrderByIdDesc(userId, role, Pageable.unpaged()).getContent();
         return content.stream()
                 .filter(offer -> offer.getId().equals(offerId))
