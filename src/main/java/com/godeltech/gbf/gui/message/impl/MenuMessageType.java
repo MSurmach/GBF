@@ -2,6 +2,7 @@ package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
+import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class MenuMessageType implements MessageType {
     @Override
     public String getMessage(SessionData sessionData) {
         log.debug("Create form message type for session data with user id : {} and username : {}",
-                sessionData.getTelegramUserId(),sessionData.getUsername() );
-        return localMessageSource.getLocaleMessage(MENU_CODE, sessionData.getUsername());
+                sessionData.getTelegramUserId(), sessionData.getUsername());
+        return localMessageSource.getLocaleMessage(MENU_CODE, ModelUtils.getUserMention(sessionData));
     }
 }

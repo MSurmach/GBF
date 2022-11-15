@@ -2,6 +2,7 @@ package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
+import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
@@ -26,10 +27,12 @@ public class CouriersListMessageType implements MessageType {
     public String getMessage(SessionData sessionData) {
         Page<Offer> page = sessionData.getOffers();
         String username = sessionData.getUsername();
-        if (page == null || page.isEmpty()) return lms.getLocaleMessage(COURIERS_NOT_EXIST, username);
+        Long userId = sessionData.getTelegramUserId();
+        if (page == null || page.isEmpty())
+            return lms.getLocaleMessage(COURIERS_NOT_EXIST);
         Offer offer = page.getContent().get(0);
-        return lms.getLocaleMessage(COURIERS_EXIST, username) +
-                lms.getLocaleMessage(COURIER_HEADER, offer.getTelegramUser().getUserName()) +
+        return lms.getLocaleMessage(COURIERS_EXIST, ModelUtils.getUserMention(sessionData)) +
+                lms.getLocaleMessage(COURIER_HEADER, ModelUtils.getUserMention(offer)) +
                 routeDetails(offer.getRoutePoints(), lms) +
                 datesDetails(offer.getStartDate(), offer.getEndDate(), lms) +
                 deliveryDetails(offer.getDelivery(), lms) +

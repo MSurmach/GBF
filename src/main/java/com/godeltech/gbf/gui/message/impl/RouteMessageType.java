@@ -3,6 +3,7 @@ package com.godeltech.gbf.gui.message.impl;
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
 import com.godeltech.gbf.gui.utils.MessageUtils;
+import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.RoutePoint;
@@ -31,7 +32,7 @@ public class RouteMessageType implements MessageType {
         log.debug("Create route message type for session data with user id : {} and username : {}",
                 sessionData.getTelegramUserId(),sessionData.getUsername() );
         LinkedList<RoutePoint> tempRoute = sessionData.getTempRoute();
-        String about = lms.getLocaleMessage(ROUTE_INFO_ABOUT, sessionData.getUsername());
+        String about = lms.getLocaleMessage(ROUTE_INFO_ABOUT, ModelUtils.getUserMention(sessionData));
         String routeDetails = MessageUtils.routeDetails(tempRoute, lms);
         String question = tempRoute.stream().anyMatch(routePoint -> routePoint.getStatus() == Status.INITIAL) ?
                 lms.getLocaleMessage(ROUTE_QUESTION_NEXT_POINT) :

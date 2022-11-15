@@ -2,6 +2,7 @@ package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
+import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
@@ -28,11 +29,11 @@ public class OffersMessageType implements MessageType {
     @Override
     public String getMessage(SessionData sessionData) {
         Role role = sessionData.getRole();
-        String username = sessionData.getUsername();
         Page<Offer> page = sessionData.getOffers();
-        if (page == null || page.isEmpty()) return offersNotFoundMessage(role, username);
+        if (page == null || page.isEmpty())
+            return offersNotFoundMessage(role);
         Offer offer = page.getContent().get(0);
-        return aboutMessage(role, username) +
+        return aboutMessage(sessionData) +
                 offerHeaderWithIdMessage(offer.getRole(), offer.getId().toString()) +
                 routeDetails(offer.getRoutePoints(), lms) +
                 datesDetails(offer.getStartDate(), offer.getEndDate(), lms) +
@@ -41,10 +42,10 @@ public class OffersMessageType implements MessageType {
                 commentDetails(offer.getComment(), lms);
     }
 
-    private String offersNotFoundMessage(Role role, String username) {
+    private String offersNotFoundMessage(Role role) {
         return Objects.equals(role, Role.REGISTRATIONS_VIEWER) ?
-                lms.getLocaleMessage(REGISTRATIONS_NOT_EXIST_CODE, username) :
-                lms.getLocaleMessage(REQUESTS_NOT_EXIST_CODE, username);
+                lms.getLocaleMessage(REGISTRATIONS_NOT_EXIST_CODE) :
+                lms.getLocaleMessage(REQUESTS_NOT_EXIST_CODE);
     }
 
     private String offerHeaderWithIdMessage(Role role, String offerId) {
@@ -53,9 +54,9 @@ public class OffersMessageType implements MessageType {
                 lms.getLocaleMessage(REQUEST_ID_CODE, offerId);
     }
 
-    private String aboutMessage(Role role, String username) {
-        return Objects.equals(role, Role.REGISTRATIONS_VIEWER) ?
-                lms.getLocaleMessage(REGISTRATIONS_EXIST_CODE, username) :
-                lms.getLocaleMessage(REQUESTS_EXIST_CODE, username);
+    private String aboutMessage(SessionData sessionData) {
+        return Objects.equals(sessionData.getRole(), Role.REGISTRATIONS_VIEWER) ?
+                lms.getLocaleMessage(REGISTRATIONS_EXIST_CODE, ModelUtils.getUserMention(sessionData)) :
+                lms.getLocaleMessage(REQUESTS_EXIST_CODE, ModelUtils.getUserMention(sessionData));
     }
 }

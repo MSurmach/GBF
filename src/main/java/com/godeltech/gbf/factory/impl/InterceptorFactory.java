@@ -8,7 +8,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -24,10 +23,6 @@ public class InterceptorFactory {
     }
 
     public Interceptor getInterceptor(Update update) {
-        if (isUsernameNull(update)) {
-            log.info("Get null username interceptor");
-            return interceptorContext.get(InterceptorTypes.USERNAME_NULL);
-        }
         if (update.hasCallbackQuery()) {
             log.info("Get callback interceptor by user : {}", update.getCallbackQuery().getFrom().getUserName());
             return interceptorContext.get(InterceptorTypes.CALLBACK);
@@ -36,13 +31,5 @@ public class InterceptorFactory {
         return update.getMessage().hasEntities() ?
                 interceptorContext.get(InterceptorTypes.MESSAGE_ENTITY) :
                 interceptorContext.get(InterceptorTypes.MESSAGE_TEXT);
-    }
-
-    private boolean isUsernameNull(Update update) {
-        log.info("Check username nullity");
-        String username = update.hasMessage() ?
-                update.getMessage().getFrom().getUserName() :
-                update.getCallbackQuery().getFrom().getUserName();
-        return Objects.isNull(username);
     }
 }

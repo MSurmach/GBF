@@ -2,6 +2,7 @@ package com.godeltech.gbf.gui.message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.message.MessageType;
+import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
@@ -25,7 +26,7 @@ public class FormMessageType implements MessageType {
 
     @Override
     public String getMessage(SessionData sessionData) {
-        return instructions(sessionData.getRole(), sessionData.getUsername(), sessionData.isEditable()) +
+        return instructions(sessionData) +
                 detailsHeader(sessionData.getRole(), sessionData.isEmpty(), sessionData.getOfferId(), sessionData.isEditable()) +
                 routeDetails(sessionData.getRoute(), lms) +
                 datesDetails(sessionData.getStartDate(), sessionData.getEndDate(), lms) +
@@ -42,15 +43,15 @@ public class FormMessageType implements MessageType {
                 lms.getLocaleMessage(REQUEST_ID_CODE, offerId.toString());
     }
 
-    private String instructions(Role role, String username, boolean isEditable) {
+    private String instructions(SessionData sessionData) {
         String message = null;
-        switch (role) {
-            case COURIER -> message = !isEditable ?
-                    lms.getLocaleMessage(INSTRUCTION_COURIER_ABOUT_CODE, username) :
-                    lms.getLocaleMessage(INSTRUCTION_REGISTRATIONS_VIEWER_ABOUT_CODE, username);
-            case CLIENT -> message = !isEditable ?
-                    lms.getLocaleMessage(INSTRUCTION_CLIENT_ABOUT_CODE, username) :
-                    lms.getLocaleMessage(INSTRUCTION_REQUESTS_VIEWER_ABOUT_CODE, username);
+        switch (sessionData.getRole()) {
+            case COURIER -> message = !sessionData.isEditable() ?
+                    lms.getLocaleMessage(INSTRUCTION_COURIER_ABOUT_CODE, ModelUtils.getUserMention(sessionData)) :
+                    lms.getLocaleMessage(INSTRUCTION_REGISTRATIONS_VIEWER_ABOUT_CODE, ModelUtils.getUserMention(sessionData));
+            case CLIENT -> message = !sessionData.isEditable() ?
+                    lms.getLocaleMessage(INSTRUCTION_CLIENT_ABOUT_CODE, ModelUtils.getUserMention(sessionData)) :
+                    lms.getLocaleMessage(INSTRUCTION_REQUESTS_VIEWER_ABOUT_CODE, ModelUtils.getUserMention(sessionData));
         }
         return message;
     }
