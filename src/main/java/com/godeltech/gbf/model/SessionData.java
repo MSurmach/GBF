@@ -33,17 +33,15 @@ public class SessionData {
     private LocalDate endDate;
     private Role role;
     private String callbackQueryId;
-
     private LinkedList<State> stateHistory = new LinkedList<>();
-
     private LinkedList<String> callbackHistory = new LinkedList<>();
-
     private Page<Offer> offers;
     private List<Feedback> feedbacks;
     private int pageNumber;
     private Offer searchOffer;
     private boolean isEditable;
     private Long tempOfferId;
+    private String language;
 
     public void clearTemp() {
         tempStartDate = null;
