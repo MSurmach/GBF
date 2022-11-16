@@ -4,9 +4,9 @@ import lombok.Getter;
 
 public class EmptyButtonCalendarException extends RuntimeException {
     @Getter
-    private String buttonCallback;
+    private final String buttonCallback;
     @Getter
-    private String callbackQueryId;
+    private final String callbackQueryId;
 
     public EmptyButtonCalendarException(String buttonCallback, String callbackQueryId) {
         this.buttonCallback = buttonCallback;

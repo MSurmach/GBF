@@ -30,4 +30,9 @@ public class EnMessageSource extends AllMessageSource implements LocalMessageSou
     public String getLanguage() {
         return ENGLISH.getLanguage();
     }
+
+    @Override
+    public Locale getLocale() {
+        return ENGLISH;
+    }
 }

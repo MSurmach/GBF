@@ -43,11 +43,11 @@ public class FormHandlerType implements HandlerType {
                 }
             }
             case REGISTER -> {
-                routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId());
+                routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId(), sessionData.getLanguage());
                 offerService.save(sessionData);
             }
             case SAVE_CHANGES -> {
-                routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId());
+                routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId(), sessionData.getLanguage());
                 sessionData.setEditable(false);
                 offerService.save(sessionData);
                 switch (sessionData.getRole()) {
@@ -56,7 +56,7 @@ public class FormHandlerType implements HandlerType {
                 }
             }
             case SEARCH_CLIENTS -> {
-                routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId());
+                routeValidator.checkRouteIsNotEmpty(sessionData.getRoute(), sessionData.getCallbackQueryId(), sessionData.getLanguage());
                 Offer offer = ModelUtils.mapSessionDataToOffer(sessionData);
                 sessionData.setSearchOffer(offer);
                 offerService.save(sessionData);

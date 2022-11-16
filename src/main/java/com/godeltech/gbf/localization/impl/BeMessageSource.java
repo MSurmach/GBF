@@ -8,30 +8,30 @@ import org.springframework.stereotype.Component;
 import java.util.Locale;
 
 @Component
-public class RuMessageSource extends AllMessageSource implements LocalMessageSource {
-    private final Locale RUSSIAN = new Locale("ru");
+public class BeMessageSource extends AllMessageSource implements LocalMessageSource {
+    private final Locale BELARUSIAN = new Locale("be");
 
-    public RuMessageSource(MessageSource messageSource) {
+    public BeMessageSource(MessageSource messageSource) {
         super(messageSource);
     }
 
     @Override
     public String getLocaleMessage(String code) {
-        return messageSource.getMessage(code, null, RUSSIAN);
+        return messageSource.getMessage(code, null, BELARUSIAN);
     }
 
     @Override
     public String getLocaleMessage(String code, String... args) {
-        return messageSource.getMessage(code, args, RUSSIAN);
+        return messageSource.getMessage(code, args, BELARUSIAN);
     }
 
     @Override
     public String getLanguage() {
-        return RUSSIAN.getLanguage();
+        return BELARUSIAN.getLanguage();
     }
 
     @Override
     public Locale getLocale() {
-        return RUSSIAN;
+        return BELARUSIAN;
     }
 }

@@ -30,7 +30,7 @@ public class SendMessageView implements View<SendMessage> {
     private final OfferService offerService;
     private final FeedbackService feedbackService;
 
-    private final List<State> statesNeededForOffersPageInit = List.of(MY_OFFERS, COURIERS_SEARCH_RESULT, CLIENTS_SEARCH_RESULT, ALL_OFFERS);
+    private final List<State> statesNeededForOffersPageInit = List.of(MY_OFFERS, SEARCH_RESULT, ALL_OFFERS);
 
     public SendMessage buildView(Long chatId, SessionData sessionData) {
         State state = sessionData.getStateHistory().peek();

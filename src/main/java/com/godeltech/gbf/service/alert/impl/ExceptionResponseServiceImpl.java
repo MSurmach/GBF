@@ -36,6 +36,4 @@ public class ExceptionResponseServiceImpl implements ExceptionResponseService {
                 .text(messageText)
                 .build();
     }
-
-
 }

@@ -1,7 +1,6 @@
 package com.godeltech.gbf.config;
 
 import com.godeltech.gbf.GbfBot;
-import com.godeltech.gbf.LocalMessageSource;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -51,11 +50,6 @@ public class ApplicationConfig {
         DefaultBotOptions defaultBotOptions = new DefaultBotOptions();
         defaultBotOptions.setGetUpdatesTimeout(100);
         return defaultBotOptions;
-    }
-
-    @Bean
-    public LocalMessageSource localeMessageSource(MessageSource messageSource) {
-        return new LocalMessageSource(messageSource);
     }
 
     @Bean

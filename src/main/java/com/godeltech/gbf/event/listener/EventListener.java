@@ -3,7 +3,6 @@ package com.godeltech.gbf.event.listener;
 import com.godeltech.gbf.event.NotificationEvent;
 import com.godeltech.gbf.service.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
@@ -22,8 +21,8 @@ public class EventListener implements AsyncConfigurer {
 
     @Async("threadPoolTaskExecutor")
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handleNotificationEvent(NotificationEvent notificationEvent){
-        log.info("Got notification event ={}",notificationEvent);
+    public void handleNotificationEvent(NotificationEvent notificationEvent) {
+        log.info("Got notification event ={}", notificationEvent);
         notificationService.makeNotifications(notificationEvent);
     }
 }
