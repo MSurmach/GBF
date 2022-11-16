@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class HandlerFactory implements Factory<HandlerType> {
+public class HandlerTypeFactory implements Factory<HandlerType, State> {
 
     private final Map<State, HandlerType> handlerContext;
 
-    public HandlerFactory(List<HandlerType> handlerTypes) {
+    public HandlerTypeFactory(List<HandlerType> handlerTypes) {
         this.handlerContext = handlerTypes.stream()
                 .collect(Collectors.toMap(HandlerType::getState, Function.identity()));
     }

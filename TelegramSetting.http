@@ -10,10 +10,10 @@ POST https://api.telegram.org/bot5706618703:AAFl63KXySJX1BxC7vJsYPLMOgvaLYNPNJU/
 POST https://api.telegram.org/bot5706618703:AAFl63KXySJX1BxC7vJsYPLMOgvaLYNPNJU/setWebhook?url=https://7043-178-124-214-152.eu.ngrok.io
 
 ###
-POST https://api.telegram.org/bot5706618703:AAFl63KXySJX1BxC7vJsYPLMOgvaLYNPNJU/sendMessage?chat_id=621620935&messageType=<b>Hello</b>, it's me&parse_mode=html
+POST https://api.telegram.org/bot5706618703:AAFl63KXySJX1BxC7vJsYPLMOgvaLYNPNJU/sendMessage?chat_id=621620935&textMessageType=<b>Hello</b>, it's me&parse_mode=html
 
 ###
 POST https://api.telegram.org/bot5706618703:AAGcJ_1iGj6c-CXrJ-ik_QNUpzbIb6S79t4/deleteMessage?chat_id=621620935&message_id=491
 
 ###
-POST https://api.telegram.org/bot5706618703:AAGcJ_1iGj6c-CXrJ-ik_QNUpzbIb6S79t4/sendMessage?chat_id=621620935&messageType=/start
+POST https://api.telegram.org/bot5706618703:AAGcJ_1iGj6c-CXrJ-ik_QNUpzbIb6S79t4/sendMessage?chat_id=621620935&textMessageType=/start
