@@ -1,7 +1,8 @@
 package com.godeltech.gbf.gui.text_message.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.text_message.TextMessageType;
+import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
@@ -19,7 +20,7 @@ import static com.godeltech.gbf.gui.utils.ConstantUtil.FEEDBACK_NOT_FOUND_CODE;
 @Component
 @AllArgsConstructor
 public class AllFeedbacksTextMessageType implements TextMessageType {
-    private final LocalMessageSource lms;
+    private final LocalMessageSourceFactory localMessageSourceFactory;
     private final TelegramUserService telegramUserService;
 
     @Override
@@ -29,6 +30,7 @@ public class AllFeedbacksTextMessageType implements TextMessageType {
 
     @Override
     public String getMessage(SessionData sessionData) {
+        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
         List<Feedback> feedbacks = sessionData.getFeedbacks();
         if (feedbacks == null || feedbacks.isEmpty()) return lms.getLocaleMessage(FEEDBACK_NOT_FOUND_CODE);
         StringBuilder feedBackMessageBuilder = new StringBuilder();

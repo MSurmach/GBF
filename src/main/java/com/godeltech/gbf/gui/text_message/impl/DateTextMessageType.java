@@ -1,8 +1,9 @@
 package com.godeltech.gbf.gui.text_message.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.text_message.TextMessageType;
 import com.godeltech.gbf.gui.utils.DateUtils;
+import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ import static com.godeltech.gbf.gui.utils.MessageUtils.datesDetails;
 @Slf4j
 public class DateTextMessageType implements TextMessageType {
 
-    private final LocalMessageSource lms;
+    private final LocalMessageSourceFactory localMessageSourceFactory;
 
     @Override
     public State getState() {
@@ -30,7 +31,8 @@ public class DateTextMessageType implements TextMessageType {
     @Override
     public String getMessage(SessionData sessionData) {
         log.debug("Create date message type for session data with user id : {} and username : {}",
-                sessionData.getTelegramUserId(),sessionData.getUsername() );
+                sessionData.getTelegramUserId(), sessionData.getUsername());
+        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
         String nowDate = DateUtils.shortFormatDate(LocalDate.now());
         String nowDateInfo = lms.getLocaleMessage(DATE_TODAY_CODE, nowDate);
         return nowDateInfo +

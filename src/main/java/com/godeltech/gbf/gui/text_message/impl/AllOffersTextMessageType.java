@@ -1,7 +1,8 @@
 package com.godeltech.gbf.gui.text_message.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.text_message.TextMessageType;
+import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
@@ -19,7 +20,7 @@ import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 @Service
 @AllArgsConstructor
 public class AllOffersTextMessageType implements TextMessageType {
-    private LocalMessageSource lms;
+    private final LocalMessageSourceFactory localMessageSourceFactory;
 
     @Override
     public State getState() {
@@ -28,15 +29,16 @@ public class AllOffersTextMessageType implements TextMessageType {
 
     @Override
     public String getMessage(SessionData sessionData) {
+        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
         Role role = sessionData.getRole();
         String username = sessionData.getUsername();
         Page<Offer> page = sessionData.getOffers();
-        if (page == null || page.isEmpty()) return offersNotFoundMessage(role, username);
+        if (page == null || page.isEmpty()) return offersNotFoundMessage(role, username, lms);
         StringBuilder messageBuilder = new StringBuilder();
-        messageBuilder.append(aboutMessage(sessionData));
+        messageBuilder.append(aboutMessage(sessionData, lms));
         for (Offer offer : page) {
-            messageBuilder.append(offerIdMessage(offer.getRole(), offer.getId())).
-                    append(offerHeaderMessage(offer)).
+            messageBuilder.append(offerIdMessage(offer, lms)).
+                    append(offerHeaderMessage(offer, lms)).
                     append(routeDetails(offer.getRoutePoints(), lms)).
                     append(datesDetails(offer.getStartDate(), offer.getEndDate(), lms)).
                     append(deliveryDetails(offer.getDelivery(), lms)).
@@ -47,25 +49,25 @@ public class AllOffersTextMessageType implements TextMessageType {
         return messageBuilder.toString();
     }
 
-    private String offersNotFoundMessage(Role role, String username) {
+    private String offerIdMessage(Offer offer, LocalMessageSource lms) {
+        return Objects.equals(offer.getRole(), Role.COURIER) ?
+                lms.getLocaleMessage(REGISTRATION_ID_CODE, offer.getId().toString()) :
+                lms.getLocaleMessage(REQUEST_ID_CODE, offer.getId().toString());
+    }
+
+    private String offersNotFoundMessage(Role role, String username, LocalMessageSource lms) {
         return Objects.equals(role, Role.REGISTRATIONS_VIEWER) ?
                 lms.getLocaleMessage(ALL_REGISTRATIONS_NOT_EXIST_CODE, username) :
                 lms.getLocaleMessage(ALL_REQUESTS_NOT_EXIST_CODE, username);
     }
 
-    private String offerHeaderMessage(Offer offer) {
+    private String offerHeaderMessage(Offer offer, LocalMessageSource lms) {
         return Objects.equals(offer.getRole(), Role.COURIER) ?
-                lms.getLocaleMessage(COURIER_HEADER, ModelUtils.getUserMention(offer)) :
-                lms.getLocaleMessage(CLIENT_HEADER, ModelUtils.getUserMention(offer));
+                lms.getLocaleMessage(COURIER_HEADER_CODE, ModelUtils.getUserMention(offer)) :
+                lms.getLocaleMessage(CLIENT_HEADER_CODE, ModelUtils.getUserMention(offer));
     }
 
-    private String offerIdMessage(Role role, Long offerId) {
-        return Objects.equals(role, Role.COURIER) ?
-                lms.getLocaleMessage(REGISTRATION_ID_CODE, offerId.toString()) :
-                lms.getLocaleMessage(REQUEST_ID_CODE, offerId.toString());
-    }
-
-    private String aboutMessage(SessionData sessionData) {
+    private String aboutMessage(SessionData sessionData, LocalMessageSource lms) {
         return Objects.equals(sessionData.getRole(), Role.REGISTRATIONS_VIEWER) ?
                 lms.getLocaleMessage(ALL_REGISTRATIONS_EXIST_CODE, ModelUtils.getUserMention(sessionData)) :
                 lms.getLocaleMessage(ALL_REQUESTS_EXIST_CODE, ModelUtils.getUserMention(sessionData));

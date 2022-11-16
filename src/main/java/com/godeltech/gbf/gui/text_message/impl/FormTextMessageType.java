@@ -1,7 +1,8 @@
 package com.godeltech.gbf.gui.text_message.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.text_message.TextMessageType;
+import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
@@ -17,7 +18,7 @@ import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 @Component
 @AllArgsConstructor
 public class FormTextMessageType implements TextMessageType {
-    private LocalMessageSource lms;
+    private final LocalMessageSourceFactory localMessageSourceFactory;
 
     @Override
     public State getState() {
@@ -26,8 +27,9 @@ public class FormTextMessageType implements TextMessageType {
 
     @Override
     public String getMessage(SessionData sessionData) {
-        return instructions(sessionData) +
-                detailsHeader(sessionData.getRole(), sessionData.isEmpty(), sessionData.getOfferId(), sessionData.isEditable()) +
+        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
+        return instructions(sessionData, lms) +
+                detailsHeader(sessionData.getRole(), sessionData.isEmpty(), sessionData.getOfferId(), sessionData.isEditable(), lms) +
                 routeDetails(sessionData.getRoute(), lms) +
                 datesDetails(sessionData.getStartDate(), sessionData.getEndDate(), lms) +
                 deliveryDetails(sessionData.getDelivery(), lms) +
@@ -35,7 +37,7 @@ public class FormTextMessageType implements TextMessageType {
                 commentDetails(sessionData.getComment(), lms);
     }
 
-    private String detailsHeader(Role role, boolean isEmptySession, Long offerId, boolean isEditable) {
+    private String detailsHeader(Role role, boolean isEmptySession, Long offerId, boolean isEditable, LocalMessageSource lms) {
         if (isEmptySession) return lms.getLocaleMessage(DETAILS_HEADER_EMPTY_CODE);
         if (!isEditable) return lms.getLocaleMessage(DETAILS_HEADER_FULL_CODE);
         return Objects.equals(role, Role.COURIER) ?
@@ -43,7 +45,7 @@ public class FormTextMessageType implements TextMessageType {
                 lms.getLocaleMessage(REQUEST_ID_CODE, offerId.toString());
     }
 
-    private String instructions(SessionData sessionData) {
+    private String instructions(SessionData sessionData, LocalMessageSource lms) {
         String message = null;
         switch (sessionData.getRole()) {
             case COURIER -> message = !sessionData.isEditable() ?
