@@ -1,7 +1,7 @@
-package com.godeltech.gbf.gui.message.impl;
+package com.godeltech.gbf.gui.text_message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.message.MessageType;
+import com.godeltech.gbf.gui.text_message.TextMessageType;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import lombok.extern.slf4j.Slf4j;
@@ -11,10 +11,10 @@ import static com.godeltech.gbf.gui.utils.ConstantUtil.YEAR_CODE;
 
 @Component
 @Slf4j
-public class YearMessageType implements MessageType {
+public class YearTextMessageType implements TextMessageType {
     private LocalMessageSource localMessageSource;
 
-    public YearMessageType(LocalMessageSource localMessageSource) {
+    public YearTextMessageType(LocalMessageSource localMessageSource) {
         this.localMessageSource = localMessageSource;
     }
 

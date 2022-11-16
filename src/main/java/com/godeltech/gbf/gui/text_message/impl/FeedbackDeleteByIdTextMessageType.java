@@ -1,7 +1,7 @@
-package com.godeltech.gbf.gui.message.impl;
+package com.godeltech.gbf.gui.text_message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.message.MessageType;
+import com.godeltech.gbf.gui.text_message.TextMessageType;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import static com.godeltech.gbf.gui.utils.ConstantUtil.DELETE_FEEDBACK_BY_ID_COD
 
 @Component
 @AllArgsConstructor
-public class FeedbackDeleteByIdMessageType implements MessageType {
+public class FeedbackDeleteByIdTextMessageType implements TextMessageType {
     private final LocalMessageSource lms;
 
     @Override

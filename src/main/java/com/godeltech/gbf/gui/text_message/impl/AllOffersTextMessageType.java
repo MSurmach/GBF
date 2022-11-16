@@ -1,7 +1,7 @@
-package com.godeltech.gbf.gui.message.impl;
+package com.godeltech.gbf.gui.text_message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.message.MessageType;
+import com.godeltech.gbf.gui.text_message.TextMessageType;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
@@ -18,7 +18,7 @@ import static com.godeltech.gbf.gui.utils.MessageUtils.*;
 
 @Service
 @AllArgsConstructor
-public class AllOffersMessageType implements MessageType {
+public class AllOffersTextMessageType implements TextMessageType {
     private LocalMessageSource lms;
 
     @Override

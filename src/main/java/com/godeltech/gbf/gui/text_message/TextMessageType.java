@@ -1,9 +1,9 @@
-package com.godeltech.gbf.gui.message;
+package com.godeltech.gbf.gui.text_message;
 
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.SessionData;
 
-public interface MessageType {
+public interface TextMessageType {
     State getState();
 
     String getMessage(SessionData sessionData);

@@ -1,7 +1,7 @@
-package com.godeltech.gbf.gui.message.impl;
+package com.godeltech.gbf.gui.text_message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.message.MessageType;
+import com.godeltech.gbf.gui.text_message.TextMessageType;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
@@ -14,7 +14,7 @@ import static com.godeltech.gbf.gui.utils.ConstantUtil.MENU_CODE;
 @Component
 @AllArgsConstructor
 @Slf4j
-public class MenuMessageType implements MessageType {
+public class MenuTextMessageType implements TextMessageType {
     private final LocalMessageSource localMessageSource;
 
     @Override

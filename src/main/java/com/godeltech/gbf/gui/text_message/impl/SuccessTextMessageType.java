@@ -1,7 +1,7 @@
-package com.godeltech.gbf.gui.message.impl;
+package com.godeltech.gbf.gui.text_message.impl;
 
 import com.godeltech.gbf.LocalMessageSource;
-import com.godeltech.gbf.gui.message.MessageType;
+import com.godeltech.gbf.gui.text_message.TextMessageType;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import lombok.extern.slf4j.Slf4j;
@@ -11,10 +11,10 @@ import static com.godeltech.gbf.gui.utils.ConstantUtil.SUCCESS_CODE;
 
 @Component
 @Slf4j
-public class SuccessMessageType implements MessageType {
+public class SuccessTextMessageType implements TextMessageType {
     private final LocalMessageSource localMessageSource;
 
-    public SuccessMessageType(LocalMessageSource localMessageSource) {
+    public SuccessTextMessageType(LocalMessageSource localMessageSource) {
         this.localMessageSource = localMessageSource;
     }
 
