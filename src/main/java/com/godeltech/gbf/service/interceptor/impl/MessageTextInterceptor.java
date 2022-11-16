@@ -3,7 +3,7 @@ package com.godeltech.gbf.service.interceptor.impl;
 import com.godeltech.gbf.cache.SessionDataCache;
 import com.godeltech.gbf.exception.InsufficientInputException;
 import com.godeltech.gbf.exception.WrongInputException;
-import com.godeltech.gbf.factory.impl.HandlerFactory;
+import com.godeltech.gbf.factory.impl.HandlerTypeFactory;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
@@ -25,7 +25,7 @@ import static com.godeltech.gbf.model.State.*;
 @Service
 @Slf4j
 public class MessageTextInterceptor implements Interceptor {
-    private final HandlerFactory handlerFactory;
+    private final HandlerTypeFactory handlerTypeFactory;
     private final View<? extends BotApiMethod<?>> view;
 
     private final BotMessageService botMessageService;
@@ -34,8 +34,8 @@ public class MessageTextInterceptor implements Interceptor {
     @Getter
     private Long chatId;
 
-    public MessageTextInterceptor(HandlerFactory handlerFactory, View<SendMessage> view, BotMessageService botMessageService) {
-        this.handlerFactory = handlerFactory;
+    public MessageTextInterceptor(HandlerTypeFactory handlerTypeFactory, View<SendMessage> view, BotMessageService botMessageService) {
+        this.handlerTypeFactory = handlerTypeFactory;
         this.view = view;
         this.botMessageService = botMessageService;
     }
@@ -68,7 +68,7 @@ public class MessageTextInterceptor implements Interceptor {
         if (currentState == SEATS || currentState == COMMENT || currentState == FEEDBACK || currentState == OFFER_ID_INPUT || currentState== FEEDBACK_DELETE_BY_ID) {
             String text = update.getMessage().getText();
             cached.getCallbackHistory().push(text);
-            HandlerType handlerType = handlerFactory.get(currentState);
+            HandlerType handlerType = handlerTypeFactory.get(currentState);
             return handlerType.handle(cached);
         } else throw new WrongInputException();
     }

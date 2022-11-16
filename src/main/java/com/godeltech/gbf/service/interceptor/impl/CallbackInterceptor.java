@@ -2,7 +2,7 @@ package com.godeltech.gbf.service.interceptor.impl;
 
 import com.godeltech.gbf.cache.SessionDataCache;
 import com.godeltech.gbf.exception.CachedUserDataNotFound;
-import com.godeltech.gbf.factory.impl.HandlerFactory;
+import com.godeltech.gbf.factory.impl.HandlerTypeFactory;
 import com.godeltech.gbf.gui.button.NavigationBotButton;
 import com.godeltech.gbf.gui.button.PaginationButton;
 import com.godeltech.gbf.model.ModelUtils;
@@ -31,7 +31,7 @@ import static com.godeltech.gbf.service.interceptor.InterceptorTypes.CALLBACK;
 @Service
 @Slf4j
 public class CallbackInterceptor implements Interceptor {
-    private final HandlerFactory handlerFactory;
+    private final HandlerTypeFactory handlerTypeFactory;
     private final BotMessageService botMessageService;
     private final View<? extends BotApiMethod<?>> view;
     @Getter
@@ -39,8 +39,8 @@ public class CallbackInterceptor implements Interceptor {
     @Getter
     private Long chatId;
 
-    public CallbackInterceptor(HandlerFactory handlerFactory, View<? extends BotApiMethod<?>> view, BotMessageService botMessageService) {
-        this.handlerFactory = handlerFactory;
+    public CallbackInterceptor(HandlerTypeFactory handlerTypeFactory, View<? extends BotApiMethod<?>> view, BotMessageService botMessageService) {
+        this.handlerTypeFactory = handlerTypeFactory;
         this.view = view;
         this.botMessageService = botMessageService;
     }
@@ -96,7 +96,7 @@ public class CallbackInterceptor implements Interceptor {
             SessionData sessionData = SessionDataCache.get(telegramUserId);
             return switch (botButton) {
                 case BACK -> {
-                    HandlerType handlerType = handlerFactory.get(BACK);
+                    HandlerType handlerType = handlerTypeFactory.get(BACK);
                     yield handlerType.handle(sessionData);
                 }
                 case MENU -> {
@@ -142,7 +142,7 @@ public class CallbackInterceptor implements Interceptor {
             log.info(illegalArgumentException.getMessage());
             SessionData cached = SessionDataCache.get(telegramUserId);
             State currentState = cached.getStateHistory().peek();
-            HandlerType handlerType = handlerFactory.get(currentState);
+            HandlerType handlerType = handlerTypeFactory.get(currentState);
             return handlerType.handle(cached);
         }
     }
