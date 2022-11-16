@@ -1,8 +1,9 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
+import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Delivery;
@@ -26,7 +27,7 @@ import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 @AllArgsConstructor
 public class DeliveryKeyboardType implements KeyboardType {
 
-    private LocalMessageSource lms;
+    private final LocalMessageSourceFactory localMessageSourceFactory;
 
     @Override
     public State getState() {
@@ -37,6 +38,7 @@ public class DeliveryKeyboardType implements KeyboardType {
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
         log.debug("Create delivery keyboard type for session data with user id : {} and username : {}",
                 sessionData.getTelegramUserId(), sessionData.getUsername());
+        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         Delivery[] deliveries = Delivery.values();
         Delivery selectedDelivery = sessionData.getDelivery();
@@ -47,7 +49,7 @@ public class DeliveryKeyboardType implements KeyboardType {
                 Delivery delivery = deliveries[index];
                 deliveryButtonRow.add(
                         !Objects.isNull(selectedDelivery) && Objects.equals(delivery, selectedDelivery) ?
-                                createButton(attachMarkToLabel(delivery.name()), delivery.name()) :
+                                createButton(lms.getLocaleMessage(delivery.name()) + lms.getLocaleMessage(DELIVERY_MARKER_CODE), delivery.name()) :
                                 createLocalButton(delivery.name(), delivery.name(), lms));
                 columnCount--;
                 index++;
@@ -57,9 +59,5 @@ public class DeliveryKeyboardType implements KeyboardType {
         return new KeyboardMarkupAppender(new InlineKeyboardMarkup(keyboard)).
                 append(backAndMenuMarkup(lms)).
                 result();
-    }
-
-    private String attachMarkToLabel(String label) {
-        return lms.getLocaleMessage(label) + lms.getLocaleMessage(DELIVERY_MARKER_CODE);
     }
 }

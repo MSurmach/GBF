@@ -1,9 +1,10 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.utils.KeyboardUtils;
+import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
@@ -14,17 +15,18 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 @Component
 @AllArgsConstructor
-public class ClientListKeyboardType implements KeyboardType {
-    private final LocalMessageSource lms;
+public class SearchResultKeyboardType implements KeyboardType {
+    private final LocalMessageSourceFactory localMessageSourceFactory;
     private final PaginationKeyboardType paginationKeyboardType;
 
     @Override
     public State getState() {
-        return State.CLIENTS_SEARCH_RESULT;
+        return State.SEARCH_RESULT;
     }
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
+        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
         Page<Offer> page = sessionData.getOffers();
         if (page == null || page.isEmpty()) return KeyboardUtils.menuMarkup(lms);
         return new KeyboardMarkupAppender().

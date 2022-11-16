@@ -1,7 +1,8 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
+import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButton;
 public class MenuKeyboardType implements KeyboardType {
     @Value("#{'${adminIdList}'.split(',')}")
     private List<Long> adminIdList;
-    private LocalMessageSource lms;
+    private final LocalMessageSourceFactory localMessageSourceFactory;
 
     @Override
     public State getState() {
@@ -34,6 +35,7 @@ public class MenuKeyboardType implements KeyboardType {
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
         log.debug("Create main menu keyboard type for session data with user id : {} and username : {}",
                 sessionData.getTelegramUserId(), sessionData.getUsername());
+        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
         var courierButton = createLocalButton(START_AS_COURIER, lms);
         var clientButton = createLocalButton(START_AS_CLIENT, lms);
         var myRegistrationsButton = createLocalButton(LOOK_AT_MY_REGISTRATIONS, lms);
@@ -45,11 +47,11 @@ public class MenuKeyboardType implements KeyboardType {
         keyboard.add(List.of(clientButton));
         keyboard.add(List.of(myRegistrationsButton, myRequestsButton));
         keyboard.add(List.of(lookAtAllRegistrationsButton, lookAtAllRequestsButton));
-        keyboard.add(feedbackButtonsRow(sessionData.getTelegramUserId()));
+        keyboard.add(feedbackButtonsRow(sessionData.getTelegramUserId(), lms));
         return new InlineKeyboardMarkup(keyboard);
     }
 
-    private List<InlineKeyboardButton> feedbackButtonsRow(Long telegramUserId) {
+    private List<InlineKeyboardButton> feedbackButtonsRow(Long telegramUserId, LocalMessageSource lms) {
         var sendFeedbackButton = createLocalButton(SEND_FEEDBACK, lms);
         var lookAtFeedbacksButton = createLocalButton(LOOK_AT_FEEDBACKS, lms);
         return adminIdList.contains(telegramUserId) ?

@@ -1,9 +1,10 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.utils.ButtonUtils;
+import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.City;
@@ -29,7 +30,7 @@ import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 @Slf4j
 public class RouteKeyboardType implements KeyboardType {
 
-    private LocalMessageSource lms;
+    private final LocalMessageSourceFactory localMessageSourceFactory;
     private CityService cityService;
 
     @Override
@@ -40,7 +41,8 @@ public class RouteKeyboardType implements KeyboardType {
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
         log.debug("Create route keyboard type for session data with user id : {} and username : {}",
-                sessionData.getTelegramUserId(),sessionData.getUsername() );
+                sessionData.getTelegramUserId(), sessionData.getUsername());
+        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
         List<City> allCities = cityService.findAll();
         LinkedList<RoutePoint> route = sessionData.getTempRoute();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
@@ -50,7 +52,7 @@ public class RouteKeyboardType implements KeyboardType {
             while (columnCount > 0 && index != allCities.size()) {
                 City city = allCities.get(index);
                 Optional<RoutePoint> found = route.stream().filter(routePoint -> routePoint.getCity().equals(city)).findFirst();
-                String statusLabel = found.map(this::statusLabel).orElse(null);
+                String statusLabel = found.map(routePoint -> statusLabel(routePoint, lms)).orElse(null);
                 String cityName = city.getName();
                 citiesRow.add(ButtonUtils.createLocalButtonWithData(statusLabel, cityName, SELECT_CITY, cityName, lms));
                 columnCount--;
@@ -59,20 +61,20 @@ public class RouteKeyboardType implements KeyboardType {
             keyboard.add(citiesRow);
         }
         if (!route.isEmpty())
-            keyboard.add(routeControlsRow());
+            keyboard.add(routeControlsRow(lms));
         InlineKeyboardMarkup countryKeyboardMarkup = new InlineKeyboardMarkup(keyboard);
         return new KeyboardMarkupAppender(countryKeyboardMarkup).
                 append(backAndMenuMarkup(lms)).
                 result();
     }
 
-    private List<InlineKeyboardButton> routeControlsRow() {
+    private List<InlineKeyboardButton> routeControlsRow(LocalMessageSource lms) {
         var clearButton = createLocalButton(CLEAR_ROUTE, lms);
         var confirmRouteButton = createLocalButton(CONFIRM_ROUTE, lms);
         return List.of(clearButton, confirmRouteButton);
     }
 
-    private String statusLabel(RoutePoint routePoint) {
+    private String statusLabel(RoutePoint routePoint, LocalMessageSource lms) {
         final String INITIAL_STATUS_LABEL_CODE = "start.flag";
         final String FINAL_STATUS_LABEL_CODE = "end.flag";
         return switch (routePoint.getStatus()) {
