@@ -115,4 +115,7 @@ public class ConstantUtil {
 
     //Language
     public final static String LANGUAGE_QUESTION_CODE = "language.question";
+
+    //Admin instruments
+    public final static String ADMIN_INSTRUMENTS_QUESTION_CODE = "adminInstruments.question";
 }
