@@ -1,7 +1,7 @@
 package com.godeltech.gbf.gui.utils;
 
-import com.godeltech.gbf.LocalMessageSource;
 import com.godeltech.gbf.gui.button.BotButton;
+import com.godeltech.gbf.localization.LocalMessageSource;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import static com.godeltech.gbf.gui.utils.ConstantUtil.*;

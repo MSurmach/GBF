@@ -42,7 +42,7 @@ public class RouteHandlerType implements HandlerType {
                 normalizeRoutePointsOrders(tempRoute);
             }
             case CONFIRM_ROUTE -> {
-                routeValidator.checkRouteHasMoreOrEqualsThan2Points(tempRoute, sessionData.getCallbackQueryId());
+                routeValidator.checkRouteHasMoreOrEqualsThan2Points(tempRoute, sessionData.getCallbackQueryId(), sessionData.getLanguage());
                 sessionData.setRoute(new LinkedList<>(tempRoute));
                 tempRoute.clear();
             }

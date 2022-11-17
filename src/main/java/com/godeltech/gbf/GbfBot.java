@@ -63,7 +63,7 @@ public class GbfBot extends SpringWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        Interceptor interceptor = interceptorFactory.getInterceptor(update);
+        Interceptor interceptor = interceptorFactory.get(update);
         BotApiMethod<?> method = interceptor.intercept(update);
         if (interceptor.getType() == InterceptorTypes.MESSAGE_ENTITY)
             addMenuCommands(update.getMessage());

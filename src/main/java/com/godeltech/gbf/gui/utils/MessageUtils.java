@@ -1,6 +1,6 @@
 package com.godeltech.gbf.gui.utils;
 
-import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.db.Delivery;
 import com.godeltech.gbf.model.db.RoutePoint;
 

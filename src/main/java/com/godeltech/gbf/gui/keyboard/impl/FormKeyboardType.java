@@ -1,9 +1,10 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.utils.MessageUtils;
+import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
@@ -31,7 +32,7 @@ import static com.godeltech.gbf.model.Role.COURIER;
 @AllArgsConstructor
 public class FormKeyboardType implements KeyboardType {
 
-    private final LocalMessageSource lms;
+    private final LocalMessageSourceFactory localMessageSourceFactory;
 
     @Override
     public State getState() {
@@ -42,18 +43,19 @@ public class FormKeyboardType implements KeyboardType {
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
         log.debug("Create form keyboard type for session data with user id : {} and username : {}",
                 sessionData.getTelegramUserId(), sessionData.getUsername());
+        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         boolean isRouteEmpty = sessionData.getRoute().isEmpty();
-        keyboard.add(routeButton(sessionData.getRoute()));
+        keyboard.add(routeButton(sessionData.getRoute(), lms));
         if (!isRouteEmpty)
-            keyboard.add(datesButton(sessionData.getStartDate(), sessionData.getEndDate()));
-        keyboard.add(deliveryButton(sessionData.getDelivery()));
-        keyboard.add(seatsButton(sessionData.getSeats()));
-        keyboard.add(commentButton(sessionData.getComment()));
+            keyboard.add(datesButton(sessionData.getStartDate(), sessionData.getEndDate(), lms));
+        keyboard.add(deliveryButton(sessionData.getDelivery(), lms));
+        keyboard.add(seatsButton(sessionData.getSeats(), lms));
+        keyboard.add(commentButton(sessionData.getComment(), lms));
         keyboard.add(
                 sessionData.isEditable() ?
-                        saveChangesButton() :
-                        confirmButton(sessionData.getRole())
+                        saveChangesButton(lms) :
+                        confirmButton(sessionData.getRole(), lms)
         );
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(keyboard);
         return new KeyboardMarkupAppender(keyboardMarkup).
@@ -61,46 +63,46 @@ public class FormKeyboardType implements KeyboardType {
                 result();
     }
 
-    private List<InlineKeyboardButton> routeButton(List<RoutePoint> route) {
+    private List<InlineKeyboardButton> routeButton(List<RoutePoint> route, LocalMessageSource lms) {
         if (route.isEmpty()) return List.of(createLocalButton(ADD_ROUTE, lms));
         String routeContent = MessageUtils.routeContent(route, false, lms);
         String label = lms.getLocaleMessage(EDIT_ROUTE.name(), routeContent);
         return List.of(createButton(label, EDIT_ROUTE));
     }
 
-    private List<InlineKeyboardButton> datesButton(LocalDate startDate, LocalDate endDate) {
+    private List<InlineKeyboardButton> datesButton(LocalDate startDate, LocalDate endDate, LocalMessageSource lms) {
         if (Objects.isNull(startDate)) return List.of(createLocalButton(ADD_DATES, lms));
         String datesContent = MessageUtils.datesContent(startDate, endDate);
         String label = lms.getLocaleMessage(EDIT_DATES.name(), datesContent);
         return List.of(createButton(label, EDIT_DATES));
     }
 
-    private List<InlineKeyboardButton> deliveryButton(Delivery delivery) {
+    private List<InlineKeyboardButton> deliveryButton(Delivery delivery, LocalMessageSource lms) {
         if (Objects.isNull(delivery))
             return List.of(createLocalButton(ADD_DELIVERY, lms));
         String label = lms.getLocaleMessage(EDIT_DELIVERY.name(), MessageUtils.deliveryContent(delivery, lms));
         return List.of(createButton(label, EDIT_DELIVERY));
     }
 
-    private List<InlineKeyboardButton> seatsButton(Integer seats) {
+    private List<InlineKeyboardButton> seatsButton(Integer seats, LocalMessageSource lms) {
         if (Objects.equals(seats, 0)) return List.of(createLocalButton(ADD_SEATS, lms));
         String label = lms.getLocaleMessage(EDIT_SEATS.name(), seats.toString());
         return List.of(createButton(label, EDIT_SEATS));
     }
 
-    private List<InlineKeyboardButton> commentButton(String comment) {
+    private List<InlineKeyboardButton> commentButton(String comment, LocalMessageSource lms) {
         return Objects.isNull(comment) ?
                 List.of(createLocalButton(ADD_COMMENT, lms)) :
                 List.of(createLocalButton(EDIT_COMMENT, lms));
     }
 
-    private List<InlineKeyboardButton> confirmButton(Role role) {
+    private List<InlineKeyboardButton> confirmButton(Role role, LocalMessageSource lms) {
         return Objects.equals(role, COURIER) ?
                 List.of(createLocalButton(REGISTER, lms)) :
                 List.of(createLocalButton(SEARCH_CLIENTS, lms));
     }
 
-    private List<InlineKeyboardButton> saveChangesButton() {
+    private List<InlineKeyboardButton> saveChangesButton(LocalMessageSource lms) {
         return List.of(createLocalButton(SAVE_CHANGES, lms));
     }
 }

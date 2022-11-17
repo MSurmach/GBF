@@ -33,17 +33,15 @@ public class SessionData {
     private LocalDate endDate;
     private Role role;
     private String callbackQueryId;
-
     private LinkedList<State> stateHistory = new LinkedList<>();
-
     private LinkedList<String> callbackHistory = new LinkedList<>();
-
     private Page<Offer> offers;
     private List<Feedback> feedbacks;
     private int pageNumber;
     private Offer searchOffer;
     private boolean isEditable;
     private Long tempOfferId;
+    private String language;
 
     public void clearTemp() {
         tempStartDate = null;
@@ -51,11 +49,12 @@ public class SessionData {
         tempRoute = new LinkedList<>();
     }
 
-    public SessionData(Long telegramUserId, String username, String firstName, String lastName) {
+    public SessionData(Long telegramUserId, String username, String firstName, String lastName, String language) {
         this.telegramUserId = telegramUserId;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.language = language;
     }
 
     public boolean isEmpty() {

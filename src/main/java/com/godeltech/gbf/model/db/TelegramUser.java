@@ -30,4 +30,6 @@ public class TelegramUser {
     @Column
     private String userName;
 
+    @Column
+    private String language;
 }

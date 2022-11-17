@@ -5,8 +5,9 @@ import com.godeltech.gbf.model.db.TelegramUser;
 
 import java.util.LinkedList;
 
-public class ModelUtils {
+import static com.godeltech.gbf.gui.utils.ConstantUtil.LINK_TO_USER_PATTERN;
 
+public class ModelUtils {
     public static Offer mapSessionDataToOffer(SessionData sessionData) {
         Offer offer = Offer.builder().
                 id(sessionData.getOfferId()).
@@ -77,5 +78,17 @@ public class ModelUtils {
         to.setRole(from.getRole());
         to.setStartDate(from.getStartDate());
         to.setEndDate(from.getEndDate());
+    }
+
+    public static String getUserMention(SessionData sessionData) {
+        return String.format(LINK_TO_USER_PATTERN, sessionData.getTelegramUserId(), sessionData.getUsername());
+    }
+
+    public static String getUserMention(Offer offer) {
+        return String.format(LINK_TO_USER_PATTERN, offer.getTelegramUser().getId(), offer.getTelegramUser().getUserName());
+    }
+
+    public static String getUserMention(TelegramUser telegramUser) {
+        return String.format(LINK_TO_USER_PATTERN, telegramUser.getId(), telegramUser.getUserName());
     }
 }

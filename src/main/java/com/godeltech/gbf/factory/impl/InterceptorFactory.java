@@ -1,5 +1,6 @@
 package com.godeltech.gbf.factory.impl;
 
+import com.godeltech.gbf.factory.Factory;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.interceptor.InterceptorTypes;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class InterceptorFactory {
+public class InterceptorFactory implements Factory<Interceptor, Update> {
 
     private final Map<InterceptorTypes, Interceptor> interceptorContext;
 
@@ -22,15 +23,14 @@ public class InterceptorFactory {
                 .collect(Collectors.toMap(Interceptor::getType, Function.identity()));
     }
 
-    public Interceptor getInterceptor(Update update) {
+    public Interceptor get(Update update) {
         if (update.hasCallbackQuery()) {
             log.info("Get callback interceptor by user : {}", update.getCallbackQuery().getFrom().getUserName());
             return interceptorContext.get(InterceptorTypes.CALLBACK);
-        } else {
-            log.info("Get message interceptors by user : {}", update.getMessage().getFrom().getUserName());
-            return update.getMessage().hasEntities() ?
-                    interceptorContext.get(InterceptorTypes.MESSAGE_ENTITY) :
-                    interceptorContext.get(InterceptorTypes.MESSAGE_TEXT);
         }
+        log.info("Get message interceptors by user : {}", update.getMessage().getFrom().getUserName());
+        return update.getMessage().hasEntities() ?
+                interceptorContext.get(InterceptorTypes.MESSAGE_ENTITY) :
+                interceptorContext.get(InterceptorTypes.MESSAGE_TEXT);
     }
 }

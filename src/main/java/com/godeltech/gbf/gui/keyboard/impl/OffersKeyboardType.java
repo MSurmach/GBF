@@ -1,9 +1,10 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.utils.KeyboardUtils;
+import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
@@ -24,7 +25,7 @@ import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButtonWithData;
 @Component
 @AllArgsConstructor
 public class OffersKeyboardType implements KeyboardType {
-    private final LocalMessageSource lms;
+    private final LocalMessageSourceFactory localMessageSourceFactory;
     private final PaginationKeyboardType paginationKeyboardType;
 
     @Override
@@ -34,6 +35,7 @@ public class OffersKeyboardType implements KeyboardType {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
+        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
         Page<Offer> page = sessionData.getOffers();
         if (page == null || page.isEmpty()) return KeyboardUtils.menuMarkup(lms);
         String offerId = page.getContent().get(0).getId().toString();
@@ -44,7 +46,8 @@ public class OffersKeyboardType implements KeyboardType {
                 createLocalButtonWithData(OFFER_FIND_CLIENTS, offerId, lms) :
                 createLocalButtonWithData(OFFER_FIND_COURIERS, offerId, lms);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        keyboard.add(List.of(editButton, deleteButton, findByIdButton, findButton));
+        keyboard.add(List.of(findButton));
+        keyboard.add(List.of(editButton, deleteButton, findByIdButton));
         var keyboardMarkup = new InlineKeyboardMarkup(keyboard);
         return new KeyboardMarkupAppender(keyboardMarkup).
                 append(paginationKeyboardType.getKeyboardMarkup(sessionData)).

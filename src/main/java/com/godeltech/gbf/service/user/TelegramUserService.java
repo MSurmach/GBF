@@ -1,11 +1,12 @@
 package com.godeltech.gbf.service.user;
 
-import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.db.TelegramUser;
 
-public interface TelegramUserService {
-    TelegramUser saveUser(Long id, String username);
+import java.util.Optional;
 
-    TelegramUser findById(Long id);
+public interface TelegramUserService {
+    TelegramUser saveUser(Long id, String username, String language);
+
+    Optional<TelegramUser> findById(Long id);
 
 }

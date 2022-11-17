@@ -1,9 +1,9 @@
 package com.godeltech.gbf.service.view.impl;
 
-import com.godeltech.gbf.factory.impl.KeyboardFactory;
-import com.godeltech.gbf.factory.impl.MessageFactory;
+import com.godeltech.gbf.factory.impl.KeyboardTypeFactory;
+import com.godeltech.gbf.factory.impl.TextMessageTypeFactory;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
-import com.godeltech.gbf.gui.message.MessageType;
+import com.godeltech.gbf.gui.text_message.TextMessageType;
 import com.godeltech.gbf.model.Role;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
@@ -25,25 +25,25 @@ import static com.godeltech.gbf.model.State.*;
 @AllArgsConstructor
 public class SendMessageView implements View<SendMessage> {
 
-    private final MessageFactory messageFactory;
-    private final KeyboardFactory keyboardFactory;
+    private final TextMessageTypeFactory textMessageTypeFactory;
+    private final KeyboardTypeFactory keyboardTypeFactory;
     private final OfferService offerService;
     private final FeedbackService feedbackService;
 
-    private final List<State> statesNeededForOffersPageInit = List.of(MY_OFFERS, COURIERS_SEARCH_RESULT, CLIENTS_SEARCH_RESULT, ALL_OFFERS);
+    private final List<State> statesNeededForOffersPageInit = List.of(MY_OFFERS, SEARCH_RESULT, ALL_OFFERS);
 
     public SendMessage buildView(Long chatId, SessionData sessionData) {
         State state = sessionData.getStateHistory().peek();
         if (statesNeededForOffersPageInit.contains(state)) initOffersPage(sessionData);
         if (Objects.equals(state, ALL_FEEDBACKS))
             sessionData.setFeedbacks(feedbackService.findAllFeedbacks());
-        MessageType messageType = messageFactory.get(state);
-        KeyboardType keyboardType = keyboardFactory.get(state);
+        TextMessageType textMessageType = textMessageTypeFactory.get(state);
+        KeyboardType keyboardType = keyboardTypeFactory.get(state);
         return SendMessage.
                 builder().
                 chatId(chatId).
                 parseMode("html").
-                text(messageType.getMessage(sessionData)).
+                text(textMessageType.getMessage(sessionData)).
                 replyMarkup(keyboardType.getKeyboardMarkup(sessionData)).build();
     }
 

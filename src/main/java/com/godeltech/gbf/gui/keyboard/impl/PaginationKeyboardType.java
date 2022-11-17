@@ -1,7 +1,8 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
+import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButton;
 @AllArgsConstructor
 @Slf4j
 public class PaginationKeyboardType implements KeyboardType {
-    private LocalMessageSource lms;
+    private final LocalMessageSourceFactory localMessageSourceFactory;
 
     @Override
     public State getState() {
@@ -30,6 +31,7 @@ public class PaginationKeyboardType implements KeyboardType {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
+        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
         log.debug("Create pagination keyboard type for session data with user id : {} and username : {}",
                 sessionData.getTelegramUserId(),sessionData.getUsername() );
         var startButton = createLocalButton(PAGE_START, lms);

@@ -1,7 +1,5 @@
 package com.godeltech.gbf.factory;
 
-import com.godeltech.gbf.model.State;
-
-public interface Factory<T> {
-    T get(State state);
+public interface Factory<T, P> {
+    T get(P arg);
 }

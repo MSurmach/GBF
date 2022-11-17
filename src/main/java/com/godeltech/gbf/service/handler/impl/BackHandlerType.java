@@ -25,13 +25,15 @@ public class BackHandlerType implements HandlerType {
         stateAndBackStateMap.put(ROUTE, FORM);
         stateAndBackStateMap.put(YEAR, DATE);
         stateAndBackStateMap.put(MONTH, DATE);
-        stateAndBackStateMap.put(COURIERS_SEARCH_RESULT, MY_OFFERS);
-        stateAndBackStateMap.put(CLIENTS_SEARCH_RESULT, MY_OFFERS);
+        stateAndBackStateMap.put(SEARCH_RESULT, MY_OFFERS);
         stateAndBackStateMap.put(ALL_OFFERS, MENU);
         stateAndBackStateMap.put(FEEDBACK, MENU);
         stateAndBackStateMap.put(ALL_FEEDBACKS, MENU);
         stateAndBackStateMap.put(OFFER_ID_INPUT, MY_OFFERS);
         stateAndBackStateMap.put(OFFER_BY_ID_NOT_FOUND, MY_OFFERS);
+        stateAndBackStateMap.put(SUCCESS_REGISTRATION, FORM);
+        stateAndBackStateMap.put(THANKS_FOR_FEEDBACK, FEEDBACK);
+
     }
 
     @Override
@@ -42,6 +44,8 @@ public class BackHandlerType implements HandlerType {
     @Override
     public State handle(SessionData sessionData) {
         State currentState = sessionData.getStateHistory().pop();
-        return stateAndBackStateMap.get(currentState);
+        State backState = stateAndBackStateMap.get(currentState);
+        if (backState == MENU) ModelUtils.resetSessionData(sessionData);
+        return backState;
     }
 }

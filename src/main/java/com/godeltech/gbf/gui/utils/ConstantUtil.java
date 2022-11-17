@@ -1,6 +1,10 @@
 package com.godeltech.gbf.gui.utils;
 
 public class ConstantUtil {
+    public static final String EN_CODE = "en";
+    public final static String RU_CODE = "ru";
+    public final static String BE_CODE = "be";
+    public static final String LINK_TO_USER_PATTERN = "<a href=\"tg://user?id=%d\">%s</a>";
     public final static String EMPTY = "";
     public final static String SPACE = " ";
     public final static String SPLITTER = ":";
@@ -8,14 +12,14 @@ public class ConstantUtil {
     //    Client list mess type
     public final static String CLIENTS_EXIST_CODE = "clients.exist";
     public final static String CLIENTS_NOT_EXIST_CODE = "clients.notExist";
-    public final static String CLIENT_HEADER = "client.header";
+    public final static String CLIENT_HEADER_CODE = "client.header";
 
     //    comment
     public final static String COMMENT_CODE = "comment";
     //courier list
-    public final static String COURIERS_EXIST = "couriers.exist";
-    public final static String COURIERS_NOT_EXIST = "couriers.notExist";
-    public final static String COURIER_HEADER = "courier.header";
+    public final static String COURIERS_EXIST_CODE = "couriers.exist";
+    public final static String COURIERS_NOT_EXIST_CODE = "couriers.notExist";
+    public final static String COURIER_HEADER_CODE = "courier.header";
 
     //    date message type
     public final static String DATE_QUESTION_CODE = "date.question";
@@ -108,4 +112,7 @@ public class ConstantUtil {
 
     //Delete feedback by id
     public final static String DELETE_FEEDBACK_BY_ID_CODE = "feedback.delete.question";
+
+    //Language
+    public final static String LANGUAGE_QUESTION_CODE = "language.question";
 }

@@ -1,5 +1,5 @@
 package com.godeltech.gbf.service.interceptor;
 
 public enum InterceptorTypes {
-    CALLBACK, MESSAGE_TEXT,MESSAGE_ENTITY
+    CALLBACK, MESSAGE_TEXT, MESSAGE_ENTITY
 }

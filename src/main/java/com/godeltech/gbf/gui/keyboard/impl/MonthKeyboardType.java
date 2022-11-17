@@ -1,11 +1,12 @@
 package com.godeltech.gbf.gui.keyboard.impl;
 
-import com.godeltech.gbf.LocalMessageSource;
+import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
-import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.gui.utils.ButtonUtils;
+import com.godeltech.gbf.localization.LocalMessageSource;
+import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,7 @@ import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 @AllArgsConstructor
 @Slf4j
 public class MonthKeyboardType implements KeyboardType {
-    private LocalMessageSource lms;
+    private final LocalMessageSourceFactory localMessageSourceFactory;
 
     @Override
     public State getState() {
@@ -37,13 +38,14 @@ public class MonthKeyboardType implements KeyboardType {
 
     @Override
     public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
+        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
         String callback = sessionData.getCallbackHistory().peek();
         String date = callback.split(":")[1];
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         LocalDate callBackDate = LocalDate.parse(date);
         log.debug("Create month keyboard type for session data with user id : {} and username : {} with income date : {}",
-                sessionData.getTelegramUserId(),sessionData.getUsername(),callBackDate );
-        addYearHeader(callBackDate, keyboard);
+                sessionData.getTelegramUserId(), sessionData.getUsername(), callBackDate);
+        addYearHeader(callBackDate, keyboard, lms);
         Month[] months = Month.values();
         for (var index = 0; index < months.length; ) {
             var columnCount = 3;
@@ -64,7 +66,7 @@ public class MonthKeyboardType implements KeyboardType {
                 result();
     }
 
-    private void addYearHeader(LocalDate date, List<List<InlineKeyboardButton>> keyboard) {
+    private void addYearHeader(LocalDate date, List<List<InlineKeyboardButton>> keyboard, LocalMessageSource lms) {
         var prevYearButton = createLocalButtonWithData(
                 PREVIOUS, date.minusYears(1).toString(), lms);
         var nextYearButton = createLocalButtonWithData(

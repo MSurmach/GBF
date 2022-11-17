@@ -2,17 +2,19 @@ package com.godeltech.gbf.service.interceptor.impl;
 
 import com.godeltech.gbf.cache.SessionDataCache;
 import com.godeltech.gbf.exception.CachedUserDataNotFound;
-import com.godeltech.gbf.factory.impl.HandlerFactory;
+import com.godeltech.gbf.factory.impl.HandlerTypeFactory;
 import com.godeltech.gbf.gui.button.NavigationBotButton;
 import com.godeltech.gbf.gui.button.PaginationButton;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.SessionData;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
+import com.godeltech.gbf.model.db.TelegramUser;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.interceptor.InterceptorTypes;
+import com.godeltech.gbf.service.user.TelegramUserService;
 import com.godeltech.gbf.service.view.View;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
+import java.util.Optional;
+
 import static com.godeltech.gbf.model.State.BACK;
 import static com.godeltech.gbf.model.State.MENU;
 import static com.godeltech.gbf.service.interceptor.InterceptorTypes.CALLBACK;
@@ -31,18 +35,20 @@ import static com.godeltech.gbf.service.interceptor.InterceptorTypes.CALLBACK;
 @Service
 @Slf4j
 public class CallbackInterceptor implements Interceptor {
-    private final HandlerFactory handlerFactory;
+    private final HandlerTypeFactory handlerTypeFactory;
     private final BotMessageService botMessageService;
+    private final TelegramUserService telegramUserService;
     private final View<? extends BotApiMethod<?>> view;
     @Getter
     private Long telegramUserId;
     @Getter
     private Long chatId;
 
-    public CallbackInterceptor(HandlerFactory handlerFactory, View<? extends BotApiMethod<?>> view, BotMessageService botMessageService) {
-        this.handlerFactory = handlerFactory;
+    public CallbackInterceptor(HandlerTypeFactory handlerTypeFactory, View<? extends BotApiMethod<?>> view, BotMessageService botMessageService, TelegramUserService telegramUserService) {
+        this.handlerTypeFactory = handlerTypeFactory;
         this.view = view;
         this.botMessageService = botMessageService;
+        this.telegramUserService = telegramUserService;
     }
 
     @Override
@@ -69,7 +75,11 @@ public class CallbackInterceptor implements Interceptor {
         } catch (CachedUserDataNotFound e) {
             log.info("Initialize new user");
             nextState = MENU;
-            SessionDataCache.initializeByIdAndUsernameAndFirstNameAndLastName(telegramUserId, from.getUserName(), from.getFirstName(), from.getLastName());
+            Optional<TelegramUser> optionalTelegramUser = telegramUserService.findById(telegramUserId);
+            optionalTelegramUser.ifPresentOrElse(SessionDataCache::initializeSession, () -> {
+                TelegramUser createdUser = telegramUserService.saveUser(telegramUserId, from.getUserName(), "ru");
+                SessionDataCache.initializeSession(createdUser);
+            });
             cached = SessionDataCache.get(telegramUserId);
         }
         cached.getStateHistory().push(nextState);
@@ -78,7 +88,7 @@ public class CallbackInterceptor implements Interceptor {
 
     private State handleUpdate(Update update) {
         log.info("Handle update with callback data : {}", update.getCallbackQuery().getData());
-            return interceptNavigationButton(update);
+        return interceptNavigationButton(update);
     }
 
     private SessionData pullFromCache(Long telegramUserId) throws CachedUserDataNotFound {
@@ -88,15 +98,15 @@ public class CallbackInterceptor implements Interceptor {
         return cached;
     }
 
-    private State interceptNavigationButton(Update update){
+    private State interceptNavigationButton(Update update) {
         String callback = update.getCallbackQuery().getData();
         try {
             log.info("Intercept navigation buttons with callback : {}", callback);
             NavigationBotButton botButton = NavigationBotButton.valueOf(callback);
             SessionData sessionData = SessionDataCache.get(telegramUserId);
             return switch (botButton) {
-                case GLOBAL_BACK -> {
-                    HandlerType handlerType = handlerFactory.get(BACK);
+                case BACK -> {
+                    HandlerType handlerType = handlerTypeFactory.get(BACK);
                     yield handlerType.handle(sessionData);
                 }
                 case MENU -> {
@@ -105,12 +115,12 @@ public class CallbackInterceptor implements Interceptor {
                 }
             };
         } catch (IllegalArgumentException illegalArgumentException) {
-            log.info(illegalArgumentException.getMessage() +" It's turn for intercepting Pagination Button");
+            log.info(illegalArgumentException.getMessage() + " It's turn for intercepting Pagination Button");
             return interceptPaginationButton(update);
         }
     }
 
-    private State interceptPaginationButton(Update update){
+    private State interceptPaginationButton(Update update) {
         String callback = update.getCallbackQuery().getData();
         SessionData sessionData = SessionDataCache.get(telegramUserId);
         try {
@@ -142,7 +152,7 @@ public class CallbackInterceptor implements Interceptor {
             log.info(illegalArgumentException.getMessage());
             SessionData cached = SessionDataCache.get(telegramUserId);
             State currentState = cached.getStateHistory().peek();
-            HandlerType handlerType = handlerFactory.get(currentState);
+            HandlerType handlerType = handlerTypeFactory.get(currentState);
             return handlerType.handle(cached);
         }
     }
