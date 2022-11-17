@@ -29,12 +29,13 @@ public class BackHandlerType implements HandlerType {
         stateAndBackStateMap.put(SEARCH_RESULT, MY_OFFERS);
         stateAndBackStateMap.put(ALL_OFFERS, MENU);
         stateAndBackStateMap.put(FEEDBACK, MENU);
-        stateAndBackStateMap.put(ALL_FEEDBACKS, MENU);
+        stateAndBackStateMap.put(ALL_FEEDBACKS, ADMIN_INSTRUMENTS);
+        stateAndBackStateMap.put(FEEDBACK_DELETE_BY_ID, ALL_FEEDBACKS);
         stateAndBackStateMap.put(OFFER_ID_INPUT, MY_OFFERS);
         stateAndBackStateMap.put(OFFER_BY_ID_NOT_FOUND, MY_OFFERS);
         stateAndBackStateMap.put(SUCCESS_REGISTRATION, FORM);
         stateAndBackStateMap.put(THANKS_FOR_FEEDBACK, FEEDBACK);
-
+        stateAndBackStateMap.put(ADMIN_INSTRUMENTS, MENU);
     }
 
     @Override

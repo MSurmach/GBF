@@ -43,7 +43,6 @@ public class MenuKeyboardType implements KeyboardType {
         var lookAtAllRegistrationsButton = createLocalButton(LOOK_AT_ALL_REGISTRATIONS, lms);
         var lookAtAllRequestsButton = createLocalButton(LOOK_AT_ALL_REQUESTS, lms);
         var sendFeedbackButton = createLocalButton(SEND_FEEDBACK, lms);
-        var lookAtFeedbacksButton = createLocalButton(LOOK_AT_FEEDBACKS, lms);
         var switchLanguage = createLocalButton(SWITCH_LANGUAGE, lms);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(List.of(courierButton));
@@ -51,8 +50,10 @@ public class MenuKeyboardType implements KeyboardType {
         keyboard.add(List.of(myRegistrationsButton, myRequestsButton));
         keyboard.add(List.of(lookAtAllRegistrationsButton, lookAtAllRequestsButton));
         keyboard.add(List.of(sendFeedbackButton, switchLanguage));
-        if (adminIdList.contains(sessionData.getTelegramUserId()))
-            keyboard.add(List.of(lookAtFeedbacksButton));
+        if (adminIdList.contains(sessionData.getTelegramUserId())){
+            var adminPanelButton = createLocalButton(ADMIN_PANEL, lms);
+            keyboard.add(List.of(adminPanelButton));
+        }
         return new InlineKeyboardMarkup(keyboard);
     }
 }
