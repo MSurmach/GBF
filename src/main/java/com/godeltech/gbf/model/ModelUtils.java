@@ -5,7 +5,7 @@ import com.godeltech.gbf.model.db.TelegramUser;
 
 import java.util.LinkedList;
 
-import static com.godeltech.gbf.gui.utils.ConstantUtil.LINK_TO_USER_PATTERN;
+import static com.godeltech.gbf.gui.utils.ConstantUtil.MENTION_TO_USER_PATTERN;
 
 public class ModelUtils {
     public static Offer mapSessionDataToOffer(SessionData sessionData) {
@@ -81,14 +81,17 @@ public class ModelUtils {
     }
 
     public static String getUserMention(SessionData sessionData) {
-        return String.format(LINK_TO_USER_PATTERN, sessionData.getTelegramUserId(), sessionData.getUsername());
+        //return String.format(LINK_TO_USER_PATTERN, sessionData.getTelegramUserId(), sessionData.getUsername());
+        return String.format(MENTION_TO_USER_PATTERN, sessionData.getUsername());
     }
 
     public static String getUserMention(Offer offer) {
-        return String.format(LINK_TO_USER_PATTERN, offer.getTelegramUser().getId(), offer.getTelegramUser().getUserName());
+        //return String.format(LINK_TO_USER_PATTERN, offer.getTelegramUser().getId(), offer.getTelegramUser().getUserName());
+        return String.format(MENTION_TO_USER_PATTERN, offer.getTelegramUser().getUserName());
     }
 
     public static String getUserMention(TelegramUser telegramUser) {
-        return String.format(LINK_TO_USER_PATTERN, telegramUser.getId(), telegramUser.getUserName());
+       // return String.format(LINK_TO_USER_PATTERN, telegramUser.getId(), telegramUser.getUserName());
+        return String.format(MENTION_TO_USER_PATTERN, telegramUser.getUserName());
     }
 }

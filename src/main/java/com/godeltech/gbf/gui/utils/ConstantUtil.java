@@ -5,6 +5,7 @@ public class ConstantUtil {
     public final static String RU_CODE = "ru";
     public final static String BE_CODE = "be";
     public static final String LINK_TO_USER_PATTERN = "<a href=\"tg://user?id=%d\">%s</a>";
+    public static final String MENTION_TO_USER_PATTERN = "@%s";
     public final static String EMPTY = "";
     public final static String SPACE = " ";
     public final static String SPLITTER = ":";
