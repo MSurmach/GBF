@@ -46,7 +46,8 @@ public class OffersKeyboardType implements KeyboardType {
                 createLocalButtonWithData(OFFER_FIND_CLIENTS, offerId, lms) :
                 createLocalButtonWithData(OFFER_FIND_COURIERS, offerId, lms);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        keyboard.add(List.of(editButton, deleteButton, findByIdButton, findButton));
+        keyboard.add(List.of(findButton));
+        keyboard.add(List.of(editButton, deleteButton, findByIdButton));
         var keyboardMarkup = new InlineKeyboardMarkup(keyboard);
         return new KeyboardMarkupAppender(keyboardMarkup).
                 append(paginationKeyboardType.getKeyboardMarkup(sessionData)).

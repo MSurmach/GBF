@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 @ControllerAdvice
 @AllArgsConstructor
@@ -40,11 +41,11 @@ public class BotExceptionHandler {
 
     @ExceptionHandler(MembershipException.class)
     public void handleMembershipException(MembershipException exception) {
-//        User user = exception.getBotMessage().getFrom();
-//        log.error("User isn't a member of chmoki group with username : {} and id : {}",
-//                user.getUserName(), user.getId());
-//        exceptionResponseService.makeSendMessage(exception.getBotMessage(),
-//                lms.getLocaleMessage(TEXT_MESSAGE_OF_MEMBERSHIP));
+        User user = exception.getBotMessage().getFrom();
+        log.error("User isn't a member of chmoki group with username : {} and id : {}",
+                user.getUserName(), user.getId());
+        exceptionResponseService.makeSendMessage(exception.getBotMessage(),
+                "‼ You are not a member of the Chmoki group");
     }
 
     @ExceptionHandler(MessageFromGroupException.class)

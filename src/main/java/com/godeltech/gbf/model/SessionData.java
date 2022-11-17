@@ -49,11 +49,12 @@ public class SessionData {
         tempRoute = new LinkedList<>();
     }
 
-    public SessionData(Long telegramUserId, String username, String firstName, String lastName) {
+    public SessionData(Long telegramUserId, String username, String firstName, String lastName, String language) {
         this.telegramUserId = telegramUserId;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.language = language;
     }
 
     public boolean isEmpty() {

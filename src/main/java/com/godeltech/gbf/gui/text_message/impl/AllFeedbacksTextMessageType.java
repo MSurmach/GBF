@@ -35,7 +35,7 @@ public class AllFeedbacksTextMessageType implements TextMessageType {
         if (feedbacks == null || feedbacks.isEmpty()) return lms.getLocaleMessage(FEEDBACK_NOT_FOUND_CODE);
         StringBuilder feedBackMessageBuilder = new StringBuilder();
         for (Feedback feedBack : feedbacks) {
-            TelegramUser feedbacker = telegramUserService.findById(feedBack.getUserId());
+            TelegramUser feedbacker = telegramUserService.findById(feedBack.getUserId()).get();
             String feedBackMessage = lms.getLocaleMessage(FEEDBACK_CONTENT_CODE, ModelUtils.getUserMention(feedbacker), feedBack.getUserId().toString(), feedBack.getId().toString(), feedBack.getContent());
             feedBackMessageBuilder.append(feedBackMessage).
                     append(System.lineSeparator());

@@ -42,20 +42,17 @@ public class MenuKeyboardType implements KeyboardType {
         var myRequestsButton = createLocalButton(LOOK_AT_MY_REQUESTS, lms);
         var lookAtAllRegistrationsButton = createLocalButton(LOOK_AT_ALL_REGISTRATIONS, lms);
         var lookAtAllRequestsButton = createLocalButton(LOOK_AT_ALL_REQUESTS, lms);
+        var sendFeedbackButton = createLocalButton(SEND_FEEDBACK, lms);
+        var lookAtFeedbacksButton = createLocalButton(LOOK_AT_FEEDBACKS, lms);
+        var switchLanguage = createLocalButton(SWITCH_LANGUAGE, lms);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(List.of(courierButton));
         keyboard.add(List.of(clientButton));
         keyboard.add(List.of(myRegistrationsButton, myRequestsButton));
         keyboard.add(List.of(lookAtAllRegistrationsButton, lookAtAllRequestsButton));
-        keyboard.add(feedbackButtonsRow(sessionData.getTelegramUserId(), lms));
+        keyboard.add(List.of(sendFeedbackButton, switchLanguage));
+        if (adminIdList.contains(sessionData.getTelegramUserId()))
+            keyboard.add(List.of(lookAtFeedbacksButton));
         return new InlineKeyboardMarkup(keyboard);
-    }
-
-    private List<InlineKeyboardButton> feedbackButtonsRow(Long telegramUserId, LocalMessageSource lms) {
-        var sendFeedbackButton = createLocalButton(SEND_FEEDBACK, lms);
-        var lookAtFeedbacksButton = createLocalButton(LOOK_AT_FEEDBACKS, lms);
-        return adminIdList.contains(telegramUserId) ?
-                List.of(sendFeedbackButton, lookAtFeedbacksButton) :
-                List.of(sendFeedbackButton);
     }
 }

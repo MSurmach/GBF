@@ -34,19 +34,20 @@ public class NotificationServiceImpl implements NotificationService {
         log.info("Make notification by saved offer : {} ", savedOffer);
         List<Offer> offers = offerService.findSuitableOffersListByGivenOffer(savedOffer);
         if (!offers.isEmpty()) {
-            String textMessage = savedOffer.getRole() == Role.COURIER ?
-                    lms.getLocaleMessage(CLIENT_NOTIFICATION) :
-                    lms.getLocaleMessage(COURIER_NOTIFICATION);
-            offers.forEach(offer -> sendNotificationMessageToUser(offer, textMessage));
+            String notificationMessageCode = savedOffer.getRole() == Role.COURIER ?
+                    CLIENT_NOTIFICATION :
+                    COURIER_NOTIFICATION;
+            offers.forEach(offer -> sendNotificationMessageToUser(offer, notificationMessageCode));
         }
     }
 
-    private void sendNotificationMessageToUser(Offer offer, String textMessage) {
+    private void sendNotificationMessageToUser(Offer offer, String notificationMessageCode) {
         log.info("Send notification message for user with offer id : {}", offer.getTelegramUser().getId());
+        LocalMessageSource lms = localMessageSourceFactory.get(offer.getTelegramUser().getLanguage());
         try {
             gbfBot.execute(SendMessage.builder()
                     .chatId(offer.getTelegramUser().getId().toString())
-                    .text(textMessage + offer.getId())
+                    .text(lms.getLocaleMessage(notificationMessageCode) + offer.getId())
                     .build());
         } catch (TelegramApiException e) {
             log.error("Message couldn't send to telegramuser with id : {} and about offer with id : {}",

@@ -1,6 +1,9 @@
 package com.godeltech.gbf.gui.utils;
 
 public class ConstantUtil {
+    public static final String EN_CODE = "en";
+    public final static String RU_CODE = "ru";
+    public final static String BE_CODE = "be";
     public static final String LINK_TO_USER_PATTERN = "<a href=\"tg://user?id=%d\">%s</a>";
     public final static String EMPTY = "";
     public final static String SPACE = " ";
@@ -109,4 +112,7 @@ public class ConstantUtil {
 
     //Delete feedback by id
     public final static String DELETE_FEEDBACK_BY_ID_CODE = "feedback.delete.question";
+
+    //Language
+    public final static String LANGUAGE_QUESTION_CODE = "language.question";
 }
