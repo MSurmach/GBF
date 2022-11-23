@@ -29,4 +29,10 @@ public class TelegramUserServiceImpl implements TelegramUserService {
         log.info("Get telegram user by id : {}", id);
         return telegramUserRepository.findById(id);
     }
+
+    @Override
+    public Long getCountOfUsers() {
+        log.info("Get count of all telegram users");
+        return telegramUserRepository.count();
+    }
 }
