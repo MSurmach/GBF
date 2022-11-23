@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.godeltech.gbf.gui.button.AdminInstrumentsBotButton.LOOK_AT_FEEDBACKS;
+import static com.godeltech.gbf.gui.button.AdminInstrumentsBotButton.LOOK_AT_STATISTIC;
 import static com.godeltech.gbf.gui.utils.ButtonUtils.createLocalButton;
 import static com.godeltech.gbf.gui.utils.KeyboardUtils.backAndMenuMarkup;
 
@@ -32,8 +33,10 @@ public class AdminInstrumentsKeyboardType implements KeyboardType {
     public InlineKeyboardMarkup getKeyboardMarkup(Session session) {
         LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
         var feedbacksButton = createLocalButton (LOOK_AT_FEEDBACKS, lms);
+        var statisticButton = createLocalButton(LOOK_AT_STATISTIC, lms);
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(List.of(feedbacksButton));
+        keyboard.add(List.of(statisticButton));
         return new KeyboardMarkupAppender(new InlineKeyboardMarkup(keyboard)).
                 append(backAndMenuMarkup(lms)).
                 result();

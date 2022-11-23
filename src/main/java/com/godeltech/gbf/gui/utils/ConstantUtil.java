@@ -119,4 +119,7 @@ public class ConstantUtil {
 
     //Admin instruments
     public final static String ADMIN_INSTRUMENTS_QUESTION_CODE = "adminInstruments.question";
+
+    //Statistic
+    public final static String STATISTIC_CONTENT_CODE = "statistic.content";
 }

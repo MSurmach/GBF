@@ -36,6 +36,7 @@ public class BackHandlerType implements HandlerType {
         stateAndBackStateMap.put(SUCCESS_REGISTRATION, FORM);
         stateAndBackStateMap.put(THANKS_FOR_FEEDBACK, FEEDBACK);
         stateAndBackStateMap.put(ADMIN_INSTRUMENTS, MENU);
+        stateAndBackStateMap.put(STATISTIC, ADMIN_INSTRUMENTS);
     }
 
     @Override
