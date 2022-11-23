@@ -4,7 +4,7 @@ import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.text_message.TextMessageType;
 import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.ModelUtils;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,8 +22,8 @@ public class ThanksForFeedbackTextMessageType implements TextMessageType {
     }
 
     @Override
-    public String getMessage(SessionData sessionData) {
-        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
-        return lms.getLocaleMessage(THANKS_FOR_FEEDBACK_CODE, ModelUtils.getUserMention(sessionData));
+    public String getMessage(Session session) {
+        LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
+        return lms.getLocaleMessage(THANKS_FOR_FEEDBACK_CODE, ModelUtils.getUserMention(session));
     }
 }

@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.model.ModelUtils;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.service.handler.HandlerType;
 import org.springframework.stereotype.Service;
@@ -44,10 +44,10 @@ public class BackHandlerType implements HandlerType {
     }
 
     @Override
-    public State handle(SessionData sessionData) {
-        State currentState = sessionData.getStateHistory().pop();
+    public State handle(Session session) {
+        State currentState = session.getStateHistory().pop();
         State backState = stateAndBackStateMap.get(currentState);
-        if (backState == MENU) ModelUtils.resetSessionData(sessionData);
+        if (backState == MENU) ModelUtils.resetSessionData(session);
         return backState;
     }
 }

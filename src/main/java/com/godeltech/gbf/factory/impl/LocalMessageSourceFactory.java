@@ -3,6 +3,7 @@ package com.godeltech.gbf.factory.impl;
 import com.godeltech.gbf.factory.Factory;
 import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.localization.impl.RuMessageSource;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class LocalMessageSourceFactory implements Factory<LocalMessageSource, String> {
+    @Getter
     private final RuMessageSource defaultMessageSource;
     private final Map<String, LocalMessageSource> localMessageSourceContext;
 

@@ -2,7 +2,7 @@ package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.exception.OfferNotFoundException;
 import com.godeltech.gbf.model.Role;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.offer.OfferService;
@@ -23,17 +23,17 @@ public class OfferIdInputHandlerType implements HandlerType {
     }
 
     @Override
-    public State handle(SessionData sessionData) {
-        String callback = sessionData.getCallbackHistory().peek();
+    public State handle(Session session) {
+        String callback = session.getCallbackHistory().peek();
         try {
             Long offerId = Long.parseLong(callback);
-            sessionData.setTempOfferId(offerId);
-            Role role = sessionData.getRole().equals(Role.REGISTRATIONS_VIEWER) ? Role.COURIER : Role.CLIENT;
-            int pageNumber = offerService.getOrderedNumberOfOfferWithId(sessionData.getTelegramUserId(), role, offerId);
-            sessionData.setPageNumber(pageNumber);
+            session.setTempOfferId(offerId);
+            Role role = session.getRole().equals(Role.REGISTRATIONS_VIEWER) ? Role.COURIER : Role.CLIENT;
+            int pageNumber = offerService.getOrderedNumberOfOfferWithId(session.getTelegramUser().getId(), role, offerId);
+            session.setPageNumber(pageNumber);
             return MY_OFFERS;
         } catch (NumberFormatException numberFormatException) {
-            return sessionData.getStateHistory().pop();
+            return session.getStateHistory().pop();
         }
         catch (OfferNotFoundException exception){
             return OFFER_BY_ID_NOT_FOUND;

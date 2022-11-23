@@ -5,7 +5,7 @@ import com.godeltech.gbf.gui.text_message.TextMessageType;
 import com.godeltech.gbf.gui.utils.MessageUtils;
 import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.ModelUtils;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.Status;
@@ -29,12 +29,12 @@ public class RouteTextMessageType implements TextMessageType {
     }
 
     @Override
-    public String getMessage(SessionData sessionData) {
-        log.debug("Create route message type for session data with user id : {} and username : {}",
-                sessionData.getTelegramUserId(),sessionData.getUsername() );
-        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
-        LinkedList<RoutePoint> tempRoute = sessionData.getTempRoute();
-        String about = lms.getLocaleMessage(ROUTE_INFO_ABOUT, ModelUtils.getUserMention(sessionData));
+    public String getMessage(Session session) {
+        log.debug("Create route message type for session data with user: {}",
+                session.getTelegramUser() );
+        LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
+        LinkedList<RoutePoint> tempRoute = session.getTempRoute();
+        String about = lms.getLocaleMessage(ROUTE_INFO_ABOUT, ModelUtils.getUserMention(session));
         String routeDetails = MessageUtils.routeDetails(tempRoute, lms);
         String question = tempRoute.stream().anyMatch(routePoint -> routePoint.getStatus() == Status.INITIAL) ?
                 lms.getLocaleMessage(ROUTE_QUESTION_NEXT_POINT) :

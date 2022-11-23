@@ -19,13 +19,9 @@ public class TelegramUserServiceImpl implements TelegramUserService {
 
     @Override
     @Transactional
-    public TelegramUser saveUser(Long id, String username, String language) {
-        log.info("Get or create telegram user by id : {} and username : {}", id, username);
-        return telegramUserRepository.save(TelegramUser.builder()
-                .id(id)
-                .userName(username)
-                .language(language)
-                .build());
+    public TelegramUser saveUser(TelegramUser telegramUser) {
+        log.info("Get or create telegram user by id : {} and username : {}", telegramUser.getId(), telegramUser.getUserName());
+        return telegramUserRepository.save(telegramUser);
     }
 
     @Override

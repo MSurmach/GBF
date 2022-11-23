@@ -1,6 +1,6 @@
 package com.godeltech.gbf.service.handler.impl;
 
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.user.TelegramUserService;
@@ -17,10 +17,10 @@ public class LanguageHandlerType implements HandlerType {
     }
 
     @Override
-    public State handle(SessionData sessionData) {
-        String callback = sessionData.getCallbackHistory().peek();
-        sessionData.setLanguage(callback);
-        telegramUserService.saveUser(sessionData.getTelegramUserId(), sessionData.getUsername(), sessionData.getLanguage());
+    public State handle(Session session) {
+        String callback = session.getCallbackHistory().peek();
+        session.getTelegramUser().setLanguage(callback);
+        telegramUserService.saveUser(session.getTelegramUser());
         return State.MENU;
     }
 }

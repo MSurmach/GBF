@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.service.handler.HandlerType;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +16,14 @@ public class SeatsHandlerType implements HandlerType {
     }
 
     @Override
-    public State handle(SessionData sessionData) {
-        String callback = sessionData.getCallbackHistory().peek();
+    public State handle(Session session) {
+        String callback = session.getCallbackHistory().peek();
         try {
             int count = Integer.parseInt(callback);
-            sessionData.setSeats(count);
+            session.setSeats(count);
             return FORM;
         } catch (NumberFormatException numberFormatException) {
-            return sessionData.getStateHistory().pop();
+            return session.getStateHistory().pop();
         }
     }
 }

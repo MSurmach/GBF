@@ -4,7 +4,7 @@ import com.godeltech.gbf.event.NotificationEvent;
 import com.godeltech.gbf.exception.OfferNotFoundException;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.db.Delivery;
 import com.godeltech.gbf.model.db.Offer;
 import com.godeltech.gbf.model.db.RoutePoint;
@@ -40,10 +40,10 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional
-    public void save(SessionData sessionData) {
-        log.info("Save offer with session date : {}", sessionData);
-        Offer offer = ModelUtils.mapSessionDataToOffer(sessionData);
-        TelegramUser telegramUser = telegramUserService.saveUser(sessionData.getTelegramUserId(), sessionData.getUsername(), sessionData.getLanguage());
+    public void save(Session session) {
+        log.info("Save offer with session date : {}", session);
+        Offer offer = ModelUtils.mapSessionDataToOffer(session);
+        TelegramUser telegramUser = telegramUserService.saveUser(session.getTelegramUser());
         offer.setTelegramUser(telegramUser);
         offer = offerRepository.save(offer);
         applicationEventPublisher.publishEvent(new NotificationEvent(offer));

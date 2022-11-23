@@ -10,69 +10,59 @@ import static com.godeltech.gbf.gui.utils.ConstantUtil.LINK_TO_USER_PATTERN;
 import static com.godeltech.gbf.gui.utils.ConstantUtil.MENTION_TO_USER_PATTERN;
 
 public class ModelUtils {
-    public static Offer mapSessionDataToOffer(SessionData sessionData) {
+
+    public static Offer mapSessionDataToOffer(Session session) {
         Offer offer = Offer.builder().
-                id(sessionData.getOfferId()).
-                startDate(sessionData.getStartDate()).
-                endDate(sessionData.getEndDate()).
+                id(session.getOfferId()).
+                startDate(session.getStartDate()).
+                endDate(session.getEndDate()).
                 routePoints(new LinkedList<>()).
-                comment(sessionData.getComment()).
-                seats(sessionData.getSeats()).
-                role(sessionData.getRole()).
-                delivery(sessionData.getDelivery()).
-                telegramUser(TelegramUser.builder()
-                        .id(sessionData.getTelegramUserId())
-                        .userName(sessionData.getUsername())
-                        .firstName(sessionData.getFirstName())
-                        .lastName(sessionData.getLastName())
-                        .build()).
+                comment(session.getComment()).
+                seats(session.getSeats()).
+                role(session.getRole()).
+                delivery(session.getDelivery()).
+                telegramUser(session.getTelegramUser()).
                 build();
-        sessionData.getRoute().forEach(offer::addRoutePoint);
+        session.getRoute().forEach(offer::addRoutePoint);
         return offer;
     }
 
-    public static void resetSessionData(SessionData sessionData) {
-        sessionData.setOfferId(null);
-        sessionData.setDelivery(null);
-        sessionData.setSeats(0);
-        sessionData.setRole(null);
-        sessionData.setRoute(new LinkedList<>());
-        sessionData.setStartDate(null);
-        sessionData.setEndDate(null);
-        sessionData.setComment(null);
-        sessionData.setStateHistory(new LinkedList<>());
-        sessionData.setCallbackHistory(new LinkedList<>());
-        sessionData.setCallbackQueryId(null);
-        sessionData.setSearchOffer(null);
-        sessionData.setPageNumber(0);
-        sessionData.setOffers(null);
-        sessionData.setEditable(false);
-        sessionData.setTempOfferId(null);
+    public static void resetSessionData(Session session) {
+        session.setOfferId(null);
+        session.setDelivery(null);
+        session.setSeats(0);
+        session.setRole(null);
+        session.setRoute(new LinkedList<>());
+        session.setStartDate(null);
+        session.setEndDate(null);
+        session.setComment(null);
+        session.setStateHistory(new LinkedList<>());
+        session.setCallbackHistory(new LinkedList<>());
+        session.setCallbackQueryId(null);
+        session.setSearchOffer(null);
+        session.setPageNumber(0);
+        session.setOffers(null);
+        session.setEditable(false);
+        session.setTempOfferId(null);
     }
 
-    public static SessionData mapOfferToSessionData(Offer offer) {
-        return SessionData.builder().
+    public static Session mapOfferToSessionData(Offer offer) {
+        return Session.builder().
                 offerId(offer.getId()).
-                telegramUserId(offer.getTelegramUser().getId()).
-                username(offer.getTelegramUser().getUserName()).
+                telegramUser(offer.getTelegramUser()).
                 seats(offer.getSeats()).
                 delivery(offer.getDelivery()).
                 route(new LinkedList<>(offer.getRoutePoints())).
                 comment(offer.getComment()).
                 role(offer.getRole()).
-                firstName(offer.getTelegramUser().getFirstName()).
-                lastName(offer.getTelegramUser().getLastName()).
                 startDate(offer.getStartDate()).
                 endDate(offer.getEndDate()).
                 build();
     }
 
-    public static void copyOfferToSessionData(SessionData to, Offer from) {
+    public static void copyOfferToSessionData(Session to, Offer from) {
         to.setOfferId(from.getId());
-        to.setTelegramUserId(from.getTelegramUser().getId());
-        to.setUsername(from.getTelegramUser().getUserName());
-        to.setFirstName(from.getTelegramUser().getFirstName());
-        to.setLastName(from.getTelegramUser().getLastName());
+        to.setTelegramUser(from.getTelegramUser());
         to.setSeats(from.getSeats());
         to.setDelivery(from.getDelivery());
         to.setComment(from.getComment());
@@ -82,8 +72,8 @@ public class ModelUtils {
         to.setEndDate(from.getEndDate());
     }
 
-    public static String getUserMention(SessionData sessionData) {
-        return adviceUserMention(sessionData.getUsername(), sessionData.getTelegramUserId());
+    public static String getUserMention(Session session) {
+        return adviceUserMention(session.getTelegramUser().getUserName(), session.getTelegramUser().getId());
     }
 
     public static String getUserMention(Offer offer) {

@@ -3,7 +3,7 @@ package com.godeltech.gbf.gui.text_message.impl;
 import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.text_message.TextMessageType;
 import com.godeltech.gbf.localization.LocalMessageSource;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,10 +24,10 @@ public class OfferIDInputTextMessageType implements TextMessageType {
     }
 
     @Override
-    public String getMessage(SessionData sessionData) {
-        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
+    public String getMessage(Session session) {
+        LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
         String infoMessage = lms.getLocaleMessage(OFFER_ID_INPUT_INFO_CODE);
-        String questionMessage = Objects.equals(sessionData.getRole(), REGISTRATIONS_VIEWER) ?
+        String questionMessage = Objects.equals(session.getRole(), REGISTRATIONS_VIEWER) ?
                 lms.getLocaleMessage(OFFER_ID_INPUT_REGISTRATION_QUESTION_CODE) :
                 lms.getLocaleMessage(OFFER_ID_INPUT_REQUEST_QUESTION_CODE);
         return infoMessage + questionMessage;

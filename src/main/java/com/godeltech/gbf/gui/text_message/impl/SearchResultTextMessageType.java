@@ -5,7 +5,7 @@ import com.godeltech.gbf.gui.text_message.TextMessageType;
 import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
 import lombok.AllArgsConstructor;
@@ -29,13 +29,13 @@ public class SearchResultTextMessageType implements TextMessageType {
     }
 
     @Override
-    public String getMessage(SessionData sessionData) {
-        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
-        Page<Offer> page = sessionData.getOffers();
+    public String getMessage(Session session) {
+        LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
+        Page<Offer> page = session.getOffers();
         if (page == null || page.isEmpty())
-            return messageIfSearchResultIsEmpty(sessionData.getRole(), lms);
+            return messageIfSearchResultIsEmpty(session.getRole(), lms);
         Offer offer = page.getContent().get(0);
-        return messageIfSearchResultIsNotEmpty(sessionData, lms) +
+        return messageIfSearchResultIsNotEmpty(session, lms) +
                 offerDetailsHeader(offer, lms) +
                 routeDetails(offer.getRoutePoints(), lms) +
                 datesDetails(offer.getStartDate(), offer.getEndDate(), lms) +
@@ -50,10 +50,10 @@ public class SearchResultTextMessageType implements TextMessageType {
                 lms.getLocaleMessage(COURIERS_NOT_EXIST_CODE);
     }
 
-    private String messageIfSearchResultIsNotEmpty(SessionData sessionData, LocalMessageSource lms) {
-        return Objects.equals(sessionData.getRole(), REGISTRATIONS_VIEWER) || Objects.equals(sessionData.getRole(), COURIER) ?
-                lms.getLocaleMessage(CLIENTS_EXIST_CODE, ModelUtils.getUserMention(sessionData)) :
-                lms.getLocaleMessage(COURIERS_EXIST_CODE, ModelUtils.getUserMention(sessionData));
+    private String messageIfSearchResultIsNotEmpty(Session session, LocalMessageSource lms) {
+        return Objects.equals(session.getRole(), REGISTRATIONS_VIEWER) || Objects.equals(session.getRole(), COURIER) ?
+                lms.getLocaleMessage(CLIENTS_EXIST_CODE, ModelUtils.getUserMention(session)) :
+                lms.getLocaleMessage(COURIERS_EXIST_CODE, ModelUtils.getUserMention(session));
     }
 
     private String offerDetailsHeader(Offer offer, LocalMessageSource lms) {

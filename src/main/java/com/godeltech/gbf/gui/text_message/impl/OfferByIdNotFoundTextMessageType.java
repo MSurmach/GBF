@@ -3,7 +3,7 @@ package com.godeltech.gbf.gui.text_message.impl;
 import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.text_message.TextMessageType;
 import com.godeltech.gbf.localization.LocalMessageSource;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -25,10 +25,10 @@ public class OfferByIdNotFoundTextMessageType implements TextMessageType {
     }
 
     @Override
-    public String getMessage(SessionData sessionData) {
-        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
-        Long tempOfferIdSearch = sessionData.getTempOfferId();
-        return Objects.equals(sessionData.getRole(), REGISTRATIONS_VIEWER) ?
+    public String getMessage(Session session) {
+        LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
+        Long tempOfferIdSearch = session.getTempOfferId();
+        return Objects.equals(session.getRole(), REGISTRATIONS_VIEWER) ?
                 lms.getLocaleMessage(OFFER_ID_REGISTRATION_NOT_FOUND_CODE, tempOfferIdSearch.toString()) :
                 lms.getLocaleMessage(OFFER_ID_REQUEST_NOT_FOUND_CODE, tempOfferIdSearch.toString());
     }

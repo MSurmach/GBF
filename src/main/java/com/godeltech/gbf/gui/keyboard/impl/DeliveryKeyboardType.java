@@ -4,7 +4,7 @@ import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.localization.LocalMessageSource;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Delivery;
 import lombok.AllArgsConstructor;
@@ -35,13 +35,13 @@ public class DeliveryKeyboardType implements KeyboardType {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
-        log.debug("Create delivery keyboard type for session data with user id : {} and username : {}",
-                sessionData.getTelegramUserId(), sessionData.getUsername());
-        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
+    public InlineKeyboardMarkup getKeyboardMarkup(Session session) {
+        log.debug("Create delivery keyboard type for session data with user: {}",
+                session.getTelegramUser());
+        LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         Delivery[] deliveries = Delivery.values();
-        Delivery selectedDelivery = sessionData.getDelivery();
+        Delivery selectedDelivery = session.getDelivery();
         for (var index = 0; index < deliveries.length; ) {
             var columnCount = 3;
             List<InlineKeyboardButton> deliveryButtonRow = new ArrayList<>();

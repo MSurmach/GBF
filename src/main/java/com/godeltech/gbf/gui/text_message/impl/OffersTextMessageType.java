@@ -5,7 +5,7 @@ import com.godeltech.gbf.gui.text_message.TextMessageType;
 import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
 import lombok.AllArgsConstructor;
@@ -28,14 +28,14 @@ public class OffersTextMessageType implements TextMessageType {
     }
 
     @Override
-    public String getMessage(SessionData sessionData) {
-        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
-        Role role = sessionData.getRole();
-        Page<Offer> page = sessionData.getOffers();
+    public String getMessage(Session session) {
+        LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
+        Role role = session.getRole();
+        Page<Offer> page = session.getOffers();
         if (page == null || page.isEmpty())
             return offersNotFoundMessage(role, lms);
         Offer offer = page.getContent().get(0);
-        return aboutMessage(sessionData, lms) +
+        return aboutMessage(session, lms) +
                 offerHeaderWithIdMessage(offer.getRole(), offer.getId().toString(), lms) +
                 routeDetails(offer.getRoutePoints(), lms) +
                 datesDetails(offer.getStartDate(), offer.getEndDate(), lms) +
@@ -56,9 +56,9 @@ public class OffersTextMessageType implements TextMessageType {
                 lms.getLocaleMessage(REQUEST_ID_CODE, offerId);
     }
 
-    private String aboutMessage(SessionData sessionData, LocalMessageSource lms) {
-        return Objects.equals(sessionData.getRole(), Role.REGISTRATIONS_VIEWER) ?
-                lms.getLocaleMessage(REGISTRATIONS_EXIST_CODE, ModelUtils.getUserMention(sessionData)) :
-                lms.getLocaleMessage(REQUESTS_EXIST_CODE, ModelUtils.getUserMention(sessionData));
+    private String aboutMessage(Session session, LocalMessageSource lms) {
+        return Objects.equals(session.getRole(), Role.REGISTRATIONS_VIEWER) ?
+                lms.getLocaleMessage(REGISTRATIONS_EXIST_CODE, ModelUtils.getUserMention(session)) :
+                lms.getLocaleMessage(REQUESTS_EXIST_CODE, ModelUtils.getUserMention(session));
     }
 }

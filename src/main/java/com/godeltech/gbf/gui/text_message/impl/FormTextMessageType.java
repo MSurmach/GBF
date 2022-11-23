@@ -5,7 +5,7 @@ import com.godeltech.gbf.gui.text_message.TextMessageType;
 import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -26,15 +26,15 @@ public class FormTextMessageType implements TextMessageType {
     }
 
     @Override
-    public String getMessage(SessionData sessionData) {
-        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
-        return instructions(sessionData, lms) +
-                detailsHeader(sessionData.getRole(), sessionData.isEmpty(), sessionData.getOfferId(), sessionData.isEditable(), lms) +
-                routeDetails(sessionData.getRoute(), lms) +
-                datesDetails(sessionData.getStartDate(), sessionData.getEndDate(), lms) +
-                deliveryDetails(sessionData.getDelivery(), lms) +
-                seatsDetails(sessionData.getSeats(), lms) +
-                commentDetails(sessionData.getComment(), lms);
+    public String getMessage(Session session) {
+        LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
+        return instructions(session, lms) +
+                detailsHeader(session.getRole(), session.isEmpty(), session.getOfferId(), session.isEditable(), lms) +
+                routeDetails(session.getRoute(), lms) +
+                datesDetails(session.getStartDate(), session.getEndDate(), lms) +
+                deliveryDetails(session.getDelivery(), lms) +
+                seatsDetails(session.getSeats(), lms) +
+                commentDetails(session.getComment(), lms);
     }
 
     private String detailsHeader(Role role, boolean isEmptySession, Long offerId, boolean isEditable, LocalMessageSource lms) {
@@ -45,15 +45,15 @@ public class FormTextMessageType implements TextMessageType {
                 lms.getLocaleMessage(REQUEST_ID_CODE, offerId.toString());
     }
 
-    private String instructions(SessionData sessionData, LocalMessageSource lms) {
+    private String instructions(Session session, LocalMessageSource lms) {
         String message = null;
-        switch (sessionData.getRole()) {
-            case COURIER -> message = !sessionData.isEditable() ?
-                    lms.getLocaleMessage(INSTRUCTION_COURIER_ABOUT_CODE, ModelUtils.getUserMention(sessionData)) :
-                    lms.getLocaleMessage(INSTRUCTION_REGISTRATIONS_VIEWER_ABOUT_CODE, ModelUtils.getUserMention(sessionData));
-            case CLIENT -> message = !sessionData.isEditable() ?
-                    lms.getLocaleMessage(INSTRUCTION_CLIENT_ABOUT_CODE, ModelUtils.getUserMention(sessionData)) :
-                    lms.getLocaleMessage(INSTRUCTION_REQUESTS_VIEWER_ABOUT_CODE, ModelUtils.getUserMention(sessionData));
+        switch (session.getRole()) {
+            case COURIER -> message = !session.isEditable() ?
+                    lms.getLocaleMessage(INSTRUCTION_COURIER_ABOUT_CODE, ModelUtils.getUserMention(session)) :
+                    lms.getLocaleMessage(INSTRUCTION_REGISTRATIONS_VIEWER_ABOUT_CODE, ModelUtils.getUserMention(session));
+            case CLIENT -> message = !session.isEditable() ?
+                    lms.getLocaleMessage(INSTRUCTION_CLIENT_ABOUT_CODE, ModelUtils.getUserMention(session)) :
+                    lms.getLocaleMessage(INSTRUCTION_REQUESTS_VIEWER_ABOUT_CODE, ModelUtils.getUserMention(session));
         }
         return message;
     }

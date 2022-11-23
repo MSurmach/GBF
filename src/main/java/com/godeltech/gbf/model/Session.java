@@ -1,9 +1,6 @@
 package com.godeltech.gbf.model;
 
-import com.godeltech.gbf.model.db.Delivery;
-import com.godeltech.gbf.model.db.Feedback;
-import com.godeltech.gbf.model.db.Offer;
-import com.godeltech.gbf.model.db.RoutePoint;
+import com.godeltech.gbf.model.db.*;
 import lombok.*;
 import org.springframework.data.domain.Page;
 
@@ -16,12 +13,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SessionData {
+public class Session {
     private Long offerId;
-    private Long telegramUserId;
-    private String firstName;
-    private String lastName;
-    private String username;
+    private TelegramUser telegramUser;
     private Delivery delivery;
     private int seats;
     private String comment;
@@ -41,7 +35,6 @@ public class SessionData {
     private Offer searchOffer;
     private boolean isEditable;
     private Long tempOfferId;
-    private String language;
 
     public void clearTemp() {
         tempStartDate = null;
@@ -49,12 +42,8 @@ public class SessionData {
         tempRoute = new LinkedList<>();
     }
 
-    public SessionData(Long telegramUserId, String username, String firstName, String lastName, String language) {
-        this.telegramUserId = telegramUserId;
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.language = language;
+    public Session(TelegramUser telegramUser) {
+        this.telegramUser = telegramUser;
     }
 
     public boolean isEmpty() {
