@@ -31,4 +31,9 @@ public class SessionCacheServiceImpl implements SessionCacheService {
         }
         return session;
     }
+
+    @Override
+    public int getSessionCount() {
+        return sessionCache.count();
+    }
 }

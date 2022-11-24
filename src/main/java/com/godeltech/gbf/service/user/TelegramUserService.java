@@ -9,5 +9,5 @@ public interface TelegramUserService {
 
     Optional<TelegramUser> findById(Long id);
 
-    Long getCountOfUsers();
+    long getUserCount();
 }

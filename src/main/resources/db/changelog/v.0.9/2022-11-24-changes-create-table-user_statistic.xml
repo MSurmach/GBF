@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet id="2022-11-24-changes-create-table-offer" author="m.surmach">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_statistic"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user_statistic">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="telegram_user_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_statistic_user" references="telegram_user(id)"/>
+            </column>
+            <column name="registration_count" type="BIGINT">
+            </column>
+            <column name="request_count" type="BIGINT">
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

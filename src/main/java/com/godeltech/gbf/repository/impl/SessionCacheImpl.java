@@ -24,4 +24,9 @@ public class SessionCacheImpl implements SessionCache {
     public Optional<Session> get(TelegramUser telegramUser) {
         return Optional.ofNullable(SESSION_CACHE.get(telegramUser.getId()));
     }
+
+    @Override
+    public int count() {
+        return SESSION_CACHE.size();
+    }
 }

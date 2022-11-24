@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface SessionCache {
     Session save(TelegramUser telegramUser);
     Optional<Session> get (TelegramUser telegramUser);
+
+    int count();
 }

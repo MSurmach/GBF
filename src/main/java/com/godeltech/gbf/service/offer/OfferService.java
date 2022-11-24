@@ -24,4 +24,6 @@ public interface OfferService {
     List<Offer> findSuitableOffersListByGivenOffer(Offer offer);
 
     int getOrderedNumberOfOfferWithId(Long id, Role role, Long offerId);
+
+    long countByRole(Role role);
 }

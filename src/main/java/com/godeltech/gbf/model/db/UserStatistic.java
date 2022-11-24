@@ -7,20 +7,20 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-
 @Entity
-@Table(name = "telegram_user")
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TelegramUser {
+public class UserStatistic {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @OneToOne
+    @JoinColumn(name = "telegramUserId")
+    private TelegramUser telegramUser;
     @Column
-    private String userName;
-
+    private Long registrationCount;
     @Column
-    private String language;
+    private Long requestCount;
 }

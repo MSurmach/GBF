@@ -4,7 +4,10 @@ import com.godeltech.gbf.model.db.Offer;
 import com.godeltech.gbf.model.db.TelegramUser;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.godeltech.gbf.gui.utils.ConstantUtil.LINK_TO_USER_PATTERN;
 import static com.godeltech.gbf.gui.utils.ConstantUtil.MENTION_TO_USER_PATTERN;
@@ -88,5 +91,28 @@ public class ModelUtils {
         return Objects.isNull(username) ?
                 String.format(LINK_TO_USER_PATTERN, telegramUserId, username) :
                 String.format(MENTION_TO_USER_PATTERN, username);
+    }
+
+    public static String[] statisticAsArrayArgs(Statistic statistic) {
+        var registrationLeadersList = statistic.getRegistrationLeaders();
+        var registrationLeadersContent = IntStream.
+                range(0, registrationLeadersList.size()).
+                mapToObj(index -> index + 1 + ". " + registrationLeadersList.get(index).toString()).
+                collect(Collectors.joining(System.lineSeparator()));
+        var requestLeadersList = statistic.getRequestLeaders();
+        var requestLeadersContent = IntStream.
+                range(0, requestLeadersList.size()).
+                mapToObj(index -> index + 1 + ". " + requestLeadersList.get(index).toString()).
+                collect(Collectors.joining(System.lineSeparator()));
+        var args = List.of(
+                String.valueOf(statistic.getAllUsersCount()),
+                String.valueOf(statistic.getAllSessionCount()),
+                String.valueOf(statistic.getActiveRegistrationsCount()),
+                String.valueOf(statistic.getAllRegistrationsInHistoryCount()),
+                registrationLeadersContent,
+                String.valueOf(statistic.getActiveRequestsCount()),
+                String.valueOf(statistic.getAllRequestsInHistoryCount()),
+                requestLeadersContent);
+        return args.toArray(new String[0]);
     }
 }
