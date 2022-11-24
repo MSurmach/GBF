@@ -12,4 +12,5 @@
     <include file="classpath:db/changelog/v.0.5/2022-11-08-changes-drop-constraints-username-telegram_user.xml"/>
     <include file="classpath:db/changelog/v.0.6/2022-11-09-changes-create-table-feedback.xml"/>
     <include file="classpath:db/changelog/v.0.7/2022-11-17-changes-update-table-telegram_user.xml"/>
+    <include file="classpath:db/changelog/v.0.8/2022-11-24-add-batumi-to-city.xml"/>
 </databaseChangeLog>
