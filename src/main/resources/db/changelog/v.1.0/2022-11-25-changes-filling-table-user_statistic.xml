@@ -11,5 +11,13 @@
             INSERT INTO user_statistic (telegram_user_id)
             SELECT id FROM telegram_user;
         </sql>
+        <update tableName="user_statistic">
+            <column name="registration_count"
+                    valueComputed="(SELECT COUNT(*) FROM offer o WHERE role = 'COURIER' AND o.telegram_user_id = telegram_user_id)"/>
+        </update>
+        <update tableName="user_statistic">
+            <column name="request_count"
+                    valueComputed="(SELECT COUNT(*) FROM offer o WHERE role = 'CLIENT' AND o.telegram_user_id = telegram_user_id)"/>
+        </update>
     </changeSet>
 </databaseChangeLog>
