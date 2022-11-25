@@ -3,7 +3,7 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
       https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
-    <changeSet id="2022-11-23-changes-delete-columns-telegram_user" author="m.surmach">
+    <changeSet id="2022-11-24-changes-delete-columns-telegram_user" author="m.surmach">
         <preConditions onFail="MARK_RAN">
                 <columnExists columnName="first_name" tableName="telegram_user"/>
                 <columnExists columnName="last_name" tableName="telegram_user"/>
