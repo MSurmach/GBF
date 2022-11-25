@@ -46,8 +46,9 @@ public class NotificationServiceImpl implements NotificationService {
         LocalMessageSource lms = localMessageSourceFactory.get(offer.getTelegramUser().getLanguage());
         try {
             gbfBot.execute(SendMessage.builder()
+                    .parseMode("html")
                     .chatId(offer.getTelegramUser().getId().toString())
-                    .text(lms.getLocaleMessage(notificationMessageCode) + offer.getId())
+                    .text(lms.getLocaleMessage(notificationMessageCode, offer.getId().toString()))
                     .build());
         } catch (TelegramApiException e) {
             log.error("Message couldn't send to telegramuser with id : {} and about offer with id : {}",
