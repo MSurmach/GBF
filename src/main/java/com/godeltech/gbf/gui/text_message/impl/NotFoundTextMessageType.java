@@ -3,7 +3,7 @@ package com.godeltech.gbf.gui.text_message.impl;
 import com.godeltech.gbf.exception.NotFoundStateTypeException;
 import com.godeltech.gbf.gui.text_message.TextMessageType;
 import com.godeltech.gbf.model.State;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 
 public class NotFoundTextMessageType implements TextMessageType {
     @Override
@@ -12,7 +12,7 @@ public class NotFoundTextMessageType implements TextMessageType {
     }
 
     @Override
-    public String getMessage(SessionData sessionData) {
-        throw new NotFoundStateTypeException(NotFoundTextMessageType.class, sessionData.getUsername(), sessionData.getOfferId());
+    public String getMessage(Session session) {
+        throw new NotFoundStateTypeException(NotFoundTextMessageType.class, session.getTelegramUser());
     }
 }

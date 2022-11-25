@@ -1,7 +1,7 @@
 package com.godeltech.gbf.service.alert.impl;
 
 import com.godeltech.gbf.GbfBot;
-import com.godeltech.gbf.service.alert.ExceptionResponseService;
+import com.godeltech.gbf.service.alert.ShowAlertService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Service
 @AllArgsConstructor
-public class ExceptionResponseServiceImpl implements ExceptionResponseService {
+public class ShowAlertServiceImpl implements ShowAlertService {
     private GbfBot gbfBot;
 
     @Override

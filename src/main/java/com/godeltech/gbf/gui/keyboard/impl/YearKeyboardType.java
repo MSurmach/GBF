@@ -5,7 +5,7 @@ import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.utils.ButtonUtils;
 import com.godeltech.gbf.localization.LocalMessageSource;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,10 +34,10 @@ public class YearKeyboardType implements KeyboardType {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
-        log.debug("Create year keyboard type for session data with user id : {} and username : {}",
-                sessionData.getTelegramUserId(), sessionData.getUsername());
-        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
+    public InlineKeyboardMarkup getKeyboardMarkup(Session session) {
+        log.debug("Create year keyboard type for session data with user: {}",
+                session.getTelegramUser());
+        LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
         LocalDate[] years = getYearsArray(4);
         List<InlineKeyboardButton> yearButtons = Arrays.stream(years).
                 map(date -> ButtonUtils.createButtonWithData(Integer.toString(date.getYear()), SELECT_YEAR, date.toString())).

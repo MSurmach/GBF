@@ -13,4 +13,7 @@
     <include file="classpath:db/changelog/v.0.6/2022-11-09-changes-create-table-feedback.xml"/>
     <include file="classpath:db/changelog/v.0.7/2022-11-17-changes-update-table-telegram_user.xml"/>
     <include file="classpath:db/changelog/v.0.8/2022-11-24-add-batumi-to-city.xml"/>
+    <include file="classpath:db/changelog/v.0.8/2022-11-23-changes-delete-columns-telegram_user.xml"/>
+    <include file="classpath:db/changelog/v.0.9/2022-11-24-changes-create-table-user_statistic.xml"/>
+    <include file="classpath:db/changelog/v.1.0/2022-11-25-changes-filling-table-user_statistic.xml"/>
 </databaseChangeLog>

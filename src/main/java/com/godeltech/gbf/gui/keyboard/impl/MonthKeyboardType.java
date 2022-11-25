@@ -5,7 +5,7 @@ import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.utils.ButtonUtils;
 import com.godeltech.gbf.localization.LocalMessageSource;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,14 +37,14 @@ public class MonthKeyboardType implements KeyboardType {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
-        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
-        String callback = sessionData.getCallbackHistory().peek();
+    public InlineKeyboardMarkup getKeyboardMarkup(Session session) {
+        LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
+        String callback = session.getCallbackHistory().peek();
         String date = callback.split(":")[1];
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         LocalDate callBackDate = LocalDate.parse(date);
-        log.debug("Create month keyboard type for session data with user id : {} and username : {} with income date : {}",
-                sessionData.getTelegramUserId(), sessionData.getUsername(), callBackDate);
+        log.debug("Create month keyboard type for session data with user: {} and with income date : {}",
+                session.getTelegramUser(), callBackDate);
         addYearHeader(callBackDate, keyboard, lms);
         Month[] months = Month.values();
         for (var index = 0; index < months.length; ) {

@@ -5,7 +5,7 @@ import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.utils.ButtonUtils;
 import com.godeltech.gbf.localization.LocalMessageSource;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.City;
 import com.godeltech.gbf.model.db.RoutePoint;
@@ -39,12 +39,12 @@ public class RouteKeyboardType implements KeyboardType {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
-        log.debug("Create route keyboard type for session data with user id : {} and username : {}",
-                sessionData.getTelegramUserId(), sessionData.getUsername());
-        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
+    public InlineKeyboardMarkup getKeyboardMarkup(Session session) {
+        log.debug("Create route keyboard type for session data with user: {}",
+                session.getTelegramUser());
+        LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
         List<City> allCities = cityService.findAll();
-        LinkedList<RoutePoint> route = sessionData.getTempRoute();
+        LinkedList<RoutePoint> route = session.getTempRoute();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         for (var index = 0; index < allCities.size(); ) {
             var columnCount = 3;

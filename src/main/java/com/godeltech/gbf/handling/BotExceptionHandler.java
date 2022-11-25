@@ -1,7 +1,7 @@
 package com.godeltech.gbf.handling;
 
 import com.godeltech.gbf.exception.*;
-import com.godeltech.gbf.service.alert.ExceptionResponseService;
+import com.godeltech.gbf.service.alert.ShowAlertService;
 import com.godeltech.gbf.service.validator.exceptions.GbfAlertException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ public class BotExceptionHandler {
     public final static String ALERT_CALENDAR_EMPTY_DAY_CODE = "alert.calendar.emptyDay";
     public final static String ALERT_CALENDAR_DAY_MONTH_CODE = "alert.calendar.dayOfMonth";
     public final static String TEXT_MESSAGE_OF_MEMBERSHIP = "membership.answer";
-    private ExceptionResponseService exceptionResponseService;
+    private ShowAlertService showAlertService;
 
 
     @ExceptionHandler(GbfAlertException.class)
@@ -24,7 +24,7 @@ public class BotExceptionHandler {
         log.info(exception.getAlertMessage());
         String callbackQueryId = exception.getCallbackQueryId();
         String alertMessage = exception.getAlertMessage();
-        exceptionResponseService.showAlert(callbackQueryId, alertMessage);
+        showAlertService.showAlert(callbackQueryId, alertMessage);
     }
 
 //    @ExceptionHandler(EmptyButtonCalendarException.class)
@@ -44,7 +44,7 @@ public class BotExceptionHandler {
         User user = exception.getBotMessage().getFrom();
         log.error("User isn't a member of chmoki group with username : {} and id : {}",
                 user.getUserName(), user.getId());
-        exceptionResponseService.makeSendMessage(exception.getBotMessage(),
+        showAlertService.makeSendMessage(exception.getBotMessage(),
                 "‼ You are not a member of the Chmoki group");
     }
 

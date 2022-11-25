@@ -19,4 +19,6 @@ public interface OfferRepository extends JpaRepository<Offer, Long>, JpaSpecific
     Page<Offer> findAllByRoleOrderByIdDesc(Role role, Pageable pageable);
 
     List<Offer> findAllByEndDateBefore(LocalDate date);
+
+    long countByRole(Role role);
 }

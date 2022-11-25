@@ -4,7 +4,7 @@ import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.localization.LocalMessageSource;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -30,8 +30,8 @@ public class LanguageKeyboardType implements KeyboardType {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
-        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
+    public InlineKeyboardMarkup getKeyboardMarkup(Session session) {
+        LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
         List<InlineKeyboardButton> buttons = Stream.of(EN_CODE, RU_CODE, BE_CODE).map(s -> createLocalButton(s, s, lms)).toList();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(buttons);

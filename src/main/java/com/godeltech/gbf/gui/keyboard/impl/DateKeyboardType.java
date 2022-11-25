@@ -4,7 +4,7 @@ import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.localization.LocalMessageSource;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,27 +39,25 @@ public class DateKeyboardType implements KeyboardType {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
-        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
-        String callback = sessionData.getCallbackHistory().peek();
+    public InlineKeyboardMarkup getKeyboardMarkup(Session session) {
+        LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
+        String callback = session.getCallbackHistory().peek();
         LocalDate date;
         try {
             String callbackDate = callback.split(":")[1];
             date = LocalDate.parse(callbackDate);
-            log.debug("Create date keyboard type for session data with user id : {} and username : {} and income date :{}",
-                    sessionData.getTelegramUserId(), sessionData.getUsername(), date);
+            log.debug("Create date keyboard type for session data with user: {} and income date: {}",
+                    session.getTelegramUser(), date);
         } catch (IndexOutOfBoundsException exception) {
-            log.debug("Create date keyboard type for session data with user id : {} and username : {} without income date",
-                    sessionData.getTelegramUserId(), sessionData.getUsername());
             date = LocalDate.now();
         }
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(yearRow(date));
         keyboard.add(monthWithPaginationRow(date, lms));
         keyboard.add(daysOfWeekRow(lms));
-        keyboard.addAll(calendarMarkup(date, sessionData, lms));
+        keyboard.addAll(calendarMarkup(date, session, lms));
         keyboard.add(List.of(createLocalButton(CONFIRM_DATE, lms)));
-        if (sessionData.getTempStartDate() != null) {
+        if (session.getTempStartDate() != null) {
             keyboard.add(List.of(createLocalButton(CLEAR_DATES, lms)));
         }
         return new KeyboardMarkupAppender().
@@ -92,7 +90,7 @@ public class DateKeyboardType implements KeyboardType {
         return daysOfWeekRow;
     }
 
-    private List<List<InlineKeyboardButton>> calendarMarkup(LocalDate localDate, SessionData sessionData, LocalMessageSource lms) {
+    private List<List<InlineKeyboardButton>> calendarMarkup(LocalDate localDate, Session session, LocalMessageSource lms) {
         List<List<InlineKeyboardButton>> calendarMarkup = new ArrayList<>();
         LocalDate firstDayDate = LocalDate.of(localDate.getYear(), localDate.getMonth(), 1);
         int shift = firstDayDate.getDayOfWeek().getValue() - 1;
@@ -100,7 +98,7 @@ public class DateKeyboardType implements KeyboardType {
         int lengthOfMonth = localDate.lengthOfMonth();
         int numOfRows = (int) Math.ceil(((double) shift + lengthOfMonth) / columnCount);
         for (int index = 0; index < numOfRows; index++) {
-            calendarMarkup.add(buildDaysRow(firstDayDate, shift, columnCount, sessionData, lms));
+            calendarMarkup.add(buildDaysRow(firstDayDate, shift, columnCount, session, lms));
             firstDayDate = firstDayDate.plusDays(columnCount - shift);
             shift = 0;
         }
@@ -108,7 +106,7 @@ public class DateKeyboardType implements KeyboardType {
 
     }
 
-    private List<InlineKeyboardButton> buildDaysRow(LocalDate date, int shift, int columnCount, SessionData sessionData, LocalMessageSource lms) {
+    private List<InlineKeyboardButton> buildDaysRow(LocalDate date, int shift, int columnCount, Session session, LocalMessageSource lms) {
         final String emptyLabel = "  ";
         final String emptyDayCallback = "emptyDay";
         List<InlineKeyboardButton> row = new ArrayList<>();
@@ -119,7 +117,7 @@ public class DateKeyboardType implements KeyboardType {
         }
         for (int index = shift; index < columnCount; index++) {
             if (day <= date.lengthOfMonth()) {
-                var dayButton = (Objects.equals(date, sessionData.getTempStartDate()) || Objects.equals(date, sessionData.getTempEndDate())) ?
+                var dayButton = (Objects.equals(date, session.getTempStartDate()) || Objects.equals(date, session.getTempEndDate())) ?
                         createLocalButtonWithData(DATE_MARKER, SELECT_DAY, date.toString(), lms) :
                         createButtonWithData(Integer.toString(day), SELECT_DAY, date.toString());
                 day++;

@@ -5,7 +5,7 @@ import com.godeltech.gbf.gui.keyboard.KeyboardMarkupAppender;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.utils.KeyboardUtils;
 import com.godeltech.gbf.localization.LocalMessageSource;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
 import lombok.AllArgsConstructor;
@@ -25,12 +25,12 @@ public class SearchResultKeyboardType implements KeyboardType {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
-        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
-        Page<Offer> page = sessionData.getOffers();
+    public InlineKeyboardMarkup getKeyboardMarkup(Session session) {
+        LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
+        Page<Offer> page = session.getOffers();
         if (page == null || page.isEmpty()) return KeyboardUtils.menuMarkup(lms);
         return new KeyboardMarkupAppender().
-                append(paginationKeyboardType.getKeyboardMarkup(sessionData)).
+                append(paginationKeyboardType.getKeyboardMarkup(session)).
                 append(KeyboardUtils.menuMarkup(lms)).
                 result();
     }

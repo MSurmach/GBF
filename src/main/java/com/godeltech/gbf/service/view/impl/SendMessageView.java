@@ -5,7 +5,7 @@ import com.godeltech.gbf.factory.impl.TextMessageTypeFactory;
 import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.text_message.TextMessageType;
 import com.godeltech.gbf.model.Role;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
 import com.godeltech.gbf.service.feedback.FeedbackService;
@@ -32,35 +32,35 @@ public class SendMessageView implements View<SendMessage> {
 
     private final List<State> statesNeededForOffersPageInit = List.of(MY_OFFERS, SEARCH_RESULT, ALL_OFFERS);
 
-    public SendMessage buildView(Long chatId, SessionData sessionData) {
-        State state = sessionData.getStateHistory().peek();
-        if (statesNeededForOffersPageInit.contains(state)) initOffersPage(sessionData);
+    public SendMessage buildView(Long chatId, Session session) {
+        State state = session.getStateHistory().peek();
+        if (statesNeededForOffersPageInit.contains(state)) initOffersPage(session);
         if (Objects.equals(state, ALL_FEEDBACKS))
-            sessionData.setFeedbacks(feedbackService.findAllFeedbacks());
+            session.setFeedbacks(feedbackService.findAllFeedbacks());
         TextMessageType textMessageType = textMessageTypeFactory.get(state);
         KeyboardType keyboardType = keyboardTypeFactory.get(state);
         return SendMessage.
                 builder().
                 chatId(chatId).
                 parseMode("html").
-                text(textMessageType.getMessage(sessionData)).
-                replyMarkup(keyboardType.getKeyboardMarkup(sessionData)).build();
+                text(textMessageType.getMessage(session)).
+                replyMarkup(keyboardType.getKeyboardMarkup(session)).build();
     }
 
-    private void initOffersPage(SessionData sessionData) {
-        State state = sessionData.getStateHistory().peek();
+    private void initOffersPage(Session session) {
+        State state = session.getStateHistory().peek();
         Page<Offer> offers = switch (state) {
             case MY_OFFERS -> offerService.findAllOffersByUserIdAndRole(
-                    sessionData.getTelegramUserId(),
-                    revertRoleForOfferSearching(sessionData.getRole()),
-                    sessionData.getPageNumber());
+                    session.getTelegramUser().getId(),
+                    revertRoleForOfferSearching(session.getRole()),
+                    session.getPageNumber());
             case ALL_OFFERS -> offerService.findAllByRole(
-                    revertRoleForOfferSearching(sessionData.getRole()),
-                    sessionData.getPageNumber());
+                    revertRoleForOfferSearching(session.getRole()),
+                    session.getPageNumber());
             default ->
-                    offerService.findSuitableOffersByGivenOffer(sessionData.getSearchOffer(), sessionData.getPageNumber());
+                    offerService.findSuitableOffersByGivenOffer(session.getSearchOffer(), session.getPageNumber());
         };
-        sessionData.setOffers(offers);
+        session.setOffers(offers);
     }
 
     private Role revertRoleForOfferSearching(Role role) {

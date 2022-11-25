@@ -6,7 +6,7 @@ import com.godeltech.gbf.gui.keyboard.KeyboardType;
 import com.godeltech.gbf.gui.utils.MessageUtils;
 import com.godeltech.gbf.localization.LocalMessageSource;
 import com.godeltech.gbf.model.Role;
-import com.godeltech.gbf.model.SessionData;
+import com.godeltech.gbf.model.Session;
 import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Delivery;
 import com.godeltech.gbf.model.db.RoutePoint;
@@ -40,22 +40,22 @@ public class FormKeyboardType implements KeyboardType {
     }
 
     @Override
-    public InlineKeyboardMarkup getKeyboardMarkup(SessionData sessionData) {
-        log.debug("Create form keyboard type for session data with user id : {} and username : {}",
-                sessionData.getTelegramUserId(), sessionData.getUsername());
-        LocalMessageSource lms = localMessageSourceFactory.get(sessionData.getLanguage());
+    public InlineKeyboardMarkup getKeyboardMarkup(Session session) {
+        log.debug("Create form keyboard type for session data with user: {}",
+                session.getTelegramUser());
+        LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        boolean isRouteEmpty = sessionData.getRoute().isEmpty();
-        keyboard.add(routeButton(sessionData.getRoute(), lms));
+        boolean isRouteEmpty = session.getRoute().isEmpty();
+        keyboard.add(routeButton(session.getRoute(), lms));
         if (!isRouteEmpty)
-            keyboard.add(datesButton(sessionData.getStartDate(), sessionData.getEndDate(), lms));
-        keyboard.add(deliveryButton(sessionData.getDelivery(), lms));
-        keyboard.add(seatsButton(sessionData.getSeats(), lms));
-        keyboard.add(commentButton(sessionData.getComment(), lms));
+            keyboard.add(datesButton(session.getStartDate(), session.getEndDate(), lms));
+        keyboard.add(deliveryButton(session.getDelivery(), lms));
+        keyboard.add(seatsButton(session.getSeats(), lms));
+        keyboard.add(commentButton(session.getComment(), lms));
         keyboard.add(
-                sessionData.isEditable() ?
+                session.isEditable() ?
                         saveChangesButton(lms) :
-                        confirmButton(sessionData.getRole(), lms)
+                        confirmButton(session.getRole(), lms)
         );
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(keyboard);
         return new KeyboardMarkupAppender(keyboardMarkup).

@@ -4,16 +4,14 @@ import com.godeltech.gbf.event.NotificationEvent;
 import com.godeltech.gbf.exception.OfferNotFoundException;
 import com.godeltech.gbf.model.ModelUtils;
 import com.godeltech.gbf.model.Role;
-import com.godeltech.gbf.model.SessionData;
-import com.godeltech.gbf.model.db.Delivery;
-import com.godeltech.gbf.model.db.Offer;
-import com.godeltech.gbf.model.db.RoutePoint;
-import com.godeltech.gbf.model.db.TelegramUser;
+import com.godeltech.gbf.model.Session;
+import com.godeltech.gbf.model.db.*;
 import com.godeltech.gbf.repository.OfferRepository;
 import com.godeltech.gbf.repository.specification.OfferSpecs;
 import com.godeltech.gbf.service.offer.OfferService;
 import com.godeltech.gbf.service.route_point.RoutePointService;
 import com.godeltech.gbf.service.user.TelegramUserService;
+import com.godeltech.gbf.service.user_statistic.UserStatisticService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -36,16 +34,18 @@ public class OfferServiceImpl implements OfferService {
     private final OfferRepository offerRepository;
     private final TelegramUserService telegramUserService;
     private final RoutePointService routePointService;
+    private final UserStatisticService userStatisticService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     @Transactional
-    public void save(SessionData sessionData) {
-        log.info("Save offer with session date : {}", sessionData);
-        Offer offer = ModelUtils.mapSessionDataToOffer(sessionData);
-        TelegramUser telegramUser = telegramUserService.saveUser(sessionData.getTelegramUserId(), sessionData.getUsername(), sessionData.getLanguage());
+    public void save(Session session) {
+        log.info("Save offer with session date : {}", session);
+        Offer offer = ModelUtils.mapSessionDataToOffer(session);
+        TelegramUser telegramUser = telegramUserService.saveUser(session.getTelegramUser());
         offer.setTelegramUser(telegramUser);
         offer = offerRepository.save(offer);
+        userStatisticService.collectStatistic(telegramUser, offer.getRole());
         applicationEventPublisher.publishEvent(new NotificationEvent(offer));
     }
 
@@ -104,6 +104,11 @@ public class OfferServiceImpl implements OfferService {
                 .findFirst()
                 .map(content::lastIndexOf)
                 .orElseThrow(OfferNotFoundException::new);
+    }
+
+    @Override
+    public long countByRole(Role role) {
+        return offerRepository.countByRole(role);
     }
 
 
