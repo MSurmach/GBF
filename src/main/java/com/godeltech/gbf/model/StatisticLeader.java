@@ -6,8 +6,8 @@ import lombok.Builder;
 @Builder
 public class StatisticLeader {
     private TelegramUser telegramUser;
-    private Long allOffersCount;
-    private Long activeOffersCount;
+    private int allOffersCount;
+    private long activeOffersCount;
 
     @Override
     public String toString() {

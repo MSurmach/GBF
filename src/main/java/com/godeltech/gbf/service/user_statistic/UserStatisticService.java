@@ -9,8 +9,8 @@ import java.util.List;
 public interface UserStatisticService {
 
     void collectStatistic(TelegramUser telegramUser, Role role);
-    Long totalRegistrationSum();
-    Long totalRequestSum();
+    long totalRegistrationSum();
+    long totalRequestSum();
 
     List<UserStatistic> getLeaders(Role role);
 }

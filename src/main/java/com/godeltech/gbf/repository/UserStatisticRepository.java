@@ -12,10 +12,10 @@ public interface UserStatisticRepository extends JpaRepository<UserStatistic, Lo
     Optional<UserStatistic> findUserStatisticByTelegramUser(TelegramUser telegramUser);
 
     @Query("SELECT SUM(statistic.registrationCount) FROM UserStatistic statistic")
-    Long totalRegistrationSum();
+    Optional<Long> totalRegistrationSum();
 
     @Query("SELECT SUM(statistic.requestCount) FROM UserStatistic statistic")
-    Long totalRequestSum();
+    Optional<Long> totalRequestSum();
 
     List<UserStatistic> findTop5ByOrderByRegistrationCountDesc();
     List<UserStatistic> findTop5ByOrderByRequestCountDesc();

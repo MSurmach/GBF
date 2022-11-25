@@ -9,8 +9,8 @@ import java.util.List;
 @Data
 public class Statistic {
     //Common
-    private Long allUsersCount;
-    private Integer allSessionCount;
+    private long allUsersCount;
+    private int allSessionCount;
     //Courier registrations
     private Long activeRegistrationsCount;
     private Long allRegistrationsInHistoryCount;

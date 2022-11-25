@@ -20,7 +20,7 @@ public class UserStatistic {
     @JoinColumn(name = "telegramUserId")
     private TelegramUser telegramUser;
     @Column
-    private Long registrationCount;
+    private int registrationCount;
     @Column
-    private Long requestCount;
+    private int requestCount;
 }

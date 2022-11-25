@@ -23,20 +23,23 @@ public class UserStatisticServiceImpl implements UserStatisticService {
         userStatisticRepository.findUserStatisticByTelegramUser(telegramUser).ifPresentOrElse(
                 userStatistic -> userStatisticRepository.save(increaseCounter(userStatistic, role)),
                 () -> {
-                    UserStatistic created = UserStatistic.builder().telegramUser(telegramUser).build();
+                    UserStatistic created = UserStatistic.builder().
+                            telegramUser(telegramUser).
+                            build();
                     userStatisticRepository.save(increaseCounter(created, role));
                 }
         );
     }
 
     @Override
-    public Long totalRegistrationSum() {
-        return userStatisticRepository.totalRegistrationSum();
+    public long totalRegistrationSum() {
+        return userStatisticRepository.totalRegistrationSum().orElse(0L);
+
     }
 
     @Override
-    public Long totalRequestSum() {
-        return userStatisticRepository.totalRequestSum();
+    public long totalRequestSum() {
+        return userStatisticRepository.totalRequestSum().orElse(0L);
     }
 
     @Override

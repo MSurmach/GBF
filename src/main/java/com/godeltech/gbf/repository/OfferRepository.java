@@ -20,5 +20,5 @@ public interface OfferRepository extends JpaRepository<Offer, Long>, JpaSpecific
 
     List<Offer> findAllByEndDateBefore(LocalDate date);
 
-    Long countByRole(Role role);
+    long countByRole(Role role);
 }
