@@ -3,12 +3,13 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
       https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
-    <changeSet id="2022-11-25-changes-filling-table-user_statistic" author="m.surmach">
+    <changeSet id="2022-11-25-changes-filling-table-user_statistic" author="m.surmach and a.miachyn">
         <preConditions onFail="MARK_RAN">
                 <tableExists tableName="user_statistic"/>
         </preConditions>
-        <insert tableName="user_statistic">
-            <column name="telegram_user_id" valueComputed="(SELECT id FROM telegram_user)"/>
-        </insert>
+        <sql>
+            INSERT INTO user_statistic (telegram_user_id)
+            SELECT id FROM telegram_user;
+        </sql>
     </changeSet>
 </databaseChangeLog>
