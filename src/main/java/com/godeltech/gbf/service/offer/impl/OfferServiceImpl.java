@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -117,6 +118,11 @@ public class OfferServiceImpl implements OfferService {
         log.info("Find all offers by role : {}", role);
         Pageable pageable = PageRequest.of(pageNumber, 3);
         return offerRepository.findAllByRoleOrderByIdDesc(role, pageable);
+    }
+
+    @Override
+    public Optional<Offer> findOfferById(Long id) {
+        return offerRepository.findById(id);
     }
 
 

@@ -24,8 +24,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-import static com.godeltech.gbf.model.State.BACK;
-import static com.godeltech.gbf.model.State.MENU;
+import static com.godeltech.gbf.model.State.*;
 import static com.godeltech.gbf.service.interceptor.InterceptorTypes.CALLBACK;
 
 @Service
@@ -67,7 +66,8 @@ public class CallbackInterceptor extends AbstractInterceptor {
         String callback = update.getCallbackQuery().getData();
         try {
             log.info("Intercept navigation buttons with callback : {}", callback);
-            NavigationBotButton botButton = NavigationBotButton.valueOf(callback);
+            String[] callbackValues = callback.split("&");
+            NavigationBotButton botButton = NavigationBotButton.valueOf(callbackValues[0]);
             return switch (botButton) {
                 case BACK -> {
                     HandlerType handlerType = handlerTypeFactory.get(BACK);
@@ -76,6 +76,10 @@ public class CallbackInterceptor extends AbstractInterceptor {
                 case MENU -> {
                     ModelUtils.resetSessionData(session);
                     yield MENU;
+                }
+                case NOTIFICATION -> {
+                    ModelUtils.prepareSessionsDataForProposedOffer(session,callbackValues[1]);
+                    yield NOTIFICATION;
                 }
             };
         } catch (IllegalArgumentException illegalArgumentException) {
