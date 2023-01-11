@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -33,8 +34,10 @@ public class Session {
     private List<Feedback> feedbacks;
     private int pageNumber;
     private Offer searchOffer;
+    private Optional<Offer> proposedOffer;
     private boolean isEditable;
     private Long tempOfferId;
+    private Long proposedOfferId;
 
     public void clearTemp() {
         tempStartDate = null;

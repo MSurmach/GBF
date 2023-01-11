@@ -37,6 +37,8 @@ public class SendMessageView implements View<SendMessage> {
         if (statesNeededForOffersPageInit.contains(state)) initOffersPage(session);
         if (Objects.equals(state, ALL_FEEDBACKS))
             session.setFeedbacks(feedbackService.findAllFeedbacks());
+        if (Objects.equals(state,NOTIFICATION))
+            session.setProposedOffer(offerService.findOfferById(session.getProposedOfferId()));
         TextMessageType textMessageType = textMessageTypeFactory.get(state);
         KeyboardType keyboardType = keyboardTypeFactory.get(state);
         return SendMessage.

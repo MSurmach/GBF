@@ -115,4 +115,9 @@ public class ModelUtils {
                 requestLeadersContent);
         return args.toArray(new String[0]);
     }
+
+    public static void prepareSessionsDataForProposedOffer(Session session, String proposedOfferId) {
+        resetSessionData(session);
+        session.setProposedOfferId(Long.valueOf(proposedOfferId));
+    }
 }

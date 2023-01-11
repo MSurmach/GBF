@@ -120,6 +120,15 @@ public class ConstantUtil {
     //Admin instruments
     public final static String ADMIN_INSTRUMENTS_QUESTION_CODE = "adminInstruments.question";
 
+    //NOTIFICATION OFFER
+    public final static String NOTIFICATION_SHOW_CODE="notification.button.show";
+    public final static String NOTIFICATION_REQUEST_ID_CODE="notification.request.id";
+    public final static String NOTIFICATION_REGISTRATION_ID_CODE="notification.registration.id";
+    public final static String NOTIFICATION_REGISTRATION_ABOUT_CODE="notification.registration.about";
+    public final static String NOTIFICATION_REQUEST_ABOUT_CODE="notification.request.about";
+    public final static String NOTIFICATION_REGISTRATION_HEADER_CODE="notification.registration.header";
+    public final static String NOTIFICATION_REQUEST_HEADER_CODE="notification.request.header";
+    public final static String NOTIFICATION_OFFER_NOT_VALID = "notification.offer.notValid";
     //Statistic
     public final static String STATISTIC_CONTENT_CODE = "statistic.content";
 }

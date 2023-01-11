@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface OfferService {
     void save(Session session);
@@ -20,6 +21,8 @@ public interface OfferService {
     Page<Offer> findSuitableOffersByGivenOffer(Offer offer, int pageNumber);
 
     Page<Offer> findAllByRole(Role role, int pageNumber);
+
+    Optional<Offer> findOfferById(Long id);
 
     List<Offer> findSuitableOffersListByGivenOffer(Offer offer);
 
