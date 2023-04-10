@@ -14,9 +14,10 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import static com.godeltech.gbf.handling.BotExceptionHandler.ALERT_CALENDAR_DAY_MONTH_CODE;
-import static com.godeltech.gbf.handling.BotExceptionHandler.ALERT_CALENDAR_EMPTY_DAY_CODE;
+
 import static com.godeltech.gbf.model.State.DATE;
+import static com.godeltech.gbf.utils.ConstantUtils.ALERT_CALENDAR_DAY_MONTH_CODE;
+import static com.godeltech.gbf.utils.ConstantUtils.ALERT_CALENDAR_EMPTY_DAY_CODE;
 
 @Service
 @AllArgsConstructor
