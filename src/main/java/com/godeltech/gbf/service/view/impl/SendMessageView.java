@@ -43,7 +43,7 @@ public class SendMessageView implements View<SendMessage> {
         KeyboardType keyboardType = keyboardTypeFactory.get(state);
         return SendMessage.
                 builder().
-                chatId(chatId).
+                chatId(chatId.toString()).
                 parseMode("html").
                 text(textMessageType.getMessage(session)).
                 replyMarkup(keyboardType.getKeyboardMarkup(session)).build();

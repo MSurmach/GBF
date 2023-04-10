@@ -1,6 +1,6 @@
 package com.godeltech.gbf.service.notification.impl;
 
-import com.godeltech.gbf.GbfBot;
+import com.godeltech.gbf.service.GbfBot;
 import com.godeltech.gbf.event.NotificationEvent;
 import com.godeltech.gbf.factory.impl.LocalMessageSourceFactory;
 import com.godeltech.gbf.localization.LocalMessageSource;
