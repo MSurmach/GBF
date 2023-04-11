@@ -8,7 +8,6 @@ import com.godeltech.gbf.model.db.Status;
 import com.godeltech.gbf.service.city.CityService;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.validator.RouteValidator;
-import com.godeltech.gbf.service.validator.exceptions.GbfAlertException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,8 +42,7 @@ public class RouteHandlerType implements HandlerType {
                 normalizeRoutePointsOrders(tempRoute);
             }
             case CONFIRM_ROUTE -> {
-                    routeValidator.checkRouteHasMoreOrEqualsThan2Points(tempRoute, session.getCallbackQueryId(), session.getTelegramUser().getLanguage());
-
+                routeValidator.checkRouteHasMoreOrEqualsThan2Points(tempRoute, session.getCallbackQueryId(), session.getTelegramUser().getLanguage());
                 session.setRoute(new LinkedList<>(tempRoute));
                 tempRoute.clear();
             }

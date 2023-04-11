@@ -1,6 +1,6 @@
 package com.godeltech.gbf.scheduled;
 
-import com.godeltech.gbf.service.GbfBot;
+import com.godeltech.gbf.GbfBot;
 import com.godeltech.gbf.model.db.BotMessage;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.offer.OfferService;
