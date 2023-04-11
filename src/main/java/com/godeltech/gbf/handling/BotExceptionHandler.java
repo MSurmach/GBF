@@ -13,7 +13,9 @@
 //@AllArgsConstructor
 //@Slf4j
 //public class BotExceptionHandler {
-
+//    public final static String ALERT_CALENDAR_EMPTY_DAY_CODE = "alert.calendar.emptyDay";
+//    public final static String ALERT_CALENDAR_DAY_MONTH_CODE = "alert.calendar.dayOfMonth";
+//    public final static String TEXT_MESSAGE_OF_MEMBERSHIP = "membership.answer";
 //    private ShowAlertService showAlertService;
 //
 //
