@@ -1,10 +1,12 @@
-package com.godeltech.gbf.authorization;
+package com.godeltech.gbf.service.authorization;
 
 import com.godeltech.gbf.exception.MembershipException;
 import com.godeltech.gbf.exception.MessageFromGroupException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -13,19 +15,19 @@ import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMemberBanned;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMemberLeft;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMemberRestricted;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.starter.SpringWebhookBot;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class AuthorizationService {
 
     @Value("${bot.chmokiId}")
     private String chmokiId;
-    private final SpringWebhookBot springWebhookBot;
-
-    public AuthorizationService(SpringWebhookBot springWebhookBot) {
-        this.springWebhookBot = springWebhookBot;
-    }
+    private final TelegramLongPollingBot telegramLongPollingBot;
+//
+//    public AuthorizationService(SpringWebhookBot springWebhookBot) {
+//        this.springWebhookBot = springWebhookBot;
+//    }
 
     public boolean isValid(Update update) {
         if (update.hasMessage()) {
@@ -48,7 +50,7 @@ public class AuthorizationService {
     private boolean checkMembership(Message message) {
         try {
             log.debug("Is user a member of group ? : {}", message.getFrom().getUserName());
-            ChatMember chatMember = springWebhookBot.execute(GetChatMember.builder()
+            ChatMember chatMember = telegramLongPollingBot.execute(GetChatMember.builder()
                     .chatId(chmokiId)
                     .userId(message.getFrom().getId())
                     .build());

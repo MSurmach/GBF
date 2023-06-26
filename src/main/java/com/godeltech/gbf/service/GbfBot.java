@@ -1,49 +1,50 @@
-package com.godeltech.gbf;
+package com.godeltech.gbf.service;
 
 import com.godeltech.gbf.config.TelegramBotConfig;
-import com.godeltech.gbf.exception.DeleteMessageException;
+import com.godeltech.gbf.exception.MembershipException;
+import com.godeltech.gbf.exception.NotFoundStateTypeException;
+import com.godeltech.gbf.exception.ResourceNotFoundException;
 import com.godeltech.gbf.factory.impl.InterceptorFactory;
 import com.godeltech.gbf.model.db.BotMessage;
+import com.godeltech.gbf.service.alert.ShowAlertService;
 import com.godeltech.gbf.service.bot_message.BotMessageService;
 import com.godeltech.gbf.service.interceptor.Interceptor;
 import com.godeltech.gbf.service.interceptor.InterceptorTypes;
+import com.godeltech.gbf.service.validator.exceptions.GbfAlertException;
 import com.godeltech.gbf.utils.BotMenuUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
-import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeChat;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.starter.SpringWebhookBot;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Component
 @Slf4j
-public class GbfBot extends SpringWebhookBot {
+public class GbfBot extends TelegramLongPollingBot {
     private final InterceptorFactory interceptorFactory;
     private final TelegramBotConfig telegramBotConfig;
     private final BotMessageService botMessageService;
+    private final ShowAlertService showAlertService;
     @Value("${bot.chmokiId}")
     private String chmokiId;
 
-    public GbfBot(DefaultBotOptions options,
-                  SetWebhook setWebhook,
-                  InterceptorFactory interceptorFactory,
+    public GbfBot(InterceptorFactory interceptorFactory,
                   TelegramBotConfig telegramBotConfig,
-                  BotMessageService botMessageService) {
-        super(options, setWebhook);
+                  BotMessageService botMessageService, ShowAlertService showAlertService) {
         this.interceptorFactory = interceptorFactory;
         this.telegramBotConfig = telegramBotConfig;
         this.botMessageService = botMessageService;
+        this.showAlertService = showAlertService;
     }
 
     @Override
@@ -56,32 +57,16 @@ public class GbfBot extends SpringWebhookBot {
         return telegramBotConfig.getBotToken();
     }
 
-    @Override
-    public String getBotPath() {
-        return telegramBotConfig.getBotEndpoint();
-    }
 
-    @Override
-    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        Interceptor interceptor = interceptorFactory.get(update);
-        BotApiMethod<?> method = interceptor.intercept(update);
-        if (interceptor.getType() == InterceptorTypes.MESSAGE_ENTITY)
-            addMenuCommands(update.getMessage());
-        executeMethod(method, interceptor.getTelegramUserId(), interceptor.getChatId());
-        return null;
-    }
-
-    private void executeMethod(BotApiMethod<?> method, Long telegramUserId, Long chatId) {
+    private void executeMethod(BotApiMethod<?> method, Long telegramUserId, Long chatId) throws TelegramApiException {
         log.info("Execute method for user with id : {} and chat id : {}", telegramUserId, chatId);
-        try {
+
             Serializable executed = execute(method);
             if (executed instanceof Message message) {
                 deletePreviousMessage(telegramUserId, chatId);
                 botMessageService.save(telegramUserId, message);
             }
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
+
 
     }
 
@@ -130,7 +115,7 @@ public class GbfBot extends SpringWebhookBot {
                     .build());
         } catch (TelegramApiException e) {
             log.error(e.getMessage());
-            throw new DeleteMessageException(previousMessage);
+//            throw new DeleteMessageException(previousMessage);
         }
     }
 
@@ -143,4 +128,37 @@ public class GbfBot extends SpringWebhookBot {
             log.error("Can't add commands. We will try next time");
         }
     }
+
+    @Override
+    public void onUpdateReceived(Update update) {
+        try {
+        Interceptor interceptor = interceptorFactory.get(update);
+        BotApiMethod<?> method = interceptor.intercept(update);
+        if (interceptor.getType() == InterceptorTypes.MESSAGE_ENTITY)
+            addMenuCommands(update.getMessage());
+            executeMethod(method, interceptor.getTelegramUserId(), interceptor.getChatId());
+        } catch (TelegramApiException | ResourceNotFoundException | NotFoundStateTypeException e) {
+            log.error(e.getMessage());
+        } catch (GbfAlertException gbfAlertException){
+            log.info(gbfAlertException.getAlertMessage());
+            try {
+                execute(showAlertService.showAlert(gbfAlertException.getCallbackQueryId(),gbfAlertException.getAlertMessage()));
+            } catch (TelegramApiException e) {
+               log.error(e.getMessage());
+            }
+        }catch (MembershipException membershipException){
+            log.error("User isn't a member of chmoki group with username : {} and id : {}",
+                    membershipException.getBotMessage().getFrom().getUserName(), membershipException.getBotMessage().getFrom().getId());
+            try {
+                execute(showAlertService.makeSendMessage(membershipException.getBotMessage(),
+                        "‼ You are not a member of the Chmoki group"));
+            } catch (TelegramApiException e) {
+                log.error(e.getMessage());
+            }
+        } catch (RuntimeException exception){
+        log.error("Get runtime exception with message : {} and with stacktrace : {}",
+                exception.getMessage(), exception.getStackTrace());
+        }
+    }
+
 }

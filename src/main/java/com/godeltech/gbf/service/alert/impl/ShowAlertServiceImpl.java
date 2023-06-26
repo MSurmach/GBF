@@ -1,8 +1,9 @@
 package com.godeltech.gbf.service.alert.impl;
 
-import com.godeltech.gbf.GbfBot;
+import com.godeltech.gbf.service.GbfBot;
 import com.godeltech.gbf.service.alert.ShowAlertService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -11,22 +12,16 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ShowAlertServiceImpl implements ShowAlertService {
-    private GbfBot gbfBot;
-
     @Override
-    public void showAlert(String callbackQueryId, String alertMessage) {
-        AnswerCallbackQuery alert = AnswerCallbackQuery.builder().
+    public AnswerCallbackQuery showAlert(String callbackQueryId, String alertMessage) {
+        return AnswerCallbackQuery.builder().
                 callbackQueryId(callbackQueryId).
                 showAlert(true).
                 text(alertMessage).
                 cacheTime(60).
                 build();
-        try {
-            gbfBot.execute(alert);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
