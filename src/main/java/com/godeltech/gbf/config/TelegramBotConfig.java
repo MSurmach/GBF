@@ -10,12 +10,6 @@ public class TelegramBotConfig {
     @Value("${telegram.bot.username}")
     private String botUserName;
 
-//    @Value("${telegram.bot.webHookHost}")
-//    private String webhookHost;
-//
-//    @Value("${telegram.bot.endpoint}")
-//    private String botEndpoint;
-
     @Value("${telegram.bot.token}")
     private String botToken;
 

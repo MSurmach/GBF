@@ -6,5 +6,7 @@ import com.godeltech.gbf.model.db.TelegramUser;
 public interface SessionCacheService {
     Session get(TelegramUser telegramUser);
 
+    Session get(Long telegramId);
+
     int getSessionCount();
 }

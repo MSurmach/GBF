@@ -8,7 +8,7 @@ import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.Offer;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.offer.OfferService;
-import com.godeltech.gbf.service.validator.RouteValidator;
+import com.godeltech.gbf.service.validator.FormValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ import static com.godeltech.gbf.model.State.FORM;
 public class FormHandlerType implements HandlerType {
 
     private final OfferService offerService;
-    private RouteValidator routeValidator;
+    private FormValidator formValidator;
 
     @Override
     public State getState() {
@@ -43,11 +43,11 @@ public class FormHandlerType implements HandlerType {
                 }
             }
             case REGISTER -> {
-                routeValidator.checkRouteIsNotEmpty(session.getRoute(), session.getCallbackQueryId(), session.getTelegramUser().getLanguage());
+                formValidator.validateForm(session);
                 offerService.save(session);
             }
             case SAVE_CHANGES -> {
-                routeValidator.checkRouteIsNotEmpty(session.getRoute(), session.getCallbackQueryId(), session.getTelegramUser().getLanguage());
+                formValidator.validateForm(session);
                 session.setEditable(false);
                 offerService.save(session);
                 switch (session.getRole()) {
@@ -55,8 +55,8 @@ public class FormHandlerType implements HandlerType {
                     case CLIENT -> session.setRole(Role.REQUESTS_VIEWER);
                 }
             }
-            case SEARCH_CLIENTS -> {
-                routeValidator.checkRouteIsNotEmpty(session.getRoute(), session.getCallbackQueryId(), session.getTelegramUser().getLanguage());
+            case SEARCH_COURIERS -> {
+                formValidator.validateForm(session);
                 Offer offer = ModelUtils.mapSessionDataToOffer(session);
                 session.setSearchOffer(offer);
                 offerService.save(session);

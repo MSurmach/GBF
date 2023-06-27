@@ -39,6 +39,8 @@ public class Session {
     private Long tempOfferId;
     private Long proposedOfferId;
 
+    private boolean reloadNeeded;
+
     public void clearTemp() {
         tempStartDate = null;
         tempEndDate = null;

@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +49,7 @@ public class DateKeyboardType implements KeyboardType {
             date = LocalDate.parse(callbackDate);
             log.debug("Create date keyboard type for session data with user: {} and income date: {}",
                     session.getTelegramUser(), date);
-        } catch (IndexOutOfBoundsException exception) {
+        } catch (IndexOutOfBoundsException | DateTimeParseException exception) {
             date = LocalDate.now();
         }
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
@@ -115,8 +116,9 @@ public class DateKeyboardType implements KeyboardType {
         for (int index = 0; index < shift; index++) {
             row.add(serviceButton);
         }
+        int LENGTH_MONTH = date.lengthOfMonth();
         for (int index = shift; index < columnCount; index++) {
-            if (day <= date.lengthOfMonth()) {
+            if (day <= LENGTH_MONTH) {
                 var dayButton = (Objects.equals(date, session.getTempStartDate()) || Objects.equals(date, session.getTempEndDate())) ?
                         createLocalButtonWithData(DATE_MARKER, SELECT_DAY, date.toString(), lms) :
                         createButtonWithData(Integer.toString(day), SELECT_DAY, date.toString());

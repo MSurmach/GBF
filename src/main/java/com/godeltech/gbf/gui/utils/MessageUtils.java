@@ -70,6 +70,6 @@ public class MessageUtils {
     }
 
     public static String deliveryContent(Delivery delivery, LocalMessageSource lms) {
-        return lms.getLocaleMessage(delivery.name());
+        return lms.getLocaleMessage(delivery.nameWithDesc());
     }
 }

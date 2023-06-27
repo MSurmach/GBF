@@ -1,14 +1,13 @@
 package com.godeltech.gbf.service.handler.impl;
 
 import com.godeltech.gbf.gui.button.RouteButton;
-import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.Session;
+import com.godeltech.gbf.model.State;
 import com.godeltech.gbf.model.db.RoutePoint;
 import com.godeltech.gbf.model.db.Status;
 import com.godeltech.gbf.service.city.CityService;
 import com.godeltech.gbf.service.handler.HandlerType;
 import com.godeltech.gbf.service.validator.RouteValidator;
-import com.godeltech.gbf.service.validator.exceptions.GbfAlertException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.util.List;
+
 @Repository
 public interface BotMessageRepository extends JpaRepository<BotMessage, Integer> {
     List<BotMessage> findAllByUserIdAndChatId(Long telegramId, Long chatId);

@@ -45,10 +45,8 @@ public class FormKeyboardType implements KeyboardType {
                 session.getTelegramUser());
         LocalMessageSource lms = localMessageSourceFactory.get(session.getTelegramUser().getLanguage());
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        boolean isRouteEmpty = session.getRoute().isEmpty();
         keyboard.add(routeButton(session.getRoute(), lms));
-        if (!isRouteEmpty)
-            keyboard.add(datesButton(session.getStartDate(), session.getEndDate(), lms));
+        keyboard.add(datesButton(session.getStartDate(), session.getEndDate(), lms));
         keyboard.add(deliveryButton(session.getDelivery(), lms));
         keyboard.add(seatsButton(session.getSeats(), lms));
         keyboard.add(commentButton(session.getComment(), lms));
@@ -80,7 +78,7 @@ public class FormKeyboardType implements KeyboardType {
     private List<InlineKeyboardButton> deliveryButton(Delivery delivery, LocalMessageSource lms) {
         if (Objects.isNull(delivery))
             return List.of(createLocalButton(ADD_DELIVERY, lms));
-        String label = lms.getLocaleMessage(EDIT_DELIVERY.name(), MessageUtils.deliveryContent(delivery, lms));
+        String label = lms.getLocaleMessage(EDIT_DELIVERY.name(), delivery.name());
         return List.of(createButton(label, EDIT_DELIVERY));
     }
 
@@ -99,7 +97,7 @@ public class FormKeyboardType implements KeyboardType {
     private List<InlineKeyboardButton> confirmButton(Role role, LocalMessageSource lms) {
         return Objects.equals(role, COURIER) ?
                 List.of(createLocalButton(REGISTER, lms)) :
-                List.of(createLocalButton(SEARCH_CLIENTS, lms));
+                List.of(createLocalButton(SEARCH_COURIERS, lms));
     }
 
     private List<InlineKeyboardButton> saveChangesButton(LocalMessageSource lms) {

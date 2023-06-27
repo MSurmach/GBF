@@ -33,6 +33,11 @@ public class SessionCacheServiceImpl implements SessionCacheService {
     }
 
     @Override
+    public Session get(final Long telegramId) {
+        return sessionCache.get(telegramId).get();
+    }
+
+    @Override
     public int getSessionCount() {
         return sessionCache.count();
     }
